@@ -89,6 +89,8 @@ public class LanguageManager
                 }
             }
 
+            EditorDebug.Log("TAG NOT FOUND! REMEMBER BUILD ASSETBUNDLES!");
+
             return string.Empty;
         }
     }

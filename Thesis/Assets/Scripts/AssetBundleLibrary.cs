@@ -106,8 +106,7 @@ public class AssetBundleLibrary
         {
             //me fijo si son assetbundles, si lo son los agrego al diccionario
             AssetBundle assetbundle = AssetBundle.LoadFromFile(Path.Combine(Reg.assetBundleDataPath, bundle));
-
-            EditorDebug.Log(assetbundle);
+            
 
             if(bundle != null)
             {

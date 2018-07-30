@@ -9,4 +9,11 @@ public static class EditorDebug
         Debug.Log(obj);
 #endif
     }
+
+    public static void LogWarning(object obj)
+    {
+#if UNITY_EDITOR
+        Debug.LogWarning(obj);
+#endif
+    }
 }

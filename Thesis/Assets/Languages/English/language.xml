@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lines>
 
-  <line tag="title">Title</line>
+  <!-- English-->
+  
+  <line tag="menu_button_options">Options</line>
+  
+  <line tag="options_menu_text_language">Language</line>
   
 </lines>
