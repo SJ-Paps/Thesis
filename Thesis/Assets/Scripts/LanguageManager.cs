@@ -93,7 +93,9 @@ public class LanguageManager
         }
     }
     #endregion
-    
+
+    public event Action<LanguageInfo> onLanguageChanged;
+
     private Language current;
 
     public LanguageInfo Current
@@ -216,6 +218,12 @@ public class LanguageManager
             if(lang.name == info.name)
             {
                 current = lang;
+
+                if(onLanguageChanged != null)
+                {
+                    onLanguageChanged(info);
+                }
+
                 break;
             }
         }

@@ -17,7 +17,7 @@ public struct FileName
 
         nameWithoutExtension = parts[0];
 
-        if(parts.Length > 1)
+        if (parts.Length > 1)
         {
             extension = parts[1];
         }
@@ -25,6 +25,38 @@ public struct FileName
         {
             extension = string.Empty;
         }
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is FileName == false)
+        {
+            return false;
+        }
+
+        FileName other = (FileName)obj;
+
+        if (other.nameWithExtension == nameWithExtension)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return nameWithExtension.GetHashCode();
+    }
+
+    public static bool operator ==(FileName obj1, FileName obj2)
+    {
+        return obj1.Equals(obj2);
+    }
+
+    public static bool operator !=(FileName obj1, FileName obj2)
+    {
+        return !obj1.Equals(obj2);
     }
 }
 
@@ -47,11 +79,20 @@ public class AssetBundleLibrary
     }
     #endregion
 
+    private AssetBundleManifest manifest;
+
     //creo un diccionario que utiliza como key el nombre del archivo del assetbundle
     private Dictionary<FileName, AssetBundle> assetBundles;
 
     private AssetBundleLibrary()
     {
+        AssetBundle manifestBundle = AssetBundle.LoadFromFile(Reg.assetBundleManifestPath);
+
+        if(manifestBundle != null)
+        {
+            manifest = manifestBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+        }
+
         assetBundles = new Dictionary<FileName, AssetBundle>();
 
         LoadBundles();
@@ -59,17 +100,18 @@ public class AssetBundleLibrary
 
     private void LoadBundles()
     {
-        //obtengo todos los archivos de un directorio
-        string[] files = Directory.GetFiles(Reg.assetBundleDataPath);
+        string[] bundles = manifest.GetAllAssetBundles();
 
-        foreach(string file in files)
+        foreach(string bundle in bundles)
         {
             //me fijo si son assetbundles, si lo son los agrego al diccionario
-            AssetBundle bundle = AssetBundle.LoadFromFile(file);
+            AssetBundle assetbundle = AssetBundle.LoadFromFile(Path.Combine(Reg.assetBundleDataPath, bundle));
+
+            EditorDebug.Log(assetbundle);
 
             if(bundle != null)
             {
-                assetBundles.Add(new FileName(Path.GetFileName(file)), bundle);
+                assetBundles.Add(new FileName(bundle), assetbundle);
             }
         }
     }
