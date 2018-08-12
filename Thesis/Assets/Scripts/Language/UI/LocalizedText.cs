@@ -25,17 +25,18 @@ public abstract class LocalizedText : SJMonoBehaviour {
         protected set;
     }
 
+    protected LocalizedTextLibrary localizedTextLibrary;
     protected LanguageManager languageManager;
 
     void Awake () {
 
+        localizedTextLibrary = LocalizedTextLibrary.GetInstance();
         languageManager = LanguageManager.GetInstance();
-
         languageManager.onLanguageChanged += OnLanguageChanged;
         
 	}
 
-    protected virtual void OnLanguageChanged(LanguageInfo info)
+    protected virtual void OnLanguageChanged(Language info)
     {
         UpdateText();
     }
@@ -46,25 +47,25 @@ public abstract class LocalizedText : SJMonoBehaviour {
         {
             case TextOptions.None:
                 
-                Text = languageManager.GetLineByTagAttribute(langTag);
+                Text = localizedTextLibrary.GetLineByTagAttribute(langTag);
 
                 break;
 
             case TextOptions.ToLower:
 
-                Text = languageManager.GetLineByTagAttribute(langTag).ToLower();
+                Text = localizedTextLibrary.GetLineByTagAttribute(langTag).ToLower();
 
                 break;
 
             case TextOptions.ToUpper:
 
-                Text = languageManager.GetLineByTagAttribute(langTag).ToUpper();
+                Text = localizedTextLibrary.GetLineByTagAttribute(langTag).ToUpper();
 
                 break;
 
             case TextOptions.FirstLetterToUpper:
 
-                Text = languageManager.GetLineByTagAttribute(langTag).FirstLetterToUpper();
+                Text = localizedTextLibrary.GetLineByTagAttribute(langTag).FirstLetterToUpper();
 
                 break;
         }

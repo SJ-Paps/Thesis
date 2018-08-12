@@ -528,6 +528,11 @@ Prefab:
       propertyPath: tag
       value: menu_button_options
       objectReference: {fileID: 0}
+    - target: {fileID: 114304755858256524, guid: 04a602627fd57b145bf2bc722fd4c769,
+        type: 2}
+      propertyPath: langTag
+      value: menu_button_options
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04a602627fd57b145bf2bc722fd4c769, type: 2}
   m_IsPrefabAsset: 0
@@ -641,6 +646,11 @@ Prefab:
         type: 2}
       propertyPath: m_FontData.m_Alignment
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114988452649410986, guid: 689ab8944c6ed6a489fd2c84e3b002b7,
+        type: 2}
+      propertyPath: langTag
+      value: options_menu_text_language
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 689ab8944c6ed6a489fd2c84e3b002b7, type: 2}

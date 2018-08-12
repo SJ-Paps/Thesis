@@ -86,7 +86,7 @@ public class AssetBundleLibrary
 
     private AssetBundleLibrary()
     {
-        AssetBundle manifestBundle = AssetBundle.LoadFromFile(Reg.assetBundleManifestPath);
+        AssetBundle manifestBundle = AssetBundle.LoadFromFile(Path.Combine(Reg.assetBundleDataPath, Reg.assetBundleManifestAssetName));
 
         if(manifestBundle != null)
         {
@@ -107,8 +107,7 @@ public class AssetBundleLibrary
             //me fijo si son assetbundles, si lo son los agrego al diccionario
             AssetBundle assetbundle = AssetBundle.LoadFromFile(Path.Combine(Reg.assetBundleDataPath, bundle));
             
-
-            if(bundle != null)
+            if(assetbundle != null)
             {
                 assetBundles.Add(new FileName(bundle), assetbundle);
             }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <languages>
 
-  <language name="English" extension="en" short="En"/>
-  <language name="Español" extension="es" short="Es"/>
+  <language name="English" extension="en"/>
+  <language name="Español" extension="es"/>
   
 </languages>

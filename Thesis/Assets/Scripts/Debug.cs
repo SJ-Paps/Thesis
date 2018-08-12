@@ -1,7 +1,6 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
-public static class EditorDebug
+public class EditorDebug
 {
     public static void Log(object obj)
     {

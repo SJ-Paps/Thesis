@@ -6,11 +6,16 @@ public class CreateAssetBundles
     [MenuItem("Assets/Build AssetBundles ChunkBased")]
     static void BuildAllAssetBundles()
     {
-        if(Directory.Exists(Reg.assetBundleDataPath) == false)
+        BuildAllAssetBundles(Reg.assetBundleDataPath);
+    }
+
+    public static void BuildAllAssetBundles(string path)
+    {
+        if (Directory.Exists(path) == false)
         {
-            Directory.CreateDirectory(Reg.assetBundleDataPath);
+            Directory.CreateDirectory(path);
         }
 
-        BuildPipeline.BuildAssetBundles(Reg.assetBundleDataPath, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
+        BuildPipeline.BuildAssetBundles(path, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
     }
 }

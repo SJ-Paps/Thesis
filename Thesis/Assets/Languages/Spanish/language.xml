@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lines>
-  
+<language>
+
   <!-- Español-->
 
-  <line tag="menu_button_options">Opciones</line>
+  <languageData name="Español" extension="es"/>
 
-  <line tag="options_menu_text_language">Idioma</line>
-  
-</lines>
+  <lines>
+
+    <line tag="menu_button_options">Opciones</line>
+
+    <line tag="options_menu_text_language">Idioma</line>
+
+  </lines>
+
+</language>
