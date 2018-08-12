@@ -8,10 +8,15 @@
   <lines>
 
     <line tag="menu_button_options">options</line>
+    <line tag="menu_button_exit">exit</line>
+
+
     <line tag="options_menu_text_language">language</line>
     <line tag="menu_back">back</line>
     <line tag="confirmation_menu_submit">submit</line>
     <line tag="confirmation_menu_cancel">cancel</line>
+
+    <line tag="confirmation_menu_message_exit">are you sure you want to quit?</line>
 
   </lines>
   

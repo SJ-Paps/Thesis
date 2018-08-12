@@ -6,20 +6,22 @@ public static class StringExtensions
     {
         if(str != null)
         {
-            if (str.Length > 1)
+            for(int i = 0; i < str.Length; i++)
             {
-                return char.ToUpper(str[0]) + str.Substring(1);
-            }
-            else if(str.Length > 0)
-            {
-                return str.ToUpper();
-            }
-            else
-            {
-                return str;
+                if(char.IsLetter(str[i]))
+                {
+                    if(i == 0)
+                    {
+                        return char.ToUpper(str[0]) + str.Substring(1);
+                    }
+                    else
+                    {
+                        return str.Substring(0, i) + char.ToUpper(str[i]) + str.Substring(i + 1);
+                    }
+                }
             }
         }
 
-        return null;
+        return str;
     }
 }
