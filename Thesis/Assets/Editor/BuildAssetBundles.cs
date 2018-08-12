@@ -3,7 +3,7 @@ using System.IO;
 
 public class CreateAssetBundles
 {
-    [MenuItem("Assets/Build AssetBundles ChunkBased")]
+    [MenuItem("Build/Build AssetBundles ChunkBased")]
     static void BuildAllAssetBundles()
     {
         BuildAllAssetBundles(Reg.assetBundleDataPath);

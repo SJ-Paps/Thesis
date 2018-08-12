@@ -7,9 +7,9 @@
 
   <lines>
 
-    <line tag="menu_button_options">Opciones</line>
-
-    <line tag="options_menu_text_language">Idioma</line>
+    <line tag="menu_button_options">opciones</line>
+    <line tag="options_menu_text_language">idioma</line>
+    <line tag="menu_back">atrás</line>
 
   </lines>
 
