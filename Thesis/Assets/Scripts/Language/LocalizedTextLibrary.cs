@@ -68,9 +68,13 @@ public class LocalizedTextLibrary
 
     private LocalizedTextContainer current;
 
+    private LanguageManager languageManager;
+
     private LocalizedTextLibrary()
     {
-        Language[] languages = LanguageManager.GetInstance().GetLanguages();
+        languageManager = LanguageManager.GetInstance();
+
+        Language[] languages = languageManager.GetLanguages();
 
         localizedTextContainers = new Dictionary<Language, LocalizedTextContainer>();
 
@@ -80,6 +84,8 @@ public class LocalizedTextLibrary
         }
 
         current = localizedTextContainers[LanguageManager.GetInstance().CurrentLanguage];
+
+        languageManager.onLanguageChanged += OnLanguageChanged;
     }
 
     public string GetLineByTagAttribute(string tag)
