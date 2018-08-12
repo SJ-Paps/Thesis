@@ -660,7 +660,7 @@ Prefab:
     - target: {fileID: 114351677713774708, guid: 04a602627fd57b145bf2bc722fd4c769,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224420579707854268, guid: 04a602627fd57b145bf2bc722fd4c769,
         type: 2}
@@ -875,6 +875,26 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114351677713774708, guid: 04a602627fd57b145bf2bc722fd4c769,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114351677713774708, guid: 04a602627fd57b145bf2bc722fd4c769,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114351677713774708, guid: 04a602627fd57b145bf2bc722fd4c769,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114351677713774708, guid: 04a602627fd57b145bf2bc722fd4c769,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04a602627fd57b145bf2bc722fd4c769, type: 2}
   m_IsPrefabAsset: 0
@@ -1008,6 +1028,7 @@ GameObject:
   - component: {fileID: 1561752831}
   - component: {fileID: 1561752830}
   - component: {fileID: 1561752829}
+  - component: {fileID: 1561752833}
   m_Layer: 5
   m_Name: MainMenuCanvas
   m_TagString: Untagged
@@ -1093,6 +1114,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1561752833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1561752828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28a26768237b0446a47a212507d5c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  confirmationMenuPrefab: {fileID: 114518316194789734, guid: 73ba94a7270a43a4dbad40f89ab73932,
+    type: 2}
 --- !u!224 &1821861405 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224420579707854268, guid: 04a602627fd57b145bf2bc722fd4c769,

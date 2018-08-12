@@ -96,6 +96,11 @@ public class LanguageManager
 
     public void ChangeLanguage(string language)
     {
+        if(current.name == language)
+        {
+            return;
+        }
+
         foreach (Language lang in languages)
         {
             if (lang.name == language)

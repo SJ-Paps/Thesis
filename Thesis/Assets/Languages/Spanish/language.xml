@@ -10,6 +10,8 @@
     <line tag="menu_button_options">opciones</line>
     <line tag="options_menu_text_language">idioma</line>
     <line tag="menu_back">atrás</line>
+    <line tag="confirmation_menu_submit">aceptar</line>
+    <line tag="confirmation_menu_cancel">cancelar</line>
 
   </lines>
 
