@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Text))]
-public class BuildVersion : MonoBehaviour {
+public class BuildVersion : SJMonoBehaviour {
     
 	void Awake()
     {

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-//Opciones para mostrar el texto de diferentes maneras
 public enum TextOptions
 {
     None,
@@ -9,67 +9,85 @@ public enum TextOptions
     FirstLetterToUpper
 }
 
-//Clase que modifica el texto del componente Text del objeto por un texto localizado
-public abstract class LocalizedText : SJMonoBehaviour {
+[Serializable]
+public class LocalizedText
+{
+    
+    public string tag;
 
-    //nombre del atributo "tag" del XML con texto localizado
-    [SerializeField]
-    protected string langTag;
+    private string text;
 
-    [SerializeField]
-    protected TextOptions option;
-
-    public abstract string Text
+    public string Text
     {
-        get;
-        protected set;
+        get
+        {
+            return text;
+        }
+
+        private set
+        {
+            text = value;
+        }
     }
 
-    protected LocalizedTextLibrary localizedTextLibrary;
-    protected LanguageManager languageManager;
+    private LanguageManager languageManager;
+    private LocalizedTextLibrary textLibrary;
 
-    void Awake () {
+    [SerializeField]
+    private TextOptions option;
 
-        localizedTextLibrary = LocalizedTextLibrary.GetInstance();
+    public event Action<string> onTextChanged;
+
+    public LocalizedText(string tag, TextOptions option)
+    {
+        this.tag = tag;
+        this.option = option;
+
         languageManager = LanguageManager.GetInstance();
-        languageManager.onLanguageChanged += OnLanguageChanged;
-        
-	}
+        textLibrary = LocalizedTextLibrary.GetInstance();
 
-    protected virtual void OnLanguageChanged(Language info)
+        languageManager.onLanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged(Language language)
     {
         UpdateText();
     }
 
-    protected virtual void UpdateText()
+    public void UpdateText()
     {
         switch (option)
         {
             case TextOptions.None:
-                
-                Text = localizedTextLibrary.GetLineByTagAttribute(langTag);
+
+                Text = textLibrary.GetLineByTagAttribute(tag);
 
                 break;
 
             case TextOptions.ToLower:
 
-                Text = localizedTextLibrary.GetLineByTagAttribute(langTag).ToLower();
+                Text = textLibrary.GetLineByTagAttribute(tag).ToLower();
 
                 break;
 
             case TextOptions.ToUpper:
 
-                Text = localizedTextLibrary.GetLineByTagAttribute(langTag).ToUpper();
+                Text = textLibrary.GetLineByTagAttribute(tag).ToUpper();
 
                 break;
 
             case TextOptions.FirstLetterToUpper:
 
-                Text = localizedTextLibrary.GetLineByTagAttribute(langTag).FirstLetterToUpper();
+                Text = textLibrary.GetLineByTagAttribute(tag).FirstLetterToUpper();
 
                 break;
         }
+
+        onTextChanged(Text);
     }
 
-
+    public override string ToString()
+    {
+        return Text;
+    }
 }

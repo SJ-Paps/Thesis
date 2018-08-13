@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LanguageButton : MonoBehaviour {
+public class LanguageButton : SJMonoBehaviour {
 
     private Language language;
 

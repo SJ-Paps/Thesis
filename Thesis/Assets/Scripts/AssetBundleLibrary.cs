@@ -236,4 +236,13 @@ public class AssetBundleLibrary
 
         return false;
     }
+
+    public T GetAssetFrom<T>(string assetbundleFullName, string assetName) where T : UnityEngine.Object
+    {
+        AssetBundle assetbundle = GetAssetBundleByNameWithExtension(assetbundleFullName);
+
+        T asset = assetbundle.LoadAsset<T>(assetName);
+
+        return asset;
+    }
 }

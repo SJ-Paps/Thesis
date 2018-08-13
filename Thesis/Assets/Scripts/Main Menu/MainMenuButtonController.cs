@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuButtonController : MonoBehaviour {
+public class MainMenuButtonController : SJMonoBehaviour {
 
     [SerializeField]
     private Button exit;

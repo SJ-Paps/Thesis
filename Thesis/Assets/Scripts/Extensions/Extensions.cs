@@ -1,6 +1,6 @@
-﻿
+﻿using System;
 
-public static class StringExtensions
+public static class Extensions
 {
     public static string FirstLetterToUpper(this string str)
     {
@@ -24,4 +24,6 @@ public static class StringExtensions
 
         return str;
     }
+
+
 }

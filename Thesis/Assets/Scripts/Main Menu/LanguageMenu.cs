@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LanguageMenu : MonoBehaviour {
+public class LanguageMenu : SJMonoBehaviour {
 
     [SerializeField]
     private LanguageButton languageButtonPrefab;

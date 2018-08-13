@@ -46,7 +46,7 @@ public class LanguageManager
 
     public event Action<Language> onLanguageChanged;
 
-    public LanguageManager()
+    private LanguageManager()
     {
         AssetBundle langListBundle = AssetBundleLibrary.Instance.GetAssetBundleByNameWithoutExtension(Reg.languageListFileName);
 

@@ -1,26 +1,18 @@
 ﻿using UnityEngine.UI;
 
-public class LocalizedUIText : LocalizedText {
+public class LocalizedUIText : LocalizedTextComponent {
 
     protected Text selfText;
 
-    public override string Text
-    {
-        get
-        {
-            return selfText.text;
-        }
-
-        protected set
-        {
-            selfText.text = value;
-        }
-    }
-
-    void Start () {
+    new protected void Awake () {
 
         selfText = GetComponent<Text>();
 
-        UpdateText();
-	}
+        base.Awake();
+    }
+
+    protected override void OnTextChanged(string text)
+    {
+        selfText.text = text;
+    }
 }

@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 114817087384930612}
   - component: {fileID: 114518316194789734}
   m_Layer: 5
-  m_Name: ConfirmationMenu
+  m_Name: ConfirmationMenuPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

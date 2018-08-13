@@ -9,10 +9,17 @@
 
     <line tag="menu_button_options">opciones</line>
     <line tag="menu_button_exit">salir</line>
-    
+    <line tag="menu_back">atrás</line>
     
     <line tag="options_menu_text_language">idioma</line>
-    <line tag="menu_back">atrás</line>
+    <line tag="options_menu_text_sound">configuracion de sonido</line>
+    
+    <line tag="soundchannel_general">volumen general</line>
+    <line tag="soundchannel_music">volumen de música</line>
+    <line tag="soundchannel_effects">volumen de efectos</line>
+    
+    
+    
     <line tag="confirmation_menu_submit">aceptar</line>
     <line tag="confirmation_menu_cancel">cancelar</line>
     

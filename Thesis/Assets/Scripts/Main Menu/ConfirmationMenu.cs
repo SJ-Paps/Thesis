@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ConfirmationMenu : MonoBehaviour {
+public class ConfirmationMenu : SJMonoBehaviour {
 
     [SerializeField]
     private Text message;

@@ -9,7 +9,10 @@ public static class Reg
     public const string languageFileName = "lang";
     public const string languageListAssetName = "langList";
     public const string languageAssetName = "language";
+
     public const string assetBundleManifestAssetName = "AssetBundles";
+
+    public const string resourcesAssetBundleFileName = "resources";
 
 #if UNITY_EDITOR
     public static readonly string assetBundleDataPath = Application.dataPath + "/AssetBundles";

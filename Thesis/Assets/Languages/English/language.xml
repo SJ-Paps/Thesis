@@ -11,8 +11,14 @@
     <line tag="menu_button_exit">exit</line>
 
 
-    <line tag="options_menu_text_language">language</line>
+    <line tag="options_menu_text_language">language settings</line>
+    <line tag="options_menu_text_sound">sound settings</line>
     <line tag="menu_back">back</line>
+
+    <line tag="soundchannel_general">general volume</line>
+    <line tag="soundchannel_music">music volume</line>
+    <line tag="soundchannel_effects">effects volume</line>
+    
     <line tag="confirmation_menu_submit">submit</line>
     <line tag="confirmation_menu_cancel">cancel</line>
 
