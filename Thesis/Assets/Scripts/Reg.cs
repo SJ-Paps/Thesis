@@ -24,7 +24,7 @@ public static class Reg
 
 #endif
 
-
+    public static readonly int floorLayerMask = 1 << LayerMask.NameToLayer("Floor");
 
 
 

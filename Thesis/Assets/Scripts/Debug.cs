@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿#define OFF
+
+using UnityEngine;
 
 public class EditorDebug
 {
     public static void Log(object obj)
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !OFF
         Debug.Log(obj);
 #endif
     }
