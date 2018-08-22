@@ -3,14 +3,13 @@ using UnityEngine;
 
 public class UnityControllerManager : MonoBehaviour {
 
+    [SerializeField]
     private List<UnityController> controllers;
 
 	// Use this for initialization
 	void Awake () {
 
         controllers = new List<UnityController>();
-
-        controllers.Add(new CharacterController("PlayerController", FindObjectOfType<MainCharacter>()));
 	}
 	
 	// Update is called once per frame

@@ -10,8 +10,8 @@ public class MainCharacter : Character
     {
         FSM<State, Trigger> movementFSM = new FSM<State, Trigger>();
 
-        movementFSM.AddState(State.Idle, new IdleState(movementFSM, State.Idle, this));
-        movementFSM.AddState(State.Moving, new MovingState(movementFSM, State.Moving, this));
+        movementFSM.AddState(new IdleState(movementFSM, State.Idle, this));
+        movementFSM.AddState(new MovingState(movementFSM, State.Moving, this));
 
         movementFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
         movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.Idle);
@@ -20,9 +20,9 @@ public class MainCharacter : Character
 
         FSM<State, Trigger> jumpingFSM = new FSM<State, Trigger>();
 
-        jumpingFSM.AddState(State.Grounded, new GroundedState(jumpingFSM, State.Grounded, this));
-        jumpingFSM.AddState(State.Jumping, new JumpingState(jumpingFSM, State.Jumping, this));
-        jumpingFSM.AddState(State.Falling, new FallingState(jumpingFSM, State.Falling, this));
+        jumpingFSM.AddState(new GroundedState(jumpingFSM, State.Grounded, this));
+        jumpingFSM.AddState(new JumpingState(jumpingFSM, State.Jumping, this));
+        jumpingFSM.AddState(new FallingState(jumpingFSM, State.Falling, this));
 
         jumpingFSM.MakeTransition(State.Grounded, Trigger.Jump, State.Jumping);
         jumpingFSM.MakeTransition(State.Jumping, Trigger.Fall, State.Falling);

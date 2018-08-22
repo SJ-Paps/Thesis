@@ -1,48 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 public delegate void ChangeControlDelegate(IControllable previousSlave, IControllable newSlave);
 
-public abstract class UnityController
+public abstract class UnityController : MonoBehaviour
 {
-    public string Name { get; protected set; }
-
-    protected InputAxis[] axes;
-
-    protected UnityController(string name)
-    {
-        Name = name;
-    }
-
     public abstract void Control();
-
-    protected InputAxis GetInputAxisByName(string name)
-    {
-        for(int i = 0; i < axes.Length; i++)
-        {
-            if(axes[i].Name == name)
-            {
-                return axes[i];
-            }
-        }
-
-        return null;
-    }
 }
 
-public abstract class UnityController<T> : UnityController where T : IControllable
+public abstract class UnityController<TSlave, TOrder> : UnityController where TSlave : IControllable where TOrder : struct
 {
-    public event ChangeControlDelegate onSlaveChanged;
-
-    protected T slave;
-
-    protected UnityController(string name) : base(name)
+    [SerializeField]
+    protected struct KeyOrder
     {
-
+        [SerializeField]
+        public MultiKey key;
+        [SerializeField]
+        public TOrder order;
     }
 
-    public void SetSlave(T slave)
+    public event ChangeControlDelegate onSlaveChanged;
+
+    [SerializeField]
+    protected TSlave slave;
+
+    public void SetSlave(TSlave slave)
     {
         this.slave = slave;
     }
