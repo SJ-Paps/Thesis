@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System;
 
-public delegate void ChangeControlDelegate(IControllable previousSlave, IControllable newSlave);
+public delegate void ChangeControlDelegate<TOrder>(IControllable<TOrder> previousSlave, IControllable<TOrder> newSlave) where TOrder : struct;
 
 public abstract class UnityController : MonoBehaviour
 {
     public abstract void Control();
 }
 
-public abstract class UnityController<TSlave, TOrder> : UnityController where TSlave : IControllable where TOrder : struct
+public abstract class UnityController<TSlave, TOrder> : UnityController where TSlave : IControllable<TOrder> where TOrder : struct
 {
     [SerializeField]
     protected struct KeyOrder
@@ -19,7 +19,7 @@ public abstract class UnityController<TSlave, TOrder> : UnityController where TS
         public TOrder order;
     }
 
-    public event ChangeControlDelegate onSlaveChanged;
+    public event ChangeControlDelegate<TOrder> onSlaveChanged;
 
     [SerializeField]
     protected TSlave slave;

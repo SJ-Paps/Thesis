@@ -2,15 +2,15 @@
 
 public class MainCharacter : Character
 {
-    public override event ChangeControlDelegate onChangeControl;
+    public override event ChangeControlDelegate<Character.Order> onChangeControl;
 
-    private FSM<State, Trigger>[] stateMachines;
+    private FSM<State, Trigger, ChangedStateEventArgs>[] stateMachines;
 
     void Awake()
     {
-        FSM<State, Trigger> movementFSM = new FSM<State, Trigger>();
+        FSM<State, Trigger, ChangedStateEventArgs> movementFSM = new FSM<State, Trigger, ChangedStateEventArgs>();
 
-        movementFSM.AddState(new IdleState(movementFSM, State.Idle, this));
+        movementFSM.AddState(new CharacterIdleState(movementFSM, State.Idle, this));
         movementFSM.AddState(new MovingState(movementFSM, State.Moving, this));
 
         movementFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
@@ -18,7 +18,7 @@ public class MainCharacter : Character
 
         movementFSM.StartBy(State.Idle);
 
-        FSM<State, Trigger> jumpingFSM = new FSM<State, Trigger>();
+        FSM<State, Trigger, ChangedStateEventArgs> jumpingFSM = new FSM<State, Trigger, ChangedStateEventArgs>();
 
         jumpingFSM.AddState(new GroundedState(jumpingFSM, State.Grounded, this));
         jumpingFSM.AddState(new JumpingState(jumpingFSM, State.Jumping, this));
@@ -30,7 +30,7 @@ public class MainCharacter : Character
 
         jumpingFSM.StartBy(State.Falling);
 
-        stateMachines = new FSM<State, Trigger>[2];
+        stateMachines = new FSM<State, Trigger, ChangedStateEventArgs>[2];
 
         stateMachines[0] = movementFSM;
         stateMachines[1] = jumpingFSM;

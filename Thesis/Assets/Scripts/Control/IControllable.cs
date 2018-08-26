@@ -1,4 +1,4 @@
-﻿public interface IControllable
+﻿public interface IControllable<TOrder> where TOrder : struct
 {
     bool Enslaved
     {
@@ -6,4 +6,6 @@
     }
 
     void GetEnslaved();
+
+    void SetOrder(TOrder order);
 }

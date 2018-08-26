@@ -7,17 +7,17 @@ public class MovingState : CharacterState
     private Vector2 moveForce = new Vector2(0.2f, 0);
     private float maxVelocityX = 3f;
 
-    public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character) : base(fsm, state, character)
+    public MovingState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state, character)
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
     }
 
-    protected override void OnEnter()
+    protected override void OnEnter(ref Character.ChangedStateEventArgs e)
     {
         EditorDebug.Log("MOVING ENTER");
     }
 
-    public override void Update()
+    protected override void OnUpdate()
     {
         while (eventQueue.Count != 0)
         {
@@ -33,16 +33,16 @@ public class MovingState : CharacterState
             }
         }
 
-        if(rigidbody2D.velocity.x >= maxVelocityX)
+        if (rigidbody2D.velocity.x >= maxVelocityX)
         {
             rigidbody2D.AddForce(moveForce * -1, ForceMode2D.Impulse);
         }
-        else if(rigidbody2D.velocity.x <= -maxVelocityX)
+        else if (rigidbody2D.velocity.x <= -maxVelocityX)
         {
             rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
         }
 
-        if(rigidbody2D.velocity.x == 0)
+        if (rigidbody2D.velocity.x == 0)
         {
             stateMachine.Trigger(Character.Trigger.StopMoving);
         }

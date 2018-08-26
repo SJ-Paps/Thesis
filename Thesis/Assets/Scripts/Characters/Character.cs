@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System;
 
-public abstract class Character : SJMonoBehaviour, IControllable
+public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>
 {
     public event Action<Collision2D> onCollisionEnter2D;
-    public event Action onFixedUpdate;
 
     public enum State
     {
@@ -31,6 +30,11 @@ public abstract class Character : SJMonoBehaviour, IControllable
         OrderJump
     }
 
+    public struct ChangedStateEventArgs
+    {
+
+    }
+
     protected bool enslaved;
 
     public bool Enslaved
@@ -41,25 +45,17 @@ public abstract class Character : SJMonoBehaviour, IControllable
         }
     }
 
-    public abstract event ChangeControlDelegate onChangeControl;
+    public abstract event ChangeControlDelegate<Character.Order> onChangeControl;
 
     public abstract void GetEnslaved();
 
-    public abstract void SetOrder(Order e);
+    public abstract void SetOrder(Order order);
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if(onCollisionEnter2D != null)
         {
             onCollisionEnter2D(collision);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if(onFixedUpdate != null)
-        {
-            onFixedUpdate();
         }
     }
 }

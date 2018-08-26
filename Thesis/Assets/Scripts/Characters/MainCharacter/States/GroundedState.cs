@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class GroundedState : CharacterState
 {
-    public GroundedState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character) : base(fsm, state, character)
+    public GroundedState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state, character)
     {
 
     }
 
-    protected override void OnEnter()
+    protected override void OnEnter(ref Character.ChangedStateEventArgs e)
     {
         EditorDebug.Log("GROUNDED ENTER");
     }
 
-    public override void Update()
+    protected override void OnUpdate()
     {
         while (eventQueue.Count != 0)
         {

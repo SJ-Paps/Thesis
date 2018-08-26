@@ -10,14 +10,19 @@ public class JumpingState : CharacterState {
     private float height;
     private Vector2 jumpForce = Vector2.up * 0.5f;
 
-    public JumpingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character) : base(fsm, state, character)
+    public JumpingState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state, character)
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
         collider = character.GetComponent<Collider2D>();
         height = collider.bounds.size.y;
     }
 
-    protected override void OnEnter()
+    protected override void OnExit()
+    {
+        base.OnExit();
+    }
+
+    protected override void OnEnter(ref Character.ChangedStateEventArgs e)
     {
         EditorDebug.Log("JUMPING ENTER");
 
@@ -26,18 +31,9 @@ public class JumpingState : CharacterState {
         maxHeight = initPosY + height;
 
         rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
-
-        //character.onFixedUpdate += Jump;
     }
 
-    protected override void OnExit()
-    {
-        base.OnExit();
-
-        //character.onFixedUpdate -= Jump;
-    }
-
-    public override void Update()
+    protected override void OnUpdate()
     {
         Jump();
     }
@@ -70,4 +66,6 @@ public class JumpingState : CharacterState {
             stateMachine.Trigger(Character.Trigger.Fall);
         }
     }
+
+    
 }
