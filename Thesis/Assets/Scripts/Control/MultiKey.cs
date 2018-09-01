@@ -79,8 +79,6 @@ public struct MultiKey
         {
             float axisValue = Input.GetAxis(name);
 
-            Debug.Log(name + " " + axisValue);
-
             if ((lessThanZero == true && axisValue < 0) || (lessThanZero == false && axisValue > 0))
             {
                 return true;

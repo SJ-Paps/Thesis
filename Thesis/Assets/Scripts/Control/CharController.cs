@@ -22,11 +22,14 @@ public class CharController : UnityController<Character, Character.Order> {
 
     public override void Control()
     {
-        for(int i = 0; i < keyOrders.Length; i++)
+        if(Input.anyKey)
         {
-            if(keyOrders[i].key.WasTriggered())
+            for (int i = 0; i < keyOrders.Length; i++)
             {
-                slave.SetOrder(keyOrders[i].order);
+                if (keyOrders[i].key.WasTriggered())
+                {
+                    slave.SetOrder(keyOrders[i].order);
+                }
             }
         }
     }

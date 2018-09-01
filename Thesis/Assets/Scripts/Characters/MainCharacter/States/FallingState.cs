@@ -15,14 +15,16 @@ public class FallingState : CharacterState
         diameter = collider.size.y / 2;
     }
 
-    protected override void OnExit()
-    {
-        base.OnExit();
-    }
+    
 
     protected override void OnEnter(ref Character.ChangedStateEventArgs e)
     {
         EditorDebug.Log("FALLING ENTER");
+    }
+
+    protected override void OnExit()
+    {
+
     }
 
     protected override void OnUpdate()
@@ -30,7 +32,7 @@ public class FallingState : CharacterState
         float xRay = character.transform.position.x;
         float yRay = character.transform.position.y - diameter;
 
-        RaycastHit2D groundDetection = Physics2D.Raycast(new Vector2(xRay, yRay), Vector2.down, groundDetectionDistance, Reg.floorLayerMask);
+        RaycastHit2D groundDetection = Physics2D.Raycast(new Vector2(xRay, yRay), Vector2.down, groundDetectionDistance);
 
         if (groundDetection.transform != null)
         {

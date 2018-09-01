@@ -10,6 +10,8 @@ public class GroundedState : CharacterState
 
     protected override void OnEnter(ref Character.ChangedStateEventArgs e)
     {
+        base.OnEnter(ref e);
+
         EditorDebug.Log("GROUNDED ENTER");
     }
 

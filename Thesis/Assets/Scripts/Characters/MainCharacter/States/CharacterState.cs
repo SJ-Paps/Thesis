@@ -5,6 +5,7 @@ public abstract class CharacterState : State<Character.State, Character.Trigger,
 {
     protected Character character;
     protected Queue<Character.Order> eventQueue;
+    private bool receivingOrders = false;
 
     protected CharacterState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state)
     {
@@ -12,7 +13,12 @@ public abstract class CharacterState : State<Character.State, Character.Trigger,
         eventQueue = new Queue<Character.Order>();
     }
 
-    public virtual void ProcessOrder(Character.Order e)
+    protected override void OnEnter(ref Character.ChangedStateEventArgs e)
+    {
+        character.onReceiveOrder += ProcessOrder;
+    }
+
+    protected virtual void ProcessOrder(Character.Order e)
     {
         eventQueue.Enqueue(e);
     }
@@ -20,5 +26,6 @@ public abstract class CharacterState : State<Character.State, Character.Trigger,
     protected override void OnExit()
     {
         eventQueue.Clear();
+        character.onReceiveOrder -= ProcessOrder;
     }
 }

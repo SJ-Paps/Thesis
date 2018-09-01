@@ -16,14 +16,12 @@ public class JumpingState : CharacterState {
         collider = character.GetComponent<Collider2D>();
         height = collider.bounds.size.y;
     }
-
-    protected override void OnExit()
-    {
-        base.OnExit();
-    }
+    
 
     protected override void OnEnter(ref Character.ChangedStateEventArgs e)
     {
+        base.OnEnter(ref e);
+
         EditorDebug.Log("JUMPING ENTER");
 
         float initPosY = character.transform.position.y;
@@ -36,6 +34,11 @@ public class JumpingState : CharacterState {
     protected override void OnUpdate()
     {
         Jump();
+    }
+
+    protected override void OnExit()
+    {
+        base.OnExit();
     }
 
     private void Jump()

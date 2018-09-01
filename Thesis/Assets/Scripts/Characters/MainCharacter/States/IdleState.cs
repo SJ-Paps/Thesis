@@ -9,6 +9,8 @@ public class CharacterIdleState : CharacterState
 
     protected override void OnEnter(ref Character.ChangedStateEventArgs e)
     {
+        base.OnEnter(ref e);
+
         EditorDebug.Log("IDLE ENTER");
     }
 

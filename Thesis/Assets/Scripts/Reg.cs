@@ -4,7 +4,6 @@ using System;
 
 public static class Reg
 {
-
     public const string languageListFileName = "langl";
     public const string languageFileName = "lang";
     public const string languageListAssetName = "langList";
@@ -23,8 +22,6 @@ public static class Reg
     public static readonly string assetBundleDataPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../AssetBundles"));
 
 #endif
-
-    public static readonly int floorLayerMask = 1 << LayerMask.NameToLayer("Floor");
 
 
 

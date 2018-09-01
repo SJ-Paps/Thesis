@@ -344,7 +344,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1096781616}
-  - component: {fileID: 1096781615}
   m_Layer: 0
   m_Name: ControllerManager
   m_TagString: Untagged
@@ -352,18 +351,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1096781615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1096781614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9c921c96ca914e4f964320e992d094d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllers: []
 --- !u!4 &1096781616
 Transform:
   m_ObjectHideFlags: 0

@@ -2,10 +2,10 @@
 
 public class MainCharacter : Tribal
 {
-    private FSM<State, Trigger, ChangedStateEventArgs>[] stateMachines;
-
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         FSM<State, Trigger, ChangedStateEventArgs> movementFSM = new FSM<State, Trigger, ChangedStateEventArgs>();
 
         movementFSM.AddState(new CharacterIdleState(movementFSM, State.Idle, this));
@@ -28,30 +28,12 @@ public class MainCharacter : Tribal
 
         jumpingFSM.StartBy(State.Falling);
 
-        stateMachines = new FSM<State, Trigger, ChangedStateEventArgs>[2];
-
-        stateMachines[0] = movementFSM;
-        stateMachines[1] = jumpingFSM;
-    }
-
-    void Update()
-    {
-        for(int i = 0; i < stateMachines.Length; i++)
-        {
-            stateMachines[i].UpdateCurrentState();
-        }
+        AddStateMachineWhenAlive(movementFSM);
+        AddStateMachineWhenAlive(jumpingFSM);
     }
 
     public override void GetEnslaved()
     {
         enslaved = true;
-    }
-
-    public override void SetOrder(Order e)
-    {
-        for(int i = 0; i < stateMachines.Length; i++)
-        {
-            ((CharacterState)stateMachines[i].CurrentState).ProcessOrder(e);
-        }
     }
 }
