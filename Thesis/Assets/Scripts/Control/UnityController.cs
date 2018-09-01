@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public delegate void ChangeControlDelegate<TOrder>(IControllable<TOrder> previousSlave, IControllable<TOrder> newSlave) where TOrder : struct;
+public delegate void ChangeControlDelegate(IControllable previousSlave, IControllable newSlave);
 
 public abstract class UnityController : MonoBehaviour
 {
@@ -19,7 +19,7 @@ public abstract class UnityController<TSlave, TOrder> : UnityController where TS
         public TOrder order;
     }
 
-    public event ChangeControlDelegate<TOrder> onSlaveChanged;
+    public event ChangeControlDelegate onSlaveChanged;
 
     [SerializeField]
     protected TSlave slave;

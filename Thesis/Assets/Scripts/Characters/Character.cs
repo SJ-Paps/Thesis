@@ -45,8 +45,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         }
     }
 
-    public abstract event ChangeControlDelegate<Character.Order> onChangeControl;
-
     public abstract void GetEnslaved();
 
     public abstract void SetOrder(Order order);

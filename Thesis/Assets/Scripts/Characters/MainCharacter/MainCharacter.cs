@@ -1,9 +1,7 @@
 ﻿using SAM.FSM;
 
-public class MainCharacter : Character
+public class MainCharacter : Tribal
 {
-    public override event ChangeControlDelegate<Character.Order> onChangeControl;
-
     private FSM<State, Trigger, ChangedStateEventArgs>[] stateMachines;
 
     void Awake()
