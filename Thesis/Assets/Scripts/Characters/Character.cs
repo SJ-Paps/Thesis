@@ -2,7 +2,7 @@
 using System;
 using SAM.FSM;
 
-public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>
+public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
     public event Action<Character.Order> onReceiveOrder;
@@ -76,13 +76,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected virtual void Update()
     {
         aliveFSM.UpdateCurrentState();
-
-        if (Input.GetKey(KeyCode.Q))
-        {
-            aliveFSM.Trigger(Trigger.Die);
-        }
-
-        CheckIsAlive();
     }
 
     protected void AddStateMachineWhenAlive(FSM<State, Trigger, ChangedStateEventArgs> fsm)
@@ -93,6 +86,20 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected void AddStateMachineWhenDead(FSM<State, Trigger, ChangedStateEventArgs> fsm)
     {
         dead.AddFSM(fsm);
+    }
+
+    public virtual bool Die(IDeadly deadly)
+    {
+        aliveFSM.Trigger(Trigger.Die);
+
+        IsAlive = false;
+
+        if (onDead != null)
+        {
+            onDead();
+        }
+
+        return true;
     }
 
     public abstract void GetEnslaved();
@@ -110,19 +117,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         if(onCollisionEnter2D != null)
         {
             onCollisionEnter2D(collision);
-        }
-    }
-
-    private void CheckIsAlive()
-    {
-        if (aliveFSM.CurrentState == dead && IsAlive)
-        {
-            IsAlive = false;
-
-            if (onDead != null)
-            {
-                onDead();
-            }
         }
     }
 }

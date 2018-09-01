@@ -1,4 +1,5 @@
 ﻿using SAM.FSM;
+using System;
 
 public class MainCharacter : Tribal
 {

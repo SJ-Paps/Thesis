@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Xenophobic : Tribal, IAudibleListener
 {
+    [SerializeField]
+    protected Gun gun;
+
     protected override void Awake()
     {
         base.Awake();
