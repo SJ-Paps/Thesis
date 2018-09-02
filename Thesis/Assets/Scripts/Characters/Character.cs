@@ -53,6 +53,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public bool IsAlive { get; protected set; }
 
+    public Animator Animator { get; protected set; }
+
     private FSM<State, Trigger, ChangedStateEventArgs> aliveFSM;
 
     private CharacterContextState alive;
@@ -60,6 +62,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     protected virtual void Awake()
     {
+        Animator = GetComponent<Animator>();
+
         aliveFSM = new FSM<State, Trigger, ChangedStateEventArgs>();
 
         alive = new CharacterContextState(aliveFSM, State.Alive, this);
@@ -103,6 +107,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     }
 
     public abstract void GetEnslaved();
+
+    protected abstract void Attack();
 
     public virtual void SetOrder(Order order)
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Xenophobic : Tribal, IAudibleListener
 {
     [SerializeField]
-    protected Gun gun;
+    protected Weapon gun;
 
     protected override void Awake()
     {
@@ -23,6 +23,11 @@ public class Xenophobic : Tribal, IAudibleListener
     }
 
     public override void SetOrder(Order order)
+    {
+        
+    }
+
+    protected override void Attack()
     {
         
     }

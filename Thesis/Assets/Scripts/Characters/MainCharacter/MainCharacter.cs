@@ -31,10 +31,17 @@ public class MainCharacter : Tribal
 
         AddStateMachineWhenAlive(movementFSM);
         AddStateMachineWhenAlive(jumpingFSM);
+
+        gameObject.layer = Reg.playerLayer;
     }
 
     public override void GetEnslaved()
     {
         enslaved = true;
+    }
+
+    protected override void Attack()
+    {
+        
     }
 }

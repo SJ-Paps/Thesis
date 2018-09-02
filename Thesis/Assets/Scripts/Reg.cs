@@ -23,6 +23,10 @@ public static class Reg
 
 #endif
 
-
+    public static readonly int playerLayer = 8;
+    public static readonly int hostileLayer = 9;
+    public static readonly int nonHostileLayer = 10;
+    public static readonly int hostileDeadlyLayer = 11;
+    public static readonly int generalDeadlyLayer = 12;
 
 }
