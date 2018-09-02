@@ -497,21 +497,35 @@ MonoBehaviour:
   - key:
       isAxis: 1
       lessThanZero: 1
+      isKeyDown: 0
+      isKeyReleased: 0
       name: MoveLeft
       keys: 6100000000000000
     order: 0
   - key:
       isAxis: 1
       lessThanZero: 0
+      isKeyDown: 0
+      isKeyReleased: 0
       name: MoveRight
       keys: 6400000000000000
     order: 1
   - key:
       isAxis: 0
       lessThanZero: 0
+      isKeyDown: 0
+      isKeyReleased: 0
       name: Jump
       keys: 200000005e010000
     order: 2
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 1
+      isKeyReleased: 0
+      name: Hide
+      keys: 71000000
+    order: 3
 --- !u!4 &1371896767
 Transform:
   m_ObjectHideFlags: 0

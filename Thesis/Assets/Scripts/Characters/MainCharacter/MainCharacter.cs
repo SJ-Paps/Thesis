@@ -29,8 +29,19 @@ public class MainCharacter : Tribal
 
         jumpingFSM.StartBy(State.Falling);
 
+        FSM<State, Trigger, ChangedStateEventArgs> actionsFSM = new FSM<State, Trigger, ChangedStateEventArgs>();
+
+        actionsFSM.AddState(new HiddenState(actionsFSM, State.Hidden, this));
+        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this));
+
+        actionsFSM.MakeTransition(State.Idle, Trigger.Hide, State.Hidden);
+        actionsFSM.MakeTransition(State.Hidden, Trigger.GoIdle, State.Idle);
+
+        actionsFSM.StartBy(State.Idle);
+
         AddStateMachineWhenAlive(movementFSM);
         AddStateMachineWhenAlive(jumpingFSM);
+        AddStateMachineWhenAlive(actionsFSM);
     }
 
     public override void GetEnslaved()

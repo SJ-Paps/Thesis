@@ -17,6 +17,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Grounded,
         Jumping,
         Falling,
+        Hidden
     }
 
     public enum Trigger
@@ -26,14 +27,17 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Move,
         Ground,
         Jump,
-        Fall
+        Fall,
+        Hide,
+        GoIdle
     }
 
     public enum Order
     {
         OrderMoveLeft,
         OrderMoveRight,
-        OrderJump
+        OrderJump,
+        OrderHide
     }
 
     public struct ChangedStateEventArgs
