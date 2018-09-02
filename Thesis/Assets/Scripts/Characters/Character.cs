@@ -17,6 +17,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Grounded,
         Jumping,
         Falling,
+        Attacking
     }
 
     public enum Trigger
@@ -26,14 +27,17 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Move,
         Ground,
         Jump,
-        Fall
+        Fall,
+        Attack,
+        StopAttack
     }
 
     public enum Order
     {
         OrderMoveLeft,
         OrderMoveRight,
-        OrderJump
+        OrderJump,
+        OrderAttack
     }
 
     public struct ChangedStateEventArgs
@@ -107,8 +111,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     }
 
     public abstract void GetEnslaved();
-
-    protected abstract void Attack();
 
     public virtual void SetOrder(Order order)
     {

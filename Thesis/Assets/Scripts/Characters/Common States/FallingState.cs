@@ -12,7 +12,7 @@ public class FallingState : CharacterState
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
         collider = character.GetComponent<BoxCollider2D>();
-        diameter = collider.size.y / 2;
+        diameter = collider.bounds.size.y / 2;
     }
 
     
@@ -32,7 +32,9 @@ public class FallingState : CharacterState
         float xRay = character.transform.position.x;
         float yRay = character.transform.position.y - diameter;
 
-        RaycastHit2D groundDetection = Physics2D.Raycast(new Vector2(xRay, yRay), Vector2.down, groundDetectionDistance);
+        RaycastHit2D groundDetection = Physics2D.Raycast(new Vector2(xRay, yRay), Vector2.down , groundDetectionDistance, ~(1 << Reg.playerLayer));
+
+        Debug.DrawRay(new Vector2(xRay, yRay), Vector2.down * groundDetectionDistance, Color.green);
 
         if (groundDetection.transform != null)
         {

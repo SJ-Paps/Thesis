@@ -39,9 +39,4 @@ public class MainCharacter : Tribal
     {
         enslaved = true;
     }
-
-    protected override void Attack()
-    {
-        
-    }
 }

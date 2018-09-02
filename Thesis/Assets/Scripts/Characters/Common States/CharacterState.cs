@@ -1,5 +1,6 @@
 ﻿using SAM.FSM;
 using System.Collections.Generic;
+using System;
 
 public abstract class CharacterState : State<Character.State, Character.Trigger, Character.ChangedStateEventArgs>
 {
@@ -7,15 +8,19 @@ public abstract class CharacterState : State<Character.State, Character.Trigger,
     protected Queue<Character.Order> eventQueue;
     private bool receivingOrders = false;
 
+    protected Action<Character.Order> processOrderDelegate;
+
     protected CharacterState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state)
     {
         this.character = character;
         eventQueue = new Queue<Character.Order>();
+
+        processOrderDelegate = ProcessOrder;
     }
 
     protected override void OnEnter(ref Character.ChangedStateEventArgs e)
     {
-        character.onReceiveOrder += ProcessOrder;
+        character.onReceiveOrder += processOrderDelegate;
     }
 
     protected virtual void ProcessOrder(Character.Order e)
@@ -26,6 +31,6 @@ public abstract class CharacterState : State<Character.State, Character.Trigger,
     protected override void OnExit()
     {
         eventQueue.Clear();
-        character.onReceiveOrder -= ProcessOrder;
+        character.onReceiveOrder -= processOrderDelegate;
     }
 }

@@ -26,7 +26,7 @@ public class JumpingState : CharacterState {
 
         float initPosY = character.transform.position.y;
 
-        maxHeight = initPosY + height;
+        maxHeight = initPosY + height / 3;
 
         rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
     }
@@ -45,13 +45,9 @@ public class JumpingState : CharacterState {
     {
         jumping = false;
 
-        EditorDebug.Log(eventQueue.Count);
-
         while(eventQueue.Count != 0)
         {
             Character.Order ev = eventQueue.Dequeue();
-
-            EditorDebug.Log(ev);
 
             if (ev == Character.Order.OrderJump)
             {

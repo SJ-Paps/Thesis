@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using SAM.Timers;
+using System;
 
 public class Axe : Weapon, IDeadly
 {
@@ -7,28 +8,33 @@ public class Axe : Weapon, IDeadly
     new private Collider2D collider;
 
     private SyncTimer timer;
-    private float attackInterval = 0.4f;
-    private float recoilInterval = 0.2f;
+    private float attackInterval = 1f;
+    private float recoilInterval = 0.5f;
+
+    private Action<SyncTimer> onAttack;
+    private Action<SyncTimer> onTerminate;
 
     protected override void Awake()
     {
         base.Awake();
 
         timer = new SyncTimer();
-        
+
+        onAttack = OnAttack;
+        onTerminate = OnTerminate;
     }
 
-    protected override void Update()
+    protected void Update()
     {
         timer.Update(Time.deltaTime);
     }
 
-    public override void UseWeapon()
+    protected override void OnUseWeapon()
     {
         BeingUsed = true;
 
         timer.Interval = attackInterval;
-        timer.onTick += OnAttack;
+        timer.onTick += onAttack;
         timer.Start();
     }
 
@@ -37,20 +43,20 @@ public class Axe : Weapon, IDeadly
         collider.enabled = true;
 
         timer.Interval = recoilInterval;
-        timer.onTick += OnTerminate;
+        timer.onTick -= onAttack;
+        timer.onTick += onTerminate;
         timer.Start();
     }
 
     private void OnTerminate(SyncTimer timer)
     {
+        timer.onTick -= onTerminate;
         collider.enabled = false;
         BeingUsed = false;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        EditorDebug.Log("AAAA");
-
         IMortal mortal = collision.GetComponent<IMortal>();
 
         if(mortal != null)
