@@ -6,10 +6,7 @@ using System;
 public struct MultiKey
 {
     [SerializeField]
-    private bool isAxis;
-
-    [SerializeField]
-    private bool lessThanZero;
+    private bool isAxis, lessThanZero, isKeyDown, isKeyReleased;
 
     [SerializeField]
     private string name;
@@ -39,13 +36,13 @@ public struct MultiKey
         }
     }
 
-    public MultiKey(string name, bool isAxis, bool lessThanZero)
+    /*public MultiKey(string name, bool isAxis, bool lessThanZero)
     {
         this.name = name;
         keys = new List<KeyCode>();
         this.isAxis = isAxis;
         this.lessThanZero = lessThanZero;
-    }
+    }*/
 
     public void AddKey(KeyCode key)
     {
@@ -69,9 +66,26 @@ public struct MultiKey
     {
         foreach (KeyCode k in keys)
         {
-            if (Input.GetKey(k))
+            if(isKeyDown)
             {
-                return true;
+                if (Input.GetKeyDown(k))
+                {
+                    return true;
+                }
+            }
+            else if(isKeyReleased)
+            {
+                if (Input.GetKeyUp(k))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if(Input.GetKey(k))
+                {
+                    return true;
+                }
             }
         }
 

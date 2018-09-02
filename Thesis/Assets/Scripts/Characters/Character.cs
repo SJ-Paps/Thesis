@@ -5,7 +5,7 @@ using SAM.FSM;
 public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
-    public event Action<Character.Order> onReceiveOrder;
+    public event Action<Character.Order> onProcessOrder;
     public event Action onDead;
 
     public enum State
@@ -114,9 +114,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public virtual void SetOrder(Order order)
     {
-        if(onReceiveOrder != null)
+        if(onProcessOrder != null)
         {
-            onReceiveOrder(order);
+            onProcessOrder(order);
         }
     }
 
