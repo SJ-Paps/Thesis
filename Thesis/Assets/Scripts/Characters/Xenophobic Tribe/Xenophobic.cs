@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using SAM.FSM;
 using UnityEngine;
-using SAM.FSM;
 
 public class Xenophobic : Tribal, IAudibleListener
 {
@@ -21,16 +19,16 @@ public class Xenophobic : Tribal, IAudibleListener
         }
     }
 
-    protected FSM<State, Trigger, ChangedStateEventArgs> attackFSM;
+    protected FSM<State, Trigger> attackFSM;
 
     protected override void Awake()
     {
         base.Awake();
 
-        attackFSM = new FSM<State, Trigger, ChangedStateEventArgs>();
+        attackFSM = new FSM<State, Trigger>();
 
         attackFSM.AddState(State.Idle);
-        attackFSM.AddState(new XenophobicAttackState(attackFSM, State.Attacking, this));
+        attackFSM.AddState(new XenophobicAttackState(attackFSM, State.Attacking, this, orders));
 
         attackFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
         attackFSM.MakeTransition(State.Attacking, Trigger.StopAttack, State.Idle);

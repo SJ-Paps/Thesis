@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System;
 using SAM.FSM;
+using System.Collections.Generic;
 
 public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
-    public event Action<Character.Order> onProcessOrder;
+    public event Action<Character.Order> onOrderReceived;
     public event Action onDead;
 
     public enum State
@@ -40,11 +41,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         OrderAttack
     }
 
-    public struct ChangedStateEventArgs
-    {
-
-    }
-
     protected bool enslaved;
 
     public bool Enslaved
@@ -59,19 +55,23 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public Animator Animator { get; protected set; }
 
-    private FSM<State, Trigger, ChangedStateEventArgs> aliveFSM;
+    private FSM<State, Trigger> aliveFSM;
 
-    private CharacterContextState alive;
-    private CharacterContextState dead;
+    private CharacterAliveState alive;
+    private CharacterDeadState dead;
+
+    protected List<Order> orders;
 
     protected virtual void Awake()
     {
         Animator = GetComponent<Animator>();
 
-        aliveFSM = new FSM<State, Trigger, ChangedStateEventArgs>();
+        orders = new List<Order>();
 
-        alive = new CharacterContextState(aliveFSM, State.Alive, this);
-        dead = new CharacterContextState(aliveFSM, State.Dead, this);
+        aliveFSM = new FSM<State, Trigger>();
+
+        alive = new CharacterAliveState(aliveFSM, State.Alive, this, orders);
+        dead = new CharacterDeadState(aliveFSM, State.Dead, this, orders);
 
         aliveFSM.AddState(alive);
         aliveFSM.AddState(dead);
@@ -84,19 +84,28 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected virtual void Update()
     {
         aliveFSM.UpdateCurrentState();
+
+        ClearOrders();
     }
 
-    protected void AddStateMachineWhenAlive(FSM<State, Trigger, ChangedStateEventArgs> fsm)
+    protected void AddStateMachineWhenAlive(FSM<State, Trigger> fsm)
     {
         alive.AddFSM(fsm);
     }
 
-    protected void AddStateMachineWhenDead(FSM<State, Trigger, ChangedStateEventArgs> fsm)
+    protected void AddStateMachineWhenDead(FSM<State, Trigger> fsm)
     {
         dead.AddFSM(fsm);
     }
 
     public virtual bool Die(IDeadly deadly)
+    {
+        Die();
+
+        return true;
+    }
+
+    protected bool Die()
     {
         aliveFSM.Trigger(Trigger.Die);
 
@@ -114,10 +123,17 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public virtual void SetOrder(Order order)
     {
-        if(onProcessOrder != null)
+        orders.Add(order);
+
+        if(onOrderReceived != null)
         {
-            onProcessOrder(order);
+            onOrderReceived(order);
         }
+    }
+
+    protected void ClearOrders()
+    {
+        orders.Clear();
     }
 
     void OnCollisionEnter2D(Collision2D collision)

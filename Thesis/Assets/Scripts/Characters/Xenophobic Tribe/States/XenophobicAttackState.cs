@@ -1,18 +1,19 @@
 ﻿using SAM.FSM;
+using System.Collections.Generic;
 
 public class XenophobicAttackState : CharacterAttackState
 {
     new private Xenophobic character;
     private Weapon weapon;
 
-    public XenophobicAttackState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Xenophobic controller) : base(fsm, state, controller)
+    public XenophobicAttackState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Xenophobic controller, List<Character.Order> orderList) : base(fsm, state, controller, orderList)
     {
         character = controller;
     }
 
-    protected override void OnEnter(ref Character.ChangedStateEventArgs e)
+    protected override void OnEnter()
     {
-        base.OnEnter(ref e);
+        base.OnEnter();
 
         weapon = character.Weapon;
         weapon.UseWeapon();

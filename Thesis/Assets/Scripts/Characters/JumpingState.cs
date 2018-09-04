@@ -1,5 +1,6 @@
 ﻿using SAM.FSM;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class JumpingState : CharacterState {
 
@@ -10,7 +11,7 @@ public class JumpingState : CharacterState {
     private float height;
     private Vector2 jumpForce = Vector2.up * 0.5f;
 
-    public JumpingState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state, character)
+    public JumpingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList) : base(fsm, state, character, orderList)
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
         collider = character.GetComponent<Collider2D>();
@@ -18,9 +19,9 @@ public class JumpingState : CharacterState {
     }
     
 
-    protected override void OnEnter(ref Character.ChangedStateEventArgs e)
+    protected override void OnEnter()
     {
-        base.OnEnter(ref e);
+        base.OnEnter();
 
         EditorDebug.Log("JUMPING ENTER");
 
@@ -34,28 +35,26 @@ public class JumpingState : CharacterState {
     protected override void OnUpdate()
     {
         Jump();
-    }
 
-    protected override void OnExit()
-    {
-        base.OnExit();
+        base.OnUpdate();
     }
 
     private void Jump()
     {
         jumping = false;
 
-        while(eventQueue.Count != 0)
+        for(int i = 0; i < orders.Count; i++)
         {
-            Character.Order ev = eventQueue.Dequeue();
+            Character.Order order = orders[i];
 
-            if (ev == Character.Order.OrderJump)
+            if (order == Character.Order.OrderJump)
             {
                 rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
 
                 if (character.transform.position.y < maxHeight)
                 {
                     jumping = true;
+                    break;
                 }
             }
         }

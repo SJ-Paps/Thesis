@@ -1,5 +1,6 @@
 ﻿using SAM.FSM;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class MovingState : CharacterState
 {
@@ -7,31 +8,33 @@ public class MovingState : CharacterState
     private Vector2 moveForce = new Vector2(0.2f, 0);
     private float maxVelocityX = 3f;
 
-    public MovingState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state, character)
+    public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList) : base(fsm, state, character, orderList)
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
     }
 
-    protected override void OnEnter(ref Character.ChangedStateEventArgs e)
+    protected override void OnEnter()
     {
-        base.OnEnter(ref e);
+        base.OnEnter();
 
         EditorDebug.Log("MOVING ENTER");
     }
 
     protected override void OnUpdate()
     {
-        while (eventQueue.Count != 0)
+        for (int i = 0; i < orders.Count; i++)
         {
-            Character.Order ev = eventQueue.Dequeue();
+            Character.Order order = orders[i];
 
-            if (ev == Character.Order.OrderMoveLeft)
+            if (order == Character.Order.OrderMoveLeft)
             {
                 rigidbody2D.AddForce(moveForce * -1, ForceMode2D.Impulse);
+                break;
             }
-            else if (ev == Character.Order.OrderMoveRight)
+            else if (order == Character.Order.OrderMoveRight)
             {
                 rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
+                break;
             }
         }
 
@@ -48,5 +51,7 @@ public class MovingState : CharacterState
         {
             stateMachine.Trigger(Character.Trigger.StopMoving);
         }
+
+        base.OnUpdate();
     }
 }
