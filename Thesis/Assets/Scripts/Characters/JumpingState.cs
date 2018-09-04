@@ -17,7 +17,6 @@ public class JumpingState : CharacterState {
         collider = character.GetComponent<Collider2D>();
         height = collider.bounds.size.y;
     }
-    
 
     protected override void OnEnter()
     {
@@ -64,6 +63,4 @@ public class JumpingState : CharacterState {
             stateMachine.Trigger(Character.Trigger.Fall);
         }
     }
-
-    
 }
