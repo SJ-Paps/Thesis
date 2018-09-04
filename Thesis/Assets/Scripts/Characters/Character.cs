@@ -7,6 +7,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action<Collision2D> onCollisionEnter2D;
     public event Action<Character.Order> onReceiveOrder;
     public event Action onDead;
+    public bool isHiding = false;
 
     public enum State
     {
@@ -121,6 +122,22 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         if(onCollisionEnter2D != null)
         {
             onCollisionEnter2D(collision);
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D collider) 
+    {
+        if (collider.gameObject.layer == 8) 
+        {
+            isHiding = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.gameObject.layer == 8)
+        {
+            isHiding = false;
         }
     }
 }
