@@ -5,6 +5,22 @@ using System.Collections.Generic;
 
 public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
+    [SerializeField]
+    protected bool isPlayer;
+
+    public bool IsPlayer
+    {
+        get
+        {
+            return isPlayer;
+        }
+
+        protected set
+        {
+            isPlayer = value;
+        }
+    }
+
     public event Action<Collision2D> onCollisionEnter2D;
 	public event Action<Order> onOrderReceived;
     public event Action onDead;

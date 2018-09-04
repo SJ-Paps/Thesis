@@ -8,17 +8,8 @@ public abstract class UnityController : MonoBehaviour
     public abstract void Control();
 }
 
-public abstract class UnityController<TSlave, TOrder> : UnityController where TSlave : IControllable<TOrder> where TOrder : struct
+public abstract class UnityController<TSlave, TOrder> : UnityController
 {
-    [SerializeField]
-    protected struct KeyOrder
-    {
-        [SerializeField]
-        public MultiKey key;
-        [SerializeField]
-        public TOrder order;
-    }
-
     public event ChangeControlDelegate onSlaveChanged;
 
     [SerializeField]
@@ -29,3 +20,17 @@ public abstract class UnityController<TSlave, TOrder> : UnityController where TS
         this.slave = slave;
     }
 }
+
+public abstract class UnityInputController<TSlave, TOrder> : UnityController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
+{
+    [SerializeField]
+    protected struct KeyOrder
+    {
+        [SerializeField]
+        public MultiKey key;
+        [SerializeField]
+        public TOrder order;
+    }
+}
+
+

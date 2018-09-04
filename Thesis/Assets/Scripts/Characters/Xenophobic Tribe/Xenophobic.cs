@@ -1,8 +1,11 @@
 ﻿using SAM.FSM;
 using UnityEngine;
+using System;
 
 public class Xenophobic : Tribal, IAudibleListener
 {
+    public event Action<Character> onPlayerDetected;
+
     [SerializeField]
     protected Weapon weapon;
 
@@ -21,6 +24,11 @@ public class Xenophobic : Tribal, IAudibleListener
 
     protected FSM<State, Trigger> attackFSM;
 
+    [SerializeField]
+    protected VisionTrigger nearVisionTrigger, distantVisionTrigger;
+
+    protected Character player;
+
     protected override void Awake()
     {
         base.Awake();
@@ -35,14 +43,15 @@ public class Xenophobic : Tribal, IAudibleListener
 
         attackFSM.StartBy(State.Idle);
 
-        Weapon.SetUser(this);
-    }
+        if(nearVisionTrigger != null)
+        {
+            nearVisionTrigger.onPlayerDetected += OnPlayerDetected;
+        }
 
-    protected override void Update()
-    {
-        base.Update();
-
-        weapon.UseWeapon();
+        if(distantVisionTrigger != null)
+        {
+            distantVisionTrigger.onPlayerDetected += OnSomethingDetected;
+        }
     }
 
     public override void GetEnslaved()
@@ -58,5 +67,22 @@ public class Xenophobic : Tribal, IAudibleListener
     public override void SetOrder(Order order)
     {
         
+    }
+
+    protected virtual void OnPlayerDetected(Character player)
+    {
+        EditorDebug.Log("TE VI");
+
+        this.player = player;
+
+        if(onPlayerDetected != null)
+        {
+            onPlayerDetected(player);
+        }
+    }
+
+    protected virtual void OnSomethingDetected(Character something)
+    {
+        EditorDebug.Log("QUE FUE ESO?");
     }
 }
