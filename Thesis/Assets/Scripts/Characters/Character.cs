@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
-	public event Action<Character.Order> onOrderReceived;
+	public event Action<Order> onOrderReceived;
     public event Action onDead;
     public bool isHiding = false;
 
@@ -19,24 +19,32 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Grounded,
         Jumping,
         Falling,
-		Hidden,		Attacking    }
+		Hidden,
+        Attacking
+    }
 
     public enum Trigger
     {
         Die,
-        StopMoving,
         Move,
         Ground,
         Jump,
         Fall,
-		Hide,		GoIdle,		StopAttack    }
+		Hide,
+        Attack,
+        StopAttacking,
+        StopMoving,
+        StopHiding
+    }
 
     public enum Order
     {
         OrderMoveLeft,
         OrderMoveRight,
         OrderJump,
-		OrderAttack,		OrderHide    }
+		OrderAttack,
+        OrderHide
+    }
 
     protected bool enslaved;
 

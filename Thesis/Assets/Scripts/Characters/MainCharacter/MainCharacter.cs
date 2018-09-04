@@ -28,13 +28,13 @@ public class MainCharacter : Tribal
 
         jumpingFSM.StartBy(State.Falling);
 
-        FSM<State, Trigger, ChangedStateEventArgs> actionsFSM = new FSM<State, Trigger, ChangedStateEventArgs>();
+        FSM<State, Trigger> actionsFSM = new FSM<State, Trigger>();
 
-        actionsFSM.AddState(new HiddenState(actionsFSM, State.Hidden, this));
-        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this));
+        actionsFSM.AddState(new HiddenState(actionsFSM, State.Hidden, this, orders));
+        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this, orders));
 
         actionsFSM.MakeTransition(State.Idle, Trigger.Hide, State.Hidden);
-        actionsFSM.MakeTransition(State.Hidden, Trigger.GoIdle, State.Idle);
+        actionsFSM.MakeTransition(State.Hidden, Trigger.StopHiding, State.Idle);
 
         actionsFSM.StartBy(State.Idle);
 

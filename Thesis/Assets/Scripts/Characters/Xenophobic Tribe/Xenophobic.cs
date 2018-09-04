@@ -31,7 +31,7 @@ public class Xenophobic : Tribal, IAudibleListener
         attackFSM.AddState(new XenophobicAttackState(attackFSM, State.Attacking, this, orders));
 
         attackFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
-        attackFSM.MakeTransition(State.Attacking, Trigger.StopAttack, State.Idle);
+        attackFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
 
         attackFSM.StartBy(State.Idle);
 

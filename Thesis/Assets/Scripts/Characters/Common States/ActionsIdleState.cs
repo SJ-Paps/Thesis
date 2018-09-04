@@ -1,5 +1,6 @@
 ﻿using SAM.FSM;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ActionsIdleState : CharacterState 
 {
@@ -7,9 +8,8 @@ public class ActionsIdleState : CharacterState
     public float actualCooldownToHide;
     public float necessaryCooldownToHide;
 
-    public ActionsIdleState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state, character)
+    public ActionsIdleState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders) : base(fsm, state, character, orders)
     {
-        hiddenState = character.GetComponent<HiddenState>();
         actualCooldownToHide = 2.0f;
         necessaryCooldownToHide = 2.0f;
     }
@@ -18,8 +18,9 @@ public class ActionsIdleState : CharacterState
     {
         actualCooldownToHide += Time.time;
 
-        while (eventQueue.Count != 0) {
-            Character.Order ev = eventQueue.Dequeue();
+        for (int i = 0; i < orders.Count; i++)
+        {
+            Character.Order ev = orders[i];
 
             if (ev == Character.Order.OrderHide && character.isHiding == true && actualCooldownToHide >= necessaryCooldownToHide) {
                 EditorDebug.Log(character.isHiding);

@@ -23,7 +23,7 @@ public class XenophobicAttackState : CharacterAttackState
     {
         if(weapon.BeingUsed == false)
         {
-            stateMachine.Trigger(Character.Trigger.StopAttack);
+            stateMachine.Trigger(Character.Trigger.StopAttacking);
         }
     }
 

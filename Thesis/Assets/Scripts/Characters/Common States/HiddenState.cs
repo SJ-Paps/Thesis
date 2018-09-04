@@ -1,26 +1,24 @@
 ﻿using SAM.FSM;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class HiddenState : CharacterState 
 {
     private ActionsIdleState actionsIdleState;
 
-    public HiddenState(FSM<Character.State, Character.Trigger, Character.ChangedStateEventArgs> fsm, Character.State state, Character character) : base(fsm, state, character)
+    public HiddenState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders) : base(fsm, state, character, orders)
     {
-        actionsIdleState = character.GetComponent<ActionsIdleState>();
+
     }
 
-    protected override void OnEnter(ref Character.ChangedStateEventArgs e) 
+    protected override void OnEnter() 
     {
-        base.OnEnter(ref e);
         actionsIdleState.actualCooldownToHide = 0;
         EditorDebug.Log("Entrado a Hide");
     }
 
     protected override void OnExit()
     {
-        base.OnExit();
-       
         EditorDebug.Log("Salí de Hide");
     }
 
@@ -31,16 +29,16 @@ public class HiddenState : CharacterState
 
     private void Hide() 
     {
-        while (eventQueue.Count != 0)
+        for (int i = 0; i < orders.Count; i++)
         {
-            Character.Order ev = eventQueue.Dequeue();
+            Character.Order ev = orders[i];
 
             if (ev == Character.Order.OrderHide && character.isHiding == true) 
             {
                 character.isHiding = false;
                 character.GetComponent<Collider2D>().isTrigger = false;
                 character.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-                stateMachine.Trigger(Character.Trigger.GoIdle);
+                stateMachine.Trigger(Character.Trigger.StopHiding);
             }
         }
     }
