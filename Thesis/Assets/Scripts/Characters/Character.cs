@@ -6,9 +6,16 @@ using System.Collections.Generic;
 public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
+    public event Action<Collider2D> onTriggerEnter2D;
+    public event Action<Collider2D> onTriggerExit2D;
 	public event Action<Order> onOrderReceived;
     public event Action onDead;
-    public bool isHiding = false;
+    protected Blackboard blackboard;
+
+    public bool isHidden
+    {
+        get { return blackboard.isHiding; }
+    }
 
     public enum State
     {
@@ -46,6 +53,12 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         OrderHide
     }
 
+    public class Blackboard
+    {
+        public bool isHiding;
+        //public bool isGrounded;
+    }
+
     protected bool enslaved;
 
     public bool Enslaved
@@ -70,6 +83,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected virtual void Awake()
     {
         Animator = GetComponent<Animator>();
+
+        blackboard = new Blackboard();
 
         orders = new List<Order>();
 
@@ -149,19 +164,19 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         }
     }
 
-    void OnTriggerStay2D(Collider2D collider) 
+    void OnTriggerEnter2D(Collider2D collider) 
     {
-        if (collider.gameObject.layer == 8) 
+        if (onTriggerEnter2D != null) 
         {
-            isHiding = true;
+            onTriggerEnter2D(collider);
         }
     }
 
     void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.gameObject.layer == 8)
+        if (onTriggerExit2D != null)
         {
-            isHiding = false;
+            onTriggerExit2D(collider);
         }
     }
 }
