@@ -8,7 +8,7 @@ public class JumpingState : CharacterState {
     private Rigidbody2D rigidbody2D;
     private Collider2D collider;
     private float maxHeight;
-    private float maxVelocity = 2;
+    private float maxVelocity = 4;
     private float height;
     private Vector2 jumpForce = Vector2.up * 0.5f;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class VisionTrigger : MonoBehaviour {
+public class TriggerEnter : MonoBehaviour {
 
     public event Action<Collider2D> onSomethingDetected;
 

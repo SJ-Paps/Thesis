@@ -29,7 +29,10 @@ public class Xenophobic : Tribal, IAudibleListener
     protected FSM<State, Trigger> jumpingFSM;
 
     [SerializeField]
-    protected VisionTrigger nearestVisionTrigger, nearVisionTrigger, distantVisionTrigger;
+    protected TriggerEnter nearestVisionTrigger, nearVisionTrigger;
+        
+    [SerializeField]
+    protected TriggerStay distantVisionTrigger;
 
     protected override void Awake()
     {
