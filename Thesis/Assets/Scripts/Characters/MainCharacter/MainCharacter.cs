@@ -23,6 +23,7 @@ public class MainCharacter : Tribal
         jumpingFSM.AddState(new FallingState(jumpingFSM, State.Falling, this, orders));
 
         jumpingFSM.MakeTransition(State.Grounded, Trigger.Jump, State.Jumping);
+        jumpingFSM.MakeTransition(State.Grounded, Trigger.Fall, State.Falling);
         jumpingFSM.MakeTransition(State.Jumping, Trigger.Fall, State.Falling);
         jumpingFSM.MakeTransition(State.Falling, Trigger.Ground, State.Grounded);
 
@@ -41,6 +42,7 @@ public class MainCharacter : Tribal
         AddStateMachineWhenAlive(movementFSM);
         AddStateMachineWhenAlive(jumpingFSM);
         AddStateMachineWhenAlive(actionsFSM);
+
         gameObject.layer = Reg.playerLayer;
     }
 

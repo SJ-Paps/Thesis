@@ -1,41 +1,52 @@
 ﻿using SAM.FSM;
+using UnityEngine;
 
 public class XenophobicIAController : UnityController<Xenophobic, Character.Order>
 {
-    public enum Alertness
+    public enum State
     {
         CalmedDown,
         Aware,
         FullAlert
     }
 
-    public enum AlertTrigger
+    public enum Trigger
     {
-        GoNext,
-        GoPrevious
+        CalmDown,
+        GetAware,
+        SetFullAlert
     }
 
-    protected FSM<Alertness, AlertTrigger> alertnessFSM;
+    public class Blackboard
+    {
+        public Vector2 seekedLastPosition;
+    }
+
+    protected Blackboard blackboard;
+
+    protected FSM<State, Trigger> alertnessFSM;
 
     void Awake()
     {
-        alertnessFSM = new FSM<Alertness, AlertTrigger>();
+        blackboard = new Blackboard();
 
-        alertnessFSM.AddState(Alertness.CalmedDown);
-        alertnessFSM.AddState(Alertness.Aware);
-        alertnessFSM.AddState(Alertness.FullAlert);
+        alertnessFSM = new FSM<State, Trigger>();
 
-        alertnessFSM.MakeTransition(Alertness.CalmedDown, AlertTrigger.GoNext, Alertness.Aware);
-        alertnessFSM.MakeTransition(Alertness.Aware, AlertTrigger.GoNext, Alertness.FullAlert);
-        alertnessFSM.MakeTransition(Alertness.FullAlert, AlertTrigger.GoPrevious, Alertness.Aware);
-        alertnessFSM.MakeTransition(Alertness.Aware, AlertTrigger.GoPrevious, Alertness.CalmedDown);
+        alertnessFSM.AddState(new XenophobicAlertlessState(alertnessFSM, State.CalmedDown, slave, blackboard));
+        alertnessFSM.AddState(new XenophobicAwareState(alertnessFSM, State.Aware, slave, blackboard));
+        alertnessFSM.AddState(State.FullAlert);
 
-        alertnessFSM.StartBy(Alertness.CalmedDown);
+        alertnessFSM.MakeTransition(State.CalmedDown, Trigger.GetAware, State.Aware);
+        alertnessFSM.MakeTransition(State.Aware, Trigger.SetFullAlert, State.FullAlert);
+        alertnessFSM.MakeTransition(State.FullAlert, Trigger.CalmDown, State.Aware);
+        alertnessFSM.MakeTransition(State.Aware, Trigger.CalmDown, State.CalmedDown);
+
+        alertnessFSM.StartBy(State.CalmedDown);
     }
 
     public override void Control()
     {
-        
+        alertnessFSM.UpdateCurrentState();
     }
 
     void Update()

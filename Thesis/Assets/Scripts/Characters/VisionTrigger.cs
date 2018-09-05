@@ -3,18 +3,13 @@ using UnityEngine;
 
 public class VisionTrigger : MonoBehaviour {
 
-    public event Action<Character> onPlayerDetected;
+    public event Action<Collider2D> onSomethingDetected;
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Character player = collision.GetComponent<Character>();
-
-        if(player != null && player.IsPlayer)
+        if(onSomethingDetected != null)
         {
-            if(onPlayerDetected != null)
-            {
-                onPlayerDetected(player);
-            }
+            onSomethingDetected(collision);
         }
     }
 }

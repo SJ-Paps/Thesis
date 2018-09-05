@@ -22,7 +22,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     }
 
     public event Action<Collision2D> onCollisionEnter2D;
-	public event Action<Order> onOrderReceived;
+    public event Action<Order> onOrderReceived;
     public event Action onDead;
     public bool isHiding = false;
 
@@ -35,7 +35,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Grounded,
         Jumping,
         Falling,
-		Hidden,
+        Hidden,
         Attacking
     }
 
@@ -46,7 +46,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Ground,
         Jump,
         Fall,
-		Hide,
+        Hide,
         Attack,
         StopAttacking,
         StopMoving,
@@ -58,7 +58,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         OrderMoveLeft,
         OrderMoveRight,
         OrderJump,
-		OrderAttack,
+        OrderAttack,
         OrderHide
     }
 
@@ -83,11 +83,16 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     protected List<Order> orders;
 
+    protected float groundDetectionDistance = 0.03f;
+    protected float colliderVerticalDiameter;
+
     protected virtual void Awake()
     {
         Animator = GetComponent<Animator>();
 
         orders = new List<Order>();
+
+        colliderVerticalDiameter = GetComponent<Collider2D>().bounds.size.y / 2;
 
         aliveFSM = new FSM<State, Trigger>();
 
@@ -146,7 +151,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         orders.Add(order);
 
-        if(onOrderReceived != null)
+        if (onOrderReceived != null)
         {
             onOrderReceived(order);
         }
@@ -155,6 +160,20 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected void ClearOrders()
     {
         orders.Clear();
+    }
+
+    public bool CheckIsOnFloor()
+    {
+        float xRay = transform.position.x;
+        float yRay = transform.position.y - colliderVerticalDiameter;
+
+        Vector2 origin = new Vector2(xRay, yRay);
+
+        RaycastHit2D groundDetection = Physics2D.Linecast(origin, origin + (Vector2.down * groundDetectionDistance), 1 << Reg.floorLayer);
+
+        EditorDebug.DrawLine(origin, origin + (Vector2.down * groundDetectionDistance), Color.green);
+
+        return groundDetection.transform != null;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
