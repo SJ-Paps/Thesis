@@ -7,10 +7,9 @@ public class HiddenState : CharacterState
 {
     private FSM<Character.State, Character.Trigger> characterJumpingFSM;
     private FSM<Character.State, Character.Trigger> characterMovementFSM;
-    private Character.Blackboard characterBlackboard;
     private Rigidbody2D characterRigidbody2D;
     private Collider2D characterCollider2D;
-    private Action<Collider2D> checkingForComingOutOfTheHidingPlaceMethod;
+    private Character.Blackboard characterBlackboard;
     private int hidingPlaceLayer;
 
     public HiddenState(FSM<Character.State, Character.Trigger> fsm, 
@@ -23,23 +22,23 @@ public class HiddenState : CharacterState
     {
         characterJumpingFSM = jumpingFSM;
         characterMovementFSM = movementFSM;
+        characterRigidbody2D = character.GetComponent<Rigidbody2D>();
+        characterCollider2D = character.GetComponent<Collider2D>();
         characterBlackboard = blackboard;
         hidingPlaceLayer = 8;
-        characterCollider2D = character.GetComponent<Collider2D>();
-        //checkingForComingOutOfTheHidingPlaceMethod += CheckingForComingOutOfTheHidingPlace;
-        characterRigidbody2D = character.GetComponent<Rigidbody2D>();
     }
 
     protected override void OnEnter() 
     {
-        EditorDebug.Log("Entrado a Hide");
-       // character.onTriggerEnter2D += checkingForComingOutOfTheHidingPlaceMethod;
+        characterBlackboard.isHidden = true;
+        EnteringToTheHidingPlace();
+        EditorDebug.Log("HIDDEN ENTER");
     }
 
     protected override void OnExit()
     {
-        EditorDebug.Log("Salí de Hide");
-       //character.onTriggerEnter2D -= checkingForComingOutOfTheHidingPlaceMethod;
+        characterBlackboard.isHidden = false;
+        EditorDebug.Log("HIDDEN EXIT");
     }
 
     protected override void OnUpdate() 
@@ -60,20 +59,20 @@ public class HiddenState : CharacterState
         }
     }
 
-    //void CheckingForComingOutOfTheHidingPlace(Collider2D collider2D)
-    //{
-    //    if (collider2D.gameObject.layer == hidingPlaceLayer) 
-    //    {
-    //        characterBlackboard.isHiding = false;
-    //    }
-    //}
+    private void EnteringToTheHidingPlace() 
+    {
+        characterCollider2D.isTrigger = true;
+        characterRigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+        characterJumpingFSM.Active = false;
+        characterMovementFSM.Active = false;
+    }
 
     private void ComingOutOfTheHidingPlace() 
     {
         characterCollider2D.isTrigger = false;
         characterRigidbody2D.constraints = RigidbodyConstraints2D.None;
-        characterMovementFSM.Active = true;
         characterJumpingFSM.Active = true;
+        characterMovementFSM.Active = true;
         stateMachine.Trigger(Character.Trigger.StopHiding);
     }
 }

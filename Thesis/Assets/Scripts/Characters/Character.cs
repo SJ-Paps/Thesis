@@ -10,11 +10,16 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action<Collider2D> onTriggerExit2D;
 	public event Action<Order> onOrderReceived;
     public event Action onDead;
+
     protected Blackboard blackboard;
 
     public bool isHidden
     {
-        get { return blackboard.isHiding; }
+        get { return blackboard.isHidden; }
+    }
+    public bool isGrounded
+    {
+        get { return blackboard.isGrounded; }
     }
 
     public enum State
@@ -55,8 +60,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public class Blackboard
     {
-        public bool isHiding = false;
-        //public bool isGrounded;
+        public bool isHidden = false;
+        public bool isGrounded = false;
     }
 
     protected bool enslaved;

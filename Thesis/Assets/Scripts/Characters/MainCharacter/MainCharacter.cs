@@ -18,7 +18,7 @@ public class MainCharacter : Tribal
 
         FSM<State, Trigger> jumpingFSM = new FSM<State, Trigger>();
 
-        jumpingFSM.AddState(new GroundedState(jumpingFSM, State.Grounded, this, orders));
+        jumpingFSM.AddState(new GroundedState(jumpingFSM, State.Grounded, this, orders, blackboard));
         jumpingFSM.AddState(new JumpingState(jumpingFSM, State.Jumping, this, orders));
         jumpingFSM.AddState(new FallingState(jumpingFSM, State.Falling, this, orders));
 
@@ -31,7 +31,7 @@ public class MainCharacter : Tribal
         FSM<State, Trigger> actionsFSM = new FSM<State, Trigger>();
 
         actionsFSM.AddState(new HiddenState(actionsFSM, State.Hidden, this, orders,blackboard,jumpingFSM,movementFSM));
-        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this, orders,blackboard,jumpingFSM,movementFSM));
+        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this, orders));
 
         actionsFSM.MakeTransition(State.Idle, Trigger.Hide, State.Hidden);
         actionsFSM.MakeTransition(State.Hidden, Trigger.StopHiding, State.Idle);
