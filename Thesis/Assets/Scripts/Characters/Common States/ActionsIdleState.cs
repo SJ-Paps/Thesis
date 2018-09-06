@@ -8,12 +8,12 @@ public class ActionsIdleState : CharacterState
 {
     private Action<Collider2D> checkingForEnteringToTheHidingPlaceMethod;
     private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
-    private Collider2D characterCollider2D;
+    private Rigidbody2D characterRigidbody2D;
     private SyncTimer timerOfHiding;
     private float cooldownOfHiding;
     private int hidingPlaceLayer;
     private bool canHide;
-    private bool cooldownReached;
+    private bool isEnteringToTheHidingPlace;
 
     public ActionsIdleState(FSM<Character.State, Character.Trigger> fsm,
         Character.State state,
@@ -22,11 +22,12 @@ public class ActionsIdleState : CharacterState
     {
         checkingForEnteringToTheHidingPlaceMethod += CheckingForEnteringToTheHidingPlace;
         checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
+        characterRigidbody2D = character.GetComponent<Rigidbody2D>();
         timerOfHiding = new SyncTimer();
         cooldownOfHiding = 2.0f;
         hidingPlaceLayer = 8;
         canHide = false;
-        cooldownReached = false;
+        isEnteringToTheHidingPlace = false;
 
         timerOfHiding.Interval = cooldownOfHiding;
         timerOfHiding.onTick += StopTimerOfHiding;
@@ -35,7 +36,6 @@ public class ActionsIdleState : CharacterState
     protected override void OnEnter()
     {
         base.OnEnter();
-        timerOfHiding.Start();
         character.onTriggerEnter2D += checkingForEnteringToTheHidingPlaceMethod;
         character.onTriggerExit2D += checkingForExitingOfTheHidingPlaceMethod;
         EditorDebug.Log("ACTIONIDLE ENTER");
@@ -60,7 +60,12 @@ public class ActionsIdleState : CharacterState
 
             if (ev == Character.Order.OrderHide && canHide == true && character.isGrounded == true) 
             {
-                cooldownReached = false;
+                timerOfHiding.Start();
+                characterRigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+            }
+            if(isEnteringToTheHidingPlace)
+            {
+                isEnteringToTheHidingPlace = false;
                 stateMachine.Trigger(Character.Trigger.Hide);
             }
         }
@@ -85,6 +90,6 @@ public class ActionsIdleState : CharacterState
     void StopTimerOfHiding(SyncTimer timer) 
     {
         timer.Stop();
-        cooldownReached = true;
+        isEnteringToTheHidingPlace = true;
     }
 }
