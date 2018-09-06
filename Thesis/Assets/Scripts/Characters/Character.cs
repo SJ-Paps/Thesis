@@ -10,7 +10,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action<Collider2D> onTriggerExit2D;
 	public event Action<Order> onOrderReceived;
     public event Action onDead;
-
     protected Blackboard blackboard;
 
     public bool isHidden

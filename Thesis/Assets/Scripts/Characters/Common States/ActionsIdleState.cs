@@ -9,9 +9,11 @@ public class ActionsIdleState : CharacterState
     private Action<Collider2D> checkingForEnteringToTheHidingPlaceMethod;
     private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
     private Collider2D characterCollider2D;
+    private SyncTimer timerOfHiding;
+    private float cooldownOfHiding;
     private int hidingPlaceLayer;
     private bool canHide;
-    //private SyncTimer syncTimer;
+    private bool cooldownReached;
 
     public ActionsIdleState(FSM<Character.State, Character.Trigger> fsm,
         Character.State state,
@@ -20,16 +22,20 @@ public class ActionsIdleState : CharacterState
     {
         checkingForEnteringToTheHidingPlaceMethod += CheckingForEnteringToTheHidingPlace;
         checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
+        timerOfHiding = new SyncTimer();
+        cooldownOfHiding = 2.0f;
         hidingPlaceLayer = 8;
         canHide = false;
-        //syncTimer.Interval = 2.0f;
-        //syncTimer.onTick += sfadff;
-        //syncTimer.Start();
+        cooldownReached = false;
+
+        timerOfHiding.Interval = cooldownOfHiding;
+        timerOfHiding.onTick += StopTimerOfHiding;
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
+        timerOfHiding.Start();
         character.onTriggerEnter2D += checkingForEnteringToTheHidingPlaceMethod;
         character.onTriggerExit2D += checkingForExitingOfTheHidingPlaceMethod;
         EditorDebug.Log("ACTIONIDLE ENTER");
@@ -45,14 +51,17 @@ public class ActionsIdleState : CharacterState
 
     protected override void OnUpdate()
     {
-        //syncTimer.Update(Time.deltaTime);
+
+        timerOfHiding.Update(Time.deltaTime);
+
         for (int i = 0; i < orders.Count; i++)
         {
             Character.Order ev = orders[i];
 
             if (ev == Character.Order.OrderHide && canHide == true && character.isGrounded == true) 
             {
-                stateMachine.Trigger(Character.Trigger.Hide); ;
+                cooldownReached = false;
+                stateMachine.Trigger(Character.Trigger.Hide);
             }
         }
     }
@@ -72,7 +81,10 @@ public class ActionsIdleState : CharacterState
             canHide = false;
         }
     }
-    //void sfadff(SyncTimer pacha) {
-    //    pacha.Stop();
-    //}
+    
+    void StopTimerOfHiding(SyncTimer timer) 
+    {
+        timer.Stop();
+        cooldownReached = true;
+    }
 }
