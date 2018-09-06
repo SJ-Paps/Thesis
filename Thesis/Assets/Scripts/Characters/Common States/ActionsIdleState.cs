@@ -9,6 +9,7 @@ public class ActionsIdleState : CharacterState
     private FSM<Character.State, Character.Trigger> characterJumpingFSM;
     private FSM<Character.State, Character.Trigger> characterMovementFSM;
     private Action<Collider2D> checkingForEnteringToTheHidingPlaceMethod;
+    private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
     private Rigidbody2D characterRigidbody2D;
     private Character.Blackboard characterBlackboard;
     private Collider2D characterCollider2D;
@@ -29,6 +30,7 @@ public class ActionsIdleState : CharacterState
         hidingPlaceLayer = 8;
         characterCollider2D = character.GetComponent<Collider2D>();
         checkingForEnteringToTheHidingPlaceMethod += CheckingForEnteringToTheHidingPlace;
+        checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
         characterRigidbody2D = character.GetComponent<Rigidbody2D>();
         //syncTimer.Interval = 2.0f;
         //syncTimer.onTick += sfadff;
@@ -40,12 +42,15 @@ public class ActionsIdleState : CharacterState
         base.OnEnter();
         EditorDebug.Log("Entrado a ActionIdle");
         character.onTriggerEnter2D += checkingForEnteringToTheHidingPlaceMethod;
+        character.onTriggerExit2D += checkingForExitingOfTheHidingPlaceMethod;
     }
 
-    protected override void OnExit() {
+    protected override void OnExit() 
+    {
         base.OnExit();
         EditorDebug.Log("Salí de ActionIdle");
         character.onTriggerEnter2D -= checkingForEnteringToTheHidingPlaceMethod;
+        character.onTriggerExit2D -= checkingForExitingOfTheHidingPlaceMethod;
     }
 
     protected override void OnUpdate()
@@ -55,7 +60,7 @@ public class ActionsIdleState : CharacterState
         {
             Character.Order ev = orders[i];
 
-            if (ev == Character.Order.OrderHide && character.isHidden == true /*&& actualCooldownToHide >= necessaryCooldownToHide*/) 
+            if (ev == Character.Order.OrderHide && character.isHidden == true) 
             {
                 EnteringToTheHidingPlace();
             }
@@ -74,12 +79,20 @@ public class ActionsIdleState : CharacterState
         }
     }
 
+    void CheckingForExitingOfTheHidingPlace(Collider2D collider2D)
+    {
+        if(collider2D.gameObject.layer == hidingPlaceLayer)
+        {
+            characterBlackboard.isHiding = false;
+        }
+    }
+
     private void EnteringToTheHidingPlace() 
     {
         //EditorDebug.Log(character.isHidden);
         characterCollider2D.isTrigger = true;
         characterRigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
-        characterBlackboard.isHiding = true;
+        //characterBlackboard.isHiding = true;
         characterJumpingFSM.Active = false;
         characterMovementFSM.Active = false;
         stateMachine.Trigger(Character.Trigger.Hide);

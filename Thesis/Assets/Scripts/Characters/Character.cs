@@ -55,7 +55,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public class Blackboard
     {
-        public bool isHiding;
+        public bool isHiding = false;
         //public bool isGrounded;
     }
 
