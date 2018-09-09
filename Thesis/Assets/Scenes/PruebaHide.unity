@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 24273016}
   - component: {fileID: 24273018}
   - component: {fileID: 24273017}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MainCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 24273013}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.05, y: 0.95, z: 0}
+  m_LocalPosition: {x: 0.65, y: -0.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -257,7 +257,7 @@ GameObject:
   - component: {fileID: 282435672}
   - component: {fileID: 282435671}
   - component: {fileID: 282435670}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: TestDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 315068506}
   - component: {fileID: 315068505}
   - component: {fileID: 315068504}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: New Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -443,7 +443,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 315068503}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.97940826, y: 1.6038461, z: 0.043945312}
+  m_LocalPosition: {x: -0.71, y: -0.12, z: 0.043945312}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
@@ -576,7 +576,7 @@ GameObject:
   - component: {fileID: 1153903614}
   - component: {fileID: 1153903613}
   - component: {fileID: 1153903612}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: TestGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}

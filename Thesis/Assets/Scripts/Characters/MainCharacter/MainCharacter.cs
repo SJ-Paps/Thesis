@@ -30,8 +30,8 @@ public class MainCharacter : Tribal
 
         FSM<State, Trigger> actionsFSM = new FSM<State, Trigger>();
 
-        actionsFSM.AddState(new HiddenState(actionsFSM, State.Hidden, this, orders,blackboard,jumpingFSM,movementFSM));
-        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this, orders));
+        actionsFSM.AddState(new HiddenState(actionsFSM, State.Hidden, this, orders, blackboard, jumpingFSM, movementFSM));
+        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this, orders, jumpingFSM, movementFSM));
 
         actionsFSM.MakeTransition(State.Idle, Trigger.Hide, State.Hidden);
         actionsFSM.MakeTransition(State.Hidden, Trigger.StopHiding, State.Idle);

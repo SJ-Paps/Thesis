@@ -18,7 +18,7 @@ public class FallingState : CharacterState
 
     protected override void OnEnter()
     {
-        EditorDebug.Log("FALLING ENTER");
+        //EditorDebug.Log("FALLING ENTER");
     }
 
     protected override void OnExit()

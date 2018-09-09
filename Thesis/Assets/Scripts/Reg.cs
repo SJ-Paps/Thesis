@@ -28,5 +28,6 @@ public static class Reg
     public const int nonHostileLayer = 10;
     public const int hostileDeadlyLayer = 11;
     public const int generalDeadlyLayer = 12;
+    public const int hidingPlaceLayer = 13;
 
 }

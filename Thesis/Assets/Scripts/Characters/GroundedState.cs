@@ -18,7 +18,7 @@ public class GroundedState : CharacterState
     {
         base.OnEnter();
         characterBlackboard.isGrounded = true;
-        EditorDebug.Log("GROUNDED ENTER");
+        //EditorDebug.Log("GROUNDED ENTER");
     }
 
     protected override void OnExit() {

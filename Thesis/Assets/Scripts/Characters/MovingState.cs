@@ -17,7 +17,7 @@ public class MovingState : CharacterState
     {
         base.OnEnter();
 
-        EditorDebug.Log("MOVING ENTER");
+        //EditorDebug.Log("MOVING ENTER");
     }
 
     protected override void OnUpdate()
