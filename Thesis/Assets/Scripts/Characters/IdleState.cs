@@ -12,7 +12,7 @@ public class CharacterIdleState : CharacterState
     {
         base.OnEnter();
 
-        //EditorDebug.Log("IDLE ENTER");
+        EditorDebug.Log("IDLE ENTER");
     }
 
     protected override void OnUpdate()

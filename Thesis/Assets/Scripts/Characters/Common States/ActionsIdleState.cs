@@ -10,6 +10,7 @@ public class ActionsIdleState : CharacterState
     private FSM<Character.State, Character.Trigger> characterMovementFSM;
     private Action<Collider2D> checkingForEnteringToTheHidingPlaceMethod;
     private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
+    private Rigidbody2D characterRigidBody2D;
     private SyncTimer timerOfHiding;
     private float cooldownOfHiding;
     private bool canHide;
@@ -25,6 +26,7 @@ public class ActionsIdleState : CharacterState
         characterMovementFSM = movementFSM;
         checkingForEnteringToTheHidingPlaceMethod += CheckingForEnteringToTheHidingPlace;
         checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
+        characterRigidBody2D = character.GetComponent<Rigidbody2D>();
         timerOfHiding = new SyncTimer();
         cooldownOfHiding = 2.0f;
         canHide = false;
@@ -64,6 +66,7 @@ public class ActionsIdleState : CharacterState
                 EditorDebug.Log("LLAMADO AL TIMER ACTION");
                 characterMovementFSM.Active = false;
                 characterJumpingFSM.Active = false;
+                characterRigidBody2D.velocity = new Vector2(0, characterRigidBody2D.velocity.y);
                 timerOfHiding.Start();
             }
         }
