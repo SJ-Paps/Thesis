@@ -1,5 +1,6 @@
 ﻿using SAM.FSM;
 using UnityEngine;
+using System;
 
 public class XenophobicIAController : UnityController<Xenophobic, Character.Order>
 {
@@ -26,14 +27,18 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
     protected FSM<State, Trigger> alertnessFSM;
 
+    public Eyes SlaveEyes { get; protected set; }
+
     void Awake()
     {
         blackboard = new Blackboard();
+        SlaveEyes = Slave.GetComponentInChildren<Eyes>();
 
         alertnessFSM = new FSM<State, Trigger>();
+        
 
-        alertnessFSM.AddState(new XenophobicAlertlessState(alertnessFSM, State.CalmedDown, slave, blackboard));
-        alertnessFSM.AddState(new XenophobicAwareState(alertnessFSM, State.Aware, slave, blackboard));
+        alertnessFSM.AddState(new XenophobicAlertlessState(alertnessFSM, State.CalmedDown, this, blackboard));
+        alertnessFSM.AddState(new XenophobicAwareState(alertnessFSM, State.Aware, this, blackboard));
         alertnessFSM.AddState(State.FullAlert);
 
         alertnessFSM.MakeTransition(State.CalmedDown, Trigger.GetAware, State.Aware);
@@ -53,6 +58,5 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
     {
         Control();
     }
-
 
 }

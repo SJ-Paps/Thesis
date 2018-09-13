@@ -4,10 +4,6 @@ using System;
 
 public class Xenophobic : Tribal, IAudibleListener
 {
-    public event Action<Character> onPlayerDetected;
-    public event Action<Vector2> onSomethingDetected;
-    public event Action<Character> onPlayerReached;
-
     [SerializeField]
     protected Weapon weapon;
 
@@ -27,12 +23,6 @@ public class Xenophobic : Tribal, IAudibleListener
     protected FSM<State, Trigger> attackFSM;
     protected FSM<State, Trigger> movementFSM;
     protected FSM<State, Trigger> jumpingFSM;
-
-    [SerializeField]
-    protected TriggerEnter nearestVisionTrigger, nearVisionTrigger;
-        
-    [SerializeField]
-    protected TriggerStay distantVisionTrigger;
 
     protected override void Awake()
     {
@@ -76,10 +66,6 @@ public class Xenophobic : Tribal, IAudibleListener
         AddStateMachineWhenAlive(movementFSM);
         AddStateMachineWhenAlive(jumpingFSM);
         AddStateMachineWhenAlive(attackFSM);
-
-        nearestVisionTrigger.onSomethingDetected += OnPlayerReached;
-        nearVisionTrigger.onSomethingDetected += OnPlayerDetected;
-        distantVisionTrigger.onSomethingDetected += OnSomethingDetected;
     }
 
     public override void GetEnslaved()
@@ -90,35 +76,5 @@ public class Xenophobic : Tribal, IAudibleListener
     public void Listen(ref AudibleData data)
     {
         
-    }
-
-    protected virtual void OnPlayerDetected(Collider2D player)
-    {
-        EditorDebug.Log("TE VI");
-
-        if(onPlayerDetected != null)
-        {
-            onPlayerDetected(GameManager.Instance.Player);
-        }
-    }
-
-    protected virtual void OnSomethingDetected(Collider2D something)
-    {
-        EditorDebug.Log("QUE FUE ESO?");
-
-        if(onSomethingDetected != null)
-        {
-            onSomethingDetected(something.transform.position);
-        }
-    }
-
-    protected virtual void OnPlayerReached(Collider2D player)
-    {
-        EditorDebug.Log("TE TENGO");
-
-        if(onPlayerReached != null)
-        {
-            onPlayerReached(GameManager.Instance.Player);
-        }
     }
 }

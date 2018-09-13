@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class XenophobicAlertlessState : XenophobicIAState {
 
-    private Action<Vector2> onSomethingDetectedDelegate;
+    private Action<Collider2D> onSomethingDetectedDelegate;
+    private Eyes characterEyes;
 
-	public XenophobicAlertlessState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, Xenophobic controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+	public XenophobicAlertlessState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
     {
         onSomethingDetectedDelegate = GetAware;
+
+        characterEyes = controller.SlaveEyes;
     }
 
     protected override void OnEnter()
     {
-        character.onSomethingDetected += onSomethingDetectedDelegate;
+        if(characterEyes != null)
+        {
+            characterEyes.onDistantVisionEnter += onSomethingDetectedDelegate;
+            characterEyes.onMediumVisionEnter += onSomethingDetectedDelegate;
+            characterEyes.onNearVisionEnter += onSomethingDetectedDelegate;
+        }
     }
 
     protected override void OnUpdate()
@@ -23,12 +31,17 @@ public class XenophobicAlertlessState : XenophobicIAState {
 
     protected override void OnExit()
     {
-        character.onSomethingDetected -= onSomethingDetectedDelegate;
+        if (characterEyes != null)
+        {
+            characterEyes.onDistantVisionEnter -= onSomethingDetectedDelegate;
+            characterEyes.onMediumVisionEnter -= onSomethingDetectedDelegate;
+            characterEyes.onNearVisionEnter -= onSomethingDetectedDelegate;
+        }
     }
 
-    private void GetAware(Vector2 position)
+    private void GetAware(Collider2D collider)
     {
-        blackboard.seekedLastPosition = position;
+        blackboard.seekedLastPosition = collider.transform.position;
         stateMachine.Trigger(XenophobicIAController.Trigger.GetAware);
     }
 }

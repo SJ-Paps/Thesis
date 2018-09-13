@@ -5,23 +5,29 @@ using UnityEngine;
 public class XenophobicAwareState : XenophobicIAState
 {
     private Vector2 lastPosition;
-    private Action<Character> onPlayerDetected;
     private bool positionReached;
     private float positionReachedMarginX = 2;
     private float positionReachedMarginY = 4;
 
-    private Action<Vector2> updatePositionDelegate;
+    private Action<Collider2D> updatePositionDelegate;
 
-    public XenophobicAwareState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, Xenophobic controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    private Eyes characterEyes;
+
+    public XenophobicAwareState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
     {
         updatePositionDelegate = UpdatePosition;
+
+        characterEyes = controller.SlaveEyes;
     }
 
     protected override void OnEnter()
     {
         lastPosition = blackboard.seekedLastPosition;
 
-        character.onSomethingDetected += updatePositionDelegate;
+        if (characterEyes != null)
+        {
+            characterEyes.onDistantVisionStay += updatePositionDelegate;
+        }
     }
 
     protected override void OnUpdate()
@@ -34,45 +40,38 @@ public class XenophobicAwareState : XenophobicIAState
 
     protected override void OnExit()
     {
-        character.onSomethingDetected -= updatePositionDelegate;
+        if (characterEyes != null)
+        {
+            characterEyes.onDistantVisionStay -= updatePositionDelegate;
+        }
     }
 
     private void SearchAtPosition(Vector2 position)
     {
-        if (position.x < character.transform.position.x)
+        if (position.x < controller.transform.position.x)
         {
-            character.SetOrder(Character.Order.OrderMoveLeft);
+            controller.Slave.SetOrder(Character.Order.OrderMoveLeft);
         }
         else
         {
-            character.SetOrder(Character.Order.OrderMoveRight);
+            controller.Slave.SetOrder(Character.Order.OrderMoveRight);
         }
     }
 
     private bool IsPositionReached(Vector2 position)
     {
-        float positiveMarginX = position.x + positionReachedMarginX;
-        float positiveMarginY = position.y + positionReachedMarginY;
+        Bounds b = new Bounds(position, new Vector2(positionReachedMarginX * 2, positionReachedMarginY * 2));
 
-        float negativeMarginX = position.x - positionReachedMarginX;
-        float negativeMarginY = position.y - positionReachedMarginY;
-
-        float characterX = character.transform.position.x;
-        float characterY = character.transform.position.y;
-        
-        if (positiveMarginX > characterX && negativeMarginX < characterX)
+        if (b.Contains(controller.Slave.transform.position))
         {
-            if(positiveMarginY > characterY && negativeMarginY < characterY)
-            {
-                return true;
-            }
+            return true;
         }
 
         return false;
     }
 
-    private void UpdatePosition(Vector2 position)
+    private void UpdatePosition(Collider2D collider)
     {
-        lastPosition = position;
+        lastPosition = collider.transform.position;
     }
 }

@@ -8,16 +8,31 @@ public abstract class UnityController : MonoBehaviour
     public abstract void Control();
 }
 
-public abstract class UnityController<TSlave, TOrder> : UnityController
+public abstract class UnityController<TSlave, TOrder> : UnityController where TSlave : IControllable<TOrder> where TOrder : struct
 {
     public event ChangeControlDelegate onSlaveChanged;
 
     [SerializeField]
     protected TSlave slave;
 
+    public TSlave Slave
+    {
+        get
+        {
+            return slave;
+        }
+    }
+
     public void SetSlave(TSlave slave)
     {
+        TSlave previous = this.slave;
+
         this.slave = slave;
+
+        if(onSlaveChanged != null)
+        {
+            onSlaveChanged(previous, slave);
+        }
     }
 }
 

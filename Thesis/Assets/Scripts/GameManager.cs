@@ -21,6 +21,24 @@ public class GameManager {
 
     private GameManager()
     {
-        Player = GameObject.FindObjectOfType<MainCharacter>();
+        Player = FindPlayer();
+    }
+
+    public Character FindPlayer()
+    {
+        if(Player != null)
+        {
+            return Player;
+        }
+
+        foreach (Character obj in GameObject.FindObjectsOfType<Character>())
+        {
+            if (obj.gameObject.layer == Reg.playerLayer)
+            {
+                return obj;
+            }
+        }
+
+        return null;
     }
 }
