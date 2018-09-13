@@ -12,7 +12,7 @@ public class JumpingState : CharacterState {
     private float height;
     private Vector2 jumpForce = Vector2.up * 0.5f;
 
-    public JumpingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList) : base(fsm, state, character, orderList)
+    public JumpingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
         collider = character.GetComponent<Collider2D>();

@@ -115,8 +115,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
         aliveFSM = new FSM<State, Trigger>();
 
-        alive = new CharacterAliveState(aliveFSM, State.Alive, this, orders);
-        dead = new CharacterDeadState(aliveFSM, State.Dead, this, orders);
+        alive = new CharacterAliveState(aliveFSM, State.Alive, this, orders, blackboard);
+        dead = new CharacterDeadState(aliveFSM, State.Dead, this, orders, blackboard);
 
         aliveFSM.AddState(alive);
         aliveFSM.AddState(dead);

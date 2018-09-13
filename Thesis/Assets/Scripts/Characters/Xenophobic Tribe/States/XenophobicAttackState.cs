@@ -6,7 +6,7 @@ public class XenophobicAttackState : CharacterAttackState
     new private Xenophobic character;
     private Weapon weapon;
 
-    public XenophobicAttackState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Xenophobic controller, List<Character.Order> orderList) : base(fsm, state, controller, orderList)
+    public XenophobicAttackState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Xenophobic controller, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, controller, orderList, blackboard)
     {
         character = controller;
     }

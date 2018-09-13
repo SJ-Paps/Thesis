@@ -3,27 +3,25 @@ using System.Collections.Generic;
 
 public class GroundedState : CharacterState
 {
-    Character.Blackboard characterBlackboard;
-
     public GroundedState(FSM<Character.State, Character.Trigger> fsm,
        Character.State state,
        Character character,
        List<Character.Order> orderList,
-       Character.Blackboard blackboard) : base(fsm, state, character, orderList)
+       Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
-        characterBlackboard = blackboard;
+
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
-        characterBlackboard.isGrounded = true;
+        blackboard.isGrounded = true;
         EditorDebug.Log("GROUNDED ENTER");
     }
 
     protected override void OnExit() {
         base.OnExit();
-        characterBlackboard.isGrounded = false;
+        blackboard.isGrounded = false;
         EditorDebug.Log("GROUNDED EXIT");
     }
 

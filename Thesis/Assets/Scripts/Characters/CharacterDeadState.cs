@@ -7,7 +7,7 @@ public class CharacterDeadState : CharacterState
 
     private int currentIndex;
 
-    public CharacterDeadState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character controller, List<Character.Order> orderList) : base(fsm, state, controller, orderList)
+    public CharacterDeadState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character controller, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, controller, orderList, blackboard)
     {
         stateMachines = new List<FSM<Character.State, Character.Trigger>>();
     }

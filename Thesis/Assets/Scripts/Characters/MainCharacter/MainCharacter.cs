@@ -8,8 +8,8 @@ public class MainCharacter : Tribal
 
         FSM<State, Trigger> movementFSM = new FSM<State, Trigger>();
 
-        movementFSM.AddState(new CharacterIdleState(movementFSM, State.Idle, this, orders));
-        movementFSM.AddState(new MovingState(movementFSM, State.Moving, this, orders));
+        movementFSM.AddState(new CharacterIdleState(movementFSM, State.Idle, this, orders, blackboard));
+        movementFSM.AddState(new MovingState(movementFSM, State.Moving, this, orders, blackboard));
 
         movementFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
         movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.Idle);
@@ -19,8 +19,8 @@ public class MainCharacter : Tribal
         FSM<State, Trigger> jumpingFSM = new FSM<State, Trigger>();
 
         jumpingFSM.AddState(new GroundedState(jumpingFSM, State.Grounded, this, orders, blackboard));
-        jumpingFSM.AddState(new JumpingState(jumpingFSM, State.Jumping, this, orders));
-        jumpingFSM.AddState(new FallingState(jumpingFSM, State.Falling, this, orders));
+        jumpingFSM.AddState(new JumpingState(jumpingFSM, State.Jumping, this, orders, blackboard));
+        jumpingFSM.AddState(new FallingState(jumpingFSM, State.Falling, this, orders, blackboard));
 
         jumpingFSM.MakeTransition(State.Grounded, Trigger.Jump, State.Jumping);
         jumpingFSM.MakeTransition(State.Grounded, Trigger.Fall, State.Falling);
@@ -32,7 +32,7 @@ public class MainCharacter : Tribal
         FSM<State, Trigger> actionsFSM = new FSM<State, Trigger>();
 
         actionsFSM.AddState(new HiddenState(actionsFSM, State.Hidden, this, orders, blackboard, jumpingFSM, movementFSM));
-        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this, orders, jumpingFSM, movementFSM));
+        actionsFSM.AddState(new ActionsIdleState(actionsFSM, State.Idle, this, orders, jumpingFSM, movementFSM, blackboard));
 
         actionsFSM.MakeTransition(State.Idle, Trigger.Hide, State.Hidden);
         actionsFSM.MakeTransition(State.Hidden, Trigger.StopHiding, State.Idle);

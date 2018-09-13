@@ -8,7 +8,7 @@ public class MovingState : CharacterState
     private Vector2 moveForce = new Vector2(0.2f, 0);
     private float maxVelocityX = 3f;
 
-    public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList) : base(fsm, state, character, orderList)
+    public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
     }

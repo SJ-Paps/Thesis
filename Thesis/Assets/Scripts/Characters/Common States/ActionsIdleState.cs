@@ -20,7 +20,8 @@ public class ActionsIdleState : CharacterState
         Character character,
         List<Character.Order> orders,
         FSM<Character.State,Character.Trigger> jumpingFSM,
-        FSM<Character.State, Character.Trigger> movementFSM) : base(fsm, state, character, orders)
+        FSM<Character.State, Character.Trigger> movementFSM,
+        Character.Blackboard blackboard) : base(fsm, state, character, orders, blackboard)
     {
         characterJumpingFSM = jumpingFSM;
         characterMovementFSM = movementFSM;

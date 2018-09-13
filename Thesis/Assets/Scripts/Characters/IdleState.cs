@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class CharacterIdleState : CharacterState
 {
-    public CharacterIdleState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList) : base(fsm, state, character, orderList)
+    public CharacterIdleState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
 
     }

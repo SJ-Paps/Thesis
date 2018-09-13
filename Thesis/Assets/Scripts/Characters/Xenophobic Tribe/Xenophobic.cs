@@ -40,8 +40,8 @@ public class Xenophobic : Tribal, IAudibleListener
 
         movementFSM = new FSM<State, Trigger>();
 
-        movementFSM.AddState(new CharacterIdleState(movementFSM, State.Idle, this, orders));
-        movementFSM.AddState(new MovingState(movementFSM, State.Moving, this, orders));
+        movementFSM.AddState(new CharacterIdleState(movementFSM, State.Idle, this, orders, blackboard));
+        movementFSM.AddState(new MovingState(movementFSM, State.Moving, this, orders, blackboard));
 
         movementFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
         movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.Idle);
@@ -51,9 +51,9 @@ public class Xenophobic : Tribal, IAudibleListener
 
         jumpingFSM = new FSM<State, Trigger>();
 
-        jumpingFSM.AddState(new GroundedState(jumpingFSM, State.Grounded, this, orders));
-        jumpingFSM.AddState(new JumpingState(jumpingFSM, State.Jumping, this, orders));
-        jumpingFSM.AddState(new FallingState(jumpingFSM, State.Falling, this, orders));
+        jumpingFSM.AddState(new GroundedState(jumpingFSM, State.Grounded, this, orders, blackboard));
+        jumpingFSM.AddState(new JumpingState(jumpingFSM, State.Jumping, this, orders, blackboard));
+        jumpingFSM.AddState(new FallingState(jumpingFSM, State.Falling, this, orders, blackboard));
 
         jumpingFSM.MakeTransition(State.Grounded, Trigger.Jump, State.Jumping);
         jumpingFSM.MakeTransition(State.Grounded, Trigger.Fall, State.Falling);
@@ -66,7 +66,7 @@ public class Xenophobic : Tribal, IAudibleListener
         attackFSM = new FSM<State, Trigger>();
 
         attackFSM.AddState(State.Idle);
-        attackFSM.AddState(new XenophobicAttackState(attackFSM, State.Attacking, this, orders));
+        attackFSM.AddState(new XenophobicAttackState(attackFSM, State.Attacking, this, orders, blackboard));
 
         attackFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
         attackFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);

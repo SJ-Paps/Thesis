@@ -9,7 +9,6 @@ public class HiddenState : CharacterState
     private FSM<Character.State, Character.Trigger> characterJumpingFSM;
     private FSM<Character.State, Character.Trigger> characterMovementFSM;
     private SyncTimer timerForComingOut;
-    private Character.Blackboard characterBlackboard;
     private float cooldownForComingOut;
 
     public HiddenState(FSM<Character.State, Character.Trigger> fsm, 
@@ -18,12 +17,11 @@ public class HiddenState : CharacterState
        List<Character.Order> orders,
        Character.Blackboard blackboard,
        FSM<Character.State,Character.Trigger> jumpingFSM,
-       FSM<Character.State, Character.Trigger> movementFSM) : base(fsm, state, character, orders)
+       FSM<Character.State, Character.Trigger> movementFSM) : base(fsm, state, character, orders, blackboard)
     {
         characterJumpingFSM = jumpingFSM;
         characterMovementFSM = movementFSM;
         timerForComingOut = new SyncTimer();
-        characterBlackboard = blackboard;
         cooldownForComingOut = 2.0f;
 
         timerForComingOut.onTick += StopTimerForComingOut;
@@ -32,14 +30,14 @@ public class HiddenState : CharacterState
 
     protected override void OnEnter() 
     {
-        characterBlackboard.isHidden = true;
+        blackboard.isHidden = true;
         EnteringToTheHidingPlace();
         EditorDebug.Log("HIDDEN ENTER");
     }
 
     protected override void OnExit()
     {
-        characterBlackboard.isHidden = false;
+        blackboard.isHidden = false;
       //  EditorDebug.Log("HIDDEN EXIT");
     }
 
