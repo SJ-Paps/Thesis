@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public class CharController : UnityController<Character, Character.Order> {
+public class CharacterInputController : UnityInputController<Character, Character.Order> {
 
     [Serializable]
     new protected struct KeyOrder

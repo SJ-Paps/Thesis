@@ -29,6 +29,11 @@ public class GroundedState : CharacterState
 
     protected override void OnUpdate()
     {
+        if(character.CheckIsOnFloor() == false)
+        {
+            stateMachine.Trigger(Character.Trigger.Fall);
+        }
+
         for(int i = 0; i < orders.Count; i++)
         {
             Character.Order order = orders[i];
