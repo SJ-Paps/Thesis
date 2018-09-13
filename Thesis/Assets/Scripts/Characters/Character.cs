@@ -12,13 +12,21 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action onDead;
     protected Blackboard blackboard;
 
-    public bool isHidden
+    public bool IsHidden
     {
         get { return blackboard.isHidden; }
     }
-    public bool isGrounded
+    public bool IsGrounded
     {
         get { return blackboard.isGrounded; }
+    }
+    public bool IsAlive
+    {
+        get { return blackboard.isAlive; }
+    }
+    public bool FacingLeft
+    {
+        get { return facingLeft; }
     }
 
     public enum State
@@ -59,8 +67,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public class Blackboard
     {
-        public bool isHidden = false;
-        public bool isGrounded = false;
+        public bool isAlive;
+        public bool isHidden;
+        public bool isGrounded;
     }
 
     protected bool enslaved;
@@ -73,8 +82,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         }
     }
 
-    public bool IsAlive { get; protected set; }
-
     public Animator Animator { get; protected set; }
 
     private FSM<State, Trigger> aliveFSM;
@@ -86,6 +93,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     protected float groundDetectionDistance = 0.03f;
     protected float colliderVerticalDiameter;
+
+    [SerializeField]
+    private bool facingLeft;
 
     protected virtual void Awake()
     {
@@ -138,8 +148,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         aliveFSM.Trigger(Trigger.Die);
 
-        IsAlive = false;
-
         if (onDead != null)
         {
             onDead();
@@ -177,6 +185,21 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         EditorDebug.DrawLine(origin, origin + (Vector2.down * groundDetectionDistance), Color.green);
 
         return groundDetection.transform != null;
+    }
+
+    public void Face(bool left)
+    {
+        if(facingLeft != left)
+        {
+            facingLeft = left;
+
+            OnFacingChanged(facingLeft);
+        }
+    }
+
+    protected virtual void OnFacingChanged(bool facingLeft)
+    {
+        transform.Rotate(Vector3.up, 180);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

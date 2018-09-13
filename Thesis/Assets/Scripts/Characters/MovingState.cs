@@ -28,11 +28,15 @@ public class MovingState : CharacterState
 
             if (order == Character.Order.OrderMoveLeft)
             {
+                character.Face(true);
+
                 rigidbody2D.AddForce(moveForce * -1, ForceMode2D.Impulse);
                 break;
             }
             else if (order == Character.Order.OrderMoveRight)
             {
+                character.Face(false);
+
                 rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
                 break;
             }

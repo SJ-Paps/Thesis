@@ -12,12 +12,22 @@ public class CharacterAliveState : CharacterState
         stateMachines = new List<FSM<Character.State, Character.Trigger>>();
     }
 
+    protected override void OnEnter()
+    {
+        blackboard.isAlive = true;
+    }
+
     protected override void OnUpdate()
     {
         for(currentIndex = 0; currentIndex < stateMachines.Count; currentIndex++)
         {
             stateMachines[currentIndex].UpdateCurrentState();
         }
+    }
+
+    protected override void OnExit()
+    {
+        blackboard.isAlive = false;
     }
 
     public void AddFSM(FSM<Character.State, Character.Trigger> fsm)

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class TriggerEnterExit2D : MonoBehaviour {
+public class Trigger2D : MonoBehaviour {
 
     public event Action<Collider2D> onEntered;
     public event Action<Collider2D> onExited;

@@ -202,6 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3effee286e0c054ba316790fe60b2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  facingLeft: 0
 --- !u!61 &24273017
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -365,7 +366,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.27197674, y: 0.29352388}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -376,7 +377,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.94, y: 1.28}
+  m_Size: {x: 0.15283312, y: 0.6929522}
   m_EdgeRadius: 0
 --- !u!114 &270640690
 MonoBehaviour:
@@ -817,6 +818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd9f0abc8fb7ab49aff725c618b9fb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  facingLeft: 1
   weapon: {fileID: 270640690}
 --- !u!212 &2033678308
 SpriteRenderer:

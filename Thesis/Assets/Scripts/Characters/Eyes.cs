@@ -5,11 +5,11 @@ using System;
 public class Eyes : MonoBehaviour
 {
     [SerializeField]
-    private TriggerEnterExit2D nearVision, mediumVision, distantVision;
+    private Trigger2D nearVision, mediumVision, distantVision;
 
-    public TriggerEnterExit2D NearVision { get { return nearVision; } }
-    public TriggerEnterExit2D MediumVision { get { return mediumVision; } }
-    public TriggerEnterExit2D DistantVision { get { return distantVision; } }
+    public Trigger2D NearVision { get { return nearVision; } }
+    public Trigger2D MediumVision { get { return mediumVision; } }
+    public Trigger2D DistantVision { get { return distantVision; } }
 
     public event Action<Collider2D> onNearVisionEnter;
     public event Action<Collider2D> onMediumVisionEnter;
