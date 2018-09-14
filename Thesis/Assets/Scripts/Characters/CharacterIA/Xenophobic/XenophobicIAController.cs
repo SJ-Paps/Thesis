@@ -29,7 +29,7 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
     public Eyes SlaveEyes { get; protected set; }
 
-    void Awake()
+    void Start()
     {
         blackboard = new Blackboard();
         SlaveEyes = Slave.GetComponentInChildren<Eyes>();

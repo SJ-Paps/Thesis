@@ -9,11 +9,13 @@
 
     <line tag="menu_button_options">options</line>
     <line tag="menu_button_exit">exit</line>
+    <line tag="menu_button_new_game">new game</line>
+    <line tag="menu_back">back</line>
 
 
     <line tag="options_menu_text_language">language settings</line>
     <line tag="options_menu_text_sound">sound settings</line>
-    <line tag="menu_back">back</line>
+    
 
     <line tag="soundchannel_general">general volume</line>
     <line tag="soundchannel_music">music volume</line>
