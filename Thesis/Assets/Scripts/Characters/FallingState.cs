@@ -6,6 +6,7 @@ public class FallingState : CharacterState
 {
     public FallingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
+
     }
 
     protected override void OnEnter()

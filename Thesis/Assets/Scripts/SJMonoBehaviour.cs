@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
-public class SJMonoBehaviour : MonoBehaviour {
+public class SJMonoBehaviour : MonoBehaviour 
+{
 
 }

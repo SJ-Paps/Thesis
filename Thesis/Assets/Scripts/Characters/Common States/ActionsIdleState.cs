@@ -10,6 +10,7 @@ public class ActionsIdleState : CharacterState
     private FSM<Character.State, Character.Trigger> characterMovementFSM;
     private Action<Collider2D> checkingForEnteringToTheHidingPlaceMethod;
     private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
+    private Action<Collision2D> checkingForPushingAnObjectMethod;
     private Rigidbody2D characterRigidBody2D;
     private SyncTimer timerOfHiding;
     private float cooldownOfHiding;
@@ -92,5 +93,13 @@ public class ActionsIdleState : CharacterState
     void EnteringToTheHidingPlace(SyncTimer timer) 
     {
         stateMachine.Trigger(Character.Trigger.Hide);
+    }
+
+    void CheckingForPushingAnObject(Collision2D collision) 
+    {
+        if(collision.gameObject.layer == Reg.objectLayer)
+        {
+            stateMachine.Trigger(Character.Trigger.Push);
+        }
     }
 }

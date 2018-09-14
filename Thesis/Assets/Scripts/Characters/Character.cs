@@ -47,7 +47,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Jumping,
         Falling,
         Hidden,
-        Attacking
+        Attacking,
+        Pushing
     }
 
     public enum Trigger
@@ -61,7 +62,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Attack,
         StopAttacking,
         StopMoving,
-        StopHiding
+        StopHiding,
+        StopPushing,
+        Push
     }
 
     public enum Order
@@ -70,7 +73,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         OrderMoveRight,
         OrderJump,
         OrderAttack,
-        OrderHide
+        OrderHide,
+        OrderPush
     }
 
     public class Blackboard
