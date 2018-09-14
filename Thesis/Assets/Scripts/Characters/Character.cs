@@ -28,6 +28,16 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return facingLeft; }
     }
+    public float MovementVelocity
+    {
+        get { return movementVelocity; }
+    }
+
+    [SerializeField]
+    private bool facingLeft;
+
+    [SerializeField]
+    protected float movementVelocity = 1;
 
     public enum State
     {
@@ -93,9 +103,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     protected float groundDetectionDistance = 0.03f;
     protected float colliderVerticalDiameter;
-
-    [SerializeField]
-    private bool facingLeft;
 
     protected virtual void Awake()
     {

@@ -7,6 +7,13 @@ public class Trigger2D : MonoBehaviour {
     public event Action<Collider2D> onExited;
     public event Action<Collider2D> onStay;
 
+    public BoxCollider2D InnerCollider { get; private set; }
+
+    void Awake()
+    {
+        InnerCollider = GetComponent<BoxCollider2D>();
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (onEntered != null)
@@ -29,5 +36,10 @@ public class Trigger2D : MonoBehaviour {
         {
             onStay(collision);
         }
+    }
+
+    public void ChangeSize(Vector2 size)
+    {
+        ((BoxCollider2D)InnerCollider).size = size;
     }
 }
