@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class PushingObjectState : CharacterState {
 
-    public Action<Collision2D> checkingForExitingOfPushingObjectMethod;
+    private Action<Collision2D> checkingForExitingOfPushingObjectMethod;
+    private RaycastHit2D raycastHit2D;
+    private float raycastDistance;
 
     public PushingObjectState(
        FSM<Character.State, Character.Trigger> fsm,
@@ -17,7 +19,7 @@ public class PushingObjectState : CharacterState {
        FSM<Character.State, Character.Trigger> jumpingFSM,
        FSM<Character.State, Character.Trigger> movementFSM) : base (fsm, state, character, orders, blackboard)
     {
-
+        raycastDistance = 0.4f;
     }
 
     protected override void OnEnter() {
@@ -30,6 +32,25 @@ public class PushingObjectState : CharacterState {
     }
 
     protected override void OnUpdate() {
+        raycastHit2D = Physics2D.Raycast(character.transform.position, Vector2.right * character.transform.localPosition.x, raycastDistance);
+
+        EditorDebug.DrawLine(character.transform.position, raycastHit2D.point, Color.red);
+
+        if(raycastHit2D.collider == null)
+        {
+            stateMachine.Trigger(Character.Trigger.StopPushing);
+        }
+
+        for(int i = 0; i < orders.Count; i++)
+        {
+            Character.Order ev = orders[i];
+
+            if(ev == Character.Order.OrderPush)
+            {
+                EditorDebug.Log("EMPUJO OBJETO");
+            }
+        }
+
         base.OnUpdate();
     }
 }

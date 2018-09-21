@@ -928,6 +928,14 @@ MonoBehaviour:
       name: Jump
       keys: 20000000
     order: 2
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 0
+      isKeyReleased: 0
+      name: Push
+      keys: 08000000
+    order: 5
 --- !u!1 &1713672738
 GameObject:
   m_ObjectHideFlags: 0
@@ -1191,7 +1199,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1762513080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.22, y: 2.64, z: -0.001953125}
+  m_LocalPosition: {x: -1.59, y: 2.64, z: -0.001953125}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
