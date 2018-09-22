@@ -29,21 +29,29 @@ public class PushingObjectState : CharacterState {
 
     protected override void OnExit() {
         base.OnExit();
+
+        EditorDebug.Log("PUSHINGOBJECT EXIT");
     }
 
     protected override void OnUpdate() {
-        raycastHit2D = Physics2D.Raycast(character.transform.position, Vector2.right * character.transform.localPosition.x, raycastDistance);
+        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance);
+        EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
 
-        EditorDebug.DrawLine(character.transform.position, raycastHit2D.point, Color.red);
-
-        if(raycastHit2D.collider == null)
+        if(!raycastHit2D || raycastHit2D.collider.gameObject.layer != Reg.objectLayer || !character.isGrounded)
         {
             stateMachine.Trigger(Character.Trigger.StopPushing);
+            blackboard.isPushing = false;
         }
 
         for(int i = 0; i < orders.Count; i++)
         {
             Character.Order ev = orders[i];
+
+            if(!raycastHit2D || raycastHit2D.collider.gameObject.layer != Reg.objectLayer || !character.isGrounded)
+            {
+                stateMachine.Trigger(Character.Trigger.StopPushing);
+                blackboard.isPushing = false;
+            }
 
             if(ev == Character.Order.OrderPush)
             {

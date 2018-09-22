@@ -62,13 +62,13 @@ public class ActionsIdleState : CharacterState
 
         timerOfHiding.Update(Time.deltaTime);
 
-        raycastHit2D = Physics2D.Raycast(character.transform.position, Vector2.right * character.transform.localPosition.x , raycastDistance);
+        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance);
+        EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
 
-        EditorDebug.DrawLine(character.transform.position, raycastHit2D.point, Color.red);
-
-        if(raycastHit2D.collider.gameObject.layer == Reg.objectLayer && raycastHit2D)
+        if(raycastHit2D && raycastHit2D.collider.gameObject.layer == Reg.objectLayer && character.isGrounded == true)
         {
             stateMachine.Trigger(Character.Trigger.Push);
+            blackboard.isPushing = true;
         }
 
         for (int i = 0; i < orders.Count; i++)

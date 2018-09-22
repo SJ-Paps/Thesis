@@ -21,8 +21,7 @@ public class GroundedState : CharacterState
 
     protected override void OnExit() {
         base.OnExit();
-        blackboard.isGrounded = false;
-        EditorDebug.Log("GROUNDED EXIT");
+        //EditorDebug.Log("GROUNDED EXIT");
     }
 
     protected override void OnUpdate()

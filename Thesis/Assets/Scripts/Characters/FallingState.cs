@@ -12,6 +12,7 @@ public class FallingState : CharacterState
     protected override void OnEnter()
     {
         EditorDebug.Log("FALLING ENTER");
+        blackboard.isGrounded = false;
     }
 
     protected override void OnExit()
