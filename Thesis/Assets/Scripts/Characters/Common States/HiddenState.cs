@@ -54,7 +54,7 @@ public class HiddenState : CharacterState
         {
             Character.Order ev = orders[i];
 
-            if (ev == Character.Order.OrderHide && !timerForComingOut.Active) 
+            if (ev == Character.Order.OrderAction && !timerForComingOut.Active) 
             {
                 EditorDebug.Log("LLAMADO AL TIMER HIDDEN");
                 timerForComingOut.Start();

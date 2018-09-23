@@ -20,8 +20,25 @@ public class Eyes : MonoBehaviour
 
     public bool IsVisible(Collider2D collider, int layerMask)
     {
-        RaycastHit2D hit = Physics2D.Linecast(startPoint.position, collider.transform.position, layerMask);
+        if(startPoint != null)
+        {
+            RaycastHit2D hit = Physics2D.Linecast(startPoint.position, collider.transform.position, layerMask);
 
-        return hit.collider == collider;
+            return hit.collider == collider;
+        }
+
+        return false;
+    }
+
+    public bool IsNear(Collider2D collider, int layerMask, float distance)
+    {
+        if (startPoint != null)
+        {
+            RaycastHit2D hit = Physics2D.Linecast(startPoint.position, collider.transform.position, layerMask);
+
+            return hit.distance <= distance;
+        }
+
+        return false;
     }
 }

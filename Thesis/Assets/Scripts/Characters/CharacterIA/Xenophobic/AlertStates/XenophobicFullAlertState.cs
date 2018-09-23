@@ -11,13 +11,22 @@ public class XenophobicFullAlertState : XenophobicIAState
     private Eyes characterEyes;
 
     private SyncTimer fullAlertTimer;
-    private float fullAlertTime = 8f;
+    private float fullAlertTime = 20f;
+
+    private SyncTimer playerDetectedTimer;
+    private float playerDetectedTime = 6f;
+
+    private float hiddenDetectionDistance = 1.5f;
+
+    private Character playerData;
 
     private Action<Collider2D> onSomethingDetectedDelegate;
 
     private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
 
-    private float findProbability = 75;
+    private const float baseFindProbability = 60;
+    private const float maxFindProbability = 100;
+    private float findProbability = baseFindProbability;
 
     public XenophobicFullAlertState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
     {
@@ -27,12 +36,16 @@ public class XenophobicFullAlertState : XenophobicIAState
         fullAlertTimer.Interval = fullAlertTime;
         fullAlertTimer.onTick += CalmDown;
 
+        playerDetectedTimer = new SyncTimer();
+        playerDetectedTimer.Interval = playerDetectedTime;
+        playerDetectedTimer.onTick += LosePlayerData;
+
         onSomethingDetectedDelegate += AnalyzeDetection;
     }
 
     protected override void OnEnter()
     {
-        if(characterEyes != null)
+        if (characterEyes != null)
         {
             characterEyes.Trigger2D.ChangeSize(eyeSize);
 
@@ -45,11 +58,12 @@ public class XenophobicFullAlertState : XenophobicIAState
     protected override void OnUpdate()
     {
         fullAlertTimer.Update(Time.deltaTime);
+        playerDetectedTimer.Update(Time.deltaTime);
     }
 
     protected override void OnExit()
     {
-        if(characterEyes != null)
+        if (characterEyes != null)
         {
             characterEyes.Trigger2D.onStay -= onSomethingDetectedDelegate;
 
@@ -69,20 +83,23 @@ public class XenophobicFullAlertState : XenophobicIAState
 
     private void AnalyzeDetection(Collider2D collider)
     {
-        if (characterEyes.IsVisible(collider, visionLayers))
+        if (collider.gameObject.layer == Reg.playerLayer)
         {
-            if(collider.gameObject.layer == Reg.playerLayer)
+            if (characterEyes.IsVisible(collider, visionLayers))
             {
-                if (GameManager.Instance.Player.IsHidden)
+                if (playerData == null && GameManager.Instance.Player.IsHidden)
                 {
-                    if(Random.Range(1, 100) <= findProbability)
+                    if(characterEyes.IsNear(collider, visionLayers, hiddenDetectionDistance))
                     {
-                        UpdatePosition(collider.transform.position);
+                        if (Random.Range(1, 100) <= findProbability)
+                        {
+                            SetPlayerAsFound(GameManager.Instance.Player);
+                        }
                     }
                 }
                 else
                 {
-                    UpdatePosition(collider.transform.position);
+                    SetPlayerAsFound(GameManager.Instance.Player);
                 }
             }
         }
@@ -92,5 +109,29 @@ public class XenophobicFullAlertState : XenophobicIAState
     {
         blackboard.LastDetectionPosition = position;
         fullAlertTimer.Start();
+    }
+
+    private void LosePlayerData(SyncTimer timer)
+    {
+        UpdatePlayerData(null);
+
+        findProbability = baseFindProbability;
+
+        EditorDebug.Log("XENOPHOBIC " + controller.Slave.name + " HAS LOST THE PLAYER");
+    }
+
+    private void UpdatePlayerData(Character player)
+    {
+        playerData = player;
+    }
+
+    private void SetPlayerAsFound(Character player)
+    {
+        player.NotifyDetection();
+        UpdatePosition(player.transform.position);
+        UpdatePlayerData(player);
+
+        findProbability = maxFindProbability;
+        playerDetectedTimer.Start();
     }
 }

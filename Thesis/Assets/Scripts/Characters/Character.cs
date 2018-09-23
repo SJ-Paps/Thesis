@@ -80,7 +80,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         OrderMoveRight,
         OrderJump,
         OrderAttack,
-        OrderHide
+        OrderAction
     }
 
     public class Blackboard
@@ -215,6 +215,19 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected virtual void OnFacingChanged(bool facingLeft)
     {
         transform.Rotate(Vector3.up, 180);
+    }
+
+    public void NotifyDetection()
+    {
+        OnDetected();
+    }
+
+    protected virtual void OnDetected()
+    {
+        if(IsHidden)
+        {
+            SetOrder(Order.OrderAction);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
