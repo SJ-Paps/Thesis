@@ -65,7 +65,7 @@ public class ActionsIdleState : CharacterState
         raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance);
         EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
 
-        if(raycastHit2D && raycastHit2D.collider.gameObject.layer == Reg.objectLayer && character.isGrounded == true)
+        if(raycastHit2D && raycastHit2D.collider.gameObject.layer == Reg.objectLayer && character.IsGrounded == true)
         {
             stateMachine.Trigger(Character.Trigger.Push);
             blackboard.isPushing = true;
@@ -75,7 +75,7 @@ public class ActionsIdleState : CharacterState
         {
             Character.Order ev = orders[i];
 
-            if (ev == Character.Order.OrderHide && canHide == true && character.IsGrounded == true && !timerOfHiding.Active) 
+            if (ev == Character.Order.OrderAction && canHide == true && character.IsGrounded == true && !timerOfHiding.Active) 
             {
                 EditorDebug.Log("LLAMADO AL TIMER ACTION");
                 characterMovementFSM.Active = false;

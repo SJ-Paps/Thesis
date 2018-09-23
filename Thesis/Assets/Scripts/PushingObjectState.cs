@@ -41,12 +41,12 @@ public class PushingObjectState : CharacterState {
         raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance);
         EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
 
-        if(!jointObtained && character.isGrounded)
+        if(!jointObtained && character.IsGrounded)
         {
             objectFixedJoint2D = raycastHit2D.transform.GetComponent<FixedJoint2D>();
             jointObtained = true;
         }
-        if(!raycastHit2D || raycastHit2D.collider.gameObject.layer != Reg.objectLayer || !character.isGrounded)
+        if(!raycastHit2D || raycastHit2D.collider.gameObject.layer != Reg.objectLayer || !character.IsGrounded)
         { 
             blackboard.isPushing = false;
             jointObtained = false;
@@ -66,7 +66,7 @@ public class PushingObjectState : CharacterState {
 
     private void PushOrPullObjectWhenPressingKey(Character.Order order) 
     {
-        if(order == Character.Order.OrderPush)
+        if(order == Character.Order.OrderAction)
         {
             EditorDebug.Log("EMPUJO OBJETO");
             objectFixedJoint2D.enabled = true;
@@ -77,7 +77,7 @@ public class PushingObjectState : CharacterState {
             objectFixedJoint2D.connectedBody = null;
             objectFixedJoint2D.enabled = false;
         }
-        if(order == Character.Order.OrderPush && !character.isGrounded)
+        if(order == Character.Order.OrderAction && !character.IsGrounded)
         {
             objectFixedJoint2D.connectedBody = null;
             blackboard.isPushing = false;

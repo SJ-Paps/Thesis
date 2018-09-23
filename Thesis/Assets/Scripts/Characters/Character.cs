@@ -34,7 +34,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return movementVelocity; }
     }
-	public bool isPushing
+	public bool IsPushing
     {
         get { return blackboard.isPushing; }
     }
