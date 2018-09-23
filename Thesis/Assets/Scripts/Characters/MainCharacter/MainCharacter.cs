@@ -1,4 +1,5 @@
 ﻿using SAM.FSM;
+using UnityEngine;
 
 public class MainCharacter : Tribal
 {
@@ -54,4 +55,5 @@ public class MainCharacter : Tribal
     {
         enslaved = true;
     }
+
 }

@@ -8,7 +8,6 @@ public class MovingState : CharacterState
     private float raycastDistance;
     private Rigidbody2D rigidbody2D;
     private Vector2 moveForce = new Vector2(0.2f, 0);
-    private float maxVelocityX = 3f;
 
     public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
@@ -30,21 +29,25 @@ public class MovingState : CharacterState
 
             if (order == Character.Order.OrderMoveLeft)
             {
+                character.Face(true);
+
                 rigidbody2D.AddForce(moveForce * -1, ForceMode2D.Impulse);
                 break;
             }
             else if (order == Character.Order.OrderMoveRight)
             {
+                character.Face(false);
+
                 rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
                 break;
             }
         }
 
-        if (rigidbody2D.velocity.x >= maxVelocityX)
+        if (rigidbody2D.velocity.x >= character.MovementVelocity)
         {
-            rigidbody2D.AddForce(moveForce * -1, ForceMode2D.Impulse);
+            rigidbody2D.AddForce(-1 * moveForce, ForceMode2D.Impulse);
         }
-        else if (rigidbody2D.velocity.x <= -maxVelocityX)
+        else if (rigidbody2D.velocity.x <= -character.MovementVelocity)
         {
             rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
         }

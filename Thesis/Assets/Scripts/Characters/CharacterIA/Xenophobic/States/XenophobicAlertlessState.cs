@@ -4,16 +4,34 @@ using UnityEngine;
 
 public class XenophobicAlertlessState : XenophobicIAState {
 
-    private Action<Vector2> onSomethingDetectedDelegate;
+    private Vector2 distantVisionSize;
+    private float distantVisionOffsetX;
 
-	public XenophobicAlertlessState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, Xenophobic controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    private Action<Collider2D> onSomethingDetectedDelegate;
+    private Eyes characterEyes;
+
+	public XenophobicAlertlessState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
     {
         onSomethingDetectedDelegate = GetAware;
+
+        characterEyes = controller.SlaveEyes;
+
+
+        distantVisionSize = characterEyes.DistantVision.InnerCollider.size;
+        distantVisionOffsetX = characterEyes.DistantVision.InnerCollider.offset.x;
     }
 
     protected override void OnEnter()
     {
-        character.onSomethingDetected += onSomethingDetectedDelegate;
+        if(characterEyes != null)
+        {
+            characterEyes.DistantVision.InnerCollider.size = distantVisionSize;
+            characterEyes.DistantVision.InnerCollider.offset = new Vector2(distantVisionOffsetX, characterEyes.DistantVision.InnerCollider.offset.y);
+
+            characterEyes.onDistantVisionEnter += onSomethingDetectedDelegate;
+            characterEyes.onMediumVisionEnter += onSomethingDetectedDelegate;
+            characterEyes.onNearVisionEnter += onSomethingDetectedDelegate;
+        }
     }
 
     protected override void OnUpdate()
@@ -23,12 +41,17 @@ public class XenophobicAlertlessState : XenophobicIAState {
 
     protected override void OnExit()
     {
-        character.onSomethingDetected -= onSomethingDetectedDelegate;
+        if (characterEyes != null)
+        {
+            characterEyes.onDistantVisionEnter -= onSomethingDetectedDelegate;
+            characterEyes.onMediumVisionEnter -= onSomethingDetectedDelegate;
+            characterEyes.onNearVisionEnter -= onSomethingDetectedDelegate;
+        }
     }
 
-    private void GetAware(Vector2 position)
+    private void GetAware(Collider2D collider)
     {
-        blackboard.seekedLastPosition = position;
+        blackboard.seekedLastPosition = collider.transform.position;
         stateMachine.Trigger(XenophobicIAController.Trigger.GetAware);
     }
 }

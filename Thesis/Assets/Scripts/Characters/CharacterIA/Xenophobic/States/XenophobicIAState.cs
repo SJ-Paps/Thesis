@@ -2,12 +2,12 @@
 
 public abstract class XenophobicIAState : State<XenophobicIAController.State, XenophobicIAController.Trigger>
 {
-    protected Xenophobic character;
+    protected XenophobicIAController controller;
     protected XenophobicIAController.Blackboard blackboard;
 
-    public XenophobicIAState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, Xenophobic controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state)
+    public XenophobicIAState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state)
     {
-        character = controller;
+        this.controller = controller;
         this.blackboard = blackboard;
     }
 

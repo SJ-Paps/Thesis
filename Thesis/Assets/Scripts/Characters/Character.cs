@@ -5,22 +5,6 @@ using System.Collections.Generic;
 
 public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
-    [SerializeField]
-    protected bool isPlayer;
-
-    public bool IsPlayer
-    {
-        get
-        {
-            return isPlayer;
-        }
-
-        protected set
-        {
-            isPlayer = value;
-        }
-    }
-
     public event Action<Collision2D> onCollisionEnter2D;
     public event Action<Collider2D> onTriggerEnter2D;
     public event Action<Collider2D> onTriggerExit2D;
@@ -28,18 +12,38 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action onDead;
     protected Blackboard blackboard;
 
-    public bool isHidden
+    
+    public bool IsHidden
     {
         get { return blackboard.isHidden; }
     }
-    public bool isGrounded
+    
+    public bool IsGrounded
     {
         get { return blackboard.isGrounded; }
     }
-    public bool isPushing
+    public bool IsAlive
+    {
+        get { return blackboard.isAlive; }
+    }
+    public bool FacingLeft
+    {
+        get { return facingLeft; }
+    }
+    public float MovementVelocity
+    {
+        get { return movementVelocity; }
+    }
+	public bool isPushing
     {
         get { return blackboard.isPushing; }
     }
+
+    [SerializeField]
+    private bool facingLeft;
+
+    [SerializeField]
+    protected float movementVelocity = 1;
 
     public enum State
     {
@@ -51,6 +55,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Jumping,
         Falling,
         Hidden,
+
         Attacking,
         Pushing
     }
@@ -66,6 +71,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Attack,
         StopAttacking,
         StopMoving,
+
         StopHiding,
         StopPushing,
         Push
@@ -77,15 +83,16 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         OrderMoveRight,
         OrderJump,
         OrderAttack,
-        OrderHide,
-        OrderPush
+        OrderAction
     }
 
     public class Blackboard
     {
-        public bool isHidden = false;
-        public bool isGrounded = false;
-        public bool isPushing = false;
+
+        public bool isAlive;
+        public bool isHidden;
+        public bool isGrounded;
+        public bool isPushing;
     }
 
     protected bool enslaved;
@@ -97,9 +104,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
             return enslaved;
         }
     }
-
-    public bool IsAlive { get; protected set; }
-
     public Animator Animator { get; protected set; }
 
     private FSM<State, Trigger> aliveFSM;
@@ -163,8 +167,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         aliveFSM.Trigger(Trigger.Die);
 
-        IsAlive = false;
-
         if (onDead != null)
         {
             onDead();
@@ -202,6 +204,21 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         EditorDebug.DrawLine(origin, origin + (Vector2.down * groundDetectionDistance), Color.green);
 
         return groundDetection.transform != null;
+    }
+
+    public void Face(bool left)
+    {
+        if(facingLeft != left)
+        {
+            facingLeft = left;
+
+            OnFacingChanged(facingLeft);
+        }
+    }
+
+    protected virtual void OnFacingChanged(bool facingLeft)
+    {
+        transform.Rotate(Vector3.up, 180);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
