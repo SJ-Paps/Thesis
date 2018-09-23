@@ -667,7 +667,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Push
       keys: 71000000
-    order: 5
+    order: 4
 --- !u!1001 &1561777057
 Prefab:
   m_ObjectHideFlags: 0
