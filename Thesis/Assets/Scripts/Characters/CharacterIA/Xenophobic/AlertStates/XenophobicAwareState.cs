@@ -14,10 +14,11 @@ public class XenophobicAwareState : XenophobicIAState
     private Vector2 eyesSize = new Vector2(9, 5);
 
     private float fullAlertDetectionDistance = 6f;
+    private float hiddenDetectionDistance = 1f;
 
     private Action<Collider2D> onSomethingDetectedStayDelegate;
 
-    private int findProbability = 25;
+    private int findProbability = 15;
 
     private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
 
@@ -91,9 +92,9 @@ public class XenophobicAwareState : XenophobicIAState
 
     private void AnalyzeDetection(Collider2D collider)
     {
-        if (characterEyes.IsVisible(collider, visionLayers))
+        if (collider.gameObject.layer == Reg.playerLayer)
         {
-            if(collider.gameObject.layer == Reg.playerLayer)
+            if(characterEyes.IsVisible(collider, visionLayers))
             {
                 if (GameManager.Instance.Player.IsHidden)
                 {
@@ -101,7 +102,7 @@ public class XenophobicAwareState : XenophobicIAState
                     {
                         UpdatePosition(collider.transform.position);
 
-                        if (Vector2.Distance(collider.transform.position, controller.Slave.transform.position) <= fullAlertDetectionDistance)
+                        if(characterEyes.IsNear(collider, visionLayers, hiddenDetectionDistance))
                         {
                             SetFullAlert(collider.transform.position);
                         }
@@ -111,7 +112,7 @@ public class XenophobicAwareState : XenophobicIAState
                 {
                     UpdatePosition(collider.transform.position);
 
-                    if (Vector2.Distance(collider.transform.position, controller.Slave.transform.position) <= fullAlertDetectionDistance)
+                    if (characterEyes.IsNear(collider, visionLayers, fullAlertDetectionDistance))
                     {
                         SetFullAlert(collider.transform.position);
                     }
