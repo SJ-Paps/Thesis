@@ -12,10 +12,12 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action onDead;
     protected Blackboard blackboard;
 
+    
     public bool IsHidden
     {
         get { return blackboard.isHidden; }
     }
+    
     public bool IsGrounded
     {
         get { return blackboard.isGrounded; }
@@ -32,7 +34,12 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return movementVelocity; }
     }
-    public Transform EyePoint
+	public bool IsPushing
+    {
+        get { return blackboard.isPushing; }
+    }
+
+	public Transform EyePoint
     {
         get { return eyePoint; }
     }
@@ -57,7 +64,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Jumping,
         Falling,
         Hidden,
-        Attacking
+
+        Attacking,
+        Pushing
     }
 
     public enum Trigger
@@ -71,7 +80,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Attack,
         StopAttacking,
         StopMoving,
-        StopHiding
+
+        StopHiding,
+        StopPushing,
+        Push
     }
 
     public enum Order
@@ -85,9 +97,11 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public class Blackboard
     {
+
         public bool isAlive;
         public bool isHidden;
         public bool isGrounded;
+        public bool isPushing;
     }
 
     protected bool enslaved;
@@ -99,7 +113,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
             return enslaved;
         }
     }
-
     public Animator Animator { get; protected set; }
 
     private FSM<State, Trigger> aliveFSM;
@@ -188,14 +201,14 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         orders.Clear();
     }
 
-    public bool CheckIsOnFloor()
+    public bool CheckIsOnFloor(int layerMask)
     {
         float xRay = transform.position.x;
         float yRay = transform.position.y - colliderVerticalDiameter;
 
         Vector2 origin = new Vector2(xRay, yRay);
 
-        RaycastHit2D groundDetection = Physics2D.Linecast(origin, origin + (Vector2.down * groundDetectionDistance), 1 << Reg.floorLayer);
+        RaycastHit2D groundDetection = Physics2D.Linecast(origin, origin + (Vector2.down * groundDetectionDistance), layerMask);
 
         EditorDebug.DrawLine(origin, origin + (Vector2.down * groundDetectionDistance), Color.green);
 

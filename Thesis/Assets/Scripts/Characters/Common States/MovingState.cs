@@ -4,18 +4,20 @@ using System.Collections.Generic;
 
 public class MovingState : CharacterState
 {
+    private RaycastHit2D raycastHit2D;
+    private float raycastDistance;
     private Rigidbody2D rigidbody2D;
     private Vector2 moveForce = new Vector2(0.2f, 0);
 
     public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
+        raycastDistance = 1f;
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
-
         EditorDebug.Log("MOVING ENTER");
     }
 

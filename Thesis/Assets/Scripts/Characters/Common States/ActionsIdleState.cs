@@ -12,6 +12,8 @@ public class ActionsIdleState : CharacterState
     private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
     private Rigidbody2D characterRigidBody2D;
     private SyncTimer timerOfHiding;
+    private RaycastHit2D raycastHit2D;
+    private float raycastDistance;
     private float cooldownOfHiding;
     private bool canHide;
 
@@ -29,9 +31,10 @@ public class ActionsIdleState : CharacterState
         checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
         characterRigidBody2D = character.GetComponent<Rigidbody2D>();
         timerOfHiding = new SyncTimer();
+        raycastDistance = 0.4f;
         cooldownOfHiding = 0.7f;
         canHide = false;
-
+        raycastHit2D = new RaycastHit2D();
         timerOfHiding.Interval = cooldownOfHiding;
     }
 
@@ -41,6 +44,7 @@ public class ActionsIdleState : CharacterState
         character.onTriggerEnter2D += checkingForEnteringToTheHidingPlaceMethod;
         character.onTriggerExit2D += checkingForExitingOfTheHidingPlaceMethod;
         timerOfHiding.onTick += EnteringToTheHidingPlace;
+        Physics2D.queriesStartInColliders = false;
         EditorDebug.Log("ACTIONIDLE ENTER");
     }
 
@@ -57,7 +61,16 @@ public class ActionsIdleState : CharacterState
     {
 
         timerOfHiding.Update(Time.deltaTime);
-        
+
+        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance);
+        EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
+
+        if(raycastHit2D && raycastHit2D.collider.gameObject.layer == Reg.objectLayer && character.IsGrounded == true)
+        {
+            stateMachine.Trigger(Character.Trigger.Push);
+            blackboard.isPushing = true;
+        }
+
         for (int i = 0; i < orders.Count; i++)
         {
             Character.Order ev = orders[i];
