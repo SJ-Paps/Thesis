@@ -40,6 +40,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return blackboard.isPushing; }
     }
+    public bool isFalling
+    {
+        get { return blackboard.isFalling; }
+    }
 
     public enum State
     {
@@ -86,6 +90,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         public bool isHidden = false;
         public bool isGrounded = false;
         public bool isPushing = false;
+        public bool isFalling = true;
     }
 
     protected bool enslaved;

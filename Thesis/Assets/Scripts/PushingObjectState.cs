@@ -6,9 +6,13 @@ using UnityEngine;
 
 public class PushingObjectState : CharacterState {
 
-    private Action<Collision2D> checkingForExitingOfPushingObjectMethod;
+    private Action<Collision2D> checkingForEnteringOfPushingObjectForwardMethod;
+    private Action<Collision2D> checkingForExitingOfPushingObjectForwardMethod;
     private RaycastHit2D raycastHit2D;
     private float raycastDistance;
+    private bool jointObtained;
+    private FixedJoint2D objectFixedJoint2D;
+    private Rigidbody2D characterRigidbody;
 
     public PushingObjectState(
        FSM<Character.State, Character.Trigger> fsm,
@@ -20,6 +24,8 @@ public class PushingObjectState : CharacterState {
        FSM<Character.State, Character.Trigger> movementFSM) : base (fsm, state, character, orders, blackboard)
     {
         raycastDistance = 0.4f;
+        jointObtained = false;
+        characterRigidbody = character.GetComponent<Rigidbody2D>();
     }
 
     protected override void OnEnter() {
@@ -34,28 +40,41 @@ public class PushingObjectState : CharacterState {
     }
 
     protected override void OnUpdate() {
+
         raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance);
         EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
 
-        if(!raycastHit2D || raycastHit2D.collider.gameObject.layer != Reg.objectLayer || !character.isGrounded)
+        if(!jointObtained && character.isGrounded)
         {
-            stateMachine.Trigger(Character.Trigger.StopPushing);
+            objectFixedJoint2D = raycastHit2D.transform.GetComponent<FixedJoint2D>();
+            jointObtained = true;
+        }
+        if(!raycastHit2D || raycastHit2D.collider.gameObject.layer != Reg.objectLayer || !character.isGrounded || character.isFalling)
+        { 
             blackboard.isPushing = false;
+            jointObtained = false;
+            stateMachine.Trigger(Character.Trigger.StopPushing);
         }
 
         for(int i = 0; i < orders.Count; i++)
         {
             Character.Order ev = orders[i];
 
-            if(!raycastHit2D || raycastHit2D.collider.gameObject.layer != Reg.objectLayer || !character.isGrounded)
-            {
-                stateMachine.Trigger(Character.Trigger.StopPushing);
-                blackboard.isPushing = false;
-            }
-
             if(ev == Character.Order.OrderPush)
             {
                 EditorDebug.Log("EMPUJO OBJETO");
+                objectFixedJoint2D.connectedBody = characterRigidbody;
+            }
+            else
+            {
+                objectFixedJoint2D.connectedBody = null;
+            }
+            if(ev == Character.Order.OrderPush && !character.isGrounded)
+            {
+                objectFixedJoint2D.connectedBody = null;
+                blackboard.isPushing = false;
+                jointObtained = false;
+                stateMachine.Trigger(Character.Trigger.StopPushing);
             }
         }
 
