@@ -4,117 +4,38 @@ using System;
 
 public class Eyes : MonoBehaviour
 {
-    [SerializeField]
-    private Trigger2D nearVision, mediumVision, distantVision;
+    public Trigger2D Trigger2D { get; protected set; }
 
-    public Trigger2D NearVision { get { return nearVision; } }
-    public Trigger2D MediumVision { get { return mediumVision; } }
-    public Trigger2D DistantVision { get { return distantVision; } }
-
-    public event Action<Collider2D> onNearVisionEnter;
-    public event Action<Collider2D> onMediumVisionEnter;
-    public event Action<Collider2D> onDistantVisionEnter;
-    public event Action<Collider2D> onNearVisionExit;
-    public event Action<Collider2D> onMediumVisionExit;
-    public event Action<Collider2D> onDistantVisionExit;
-    public event Action<Collider2D> onNearVisionStay;
-    public event Action<Collider2D> onMediumVisionStay;
-    public event Action<Collider2D> onDistantVisionStay;
+    protected Transform startPoint;
 
     void Awake()
     {
-        if (NearVision != null)
-        {
-            NearVision.onEntered += OnNearVisionEntered;
-            NearVision.onExited += OnNearVisionExited;
-            NearVision.onStay += OnNearVisionStay;
-        }
-
-        if (MediumVision != null)
-        {
-            MediumVision.onEntered += OnMediumVisionEntered;
-            MediumVision.onExited += OnMediumVisionExited;
-            MediumVision.onStay += OnMediumVisionStay;
-        }
-
-        if (DistantVision != null)
-        {
-            DistantVision.onEntered += OnDistantVisionEntered;
-            DistantVision.onExited += OnDistantVisionExited;
-            DistantVision.onStay += OnDistantVisionStay;
-        }
+        Trigger2D = GetComponent<Trigger2D>();
     }
 
-    private void OnNearVisionEntered(Collider2D collider)
+    public void SetEyePoint(Transform eyePoint)
     {
-        if(onNearVisionEnter != null)
-        {
-            onNearVisionEnter(collider);
-        }
+        startPoint = eyePoint;
     }
 
-    private void OnMediumVisionEntered(Collider2D collider)
+    public bool IsVisible(Collider2D collider, int[] layers)
     {
-        if(onMediumVisionEnter != null)
-        {
-            onMediumVisionEnter(collider);
-        }
-    }
+        int layerMask;
 
-    private void OnDistantVisionEntered(Collider2D collider)
-    {
-        if(onDistantVisionEnter != null)
+        if(layers.Length != 0)
         {
-            onDistantVisionEnter(collider);
-        }
-    }
+            layerMask = 1 << layers[0];
 
-    private void OnNearVisionExited(Collider2D collider)
-    {
-        if(onNearVisionExit != null)
-        {
-            onNearVisionExit(collider);
-        }
-    }
+            for(int i = 1; i < layers.Length; i++)
+            {
+                layerMask = layerMask | (1 << layers[i]);
+            }
 
-    private void OnMediumVisionExited(Collider2D collider)
-    {
-        if(onMediumVisionExit != null)
-        {
-            onMediumVisionExit(collider);
-        }
-    }
+            RaycastHit2D hit = Physics2D.Linecast(startPoint.position, collider.transform.position, layerMask);
 
-    private void OnDistantVisionExited(Collider2D collider)
-    {
-        if(onDistantVisionExit != null)
-        {
-            onDistantVisionExit(collider);
+            return hit.collider == collider;
         }
-    }
 
-
-    private void OnNearVisionStay(Collider2D collider)
-    {
-        if (onNearVisionStay != null)
-        {
-            onNearVisionStay(collider);
-        }
-    }
-
-    private void OnMediumVisionStay(Collider2D collider)
-    {
-        if (onMediumVisionStay != null)
-        {
-            onMediumVisionStay(collider);
-        }
-    }
-
-    private void OnDistantVisionStay(Collider2D collider)
-    {
-        if (onDistantVisionStay != null)
-        {
-            onDistantVisionStay(collider);
-        }
+        return false;
     }
 }

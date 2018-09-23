@@ -32,12 +32,20 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return movementVelocity; }
     }
+    public Transform EyePoint
+    {
+        get { return eyePoint; }
+    }
+
 
     [SerializeField]
     private bool facingLeft;
 
     [SerializeField]
     protected float movementVelocity = 1;
+
+    [SerializeField]
+    protected Transform eyePoint;
 
     public enum State
     {

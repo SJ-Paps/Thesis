@@ -75,7 +75,7 @@ public class ActionsIdleState : CharacterState
 
     void CheckingForEnteringToTheHidingPlace(Collider2D collider2D) 
     {
-        if (collider2D.gameObject.layer == Reg.hidingPlaceLayer) 
+        if (collider2D.gameObject.layer == Reg.hideLayer) 
         {
             canHide = true;
         }
@@ -83,7 +83,7 @@ public class ActionsIdleState : CharacterState
 
     void CheckingForExitingOfTheHidingPlace(Collider2D collider2D)
     {
-        if(collider2D.gameObject.layer == Reg.hidingPlaceLayer)
+        if(collider2D.gameObject.layer == Reg.hideLayer)
         {
             canHide = false;
         }

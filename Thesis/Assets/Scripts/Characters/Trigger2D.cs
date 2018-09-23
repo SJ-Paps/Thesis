@@ -1,20 +1,15 @@
 ﻿using System;
 using UnityEngine;
 
-public class Trigger2D : MonoBehaviour {
+public abstract class Trigger2D : MonoBehaviour {
 
     public event Action<Collider2D> onEntered;
     public event Action<Collider2D> onExited;
     public event Action<Collider2D> onStay;
 
-    public BoxCollider2D InnerCollider { get; private set; }
+    public Collider2D InnerCollider { get; protected set; }
 
-    void Awake()
-    {
-        InnerCollider = GetComponent<BoxCollider2D>();
-    }
-
-    void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         if (onEntered != null)
         {
@@ -22,7 +17,7 @@ public class Trigger2D : MonoBehaviour {
         }
     }
 
-    void OnTriggerExit2D(Collider2D collision)
+    protected void OnTriggerExit2D(Collider2D collision)
     {
         if (onExited != null)
         {
@@ -30,7 +25,7 @@ public class Trigger2D : MonoBehaviour {
         }
     }
 
-    void OnTriggerStay2D(Collider2D collision)
+    protected void OnTriggerStay2D(Collider2D collision)
     {
         if(onStay != null)
         {
@@ -38,8 +33,5 @@ public class Trigger2D : MonoBehaviour {
         }
     }
 
-    public void ChangeSize(Vector2 size)
-    {
-        ((BoxCollider2D)InnerCollider).size = size;
-    }
+    public abstract void ChangeSize(Vector2 size);
 }
