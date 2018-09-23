@@ -54,6 +54,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     [SerializeField]
     protected Transform eyePoint;
 
+    public bool blockFacing;
+
     public enum State
     {
         Alive,
@@ -218,7 +220,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public void Face(bool left)
     {
-        if(facingLeft != left)
+        if(!blockFacing && facingLeft != left)
         {
             facingLeft = left;
 

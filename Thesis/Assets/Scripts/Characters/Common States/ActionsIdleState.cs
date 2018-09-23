@@ -33,7 +33,7 @@ public class ActionsIdleState : CharacterState
         timerOfHiding = new SyncTimer();
         raycastDistance = 0.4f;
         cooldownOfHiding = 0.7f;
-        canHide = false;
+        
         raycastHit2D = new RaycastHit2D();
         timerOfHiding.Interval = cooldownOfHiding;
     }
@@ -45,6 +45,7 @@ public class ActionsIdleState : CharacterState
         character.onTriggerExit2D += checkingForExitingOfTheHidingPlaceMethod;
         timerOfHiding.onTick += EnteringToTheHidingPlace;
         Physics2D.queriesStartInColliders = false;
+        canHide = false;
         EditorDebug.Log("ACTIONIDLE ENTER");
     }
 

@@ -18,8 +18,6 @@ public class XenophobicFullAlertState : XenophobicIAState
 
     private float hiddenDetectionDistance = 1.5f;
 
-    private Character playerData;
-
     private Action<Collider2D> onSomethingDetectedDelegate;
 
     private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
@@ -87,7 +85,7 @@ public class XenophobicFullAlertState : XenophobicIAState
         {
             if (characterEyes.IsVisible(collider, visionLayers))
             {
-                if (playerData == null && GameManager.Instance.Player.IsHidden)
+                if (blackboard.PlayerData == null && GameManager.Instance.Player.IsHidden)
                 {
                     if(characterEyes.IsNear(collider, visionLayers, hiddenDetectionDistance))
                     {
@@ -122,7 +120,7 @@ public class XenophobicFullAlertState : XenophobicIAState
 
     private void UpdatePlayerData(Character player)
     {
-        playerData = player;
+        blackboard.PlayerData = player;
     }
 
     private void SetPlayerAsFound(Character player)

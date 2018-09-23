@@ -12,6 +12,8 @@ public class PushingObjectState : CharacterState {
     private FixedJoint2D objectFixedJoint2D;
     private Rigidbody2D characterRigidbody;
 
+    private int objectLayerMask = 1 << Reg.objectLayer;
+
     public PushingObjectState(
        FSM<Character.State, Character.Trigger> fsm,
        Character.State state,
@@ -38,7 +40,7 @@ public class PushingObjectState : CharacterState {
 
     protected override void OnUpdate() {
 
-        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance);
+        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance, objectLayerMask);
         EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
 
         if(!jointObtained && character.IsGrounded)
@@ -71,18 +73,22 @@ public class PushingObjectState : CharacterState {
             EditorDebug.Log("EMPUJO OBJETO");
             objectFixedJoint2D.enabled = true;
             objectFixedJoint2D.connectedBody = characterRigidbody;
+            character.blockFacing = true;
         }
         else
         {
             objectFixedJoint2D.connectedBody = null;
             objectFixedJoint2D.enabled = false;
+            character.blockFacing = false;
         }
+
         if(order == Character.Order.OrderPush && !character.IsGrounded)
         {
             objectFixedJoint2D.connectedBody = null;
             blackboard.isPushing = false;
             jointObtained = false;
             objectFixedJoint2D.enabled = false;
+            character.blockFacing = false;
             stateMachine.Trigger(Character.Trigger.StopPushing);
         }
     }

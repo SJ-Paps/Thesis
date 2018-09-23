@@ -25,6 +25,27 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
     public class Blackboard
     {
         public event Action<Vector2> onLastDetectionPositionChanged;
+        public event Action<Character> onPlayerDataChanged;
+
+        private Character playerData;
+
+        public Character PlayerData
+        {
+            get
+            {
+                return playerData;
+            }
+
+            set
+            {
+                playerData = value;
+
+                if(onPlayerDataChanged != null)
+                {
+                    onPlayerDataChanged(playerData);
+                }
+            }
+        }
 
         private Vector2 lastDetectionPosition;
 
@@ -45,6 +66,8 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
                 }
             }
         }
+
+        
     }
 
     protected Blackboard blackboard;

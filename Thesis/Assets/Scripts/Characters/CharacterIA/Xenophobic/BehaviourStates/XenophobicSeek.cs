@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class XenophobicSeek : XenophobicIAState
 {
-    private float positionReachedMarginX = 2f;
+    private float positionReachedMarginX = 1f;
     private float positionReachedMarginY = 1f;
 
     private SyncTimer renewPatrolTimer;
