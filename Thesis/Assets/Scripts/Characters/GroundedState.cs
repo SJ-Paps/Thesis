@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class GroundedState : CharacterState
 {
+    private int layerMask = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+
     public GroundedState(FSM<Character.State, Character.Trigger> fsm,
        Character.State state,
        Character character,
@@ -27,7 +29,7 @@ public class GroundedState : CharacterState
 
     protected override void OnUpdate()
     {
-        if(character.CheckIsOnFloor() == false)
+        if(character.CheckIsOnFloor(layerMask) == false)
         {
             stateMachine.Trigger(Character.Trigger.Fall);
         }

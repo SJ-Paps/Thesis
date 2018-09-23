@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class FallingState : CharacterState
 {
+    private int layerMask = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+
     public FallingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
 
@@ -21,7 +23,7 @@ public class FallingState : CharacterState
 
     protected override void OnUpdate()
     {
-        if(character.CheckIsOnFloor())
+        if(character.CheckIsOnFloor(layerMask))
         {
             stateMachine.Trigger(Character.Trigger.Ground);
         }

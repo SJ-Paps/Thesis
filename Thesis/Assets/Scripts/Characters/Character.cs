@@ -190,14 +190,14 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         orders.Clear();
     }
 
-    public bool CheckIsOnFloor()
+    public bool CheckIsOnFloor(int layerMask)
     {
         float xRay = transform.position.x;
         float yRay = transform.position.y - colliderVerticalDiameter;
 
         Vector2 origin = new Vector2(xRay, yRay);
 
-        RaycastHit2D groundDetection = Physics2D.Linecast(origin, origin + (Vector2.down * groundDetectionDistance), 1 << Reg.floorLayer);
+        RaycastHit2D groundDetection = Physics2D.Linecast(origin, origin + (Vector2.down * groundDetectionDistance), layerMask);
 
         EditorDebug.DrawLine(origin, origin + (Vector2.down * groundDetectionDistance), Color.green);
 
