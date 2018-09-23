@@ -9,7 +9,8 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         CalmedDown,
         Aware,
         FullAlert,
-        Patrolling
+        Patrolling,
+        Seeking
     }
 
     public enum Trigger
@@ -17,7 +18,8 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         CalmDown,
         GetAware,
         SetFullAlert,
-        Patrol
+        Patrol,
+        Seek
     }
 
     public class Blackboard
@@ -75,6 +77,10 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         behaviourFSM = new FSM<State, Trigger>();
 
         behaviourFSM.AddState(new XenophobicPatrol(behaviourFSM, State.Patrolling, this, blackboard));
+        behaviourFSM.AddState(new XenophobicSeek(behaviourFSM, State.Seeking, this, blackboard));
+
+        behaviourFSM.MakeTransition(State.Patrolling, Trigger.Seek, State.Seeking);
+        behaviourFSM.MakeTransition(State.Seeking, Trigger.Patrol, State.Patrolling);
 
         behaviourFSM.StartBy(State.Patrolling);
     }

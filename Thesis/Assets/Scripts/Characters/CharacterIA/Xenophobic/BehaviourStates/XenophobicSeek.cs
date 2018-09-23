@@ -1,31 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using SAM.FSM;
+using SAM.Timers;
+using System;
 using UnityEngine;
-using SAM.FSM;
 
 public class XenophobicSeek : XenophobicIAState
 {
+    private float positionReachedMarginX = 2f;
+    private float positionReachedMarginY = 1f;
+
+    private SyncTimer renewPatrolTimer;
+    private float renewPatrolTime = 4f;
+
+    private bool hasPositionTarget;
+    private Vector2 lastSeekedPosition;
+
+    private Action<Vector2> updatePositionDelegate;
+
     public XenophobicSeek(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
     {
+        updatePositionDelegate += UpdatePosition;
 
+        renewPatrolTimer = new SyncTimer();
+        renewPatrolTimer.Interval = renewPatrolTime;
+        renewPatrolTimer.onTick += RenewPatrol;
+        
     }
 
     protected override void OnEnter()
     {
-        base.OnEnter();
+        blackboard.onLastDetectionPositionChanged += updatePositionDelegate;
     }
 
     protected override void OnExit()
     {
-        base.OnExit();
+        blackboard.onLastDetectionPositionChanged -= updatePositionDelegate;
     }
 
     protected override void OnUpdate()
     {
-        base.OnUpdate();
+        renewPatrolTimer.Update(Time.deltaTime);
+
+        if(hasPositionTarget && IsPositionReached(blackboard.LastDetectionPosition) == false)
+        {
+            SearchAtPosition(blackboard.LastDetectionPosition);
+        }
+        else if(renewPatrolTimer.Active == false)
+        {
+            renewPatrolTimer.Start();
+            hasPositionTarget = false;
+        }
     }
 
-    /*private void SearchAtPosition(Vector2 position)
+    private void RenewPatrol(SyncTimer timer)
+    {
+        stateMachine.Trigger(XenophobicIAController.Trigger.Patrol);
+    }
+
+    private void UpdatePosition(Vector2 lastPosition)
+    {
+        lastSeekedPosition = lastPosition;
+        hasPositionTarget = true;
+
+        if(renewPatrolTimer.Active)
+        {
+            renewPatrolTimer.Stop();
+        }
+    }
+
+    private void SearchAtPosition(Vector2 position)
     {
         if (position.x < controller.Slave.transform.position.x)
         {
@@ -47,6 +89,6 @@ public class XenophobicSeek : XenophobicIAState
         }
 
         return false;
-    }*/
+    }
 
 }

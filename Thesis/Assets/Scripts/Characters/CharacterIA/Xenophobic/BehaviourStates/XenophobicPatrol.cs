@@ -1,5 +1,6 @@
 ﻿using SAM.FSM;
 using UnityEngine;
+using System;
 
 public class XenophobicPatrol : XenophobicIAState
 {
@@ -10,14 +11,17 @@ public class XenophobicPatrol : XenophobicIAState
 
     private Character.Order currentOrder;
 
+    private Action<Vector2> onLastDetectionPositionChangedDelegate;
+
     public XenophobicPatrol(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
     {
-
+        onLastDetectionPositionChangedDelegate += Seek;
     }
 
     protected override void OnEnter()
     {
         controller.Slave.onCollisionEnter2D += CheckCollision;
+        blackboard.onLastDetectionPositionChanged += onLastDetectionPositionChangedDelegate;
 
         currentOrder = Character.Order.OrderMoveLeft;
 
@@ -42,6 +46,11 @@ public class XenophobicPatrol : XenophobicIAState
         }
 
         controller.Slave.SetOrder(currentOrder);
+    }
+
+    private void Seek(Vector2 position)
+    {
+        stateMachine.Trigger(XenophobicIAController.Trigger.Seek);
     }
 
     private void CheckCollision(Collision2D collision)
