@@ -4,31 +4,20 @@ using System;
 
 public class XenophobicIAController : UnityController<Xenophobic, Character.Order>
 {
-    public enum AlertState
+    public enum State
     {
         CalmedDown,
         Aware,
-        FullAlert
+        FullAlert,
+        Patrolling
     }
 
-    public enum AlertTrigger
+    public enum Trigger
     {
         CalmDown,
         GetAware,
-        SetFullAlert
-    }
-
-    public enum CharacterBehaviour
-    {
-        Patrol,
-        Seek,
-        Chase
-    }
-
-    public enum CharacterBehaviourTrigger
-    {
-        SomethingDetected,
-        PlayerDetected
+        SetFullAlert,
+        Patrol
     }
 
     public class Blackboard
@@ -58,7 +47,8 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
     protected Blackboard blackboard;
 
-    protected FSM<AlertState, AlertTrigger> alertnessFSM;
+    protected FSM<State, Trigger> alertnessFSM;
+    protected FSM<State, Trigger> behaviourFSM;
 
     public Eyes SlaveEyes { get; protected set; }
 
@@ -68,29 +58,39 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         SlaveEyes = Slave.GetComponentInChildren<Eyes>();
         SlaveEyes.SetEyePoint(Slave.EyePoint);
 
-        alertnessFSM = new FSM<AlertState, AlertTrigger>();
-        
+        alertnessFSM = new FSM<State, Trigger>();
 
-        alertnessFSM.AddState(new XenophobicAlertlessState(alertnessFSM, AlertState.CalmedDown, this, blackboard));
-        alertnessFSM.AddState(new XenophobicAwareState(alertnessFSM, AlertState.Aware, this, blackboard));
-        alertnessFSM.AddState(AlertState.FullAlert);
+        alertnessFSM.AddState(new XenophobicAlertlessState(alertnessFSM, State.CalmedDown, this, blackboard));
+        alertnessFSM.AddState(new XenophobicAwareState(alertnessFSM, State.Aware, this, blackboard));
+        alertnessFSM.AddState(new XenophobicFullAlertState(alertnessFSM, State.FullAlert, this, blackboard));
 
-        alertnessFSM.MakeTransition(AlertState.CalmedDown, AlertTrigger.GetAware, AlertState.Aware);
-        alertnessFSM.MakeTransition(AlertState.Aware, AlertTrigger.SetFullAlert, AlertState.FullAlert);
-        alertnessFSM.MakeTransition(AlertState.FullAlert, AlertTrigger.CalmDown, AlertState.Aware);
-        alertnessFSM.MakeTransition(AlertState.Aware, AlertTrigger.CalmDown, AlertState.CalmedDown);
+        alertnessFSM.MakeTransition(State.CalmedDown, Trigger.GetAware, State.Aware);
+        alertnessFSM.MakeTransition(State.Aware, Trigger.SetFullAlert, State.FullAlert);
+        alertnessFSM.MakeTransition(State.FullAlert, Trigger.CalmDown, State.Aware);
+        alertnessFSM.MakeTransition(State.Aware, Trigger.CalmDown, State.CalmedDown);
 
-        alertnessFSM.StartBy(AlertState.CalmedDown);
+        alertnessFSM.StartBy(State.CalmedDown);
+
+
+        behaviourFSM = new FSM<State, Trigger>();
+
+        behaviourFSM.AddState(new XenophobicPatrol(behaviourFSM, State.Patrolling, this, blackboard));
+
+        behaviourFSM.StartBy(State.Patrolling);
     }
 
     public override void Control()
     {
         alertnessFSM.UpdateCurrentState();
+        behaviourFSM.UpdateCurrentState();
     }
 
     void Update()
     {
-        Control();
+        if(Slave != null)
+        {
+            Control();
+        }
     }
 
 }

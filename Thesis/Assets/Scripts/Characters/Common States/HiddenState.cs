@@ -22,7 +22,7 @@ public class HiddenState : CharacterState
         characterJumpingFSM = jumpingFSM;
         characterMovementFSM = movementFSM;
         timerForComingOut = new SyncTimer();
-        cooldownForComingOut = 2.0f;
+        cooldownForComingOut = 0.7f;
 
         timerForComingOut.onTick += StopTimerForComingOut;
         timerForComingOut.Interval = cooldownForComingOut;

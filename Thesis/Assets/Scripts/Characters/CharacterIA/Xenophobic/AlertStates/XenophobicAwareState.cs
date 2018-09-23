@@ -2,6 +2,7 @@
 using SAM.Timers;
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class XenophobicAwareState : XenophobicIAState
 {
@@ -10,13 +11,17 @@ public class XenophobicAwareState : XenophobicIAState
     private SyncTimer awareTimer;
     private float awareTime = 4f;
 
-    private Vector2 eyesSize = new Vector2(10, 10);
+    private Vector2 eyesSize = new Vector2(9, 5);
 
     private float fullAlertDetectionDistance = 6f;
 
     private Action<Collider2D> onSomethingDetectedStayDelegate;
 
-    public XenophobicAwareState(FSM<XenophobicIAController.AlertState, XenophobicIAController.AlertTrigger> fsm, XenophobicIAController.AlertState state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    private int findProbability = 25;
+
+    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
+
+    public XenophobicAwareState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
     {
         characterEyes = controller.SlaveEyes;
 
@@ -32,6 +37,8 @@ public class XenophobicAwareState : XenophobicIAState
         if (characterEyes != null)
         {
             awareTimer.Start();
+
+            characterEyes.Trigger2D.ChangeSize(eyesSize);
 
             characterEyes.Trigger2D.onStay += onSomethingDetectedStayDelegate;
         }
@@ -84,17 +91,39 @@ public class XenophobicAwareState : XenophobicIAState
 
     private void AnalyzeDetection(Collider2D collider)
     {
-        UpdatePosition(collider.transform.position);
-
-        if (Vector2.Distance(collider.transform.position, controller.Slave.transform.position) <= fullAlertDetectionDistance)
+        if (characterEyes.IsVisible(collider, visionLayers))
         {
-            SetFullAlert();
+            if(collider.gameObject.layer == Reg.playerLayer)
+            {
+                if (GameManager.Instance.Player.IsHidden)
+                {
+                    if(Random.Range(1, 100) <= findProbability)
+                    {
+                        UpdatePosition(collider.transform.position);
+
+                        if (Vector2.Distance(collider.transform.position, controller.Slave.transform.position) <= fullAlertDetectionDistance)
+                        {
+                            SetFullAlert(collider.transform.position);
+                        }
+                    }
+                }
+                else
+                {
+                    UpdatePosition(collider.transform.position);
+
+                    if (Vector2.Distance(collider.transform.position, controller.Slave.transform.position) <= fullAlertDetectionDistance)
+                    {
+                        SetFullAlert(collider.transform.position);
+                    }
+                }
+            }
         }
     }
 
-    private void SetFullAlert()
+    private void SetFullAlert(Vector2 lastSeekedPosition)
     {
-        stateMachine.Trigger(XenophobicIAController.AlertTrigger.SetFullAlert);
+        blackboard.LastDetectionPosition = lastSeekedPosition;
+        stateMachine.Trigger(XenophobicIAController.Trigger.SetFullAlert);
     }
 
     private void CalmDown(SyncTimer timer)
@@ -104,6 +133,6 @@ public class XenophobicAwareState : XenophobicIAState
 
     private void CalmDown()
     {
-        stateMachine.Trigger(XenophobicIAController.AlertTrigger.CalmDown);
+        stateMachine.Trigger(XenophobicIAController.Trigger.CalmDown);
     }
 }

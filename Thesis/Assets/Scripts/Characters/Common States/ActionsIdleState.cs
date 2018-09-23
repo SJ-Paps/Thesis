@@ -29,7 +29,7 @@ public class ActionsIdleState : CharacterState
         checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
         characterRigidBody2D = character.GetComponent<Rigidbody2D>();
         timerOfHiding = new SyncTimer();
-        cooldownOfHiding = 2.0f;
+        cooldownOfHiding = 0.7f;
         canHide = false;
 
         timerOfHiding.Interval = cooldownOfHiding;

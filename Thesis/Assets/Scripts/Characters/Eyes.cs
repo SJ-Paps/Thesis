@@ -18,24 +18,10 @@ public class Eyes : MonoBehaviour
         startPoint = eyePoint;
     }
 
-    public bool IsVisible(Collider2D collider, int[] layers)
+    public bool IsVisible(Collider2D collider, int layerMask)
     {
-        int layerMask;
+        RaycastHit2D hit = Physics2D.Linecast(startPoint.position, collider.transform.position, layerMask);
 
-        if(layers.Length != 0)
-        {
-            layerMask = 1 << layers[0];
-
-            for(int i = 1; i < layers.Length; i++)
-            {
-                layerMask = layerMask | (1 << layers[i]);
-            }
-
-            RaycastHit2D hit = Physics2D.Linecast(startPoint.position, collider.transform.position, layerMask);
-
-            return hit.collider == collider;
-        }
-
-        return false;
+        return hit.collider == collider;
     }
 }
