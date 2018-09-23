@@ -12,13 +12,11 @@ public class FallingState : CharacterState
     protected override void OnEnter()
     {
         EditorDebug.Log("FALLING ENTER");
-        blackboard.isFalling = true;
     }
 
     protected override void OnExit()
     {
         base.OnExit();
-        blackboard.isFalling = false;
     }
 
     protected override void OnUpdate()
