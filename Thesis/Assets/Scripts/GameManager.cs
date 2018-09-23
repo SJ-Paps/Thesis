@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager {
 
@@ -22,6 +23,8 @@ public class GameManager {
     private GameManager()
     {
         Player = FindPlayer();
+
+        Player.onDead += OnPlayerDead;
     }
 
     public Character FindPlayer()
@@ -40,5 +43,10 @@ public class GameManager {
         }
 
         return null;
+    }
+
+    private void OnPlayerDead()
+    {
+        SceneManager.LoadScene(0);
     }
 }

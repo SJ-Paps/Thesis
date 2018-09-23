@@ -40,9 +40,9 @@ public class XenophobicSeek : XenophobicIAState
     {
         renewPatrolTimer.Update(Time.deltaTime);
 
-        if(hasPositionTarget && IsPositionReached(blackboard.LastDetectionPosition) == false)
+        if(hasPositionTarget && IsPositionReached(lastSeekedPosition) == false)
         {
-            SearchAtPosition(blackboard.LastDetectionPosition);
+            SearchAtPosition(lastSeekedPosition);
         }
         else if(renewPatrolTimer.Active == false)
         {
