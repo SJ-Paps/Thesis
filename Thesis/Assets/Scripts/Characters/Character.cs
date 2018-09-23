@@ -92,7 +92,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         OrderMoveRight,
         OrderJump,
         OrderAttack,
-        OrderAction
+        OrderHide,
+        OrderPush
     }
 
     public class Blackboard
@@ -239,7 +240,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         if(IsHidden)
         {
-            SetOrder(Order.OrderAction);
+            SetOrder(Order.OrderHide);
         }
     }
 

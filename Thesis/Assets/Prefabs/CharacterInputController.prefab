@@ -34,7 +34,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1939497461121114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3119669, y: 1.7263504, z: -0.078125}
+  m_LocalPosition: {x: -17.66, y: 1.7263504, z: -0.078125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -60,7 +60,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: MoveLeft
       keys: 6100000014010000
-    order: 0
+    orders: 00000000
   - key:
       isAxis: 1
       lessThanZero: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: MoveRight
       keys: 6400000013010000
-    order: 1
+    orders: 01000000
   - key:
       isAxis: 0
       lessThanZero: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Jump
       keys: 200000005e010000
-    order: 2
+    orders: 02000000
   - key:
       isAxis: 0
       lessThanZero: 0
@@ -84,4 +84,12 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Hide
       keys: 7100000062010000
-    order: 4
+    orders: 04000000
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 0
+      isKeyReleased: 0
+      name: Push
+      keys: 7100000062010000
+    orders: 05000000

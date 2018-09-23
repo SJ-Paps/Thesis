@@ -60,29 +60,7 @@ public class XenophobicAwareState : XenophobicIAState
         }
     }
 
-    /*private void SearchAtPosition(Vector2 position)
-    {
-        if (position.x < controller.Slave.transform.position.x)
-        {
-            controller.Slave.SetOrder(Character.Order.OrderMoveLeft);
-        }
-        else
-        {
-            controller.Slave.SetOrder(Character.Order.OrderMoveRight);
-        }
-    }
-
-    private bool IsPositionReached(Vector2 position)
-    {
-        Bounds b = new Bounds(position, new Vector2(positionReachedMarginX * 2, positionReachedMarginY * 2));
-
-        if (b.Contains(controller.Slave.transform.position))
-        {
-            return true;
-        }
-
-        return false;
-    }*/
+    
 
     private void UpdatePosition(Vector2 position)
     {

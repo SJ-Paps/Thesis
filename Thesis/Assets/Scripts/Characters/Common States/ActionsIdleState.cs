@@ -75,7 +75,7 @@ public class ActionsIdleState : CharacterState
         {
             Character.Order ev = orders[i];
 
-            if (ev == Character.Order.OrderAction && canHide == true && character.IsGrounded == true && !timerOfHiding.Active) 
+            if (ev == Character.Order.OrderHide && canHide == true && character.IsGrounded == true && !timerOfHiding.Active) 
             {
                 EditorDebug.Log("LLAMADO AL TIMER ACTION");
                 characterMovementFSM.Active = false;

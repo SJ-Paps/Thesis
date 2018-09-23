@@ -4,12 +4,12 @@ using System;
 public class CharacterInputController : UnityInputController<Character, Character.Order> {
 
     [Serializable]
-    new protected struct KeyOrder
+    protected struct KeyOrder
     {
         [SerializeField]
         public MultiKey key;
         [SerializeField]
-        public Character.Order order;
+        public Character.Order[] orders;
     }
 
     [SerializeField]
@@ -26,7 +26,10 @@ public class CharacterInputController : UnityInputController<Character, Characte
         {
             if (keyOrders[i].key.WasTriggered())
             {
-                slave.SetOrder(keyOrders[i].order);
+                foreach(Character.Order order in keyOrders[i].orders)
+                {
+                    slave.SetOrder(order);
+                }
             }
         }
     }

@@ -38,14 +38,7 @@ public abstract class UnityController<TSlave, TOrder> : UnityController where TS
 
 public abstract class UnityInputController<TSlave, TOrder> : UnityController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
 {
-    [SerializeField]
-    protected struct KeyOrder
-    {
-        [SerializeField]
-        public MultiKey key;
-        [SerializeField]
-        public TOrder order;
-    }
+
 }
 
 

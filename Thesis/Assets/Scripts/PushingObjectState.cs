@@ -66,7 +66,7 @@ public class PushingObjectState : CharacterState {
 
     private void PushOrPullObjectWhenPressingKey(Character.Order order) 
     {
-        if(order == Character.Order.OrderAction)
+        if(order == Character.Order.OrderPush)
         {
             EditorDebug.Log("EMPUJO OBJETO");
             objectFixedJoint2D.enabled = true;
@@ -77,7 +77,7 @@ public class PushingObjectState : CharacterState {
             objectFixedJoint2D.connectedBody = null;
             objectFixedJoint2D.enabled = false;
         }
-        if(order == Character.Order.OrderAction && !character.IsGrounded)
+        if(order == Character.Order.OrderPush && !character.IsGrounded)
         {
             objectFixedJoint2D.connectedBody = null;
             blackboard.isPushing = false;

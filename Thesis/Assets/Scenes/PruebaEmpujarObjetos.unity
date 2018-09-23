@@ -677,11 +677,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4593280291119446, guid: c356019b006f1f5478a015ccc2fe83e6, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.68
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 4593280291119446, guid: c356019b006f1f5478a015ccc2fe83e6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 2.68
+      value: 2.76
       objectReference: {fileID: 0}
     - target: {fileID: 4593280291119446, guid: c356019b006f1f5478a015ccc2fe83e6, type: 2}
       propertyPath: m_LocalPosition.z
@@ -707,7 +707,8 @@ Prefab:
       propertyPath: m_RootOrder
       value: 8
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 61482579250364012, guid: c356019b006f1f5478a015ccc2fe83e6, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: c356019b006f1f5478a015ccc2fe83e6, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1762513080
@@ -742,6 +743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingLeft: 0
   movementVelocity: 3
+  eyePoint: {fileID: 0}
 --- !u!50 &1762513082
 Rigidbody2D:
   serializedVersion: 4
@@ -840,7 +842,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1762513080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.59, y: 2.64, z: -0.001953125}
+  m_LocalPosition: {x: 0.81, y: 2.64, z: -0.001953125}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
