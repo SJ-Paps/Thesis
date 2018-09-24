@@ -952,6 +952,7 @@ MonoBehaviour:
   facingLeft: 0
   movementVelocity: 1.5
   eyePoint: {fileID: 1147361585}
+  blockFacing: 0
   weapon: {fileID: 939673565}
 --- !u!1001 &2127497465
 Prefab:

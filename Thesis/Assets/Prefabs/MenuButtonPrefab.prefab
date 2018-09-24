@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 222883534099366534}
   - component: {fileID: 114196423105339532}
   - component: {fileID: 114351677713774708}
+  - component: {fileID: 114788303122963864}
   m_Layer: 5
   m_Name: MenuButtonPrefab
   m_TagString: Untagged
@@ -161,6 +162,25 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: TEST
+--- !u!114 &114788303122963864
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1854056465931418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!222 &222570489587313592
 CanvasRenderer:
   m_ObjectHideFlags: 1

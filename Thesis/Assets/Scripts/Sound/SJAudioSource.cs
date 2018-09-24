@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 [RequireComponent(typeof(AudioSource))]
 public class SJAudioSource : SJMonoBehaviour {
@@ -95,7 +96,9 @@ public class SJAudioSource : SJMonoBehaviour {
 
     public event ScaledVolumeChanged onVolumeChanged;
 
-    protected void Start()
+    protected ScaledVolumeChanged scaledVolumeChangedDelegate;
+
+    protected void Awake()
     {
         soundManager = SoundManager.Instance;
 
@@ -103,12 +106,24 @@ public class SJAudioSource : SJMonoBehaviour {
 
         IndependentVolume = independentVolume;
 
-        soundChannel.onVolumeChanged += OnChannelVolumeChanged;
+        scaledVolumeChangedDelegate = OnChannelVolumeChanged;
 
+        soundChannel.onVolumeChanged += scaledVolumeChangedDelegate;
+
+        soundManager.AddSource(this);
+    }
+
+    protected void Start()
+    {
         if(playOnStart)
         {
             Play();
         }
+    }
+
+    private void OnDestroy()
+    {
+        soundChannel.onVolumeChanged -= scaledVolumeChangedDelegate;
     }
 
     public void PlayOneShot(AudioClip clip)

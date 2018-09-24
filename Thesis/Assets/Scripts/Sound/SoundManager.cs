@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public delegate void ScaledVolumeChanged(float independentVolume, float scaledVolume);
 
@@ -89,11 +90,24 @@ public sealed class SoundManager
         audioSourcesPool = new List<SJAudioSource>();
         audioSourcePrefab = SJResources.Instance.LoadGameObjectAndGetComponent<SJAudioSource>("SJAudioSourcePrefab");
 
-        for(int i = 0; i < initialPoolSize; i++)
-        {
-            audioSourcesPool.Add(GameObject.Instantiate<SJAudioSource>(audioSourcePrefab));
-        }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
 
+    private void SetInitialPool()
+    {
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            AddSource(GameObject.Instantiate<SJAudioSource>(audioSourcePrefab));
+        }
+    }
+
+    public void AddSource(SJAudioSource source)
+    {
+        if(audioSourcesPool.Contains(source) == false)
+        {
+            audioSourcesPool.Add(source);
+        }
     }
 
     public void ChangeVolume(float volume)
@@ -135,6 +149,21 @@ public sealed class SoundManager
     public float GetVolume()
     {
         return Volume;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SetInitialPool();
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        for(int i = 0; i < audioSourcesPool.Count; i++)
+        {
+            GameObject.Destroy(audioSourcesPool[i]);
+        }
+
+        audioSourcesPool.Clear();
     }
 }
 

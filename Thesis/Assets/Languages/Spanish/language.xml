@@ -8,8 +8,10 @@
   <lines>
 
     <line tag="menu_button_options">opciones</line>
-    <line tag="menu_button_exit">salir</line>
+    <line tag="menu_button_exit">salir al escritorio</line>
+    <line tag="menu_button_exit_main_menu">salir al menu principal</line>
     <line tag="menu_button_new_game">nueva partida</line>
+    <line tag="menu_button_resume_game">volver al juego</line>
     <line tag="menu_back">atrás</line>
     
     <line tag="options_menu_text_language">idioma</line>

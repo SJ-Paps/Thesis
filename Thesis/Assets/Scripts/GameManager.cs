@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
-public class GameManager {
+public class GameManager : MonoBehaviour {
 
     private static GameManager instance;
 
@@ -9,22 +10,53 @@ public class GameManager {
     {
         get
         {
-            if(instance == null)
+            if(!init)
             {
-                instance = new GameManager();
+                init = true;
+                instance = Instantiate<GameManager>(SJResources.Instance.LoadGameObjectAndGetComponent<GameManager>("GameManager"));
+                instance.Init();
             }
 
             return instance;
         }
     }
 
+    public static GameManager GetInstance()
+    {
+        return Instance;
+    }
+
+    private static bool init;
+
     public Character Player { get; private set; }
 
-    private GameManager()
-    {
-        Player = FindPlayer();
+    public bool IsPaused { get; private set; }
 
-        Player.onDead += OnPlayerDead;
+    private void Init()
+    {
+        DontDestroyOnLoad(this);
+        
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void Update()
+    {
+        CheckPause();
+    }
+
+    private void CheckPause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause(!IsPaused);
+        }
+    }
+
+    public void Pause(bool shouldPause)
+    {
+        IsPaused = shouldPause;
+
+        MainMenu.GetInstance().Show(shouldPause);
     }
 
     public Character FindPlayer()
@@ -45,8 +77,22 @@ public class GameManager {
         return null;
     }
 
+    private void PreparePlayer(Character player)
+    {
+        if(player != null)
+        {
+            Player.onDead += OnPlayerDead;
+        }
+    }
+
     private void OnPlayerDead()
     {
         SceneManager.LoadScene(0);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Player = FindPlayer();
+        PreparePlayer(Player);
     }
 }
