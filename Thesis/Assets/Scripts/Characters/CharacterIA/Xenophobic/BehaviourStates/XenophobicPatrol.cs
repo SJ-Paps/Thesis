@@ -26,8 +26,7 @@ public class XenophobicPatrol : XenophobicIAState
 
         currentOrder = Character.Order.OrderMoveLeft;
 
-        worldLeftXMargin = controller.Slave.transform.position.x - xMargin;
-        worldRightXMargin = controller.Slave.transform.position.x + xMargin;
+        CalculatePatrolMargins();
     }
 
     protected override void OnExit()
@@ -48,6 +47,12 @@ public class XenophobicPatrol : XenophobicIAState
         }
 
         controller.Slave.SetOrder(currentOrder);
+    }
+
+    private void CalculatePatrolMargins()
+    {
+        worldLeftXMargin = controller.Slave.transform.position.x - xMargin;
+        worldRightXMargin = controller.Slave.transform.position.x + xMargin;
     }
 
     private void Seek(Vector2 position)
@@ -77,6 +82,8 @@ public class XenophobicPatrol : XenophobicIAState
                 {
                     currentOrder = Character.Order.OrderMoveLeft;
                 }
+
+                CalculatePatrolMargins();
             }
         }
     }
