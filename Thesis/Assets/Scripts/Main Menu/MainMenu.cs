@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : SJMonoBehaviour {
 
     private static MainMenu instance;
 

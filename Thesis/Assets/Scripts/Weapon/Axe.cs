@@ -5,7 +5,7 @@ using System;
 public class Axe : Weapon, IDeadly
 {
     [SerializeField]
-    new private Collider2D collider;
+    private Collider2D sharpEdge;
 
     private SyncTimer timer;
     private float attackInterval = 1f;
@@ -13,6 +13,9 @@ public class Axe : Weapon, IDeadly
 
     private Action<SyncTimer> onAttack;
     private Action<SyncTimer> onTerminate;
+
+    [SerializeField]
+    private FixedJoint2D joint2D;
 
     protected override void Awake()
     {
@@ -29,6 +32,22 @@ public class Axe : Weapon, IDeadly
         timer.Update(Time.deltaTime);
     }
 
+    public override void SetUser(Character character)
+    {
+        base.SetUser(character);
+
+        joint2D.enabled = true;
+        joint2D.connectedBody = character.RigidBody2D;
+    }
+
+    public override void Drop()
+    {
+        base.Drop();
+
+        joint2D.enabled = false;
+        joint2D.connectedBody = null;
+    }
+
     protected override void OnUseWeapon()
     {
         BeingUsed = true;
@@ -40,7 +59,7 @@ public class Axe : Weapon, IDeadly
 
     private void OnAttack(SyncTimer timer)
     {
-        collider.enabled = true;
+        sharpEdge.enabled = true;
 
         timer.Interval = recoilInterval;
         timer.onTick -= onAttack;
@@ -51,7 +70,7 @@ public class Axe : Weapon, IDeadly
     private void OnTerminate(SyncTimer timer)
     {
         timer.onTick -= onTerminate;
-        collider.enabled = false;
+        sharpEdge.enabled = false;
         BeingUsed = false;
     }
 

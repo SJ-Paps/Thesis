@@ -6,7 +6,8 @@ public class Eyes : MonoBehaviour
 {
     public Trigger2D Trigger2D { get; protected set; }
 
-    protected Transform startPoint;
+    [SerializeField]
+    protected Transform eyePoint;
 
     void Awake()
     {
@@ -15,14 +16,14 @@ public class Eyes : MonoBehaviour
 
     public void SetEyePoint(Transform eyePoint)
     {
-        startPoint = eyePoint;
+        this.eyePoint = eyePoint;
     }
 
     public bool IsVisible(Collider2D collider, int layerMask)
     {
-        if(startPoint != null)
+        if(eyePoint != null)
         {
-            RaycastHit2D hit = Physics2D.Linecast(startPoint.position, collider.transform.position, layerMask);
+            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, layerMask);
 
             return hit.collider == collider;
         }
@@ -32,9 +33,9 @@ public class Eyes : MonoBehaviour
 
     public bool IsNear(Collider2D collider, int layerMask, float distance)
     {
-        if (startPoint != null)
+        if (eyePoint != null)
         {
-            RaycastHit2D hit = Physics2D.Linecast(startPoint.position, collider.transform.position, layerMask);
+            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, layerMask);
 
             return hit.distance <= distance;
         }

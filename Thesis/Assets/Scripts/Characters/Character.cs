@@ -43,9 +43,14 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         get { return blackboard.isPushing; }
     }
 
-	public Transform EyePoint
+	public Eyes Eyes
     {
-        get { return eyePoint; }
+        get { return eyes; }
+    }
+
+    public Transform HandPoint
+    {
+        get { return handPoint; }
     }
 
 
@@ -56,7 +61,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected float movementVelocity = 1;
 
     [SerializeField]
-    protected Transform eyePoint;
+    protected Eyes eyes;
+
+    [SerializeField]
+    protected Transform handPoint;
 
     public bool blockFacing;
 
@@ -121,6 +129,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         }
     }
     public Animator Animator { get; protected set; }
+    public Rigidbody2D RigidBody2D { get; protected set; }
 
     private FSM<State, Trigger> aliveFSM;
 
@@ -136,6 +145,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected virtual void Awake()
     {
         Animator = GetComponent<Animator>();
+        RigidBody2D = GetComponent<Rigidbody2D>();
 
         blackboard = new Blackboard();
 

@@ -1,4 +1,6 @@
-﻿public abstract class Weapon : SJMonoBehaviour {
+﻿using UnityEngine;
+
+public abstract class Weapon : SJMonoBehaviour {
     
     public Character User { get; protected set; }
 
@@ -6,17 +8,22 @@
     
     protected virtual void Awake()
     {
-        gameObject.layer = Reg.hostileDeadlyLayer;
+
     }
 
-    public void SetUser(Character character)
+    public virtual void SetUser(Character character)
     {
         User = character;
+
+        transform.SetParent(character.HandPoint);
+        transform.localPosition = new Vector3(0, 0, 0);
     }
 
-    public void Drop()
+    public virtual void Drop()
     {
         User = null;
+
+        transform.SetParent(null);
     }
 
     public void UseWeapon()

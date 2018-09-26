@@ -15,7 +15,7 @@ public abstract class CharacterState : State<Character.State, Character.Trigger>
         this.orders = orders;
         this.blackboard = blackboard;
 
-        animator = character.GetComponent<Animator>();
+        animator = character.Animator;
     }
 
     protected override void OnEnter()
