@@ -24,6 +24,11 @@ public class MovingState : CharacterState
         EditorDebug.Log("MOVING ENTER");
     }
 
+    protected override void OnExit()
+    {
+        blackboard.movingHorizontal = false;
+    }
+
     protected override void OnUpdate()
     {
         for (int i = 0; i < orders.Count; i++)
@@ -34,6 +39,8 @@ public class MovingState : CharacterState
             {
                 character.Face(true);
 
+                blackboard.movingHorizontal = true;
+
                 rigidbody2D.AddForce(moveForce * -1, ForceMode2D.Impulse);
                 break;
             }
@@ -41,9 +48,20 @@ public class MovingState : CharacterState
             {
                 character.Face(false);
 
+                blackboard.movingHorizontal = true;
+
                 rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
                 break;
             }
+            else
+            {
+                blackboard.movingHorizontal = false;
+            }
+        }
+
+        if(orders.Count == 0)
+        {
+            blackboard.movingHorizontal = false;
         }
 
         if (rigidbody2D.velocity.x >= character.MovementVelocity)

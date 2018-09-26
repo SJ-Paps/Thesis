@@ -17,6 +17,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return blackboard.isHidden; }
     }
+    public bool IsMovingHorizontal
+    {
+        get { return blackboard.movingHorizontal; }
+    }
     
     public bool IsGrounded
     {
@@ -100,11 +104,11 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public class Blackboard
     {
-
         public bool isAlive;
         public bool isHidden;
         public bool isGrounded;
         public bool isPushing;
+        public bool movingHorizontal;
     }
 
     protected bool enslaved;
