@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
+    public event Action<Collision2D> onCollisionStay2D;
     public event Action<Collider2D> onTriggerEnter2D;
     public event Action<Collider2D> onTriggerExit2D;
 	public event Action<Order> onOrderReceived;
@@ -219,8 +220,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         orders.Clear();
     }
 
-    public abstract bool CheckIsOnFloor(int layerMask);
-
     public void Face(bool left)
     {
         if(!blockFacing && facingLeft != left)
@@ -254,6 +253,14 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         if(onCollisionEnter2D != null)
         {
             onCollisionEnter2D(collision);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if(onCollisionStay2D != null)
+        {
+            onCollisionStay2D(collision);
         }
     }
 

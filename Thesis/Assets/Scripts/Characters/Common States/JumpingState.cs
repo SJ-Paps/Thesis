@@ -41,6 +41,11 @@ public class JumpingState : CharacterState {
         base.OnUpdate();
     }
 
+    protected override void OnExit()
+    {
+        animator.ResetTrigger("Jump");
+    }
+
     private void Jump()
     {
         jumping = false;

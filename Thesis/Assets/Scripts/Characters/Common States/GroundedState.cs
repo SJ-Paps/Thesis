@@ -1,9 +1,11 @@
 ﻿using SAM.FSM;
 using System.Collections.Generic;
+using UnityEngine;
+using System;
 
 public class GroundedState : CharacterState
 {
-    private int layerMask = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+    private Action<Collision2D> checkIsOnFloorDelegate;
 
     public GroundedState(FSM<Character.State, Character.Trigger> fsm,
        Character.State state,
@@ -11,13 +13,17 @@ public class GroundedState : CharacterState
        List<Character.Order> orderList,
        Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
+        checkIsOnFloorDelegate = CheckIsOnFloor;
 
+        
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
         blackboard.isGrounded = true;
+
+        character.onCollisionStay2D += CheckIsOnFloor;
 
         animator.SetTrigger("Ground");
 
@@ -28,17 +34,14 @@ public class GroundedState : CharacterState
         base.OnExit();
         blackboard.isGrounded = false;
 
+        character.onCollisionStay2D -= CheckIsOnFloor;
+
         animator.ResetTrigger("Ground");
         //EditorDebug.Log("GROUNDED EXIT");
     }
 
     protected override void OnUpdate()
     {
-        if(character.CheckIsOnFloor(layerMask) == false)
-        {
-            stateMachine.Trigger(Character.Trigger.Fall);
-        }
-
         for(int i = 0; i < orders.Count; i++)
         {
             Character.Order order = orders[i];
@@ -49,5 +52,22 @@ public class GroundedState : CharacterState
                 break;
             }
         }
+    }
+
+    protected void CheckIsOnFloor(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.collider.gameObject.layer == Reg.floorLayer ||
+                contact.collider.gameObject.layer == Reg.objectLayer)
+            {
+                if(contact.normal.y == Vector2.up.y)
+                {
+                    return;
+                }
+            }
+        }
+
+        stateMachine.Trigger(Character.Trigger.Fall);
     }
 }
