@@ -43,7 +43,7 @@ public class PushingObjectState : CharacterState {
         raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance, objectLayerMask);
         EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
 
-        if(!jointObtained && character.IsGrounded)
+        if(raycastHit2D && !jointObtained && character.IsGrounded)
         {
             objectFixedJoint2D = raycastHit2D.transform.GetComponent<FixedJoint2D>();
             jointObtained = true;
@@ -52,8 +52,12 @@ public class PushingObjectState : CharacterState {
         { 
             blackboard.isPushing = false;
             jointObtained = false;
-            objectFixedJoint2D.enabled = false;
+            if(objectFixedJoint2D != null)
+            {
+                objectFixedJoint2D.enabled = false;
+            }
             stateMachine.Trigger(Character.Trigger.StopPushing);
+            return;
         }
 
         for(int i = 0; i < orders.Count; i++)
