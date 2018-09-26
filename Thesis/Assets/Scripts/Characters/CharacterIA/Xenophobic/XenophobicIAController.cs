@@ -4,6 +4,7 @@ using System;
 
 public class XenophobicIAController : UnityController<Xenophobic, Character.Order>
 {
+
     public enum State
     {
         CalmedDown,
