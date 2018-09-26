@@ -29,11 +29,13 @@ public class XenophobicSeek : XenophobicIAState
     protected override void OnEnter()
     {
         blackboard.onLastDetectionPositionChanged += updatePositionDelegate;
+        controller.Slave.Animator.SetTrigger("Seeking");
     }
 
     protected override void OnExit()
     {
         blackboard.onLastDetectionPositionChanged -= updatePositionDelegate;
+        controller.Slave.Animator.ResetTrigger("Seeking");
     }
 
     protected override void OnUpdate()

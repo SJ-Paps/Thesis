@@ -21,6 +21,7 @@ public class XenophobicPatrol : XenophobicIAState
     protected override void OnEnter()
     {
         controller.Slave.onCollisionEnter2D += CheckCollision;
+        controller.Slave.Animator.SetTrigger("Patrolling");
         blackboard.onLastDetectionPositionChanged += onLastDetectionPositionChangedDelegate;
 
         currentOrder = Character.Order.OrderMoveLeft;
@@ -32,6 +33,7 @@ public class XenophobicPatrol : XenophobicIAState
     protected override void OnExit()
     {
         controller.Slave.onCollisionEnter2D -= CheckCollision;
+        controller.Slave.Animator.ResetTrigger("Patrolling");
     }
 
     protected override void OnUpdate()
