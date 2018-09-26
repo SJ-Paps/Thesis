@@ -126,7 +126,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected List<Order> orders;
 
     protected float groundDetectionDistance = 0.03f;
-    protected float colliderVerticalDiameter;
+
+    new protected Collider2D collider;
 
     protected virtual void Awake()
     {
@@ -136,7 +137,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
         orders = new List<Order>();
 
-        colliderVerticalDiameter = GetComponent<Collider2D>().bounds.size.y / 2;
+        collider = GetComponent<Collider2D>();
 
         aliveFSM = new FSM<State, Trigger>();
 
@@ -204,19 +205,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         orders.Clear();
     }
 
-    public bool CheckIsOnFloor(int layerMask)
-    {
-        float xRay = transform.position.x;
-        float yRay = transform.position.y - colliderVerticalDiameter;
-
-        Vector2 origin = new Vector2(xRay, yRay);
-
-        RaycastHit2D groundDetection = Physics2D.Linecast(origin, origin + (Vector2.down * groundDetectionDistance), layerMask);
-
-        EditorDebug.DrawLine(origin, origin + (Vector2.down * groundDetectionDistance), Color.green);
-
-        return groundDetection.transform != null;
-    }
+    public abstract bool CheckIsOnFloor(int layerMask);
 
     public void Face(bool left)
     {
