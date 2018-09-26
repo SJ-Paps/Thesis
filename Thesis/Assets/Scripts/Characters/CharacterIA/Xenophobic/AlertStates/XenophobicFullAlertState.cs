@@ -85,19 +85,19 @@ public class XenophobicFullAlertState : XenophobicIAState
         {
             if (characterEyes.IsVisible(collider, visionLayers))
             {
-                if (blackboard.PlayerData == null && GameManager.Instance.Player.IsHidden)
+                if (blackboard.PlayerData == null && GameManager.Instance.GetPlayer().IsHidden)
                 {
                     if(characterEyes.IsNear(collider, visionLayers, hiddenDetectionDistance))
                     {
                         if (Random.Range(1, 100) <= findProbability)
                         {
-                            SetPlayerAsFound(GameManager.Instance.Player);
+                            SetPlayerAsFound(GameManager.Instance.GetPlayer());
                         }
                     }
                 }
                 else
                 {
-                    SetPlayerAsFound(GameManager.Instance.Player);
+                    SetPlayerAsFound(GameManager.Instance.GetPlayer());
                 }
             }
         }

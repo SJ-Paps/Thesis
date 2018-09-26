@@ -23,6 +23,8 @@ public class JumpingState : CharacterState {
     {
         base.OnEnter();
 
+        animator.SetTrigger("Jump");
+
         EditorDebug.Log("JUMPING ENTER");
 
         float initPosY = character.transform.position.y;

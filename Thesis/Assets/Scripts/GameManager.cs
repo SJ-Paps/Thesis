@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour {
 
@@ -13,7 +12,10 @@ public class GameManager : MonoBehaviour {
             if(!init)
             {
                 init = true;
-                instance = Instantiate<GameManager>(SJResources.Instance.LoadGameObjectAndGetComponent<GameManager>("GameManager"));
+                GameObject obj = new GameObject("GameManager");
+
+                instance = obj.AddComponent<GameManager>();
+
                 instance.Init();
             }
 
@@ -28,7 +30,7 @@ public class GameManager : MonoBehaviour {
 
     private static bool init;
 
-    public Character Player { get; private set; }
+    private Character player;
 
     public bool IsPaused { get; private set; }
 
@@ -37,6 +39,17 @@ public class GameManager : MonoBehaviour {
         DontDestroyOnLoad(this);
         
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public Character GetPlayer()
+    {
+        if (player == null)
+        {
+            player = FindPlayer();
+            PreparePlayer(player);
+        }
+
+        return player;
     }
 
     void Update()
@@ -61,9 +74,9 @@ public class GameManager : MonoBehaviour {
 
     public Character FindPlayer()
     {
-        if(Player != null)
+        if(player != null)
         {
-            return Player;
+            return player;
         }
 
         foreach (Character obj in GameObject.FindObjectsOfType<Character>())
@@ -81,7 +94,7 @@ public class GameManager : MonoBehaviour {
     {
         if(player != null)
         {
-            Player.onDead += OnPlayerDead;
+            player.onDead += OnPlayerDead;
         }
     }
 
@@ -92,7 +105,6 @@ public class GameManager : MonoBehaviour {
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Player = FindPlayer();
-        PreparePlayer(Player);
+        player = null;
     }
 }

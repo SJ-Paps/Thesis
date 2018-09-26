@@ -8,6 +8,8 @@ public class MovingState : CharacterState
     private Rigidbody2D rigidbody2D;
     private Vector2 moveForce = new Vector2(0.2f, 0);
 
+    private float xVelocityDeadZone = 0.1f;
+
     public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
         rigidbody2D = character.GetComponent<Rigidbody2D>();
@@ -16,6 +18,9 @@ public class MovingState : CharacterState
     protected override void OnEnter()
     {
         base.OnEnter();
+
+        animator.SetTrigger("Move");
+
         EditorDebug.Log("MOVING ENTER");
     }
 
@@ -50,7 +55,7 @@ public class MovingState : CharacterState
             rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
         }
 
-        if (rigidbody2D.velocity.x == 0)
+        if (rigidbody2D.velocity.x > -xVelocityDeadZone && rigidbody2D.velocity.x < xVelocityDeadZone)
         {
             stateMachine.Trigger(Character.Trigger.StopMoving);
         }

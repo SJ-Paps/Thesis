@@ -13,12 +13,9 @@ public class FallingState : CharacterState
 
     protected override void OnEnter()
     {
-        EditorDebug.Log("FALLING ENTER");
-    }
+        animator.SetTrigger("Fall");
 
-    protected override void OnExit()
-    {
-        base.OnExit();
+        EditorDebug.Log("FALLING ENTER");
     }
 
     protected override void OnUpdate()

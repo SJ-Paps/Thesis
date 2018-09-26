@@ -74,7 +74,7 @@ public class XenophobicAwareState : XenophobicIAState
         {
             if(characterEyes.IsVisible(collider, visionLayers))
             {
-                if (GameManager.Instance.Player.IsHidden)
+                if (GameManager.Instance.GetPlayer().IsHidden)
                 {
                     if(Random.Range(1, 100) <= findProbability)
                     {

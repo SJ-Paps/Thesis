@@ -10,7 +10,7 @@ public class CharacterIdleState : CharacterState
 
     protected override void OnEnter()
     {
-        base.OnEnter();
+        animator.SetTrigger("Idle");
 
         EditorDebug.Log("IDLE ENTER");
     }
@@ -27,7 +27,10 @@ public class CharacterIdleState : CharacterState
                 break;
             }
         }
+    }
 
-        base.OnUpdate();
+    protected override void OnExit()
+    {
+        animator.ResetTrigger("Idle");
     }
 }

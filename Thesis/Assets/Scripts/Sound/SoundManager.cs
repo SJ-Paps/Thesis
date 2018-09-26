@@ -65,13 +65,12 @@ public sealed class SoundManager
 
 
     private Dictionary<SoundChannels, SoundChannel> channels;
-    private ReadOnlyDictionary<SoundChannels, SoundChannel> readOnlyChannels;
 
-    public ReadOnlyDictionary<SoundChannels, SoundChannel> Channels
+    public Dictionary<SoundChannels, SoundChannel> Channels
     {
         get
         {
-            return readOnlyChannels;
+            return channels;
         }
     }
 
@@ -80,7 +79,6 @@ public sealed class SoundManager
     private SoundManager()
     {
         channels = new Dictionary<SoundChannels, SoundChannel>();
-        readOnlyChannels = new ReadOnlyDictionary<SoundChannels, SoundChannel>(channels);
 
         for(SoundChannels i = 0; i < SoundChannels.Count; i++)
         {

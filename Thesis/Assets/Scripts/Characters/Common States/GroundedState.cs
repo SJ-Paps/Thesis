@@ -18,12 +18,17 @@ public class GroundedState : CharacterState
     {
         base.OnEnter();
         blackboard.isGrounded = true;
+
+        animator.SetTrigger("Ground");
+
         EditorDebug.Log("GROUNDED ENTER");
     }
 
     protected override void OnExit() {
         base.OnExit();
         blackboard.isGrounded = false;
+
+        animator.ResetTrigger("Ground");
         //EditorDebug.Log("GROUNDED EXIT");
     }
 
