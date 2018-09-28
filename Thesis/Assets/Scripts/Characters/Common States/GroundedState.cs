@@ -5,10 +5,12 @@ using System;
 
 public class GroundedState : CharacterState
 {
-    private Action<Collision2D> checkIsOnFloorDelegate;
+    private Action<Collider2D> checkIsOnFloorDelegate;
 
     private float contactNormalOffsetY = 0.5f;
     private float contactNormalOffsetX = 0.2f;
+
+    private BoxTrigger2D characterFeet;
 
     public GroundedState(FSM<Character.State, Character.Trigger> fsm,
        Character.State state,
@@ -18,7 +20,7 @@ public class GroundedState : CharacterState
     {
         checkIsOnFloorDelegate = CheckIsOnFloor;
 
-        
+        characterFeet = character.Feet;
     }
 
     protected override void OnEnter()
@@ -26,7 +28,7 @@ public class GroundedState : CharacterState
         base.OnEnter();
         blackboard.isGrounded = true;
 
-        character.onCollisionStay2D += CheckIsOnFloor;
+        characterFeet.onExited += checkIsOnFloorDelegate;
 
         animator.SetTrigger("Ground");
 
@@ -37,7 +39,7 @@ public class GroundedState : CharacterState
         base.OnExit();
         blackboard.isGrounded = false;
 
-        character.onCollisionStay2D -= CheckIsOnFloor;
+        characterFeet.onExited -= checkIsOnFloorDelegate;
 
         animator.ResetTrigger("Ground");
         //EditorDebug.Log("GROUNDED EXIT");
@@ -57,28 +59,11 @@ public class GroundedState : CharacterState
         }
     }
 
-    protected void CheckIsOnFloor(Collision2D collision)
+    private void CheckIsOnFloor(Collider2D collider)
     {
-        foreach (ContactPoint2D contact in collision.contacts)
+        if(collider.gameObject.layer == Reg.floorLayer || collider.gameObject.layer == Reg.objectLayer)
         {
-            if(character.name == "XenophobicEnemy")
-            {
-                if (contact.collider.gameObject.layer == Reg.floorLayer ||
-                contact.collider.gameObject.layer == Reg.objectLayer)
-                {
-                    Debug.Log(contact.collider.gameObject.layer);
-                    Debug.Log(contact.normal.x.ToString("F8"));
-                    Debug.Log(contact.normal.y.ToString("F8"));
-                }
-            }
-
-            if ((contact.collider.gameObject.layer == Reg.floorLayer && contact.normal.y >= contactNormalOffsetY) ||
-                (contact.collider.gameObject.layer == Reg.objectLayer && contact.normal.y <= contactNormalOffsetY && contact.normal.x > contactNormalOffsetX))
-            {
-                return;
-            }
+            stateMachine.Trigger(Character.Trigger.Fall);
         }
-
-        stateMachine.Trigger(Character.Trigger.Fall);
     }
 }

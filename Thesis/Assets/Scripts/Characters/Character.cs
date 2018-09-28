@@ -61,6 +61,11 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         get { return handPoint; }
     }
 
+    public BoxTrigger2D Feet
+    {
+        get { return feet; }
+    }
+
 
     [SerializeField]
     private bool facingLeft;
@@ -73,6 +78,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     [SerializeField]
     protected Transform handPoint;
+
+    [SerializeField]
+    protected BoxTrigger2D feet;
 
     public bool blockFacing;
 

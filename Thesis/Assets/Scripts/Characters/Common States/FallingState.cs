@@ -5,21 +5,25 @@ using System;
 
 public class FallingState : CharacterState
 {
-    private Action<Collision2D> checkIsOnFloorDelegate;
+    private Action<Collider2D> checkIsOnFloorDelegate;
 
     private float contactNormalOffsetY = 0.5f;
     private float contactNormalOffsetX = 0.2f;
 
+    private BoxTrigger2D characterFeet;
+
     public FallingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
         checkIsOnFloorDelegate = CheckIsOnFloor;
+
+        characterFeet = character.Feet;
     }
 
     protected override void OnEnter()
     {
         animator.SetTrigger("Fall");
 
-        character.onCollisionStay2D += CheckIsOnFloor;
+        characterFeet.onStay += CheckIsOnFloor;
 
         EditorDebug.Log("FALLING ENTER " + character.name);
     }
@@ -33,30 +37,14 @@ public class FallingState : CharacterState
     {
         animator.ResetTrigger("Fall");
 
-        character.onCollisionStay2D -= CheckIsOnFloor;
+        characterFeet.onStay -= CheckIsOnFloor;
     }
-
-
-    protected void CheckIsOnFloor(Collision2D collision)
+    
+    private void CheckIsOnFloor(Collider2D collider)
     {
-        foreach (ContactPoint2D contact in collision.contacts)
+        if (collider.gameObject.layer == Reg.floorLayer || collider.gameObject.layer == Reg.objectLayer)
         {
-            /*if (character.name == "MainCharacter")
-            {
-                if (contact.collider.gameObject.layer == Reg.floorLayer ||
-                contact.collider.gameObject.layer == Reg.objectLayer)
-                {
-                    Debug.Log(contact.collider.gameObject.layer);
-                    Debug.Log(contact.normal.x.ToString("F8"));
-                    Debug.Log(contact.normal.y.ToString("F8"));
-                }
-            }*/
-
-            if ((contact.collider.gameObject.layer == Reg.floorLayer && contact.normal.y >= contactNormalOffsetY) ||
-                (contact.collider.gameObject.layer == Reg.objectLayer && contact.normal.y >= contactNormalOffsetY && contact.normal.x < contactNormalOffsetX))
-            {
-                stateMachine.Trigger(Character.Trigger.Ground);
-            }
+            stateMachine.Trigger(Character.Trigger.Ground);
         }
     }
 

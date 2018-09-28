@@ -11,10 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelPrimerParcial.unity
     guid: e67ac3f6400dc0d4bb731892be674d7f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PruebaEnemigos.unity
     guid: 00876e8802f073f43abf214823c1bb85
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/EscenaPrototipo.unity
     guid: 1a77106d635e4a64f92d5be8f2c3cecd
   m_configObjects: {}

@@ -55,8 +55,6 @@ public class Axe : Weapon
 
         parentConstraint.constraintActive = true;
 
-        Debug.Log(character.transform.rotation.eulerAngles);
-
         parentConstraint.SetRotationOffset(0, new Vector3(0, 180, 0));
 
         //transform.rotation = character.transform.rotation;

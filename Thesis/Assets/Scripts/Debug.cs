@@ -1,4 +1,4 @@
-﻿//#define LOG_OFF
+﻿#define LOG_OFF
 
 using UnityEngine;
 
