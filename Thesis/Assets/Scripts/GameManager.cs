@@ -106,6 +106,8 @@ public class GameManager : SJMonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
+
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         player = null;

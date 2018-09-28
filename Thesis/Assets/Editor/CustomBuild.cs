@@ -8,10 +8,14 @@ public class CustomBuild
 
         CreateAssetBundles.BuildAllAssetBundles(Reg.assetBundleDataPathBuild);
     }
-
-    private static void PlusVersion()
+    
+    private static void PlusVersion(float plusVersion)
     {
+        float version = float.Parse(PlayerSettings.bundleVersion);
+        version += plusVersion;
 
+        PlayerSettings.bundleVersion = version.ToString();
+        
     }
 
     [MenuItem("Build/SimpleCustomBuild")]
@@ -26,14 +30,18 @@ public class CustomBuild
         Build(BuildOptions.Development);
     }
 
+    [MenuItem("Build/AutoVersionBuild")]
     private static void AutoVersionBuild()
     {
-
+        PlusVersion(0.1f);
+        Build(BuildOptions.None);
     }
 
+    [MenuItem("Build/AutoVersionDevelopment")]
     private static void AutoVersionDevelopmentBuild()
     {
-
+        PlusVersion(0.1f);
+        Build(BuildOptions.Development);
     }
     
 }
