@@ -16,7 +16,7 @@ public class FallingState : CharacterState
     {
         animator.SetTrigger("Fall");
 
-        character.onCollisionEnter2D += CheckIsOnFloor;
+        character.onCollisionStay2D += CheckIsOnFloor;
 
         EditorDebug.Log("FALLING ENTER");
     }
@@ -30,7 +30,7 @@ public class FallingState : CharacterState
     {
         animator.ResetTrigger("Fall");
 
-        character.onCollisionEnter2D -= CheckIsOnFloor;
+        character.onCollisionStay2D -= CheckIsOnFloor;
     }
 
 

@@ -24,7 +24,14 @@ public class XenophobicPatrol : XenophobicIAState
         controller.Slave.Animator.SetTrigger("Patrolling");
         blackboard.onLastDetectionPositionChanged += onLastDetectionPositionChangedDelegate;
 
-        currentOrder = Character.Order.OrderMoveLeft;
+        if(controller.Slave.FacingLeft)
+        {
+            currentOrder = Character.Order.OrderMoveRight;
+        }
+        else
+        {
+            currentOrder = Character.Order.OrderMoveLeft;
+        }
 
         CalculatePatrolMargins();
     }

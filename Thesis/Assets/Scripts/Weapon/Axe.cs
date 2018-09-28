@@ -2,6 +2,7 @@
 using UnityEngine.Animations;
 using SAM.Timers;
 using System;
+using System.Collections;
 
 public class Axe : Weapon
 {
@@ -11,8 +12,8 @@ public class Axe : Weapon
     private Collider2D sharpEdge;
 
     private SyncTimer timer;
-    private float attackInterval = 1f;
-    private float recoilInterval = 0.5f;
+    private float attackInterval = 1.2f;
+    private float recoilInterval = 0.3f;
 
     private Action<SyncTimer> onAttack;
     private Action<SyncTimer> onTerminate;
@@ -37,16 +38,15 @@ public class Axe : Weapon
 
     protected void Update()
     {
+
         timer.Update(Time.deltaTime);
     }
 
     public override void SetUser(Character character)
     {
         base.SetUser(character);
-
-        //transform.position = character.HandPoint.position;
         
-        rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+        rigidbody2D.isKinematic = true;
 
         ConstraintSource source = new ConstraintSource();
         source.sourceTransform = character.HandPoint;
@@ -55,13 +55,16 @@ public class Axe : Weapon
         parentConstraint.AddSource(source);
 
         parentConstraint.constraintActive = true;
+        
+
+        transform.rotation = character.transform.rotation;
     }
 
     public override void Drop()
     {
         base.Drop();
-
-        rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+        
+        rigidbody2D.isKinematic = false;
 
         parentConstraint.RemoveSource(0);
 

@@ -42,4 +42,16 @@ public class Eyes : MonoBehaviour
 
         return false;
     }
+
+    public bool IsVisibleAndNear(Collider2D collider, int layerMask, float distance)
+    {
+        if (eyePoint != null)
+        {
+            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, layerMask);
+
+            return hit.collider == collider && hit.distance <= distance;
+        }
+
+        return false;
+    }
 }

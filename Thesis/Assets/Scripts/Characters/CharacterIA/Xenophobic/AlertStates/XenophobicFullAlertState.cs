@@ -6,12 +6,12 @@ using Random = UnityEngine.Random;
 
 public class XenophobicFullAlertState : XenophobicIAState
 {
-    private Vector2 eyeSize = new Vector2(18, 5);
+    private Vector2 eyeSize = new Vector2(12, 5);
 
     private Eyes characterEyes;
 
     private SyncTimer fullAlertTimer;
-    private float fullAlertTime = 20f;
+    private float fullAlertTime = 10f;
 
     private SyncTimer playerDetectedTimer;
     private float playerDetectedTime = 6f;

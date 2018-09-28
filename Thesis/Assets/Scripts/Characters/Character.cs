@@ -38,6 +38,13 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public float MovementVelocity
     {
         get { return movementVelocity; }
+        set
+        {
+            if(value >= 0)
+            {
+                movementVelocity = value;
+            }
+        }
     }
 	public bool IsPushing
     {
@@ -143,7 +150,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     protected float groundDetectionDistance = 0.03f;
 
-    new protected Collider2D collider;
+    public Collider2D Collider { get; protected set; }
 
     protected virtual void Awake()
     {
@@ -160,7 +167,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
         orders = new List<Order>();
 
-        collider = GetComponent<Collider2D>();
+        Collider = GetComponent<Collider2D>();
 
         aliveFSM = new FSM<State, Trigger>();
 
