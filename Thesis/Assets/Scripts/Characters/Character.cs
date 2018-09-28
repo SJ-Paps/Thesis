@@ -279,7 +279,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         {
             Deadly deadly = collider.GetComponent<Deadly>();
 
-            Die(deadly.Type);
+            if(deadly != null)
+            {
+                Die(deadly.Type);
+            }
         }
     }
 

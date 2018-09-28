@@ -38,7 +38,6 @@ public class Axe : Weapon
 
     protected void Update()
     {
-
         timer.Update(Time.deltaTime);
     }
 
@@ -55,9 +54,12 @@ public class Axe : Weapon
         parentConstraint.AddSource(source);
 
         parentConstraint.constraintActive = true;
-        
 
-        transform.rotation = character.transform.rotation;
+        Debug.Log(character.transform.rotation.eulerAngles);
+
+        parentConstraint.SetRotationOffset(0, new Vector3(0, 180, 0));
+
+        //transform.rotation = character.transform.rotation;
     }
 
     public override void Drop()

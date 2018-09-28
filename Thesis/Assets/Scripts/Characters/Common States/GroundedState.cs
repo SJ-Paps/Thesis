@@ -7,6 +7,9 @@ public class GroundedState : CharacterState
 {
     private Action<Collision2D> checkIsOnFloorDelegate;
 
+    private float contactNormalOffsetY = 0.5f;
+    private float contactNormalOffsetX = 0.2f;
+
     public GroundedState(FSM<Character.State, Character.Trigger> fsm,
        Character.State state,
        Character character,
@@ -27,7 +30,7 @@ public class GroundedState : CharacterState
 
         animator.SetTrigger("Ground");
 
-        EditorDebug.Log("GROUNDED ENTER");
+        EditorDebug.Log("GROUNDED ENTER " + character.name);
     }
 
     protected override void OnExit() {
@@ -58,13 +61,21 @@ public class GroundedState : CharacterState
     {
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            if (contact.collider.gameObject.layer == Reg.floorLayer ||
-                contact.collider.gameObject.layer == Reg.objectLayer)
+            if(character.name == "XenophobicEnemy")
             {
-                if(contact.normal.y == Vector2.up.y)
+                if (contact.collider.gameObject.layer == Reg.floorLayer ||
+                contact.collider.gameObject.layer == Reg.objectLayer)
                 {
-                    return;
+                    Debug.Log(contact.collider.gameObject.layer);
+                    Debug.Log(contact.normal.x.ToString("F8"));
+                    Debug.Log(contact.normal.y.ToString("F8"));
                 }
+            }
+
+            if ((contact.collider.gameObject.layer == Reg.floorLayer && contact.normal.y >= contactNormalOffsetY) ||
+                (contact.collider.gameObject.layer == Reg.objectLayer && contact.normal.y <= contactNormalOffsetY && contact.normal.x > contactNormalOffsetX))
+            {
+                return;
             }
         }
 

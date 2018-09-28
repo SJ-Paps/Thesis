@@ -7,6 +7,9 @@ public class FallingState : CharacterState
 {
     private Action<Collision2D> checkIsOnFloorDelegate;
 
+    private float contactNormalOffsetY = 0.5f;
+    private float contactNormalOffsetX = 0.2f;
+
     public FallingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
         checkIsOnFloorDelegate = CheckIsOnFloor;
@@ -18,7 +21,7 @@ public class FallingState : CharacterState
 
         character.onCollisionStay2D += CheckIsOnFloor;
 
-        EditorDebug.Log("FALLING ENTER");
+        EditorDebug.Log("FALLING ENTER " + character.name);
     }
 
     protected override void OnUpdate()
@@ -38,13 +41,21 @@ public class FallingState : CharacterState
     {
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            if (contact.collider.gameObject.layer == Reg.floorLayer ||
-                contact.collider.gameObject.layer == Reg.objectLayer)
+            /*if (character.name == "MainCharacter")
             {
-                if (contact.normal.y == Vector2.up.y)
+                if (contact.collider.gameObject.layer == Reg.floorLayer ||
+                contact.collider.gameObject.layer == Reg.objectLayer)
                 {
-                    stateMachine.Trigger(Character.Trigger.Ground);
+                    Debug.Log(contact.collider.gameObject.layer);
+                    Debug.Log(contact.normal.x.ToString("F8"));
+                    Debug.Log(contact.normal.y.ToString("F8"));
                 }
+            }*/
+
+            if ((contact.collider.gameObject.layer == Reg.floorLayer && contact.normal.y >= contactNormalOffsetY) ||
+                (contact.collider.gameObject.layer == Reg.objectLayer && contact.normal.y >= contactNormalOffsetY && contact.normal.x < contactNormalOffsetX))
+            {
+                stateMachine.Trigger(Character.Trigger.Ground);
             }
         }
     }
