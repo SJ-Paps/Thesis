@@ -85,6 +85,10 @@ public class ActionsIdleState : CharacterState
             {
                 CheckPushable();
             }
+            else if(ev == Character.Order.OrderAttack)
+            {
+                stateMachine.Trigger(Character.Trigger.Attack);
+            }
         }
     }
 

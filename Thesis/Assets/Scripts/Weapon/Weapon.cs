@@ -14,16 +14,11 @@ public abstract class Weapon : SJMonoBehaviour {
     public virtual void SetUser(Character character)
     {
         User = character;
-
-        transform.SetParent(character.HandPoint);
-        transform.localPosition = new Vector3(0, 0, 0);
     }
 
     public virtual void Drop()
     {
         User = null;
-
-        transform.SetParent(null);
     }
 
     public void UseWeapon()

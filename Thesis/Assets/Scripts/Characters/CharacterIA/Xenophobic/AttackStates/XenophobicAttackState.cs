@@ -15,13 +15,16 @@ public class XenophobicAttackState : CharacterAttackState
     {
         base.OnEnter();
 
+        EditorDebug.Log("XENOPHOBIC ATTACK ENTER");
+
         weapon = character.Weapon;
         weapon.UseWeapon();
+        character.Animator.SetTrigger("Attack");
     }
 
     protected override void OnUpdate()
     {
-        if(weapon.BeingUsed == false)
+        if (weapon.BeingUsed == false)
         {
             stateMachine.Trigger(Character.Trigger.StopAttacking);
         }
@@ -30,5 +33,7 @@ public class XenophobicAttackState : CharacterAttackState
     protected override void OnExit()
     {
         base.OnExit();
+
+        EditorDebug.Log("XENOPHOBIC ATTACK EXIT");
     }
 }

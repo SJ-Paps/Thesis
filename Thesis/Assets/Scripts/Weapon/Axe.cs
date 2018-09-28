@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.Animations;
 using SAM.Timers;
 using System;
 
-public class Axe : Weapon, IDeadly
+public class Axe : Weapon
 {
+    private DeadlyType type;
+
     [SerializeField]
     private Collider2D sharpEdge;
 
@@ -15,11 +18,16 @@ public class Axe : Weapon, IDeadly
     private Action<SyncTimer> onTerminate;
 
     [SerializeField]
-    private FixedJoint2D joint2D;
+    new private Rigidbody2D rigidbody2D;
+
+    [SerializeField]
+    private ParentConstraint parentConstraint;
 
     protected override void Awake()
     {
         base.Awake();
+
+        type = DeadlyType.Sharp;
 
         timer = new SyncTimer();
 
@@ -36,16 +44,28 @@ public class Axe : Weapon, IDeadly
     {
         base.SetUser(character);
 
-        joint2D.enabled = true;
-        joint2D.connectedBody = character.RigidBody2D;
+        //transform.position = character.HandPoint.position;
+        
+        rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        ConstraintSource source = new ConstraintSource();
+        source.sourceTransform = character.HandPoint;
+        source.weight = 1;
+
+        parentConstraint.AddSource(source);
+
+        parentConstraint.constraintActive = true;
     }
 
     public override void Drop()
     {
         base.Drop();
 
-        joint2D.enabled = false;
-        joint2D.connectedBody = null;
+        rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        parentConstraint.RemoveSource(0);
+
+        parentConstraint.constraintActive = false;
     }
 
     protected override void OnUseWeapon()
@@ -80,7 +100,7 @@ public class Axe : Weapon, IDeadly
 
         if(mortal != null)
         {
-            mortal.Die(this);
+            mortal.Die(type);
         }
     }
 }

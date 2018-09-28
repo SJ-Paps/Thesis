@@ -79,7 +79,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Jumping,
         Falling,
         Hidden,
-
         Attacking,
         Pushing
     }
@@ -95,7 +94,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Attack,
         StopAttacking,
         StopMoving,
-
         StopHiding,
         StopPushing,
         Push
@@ -129,6 +127,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
             return enslaved;
         }
     }
+
+    protected Action<Collision2D> collisionCheckDeadlyDelegate;
+    protected Action<Collider2D> triggerCheckDeadlyDelegate;
+
     public Animator Animator { get; protected set; }
     public Rigidbody2D RigidBody2D { get; protected set; }
 
@@ -147,6 +149,12 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
+
+        collisionCheckDeadlyDelegate = CheckDeadly;
+        triggerCheckDeadlyDelegate = CheckDeadly;
+
+        onCollisionEnter2D += collisionCheckDeadlyDelegate;
+        onTriggerEnter2D += triggerCheckDeadlyDelegate;
 
         blackboard = new Blackboard();
 
@@ -184,7 +192,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         dead.AddFSM(fsm);
     }
 
-    public virtual bool Die(IDeadly deadly)
+    public virtual bool Die(DeadlyType deadly)
     {
         Die();
 
@@ -245,6 +253,26 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         if(IsHidden)
         {
             SetOrder(Order.OrderHide);
+        }
+    }
+
+    private void CheckDeadly(Collision2D collision)
+    {
+        if(collision.gameObject.layer == Reg.hostileDeadlyLayer || collision.gameObject.layer == Reg.generalDeadlyLayer)
+        {
+            Deadly deadly = collision.gameObject.GetComponent<Deadly>();
+
+            Die(deadly.Type);
+        }
+    }
+
+    private void CheckDeadly(Collider2D collider)
+    {
+        if (collider.gameObject.layer == Reg.hostileDeadlyLayer || collider.gameObject.layer == Reg.generalDeadlyLayer)
+        {
+            Deadly deadly = collider.GetComponent<Deadly>();
+
+            Die(deadly.Type);
         }
     }
 

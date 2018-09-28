@@ -123,6 +123,8 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         {
             Control();
         }
+        
     }
+
 
 }
