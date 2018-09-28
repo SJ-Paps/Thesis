@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
+    public event Action<Collision2D> onCollisionStay2D;
     public event Action<Collider2D> onTriggerEnter2D;
     public event Action<Collider2D> onTriggerExit2D;
 	public event Action<Order> onOrderReceived;
@@ -16,6 +17,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public bool IsHidden
     {
         get { return blackboard.isHidden; }
+    }
+    public bool IsMovingHorizontal
+    {
+        get { return blackboard.movingHorizontal; }
     }
     
     public bool IsGrounded
@@ -33,15 +38,27 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public float MovementVelocity
     {
         get { return movementVelocity; }
+        set
+        {
+            if(value >= 0)
+            {
+                movementVelocity = value;
+            }
+        }
     }
 	public bool IsPushing
     {
         get { return blackboard.isPushing; }
     }
 
-	public Transform EyePoint
+	public Eyes Eyes
     {
-        get { return eyePoint; }
+        get { return eyes; }
+    }
+
+    public Transform HandPoint
+    {
+        get { return handPoint; }
     }
 
 
@@ -52,7 +69,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     protected float movementVelocity = 1;
 
     [SerializeField]
-    protected Transform eyePoint;
+    protected Eyes eyes;
+
+    [SerializeField]
+    protected Transform handPoint;
 
     public bool blockFacing;
 
@@ -66,7 +86,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Jumping,
         Falling,
         Hidden,
-
         Attacking,
         Pushing
     }
@@ -82,7 +101,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Attack,
         StopAttacking,
         StopMoving,
-
         StopHiding,
         StopPushing,
         Push
@@ -100,11 +118,11 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public class Blackboard
     {
-
         public bool isAlive;
         public bool isHidden;
         public bool isGrounded;
         public bool isPushing;
+        public bool movingHorizontal;
     }
 
     protected bool enslaved;
@@ -116,7 +134,12 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
             return enslaved;
         }
     }
+
+    protected Action<Collision2D> collisionCheckDeadlyDelegate;
+    protected Action<Collider2D> triggerCheckDeadlyDelegate;
+
     public Animator Animator { get; protected set; }
+    public Rigidbody2D RigidBody2D { get; protected set; }
 
     private FSM<State, Trigger> aliveFSM;
 
@@ -127,17 +150,24 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     protected float groundDetectionDistance = 0.03f;
 
-    new protected Collider2D collider;
+    public Collider2D Collider { get; protected set; }
 
     protected virtual void Awake()
     {
         Animator = GetComponent<Animator>();
+        RigidBody2D = GetComponent<Rigidbody2D>();
+
+        collisionCheckDeadlyDelegate = CheckDeadly;
+        triggerCheckDeadlyDelegate = CheckDeadly;
+
+        onCollisionEnter2D += collisionCheckDeadlyDelegate;
+        onTriggerEnter2D += triggerCheckDeadlyDelegate;
 
         blackboard = new Blackboard();
 
         orders = new List<Order>();
 
-        collider = GetComponent<Collider2D>();
+        Collider = GetComponent<Collider2D>();
 
         aliveFSM = new FSM<State, Trigger>();
 
@@ -169,7 +199,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         dead.AddFSM(fsm);
     }
 
-    public virtual bool Die(IDeadly deadly)
+    public virtual bool Die(DeadlyType deadly)
     {
         Die();
 
@@ -205,8 +235,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         orders.Clear();
     }
 
-    public abstract bool CheckIsOnFloor(int layerMask);
-
     public void Face(bool left)
     {
         if(!blockFacing && facingLeft != left)
@@ -235,11 +263,42 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         }
     }
 
+    private void CheckDeadly(Collision2D collision)
+    {
+        if(collision.gameObject.layer == Reg.hostileDeadlyLayer || collision.gameObject.layer == Reg.generalDeadlyLayer)
+        {
+            Deadly deadly = collision.gameObject.GetComponent<Deadly>();
+
+            Die(deadly.Type);
+        }
+    }
+
+    private void CheckDeadly(Collider2D collider)
+    {
+        if (collider.gameObject.layer == Reg.hostileDeadlyLayer || collider.gameObject.layer == Reg.generalDeadlyLayer)
+        {
+            Deadly deadly = collider.GetComponent<Deadly>();
+
+            if(deadly != null)
+            {
+                Die(deadly.Type);
+            }
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if(onCollisionEnter2D != null)
         {
             onCollisionEnter2D(collision);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if(onCollisionStay2D != null)
+        {
+            onCollisionStay2D(collision);
         }
     }
 

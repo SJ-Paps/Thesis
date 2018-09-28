@@ -60,16 +60,13 @@ public class ActionsIdleState : CharacterState
 
     protected override void OnUpdate()
     {
-
         timerOfHiding.Update(Time.deltaTime);
 
-        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance);
         EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
 
-        if(raycastHit2D && raycastHit2D.collider.gameObject.layer == Reg.objectLayer && character.IsGrounded == true)
+        if (character.IsMovingHorizontal)
         {
-            stateMachine.Trigger(Character.Trigger.Push);
-            blackboard.isPushing = true;
+            CheckPushable();
         }
 
         for (int i = 0; i < orders.Count; i++)
@@ -83,6 +80,14 @@ public class ActionsIdleState : CharacterState
                 characterJumpingFSM.Active = false;
                 characterRigidBody2D.velocity = new Vector2(0, characterRigidBody2D.velocity.y);
                 timerOfHiding.Start();
+            }
+            else if(ev == Character.Order.OrderPush)
+            {
+                CheckPushable();
+            }
+            else if(ev == Character.Order.OrderAttack)
+            {
+                stateMachine.Trigger(Character.Trigger.Attack);
             }
         }
     }
@@ -106,5 +111,16 @@ public class ActionsIdleState : CharacterState
     void EnteringToTheHidingPlace(SyncTimer timer) 
     {
         stateMachine.Trigger(Character.Trigger.Hide);
+    }
+
+    private void CheckPushable()
+    {
+        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance, 1 << Reg.objectLayer);
+
+        if (raycastHit2D && character.IsGrounded)
+        {
+            stateMachine.Trigger(Character.Trigger.Push);
+        }
+
     }
 }

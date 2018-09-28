@@ -82,7 +82,6 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
     {
         blackboard = new Blackboard();
         SlaveEyes = Slave.GetComponentInChildren<Eyes>();
-        SlaveEyes.SetEyePoint(Slave.EyePoint);
 
         alertnessFSM = new FSM<State, Trigger>();
 
@@ -107,6 +106,9 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         behaviourFSM.MakeTransition(State.Seeking, Trigger.Patrol, State.Patrolling);
 
         behaviourFSM.StartBy(State.Patrolling);
+
+        //Super provisorio
+        Slave.Weapon.SetUser(Slave);
     }
 
     public override void Control()
@@ -121,6 +123,8 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         {
             Control();
         }
+        
     }
+
 
 }

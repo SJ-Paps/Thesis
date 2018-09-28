@@ -1,6 +1,4 @@
 ﻿using SAM.FSM;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +6,10 @@ public class PushingObjectState : CharacterState {
 
     private RaycastHit2D raycastHit2D;
     private float raycastDistance;
-    private bool jointObtained;
     private FixedJoint2D objectFixedJoint2D;
     private Rigidbody2D characterRigidbody;
+
+    private Character.Order expectedOrder;
 
     private int objectLayerMask = 1 << Reg.objectLayer;
 
@@ -24,76 +23,60 @@ public class PushingObjectState : CharacterState {
        FSM<Character.State, Character.Trigger> movementFSM) : base (fsm, state, character, orders, blackboard)
     {
         raycastDistance = 0.4f;
-        jointObtained = false;
         characterRigidbody = character.GetComponent<Rigidbody2D>();
     }
 
     protected override void OnEnter() {
         base.OnEnter();
+
+        blackboard.isPushing = true;
+
+        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance, objectLayerMask);
+
+        objectFixedJoint2D = raycastHit2D.transform.GetComponent<FixedJoint2D>();
+        objectFixedJoint2D.enabled = true;
+        objectFixedJoint2D.connectedBody = characterRigidbody;
+
+        character.blockFacing = true;
+
+        if (character.transform.right.x < 0)
+        {
+            expectedOrder = Character.Order.OrderMoveLeft;
+        }
+        else
+        {
+            expectedOrder = Character.Order.OrderMoveRight;
+        }
+
         EditorDebug.Log("PUSHINGOBJECT ENTER");
     }
 
     protected override void OnExit() {
         base.OnExit();
+
+        character.blockFacing = false;
+        objectFixedJoint2D.enabled = false;
+        objectFixedJoint2D.connectedBody = null;
+        objectFixedJoint2D = null;
+
         EditorDebug.Log("PUSHINGOBJECT EXIT");
     }
 
     protected override void OnUpdate() {
-
-        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance, objectLayerMask);
-        EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
-
-        if(raycastHit2D && !jointObtained && character.IsGrounded)
+        
+        if(character.IsGrounded)
         {
-            objectFixedJoint2D = raycastHit2D.transform.GetComponent<FixedJoint2D>();
-            jointObtained = true;
-        }
-        if(!raycastHit2D || raycastHit2D.collider.gameObject.layer != Reg.objectLayer || !character.IsGrounded)
-        { 
-            blackboard.isPushing = false;
-            jointObtained = false;
-            if(objectFixedJoint2D != null)
+            for (int i = 0; i < orders.Count; i++)
             {
-                objectFixedJoint2D.enabled = false;
+                Character.Order ev = orders[i];
+
+                if (ev == Character.Order.OrderPush || ev == expectedOrder)
+                {
+                    return;
+                }
             }
-            stateMachine.Trigger(Character.Trigger.StopPushing);
-            return;
         }
 
-        for(int i = 0; i < orders.Count; i++)
-        {
-            Character.Order ev = orders[i];
-
-            PushOrPullObjectWhenPressingKey(ev);
-        }
-
-        base.OnUpdate();
-    }
-
-    private void PushOrPullObjectWhenPressingKey(Character.Order order) 
-    {
-        if(order == Character.Order.OrderPush)
-        {
-            EditorDebug.Log("EMPUJO OBJETO");
-            objectFixedJoint2D.enabled = true;
-            objectFixedJoint2D.connectedBody = characterRigidbody;
-            character.blockFacing = true;
-        }
-        else
-        {
-            objectFixedJoint2D.connectedBody = null;
-            objectFixedJoint2D.enabled = false;
-            character.blockFacing = false;
-        }
-
-        if(order == Character.Order.OrderPush && !character.IsGrounded)
-        {
-            objectFixedJoint2D.connectedBody = null;
-            blackboard.isPushing = false;
-            jointObtained = false;
-            objectFixedJoint2D.enabled = false;
-            character.blockFacing = false;
-            stateMachine.Trigger(Character.Trigger.StopPushing);
-        }
+        stateMachine.Trigger(Character.Trigger.StopPushing);
     }
 }

@@ -1,24 +1,25 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
+﻿using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : SJMonoBehaviour {
 
     private static MainMenu instance;
 
     public static MainMenu GetInstance()
     {
-        if(!init)
+        if(instance == null)
         {
-            init = true;
-            instance = Instantiate<MainMenu>(SJResources.Instance.LoadGameObjectAndGetComponent<MainMenu>("MainMenuCanvas"));
+            instance = FindObjectOfType<MainMenu>();
+
+            if(instance == null)
+            {
+                instance = Instantiate<MainMenu>(SJResources.Instance.LoadGameObjectAndGetComponent<MainMenu>("MainMenuCanvas"));
+            }
+            
             instance.Init();
         }
 
         return instance;
     }
-
-    private static bool init;
 
     private bool shown;
 
@@ -27,6 +28,8 @@ public class MainMenu : MonoBehaviour {
     private void Init()
     {
         DontDestroyOnLoad(this);
+
+        GameManager.GetInstance();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }

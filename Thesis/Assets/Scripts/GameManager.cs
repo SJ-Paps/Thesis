@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : SJMonoBehaviour {
 
     private static GameManager instance;
 
@@ -9,12 +9,17 @@ public class GameManager : MonoBehaviour {
     {
         get
         {
-            if(!init)
+            if(instance == null)
             {
-                init = true;
-                GameObject obj = new GameObject("GameManager");
+                instance = FindObjectOfType<GameManager>();
+                GameObject obj;
 
-                instance = obj.AddComponent<GameManager>();
+                if (instance == null)
+                {
+                    obj = new GameObject("GameManager");
+
+                    instance = obj.AddComponent<GameManager>();
+                }
 
                 instance.Init();
             }
@@ -27,8 +32,6 @@ public class GameManager : MonoBehaviour {
     {
         return Instance;
     }
-
-    private static bool init;
 
     private Character player;
 

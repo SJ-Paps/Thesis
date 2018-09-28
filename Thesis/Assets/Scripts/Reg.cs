@@ -33,4 +33,5 @@ public static class Reg
     public const int objectLayer = 15;
     public const int onlyPlayerStuffLayer = 16;
     public const int wallLayer = 17;
+    public const int itemLayer = 18;
 }

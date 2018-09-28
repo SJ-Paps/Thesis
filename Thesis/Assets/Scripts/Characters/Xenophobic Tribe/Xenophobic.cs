@@ -20,7 +20,7 @@ public class Xenophobic : Tribal, IAudibleListener
         }
     }
 
-    protected FSM<State, Trigger> attackFSM;
+    protected FSM<State, Trigger> actionFSM;
     protected FSM<State, Trigger> movementFSM;
     protected FSM<State, Trigger> jumpingFSM;
 
@@ -37,7 +37,7 @@ public class Xenophobic : Tribal, IAudibleListener
         movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.Idle);
 
         movementFSM.StartBy(State.Idle);
-        
+
 
         jumpingFSM = new FSM<State, Trigger>();
 
@@ -53,19 +53,20 @@ public class Xenophobic : Tribal, IAudibleListener
         jumpingFSM.StartBy(State.Falling);
 
 
-        attackFSM = new FSM<State, Trigger>();
+        actionFSM = new FSM<State, Trigger>();
 
-        attackFSM.AddState(State.Idle);
-        attackFSM.AddState(new XenophobicAttackState(attackFSM, State.Attacking, this, orders, blackboard));
+        actionFSM.AddState(new ActionsIdleState(actionFSM, State.Idle, this, orders, jumpingFSM, movementFSM, blackboard));
+        actionFSM.AddState(new XenophobicAttackState(actionFSM, State.Attacking, this, orders, blackboard));
 
-        attackFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
-        attackFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
+        actionFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
+        actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
 
-        attackFSM.StartBy(State.Idle);
+        actionFSM.StartBy(State.Idle);
 
         AddStateMachineWhenAlive(movementFSM);
         AddStateMachineWhenAlive(jumpingFSM);
-        AddStateMachineWhenAlive(attackFSM);
+        AddStateMachineWhenAlive(actionFSM);
+        
     }
 
     public override void GetEnslaved()
