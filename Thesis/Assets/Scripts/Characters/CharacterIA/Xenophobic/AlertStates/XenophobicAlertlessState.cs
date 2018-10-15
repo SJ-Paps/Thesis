@@ -25,7 +25,7 @@ public class XenophobicAlertlessState : XenophobicIAState {
         {
             characterEyes.Trigger2D.ChangeSize(eyesSize);
 
-            characterEyes.Trigger2D.onEntered += onSomethingDetectedDelegate;
+            characterEyes.Trigger2D.onStay += onSomethingDetectedDelegate;
         }
     }
 
@@ -38,14 +38,18 @@ public class XenophobicAlertlessState : XenophobicIAState {
     {
         if (characterEyes != null)
         {
-            characterEyes.Trigger2D.onEntered -= onSomethingDetectedDelegate;
+            characterEyes.Trigger2D.onStay -= onSomethingDetectedDelegate;
         }
     }
 
     private void AnalyzeDetection(Collider2D collider)
     {
+        Debug.Log("ANALYZING");
+
         if(characterEyes.IsVisible(collider, visionLayers))
         {
+            Debug.Log("IS VISIBLE");
+
             if(collider.gameObject.layer == Reg.playerLayer && GameManager.Instance.GetPlayer().IsHidden == false)
             {
                 stateMachine.Trigger(XenophobicIAController.Trigger.GetAware);
