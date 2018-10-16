@@ -44,12 +44,8 @@ public class XenophobicAlertlessState : XenophobicIAState {
 
     private void AnalyzeDetection(Collider2D collider)
     {
-        Debug.Log("ANALYZING");
-
         if(characterEyes.IsVisible(collider, visionLayers))
         {
-            Debug.Log("IS VISIBLE");
-
             if(collider.gameObject.layer == Reg.playerLayer && GameManager.Instance.GetPlayer().IsHidden == false)
             {
                 stateMachine.Trigger(XenophobicIAController.Trigger.GetAware);
