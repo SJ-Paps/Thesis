@@ -30,6 +30,6 @@ public abstract class CharacterState : State<Character.State, Character.Trigger>
 
     protected override void OnExit()
     {
-
+        
     }
 }
