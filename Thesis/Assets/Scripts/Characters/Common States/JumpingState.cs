@@ -10,7 +10,7 @@ public class JumpingState : CharacterState {
     private float maxHeight;
     private float maxVelocity = 4;
     private float height;
-    private Vector2 jumpForce = Vector2.up * 0.5f;
+    private Vector2 jumpForce = Vector2.up * 0.8f;
 
     public JumpingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
@@ -29,7 +29,7 @@ public class JumpingState : CharacterState {
 
         float initPosY = character.transform.position.y;
 
-        maxHeight = initPosY + height / 3;
+        maxHeight = initPosY + height / 2.2f;
 
         rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
     }

@@ -16,7 +16,7 @@ public class XenophobicSeek : XenophobicIAState
 
     private Action<Vector2> updatePositionDelegate;
 
-    private float movementVelocity = 3f;
+    private float movementVelocity = 4.5f;
     private float previousVelocity;
 
     private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
