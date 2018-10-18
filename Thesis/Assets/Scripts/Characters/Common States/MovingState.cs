@@ -26,6 +26,8 @@ public class MovingState : CharacterState
 
     protected override void OnExit()
     {
+        animator.ResetTrigger("Move");
+
         blackboard.movingHorizontal = false;
     }
 

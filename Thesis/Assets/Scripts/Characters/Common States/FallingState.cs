@@ -35,9 +35,9 @@ public class FallingState : CharacterState
 
     protected override void OnExit()
     {
-        animator.ResetTrigger("Fall");
-
         characterFeet.onStay -= CheckIsOnFloor;
+
+        animator.ResetTrigger("Fall");
     }
     
     private void CheckIsOnFloor(Collider2D collider)
