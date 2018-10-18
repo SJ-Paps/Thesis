@@ -7,7 +7,5 @@ public class MenuSceneLoader : MonoBehaviour {
 
         GameManager.GetInstance();
         MainMenu.GetInstance();
-
-        Logger.AnalyticsCustomEvent("PRUEBA ANALYTICS");
 	}
 }
