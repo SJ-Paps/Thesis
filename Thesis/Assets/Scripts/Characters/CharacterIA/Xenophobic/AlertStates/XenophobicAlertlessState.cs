@@ -25,7 +25,7 @@ public class XenophobicAlertlessState : XenophobicIAState {
         {
             characterEyes.Trigger2D.ChangeSize(eyesSize);
 
-            characterEyes.Trigger2D.onEntered += onSomethingDetectedDelegate;
+            characterEyes.Trigger2D.onStay += onSomethingDetectedDelegate;
         }
     }
 
@@ -38,7 +38,7 @@ public class XenophobicAlertlessState : XenophobicIAState {
     {
         if (characterEyes != null)
         {
-            characterEyes.Trigger2D.onEntered -= onSomethingDetectedDelegate;
+            characterEyes.Trigger2D.onStay -= onSomethingDetectedDelegate;
         }
     }
 

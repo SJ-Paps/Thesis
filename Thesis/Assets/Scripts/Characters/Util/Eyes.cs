@@ -25,6 +25,8 @@ public class Eyes : MonoBehaviour
         {
             RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, layerMask);
 
+            Debug.Log(hit.collider.name);
+
             return hit.collider == collider;
         }
 
