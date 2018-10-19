@@ -38,7 +38,7 @@ public class HiddenState : CharacterState
     protected override void OnExit()
     {
         blackboard.isHidden = false;
-      //  EditorDebug.Log("HIDDEN EXIT");
+        //  EditorDebug.Log("HIDDEN EXIT");
     }
 
     protected override void OnUpdate() 

@@ -75,6 +75,7 @@ public class ActionsIdleState : CharacterState
 
             if (ev == Character.Order.OrderHide && canHide == true && character.IsGrounded == true && !timerOfHiding.Active) 
             {
+                animator.ResetTrigger("Move");
                 EditorDebug.Log("LLAMADO AL TIMER ACTION");
                 characterMovementFSM.Active = false;
                 characterJumpingFSM.Active = false;

@@ -18,7 +18,6 @@ public class MovingState : CharacterState
     protected override void OnEnter()
     {
         base.OnEnter();
-
         animator.SetTrigger("Move");
 
         EditorDebug.Log("MOVING ENTER");
