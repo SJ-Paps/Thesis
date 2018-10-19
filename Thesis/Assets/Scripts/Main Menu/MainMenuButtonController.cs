@@ -62,6 +62,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private void GoNewGame()
     {
+        Logger.AnalyticsCustomEvent("Start_Level");
         SceneManager.LoadScene(1);
     }
 

@@ -9,8 +9,11 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action<Collision2D> onCollisionStay2D;
     public event Action<Collider2D> onTriggerEnter2D;
     public event Action<Collider2D> onTriggerExit2D;
+
 	public event Action<Order> onOrderReceived;
+    public event Action onDetected;
     public event Action onDead;
+
     protected Blackboard blackboard;
 
     
@@ -261,6 +264,11 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public void NotifyDetection()
     {
         OnDetected();
+
+        if(onDetected != null)
+        {
+            onDetected();
+        }
     }
 
     protected virtual void OnDetected()

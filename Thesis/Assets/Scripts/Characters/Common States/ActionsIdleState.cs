@@ -10,6 +10,7 @@ public class ActionsIdleState : CharacterState
     private FSM<Character.State, Character.Trigger> characterMovementFSM;
     private Action<Collider2D> checkingForEnteringToTheHidingPlaceMethod;
     private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
+    private Action onCharacterDetectedMethod;
     private Rigidbody2D characterRigidBody2D;
     private SyncTimer timerOfHiding;
     private RaycastHit2D raycastHit2D;
@@ -27,14 +28,20 @@ public class ActionsIdleState : CharacterState
     {
         characterJumpingFSM = jumpingFSM;
         characterMovementFSM = movementFSM;
+
         checkingForEnteringToTheHidingPlaceMethod += CheckingForEnteringToTheHidingPlace;
         checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
+        onCharacterDetectedMethod = OnCharacterDetected;
+
         characterRigidBody2D = character.GetComponent<Rigidbody2D>();
-        timerOfHiding = new SyncTimer();
+
         raycastDistance = 0.4f;
         cooldownOfHiding = 0.7f;
         
         raycastHit2D = new RaycastHit2D();
+
+        timerOfHiding = new SyncTimer();
+        timerOfHiding.onTick += EnteringToTheHidingPlace;
         timerOfHiding.Interval = cooldownOfHiding;
     }
 
@@ -43,7 +50,7 @@ public class ActionsIdleState : CharacterState
         base.OnEnter();
         character.onTriggerEnter2D += checkingForEnteringToTheHidingPlaceMethod;
         character.onTriggerExit2D += checkingForExitingOfTheHidingPlaceMethod;
-        timerOfHiding.onTick += EnteringToTheHidingPlace;
+        
         Physics2D.queriesStartInColliders = false;
         canHide = false;
         EditorDebug.Log("ACTIONIDLE ENTER");
@@ -54,8 +61,8 @@ public class ActionsIdleState : CharacterState
         base.OnExit();
         character.onTriggerEnter2D -= checkingForEnteringToTheHidingPlaceMethod;
         character.onTriggerExit2D -= checkingForExitingOfTheHidingPlaceMethod;
-        timerOfHiding.onTick -= EnteringToTheHidingPlace;
-       // EditorDebug.Log("ACTIONIDLE EXIT");
+        character.onDetected -= onCharacterDetectedMethod;
+        // EditorDebug.Log("ACTIONIDLE EXIT");
     }
 
     protected override void OnUpdate()
@@ -81,6 +88,7 @@ public class ActionsIdleState : CharacterState
                 characterJumpingFSM.Active = false;
                 characterRigidBody2D.velocity = new Vector2(0, characterRigidBody2D.velocity.y);
                 timerOfHiding.Start();
+                character.onDetected += onCharacterDetectedMethod;
             }
             else if(ev == Character.Order.OrderPush)
             {
@@ -91,6 +99,11 @@ public class ActionsIdleState : CharacterState
                 stateMachine.Trigger(Character.Trigger.Attack);
             }
         }
+    }
+
+    private void OnCharacterDetected()
+    {
+        Logger.AnalyticsCustomEvent("Detected_On_Hiding");
     }
 
     void CheckingForEnteringToTheHidingPlace(Collider2D collider2D) 
@@ -111,6 +124,8 @@ public class ActionsIdleState : CharacterState
     
     void EnteringToTheHidingPlace(SyncTimer timer) 
     {
+        character.onDetected -= onCharacterDetectedMethod;
+        Logger.AnalyticsCustomEvent("Hide_Succees");
         stateMachine.Trigger(Character.Trigger.Hide);
     }
 
