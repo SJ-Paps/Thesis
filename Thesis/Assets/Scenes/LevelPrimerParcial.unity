@@ -537,7 +537,7 @@ GameObject:
   - component: {fileID: 107105201}
   - component: {fileID: 107105202}
   - component: {fileID: 107105203}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LevelCompleteTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

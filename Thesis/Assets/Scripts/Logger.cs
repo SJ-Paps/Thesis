@@ -6,11 +6,13 @@ public static partial class Logger
 {
     public static void AnalyticsCustomEvent(string eventName)
     {
+        EditorDebug.Log(eventName);
         InternalAnalyticsCustomEvent(eventName);
     }
 
     public static void AnalyticsCustomEvent(string eventName, IDictionary<string, object> eventData)
     {
+        EditorDebug.Log(eventName);
         InternalAnalyticsCustomEvent(eventName, eventData);
     }
 

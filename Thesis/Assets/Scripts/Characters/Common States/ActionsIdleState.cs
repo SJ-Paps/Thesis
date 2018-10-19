@@ -11,6 +11,7 @@ public class ActionsIdleState : CharacterState
     private Action<Collider2D> checkingForEnteringToTheHidingPlaceMethod;
     private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
     private Action onCharacterDetectedMethod;
+    private Action onCharacterDeadMethod;
     private Rigidbody2D characterRigidBody2D;
     private SyncTimer timerOfHiding;
     private RaycastHit2D raycastHit2D;
@@ -32,6 +33,7 @@ public class ActionsIdleState : CharacterState
         checkingForEnteringToTheHidingPlaceMethod += CheckingForEnteringToTheHidingPlace;
         checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
         onCharacterDetectedMethod = OnCharacterDetected;
+        onCharacterDeadMethod = OnCharacterDead;
 
         characterRigidBody2D = character.GetComponent<Rigidbody2D>();
 
@@ -61,8 +63,7 @@ public class ActionsIdleState : CharacterState
         base.OnExit();
         character.onTriggerEnter2D -= checkingForEnteringToTheHidingPlaceMethod;
         character.onTriggerExit2D -= checkingForExitingOfTheHidingPlaceMethod;
-        character.onDetected -= onCharacterDetectedMethod;
-        // EditorDebug.Log("ACTIONIDLE EXIT");
+        EditorDebug.Log("ACTIONIDLE EXIT");
     }
 
     protected override void OnUpdate()
@@ -89,6 +90,8 @@ public class ActionsIdleState : CharacterState
                 characterRigidBody2D.velocity = new Vector2(0, characterRigidBody2D.velocity.y);
                 timerOfHiding.Start();
                 character.onDetected += onCharacterDetectedMethod;
+                character.onDead += onCharacterDeadMethod;
+                GameRegistry.hideCount++;
             }
             else if(ev == Character.Order.OrderPush)
             {
@@ -103,7 +106,21 @@ public class ActionsIdleState : CharacterState
 
     private void OnCharacterDetected()
     {
-        Logger.AnalyticsCustomEvent("Detected_On_Hiding");
+        character.onDetected -= onCharacterDetectedMethod;
+
+        if(!GameRegistry.detectedHiding && !GameRegistry.hideSuccees)
+        {
+            Logger.AnalyticsCustomEvent("Detected_On_Hiding");
+            GameRegistry.detectedHiding = true;
+        }
+        
+    }
+
+    private void OnCharacterDead()
+    {
+        character.onDead -= onCharacterDeadMethod;
+
+        Logger.AnalyticsCustomEvent("Kill_Hiding");
     }
 
     void CheckingForEnteringToTheHidingPlace(Collider2D collider2D) 
@@ -125,7 +142,14 @@ public class ActionsIdleState : CharacterState
     void EnteringToTheHidingPlace(SyncTimer timer) 
     {
         character.onDetected -= onCharacterDetectedMethod;
-        Logger.AnalyticsCustomEvent("Hide_Succees");
+        character.onDead -= onCharacterDeadMethod;
+
+        if(!GameRegistry.detectedHiding)
+        {
+            Logger.AnalyticsCustomEvent("Hide_Succees");
+            GameRegistry.hideSuccees = true;
+        }
+        
         stateMachine.Trigger(Character.Trigger.Hide);
     }
 

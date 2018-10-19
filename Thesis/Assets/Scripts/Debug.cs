@@ -1,6 +1,4 @@
-﻿#define LOG_OFF
-
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EditorDebug
 {

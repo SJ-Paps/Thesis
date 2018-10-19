@@ -191,6 +191,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         aliveFSM.MakeTransition(State.Alive, Trigger.Die, State.Dead);
 
         aliveFSM.StartBy(State.Alive);
+
+        onDead += OnDead;
     }
 
     protected virtual void Update()
@@ -331,6 +333,18 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         if (onTriggerExit2D != null)
         {
             onTriggerExit2D(collider);
+        }
+    }
+
+    private void OnDead()
+    {
+        if(GameRegistry.hideSuccees)
+        {
+            Logger.AnalyticsCustomEvent("Kill_Hide_Succees");
+        }
+        else if(GameRegistry.hideCount == 0)
+        {
+            Logger.AnalyticsCustomEvent("Kill_No_Hide");
         }
     }
 }

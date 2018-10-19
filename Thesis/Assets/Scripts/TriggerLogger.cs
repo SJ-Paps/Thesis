@@ -8,6 +8,7 @@ public class TriggerLogger : MonobehaviourLogger
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        EditorDebug.Log("ENTRE");
         onTriggerEnter.Invoke();
     }
 }
