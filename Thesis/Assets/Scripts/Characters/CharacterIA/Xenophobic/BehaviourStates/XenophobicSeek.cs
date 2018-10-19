@@ -39,7 +39,6 @@ public class XenophobicSeek : XenophobicIAState
         controller.Slave.MovementVelocity = movementVelocity;
 
         blackboard.onLastDetectionPositionChanged += updatePositionDelegate;
-        controller.Slave.Animator.SetTrigger("Seeking");
     }
 
     protected override void OnExit()
@@ -47,7 +46,6 @@ public class XenophobicSeek : XenophobicIAState
         controller.Slave.MovementVelocity = previousVelocity;
 
         blackboard.onLastDetectionPositionChanged -= updatePositionDelegate;
-        controller.Slave.Animator.ResetTrigger("Seeking");
     }
 
     protected override void OnUpdate()
