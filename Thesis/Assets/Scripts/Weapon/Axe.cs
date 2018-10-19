@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.Animations;
-using SAM.Timers;
+﻿using SAM.Timers;
 using System;
-using System.Collections;
+using UnityEngine;
+using UnityEngine.Animations;
 
 public class Axe : Weapon
 {
@@ -12,7 +11,7 @@ public class Axe : Weapon
     private Collider2D sharpEdge;
 
     private SyncTimer timer;
-    private float attackInterval = 1.2f;
+    private float attackInterval = 0.1f;
     private float recoilInterval = 0.3f;
 
     private Action<SyncTimer> onAttack;
