@@ -1,51 +1,53 @@
 ﻿using SAM.FSM;
-using UnityEngine;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 
 public class FallingState : CharacterState
 {
-    private Action<Collider2D> checkIsOnFloorDelegate;
-
     private float contactNormalOffsetY = 0.5f;
     private float contactNormalOffsetX = 0.2f;
 
-    private BoxTrigger2D characterFeet;
+    private int floorLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
 
     public FallingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
-        checkIsOnFloorDelegate = CheckIsOnFloor;
-
-        characterFeet = character.Feet;
     }
 
     protected override void OnEnter()
     {
         animator.SetTrigger("Fall");
 
-        characterFeet.onStay += CheckIsOnFloor;
-
         EditorDebug.Log("FALLING ENTER " + character.name);
     }
 
     protected override void OnUpdate()
     {
-        
+        if(IsOnFloor(floorLayers))
+        {
+            stateMachine.Trigger(Character.Trigger.Ground);
+            return;
+        }
     }
 
     protected override void OnExit()
     {
-        characterFeet.onStay -= CheckIsOnFloor;
-
         animator.ResetTrigger("Fall");
     }
-    
-    private void CheckIsOnFloor(Collider2D collider)
+
+    private bool IsOnFloor(int layerMask)
     {
-        if (collider.gameObject.layer == Reg.floorLayer || collider.gameObject.layer == Reg.objectLayer)
-        {
-            stateMachine.Trigger(Character.Trigger.Ground);
-        }
+        Bounds bounds = character.Collider.bounds;
+        float height = 0.05f;
+
+        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
+        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
+
+        EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
+        EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
+
+        return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
+            Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
+
     }
 
 }

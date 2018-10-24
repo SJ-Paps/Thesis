@@ -5,12 +5,10 @@ using System;
 
 public class GroundedState : CharacterState
 {
-    private Action<Collider2D> checkIsOnFloorDelegate;
-
     private float contactNormalOffsetY = 0.5f;
     private float contactNormalOffsetX = 0.2f;
 
-    private BoxTrigger2D characterFeet;
+    private int floorLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
 
     public GroundedState(FSM<Character.State, Character.Trigger> fsm,
        Character.State state,
@@ -18,17 +16,13 @@ public class GroundedState : CharacterState
        List<Character.Order> orderList,
        Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
-        checkIsOnFloorDelegate = CheckIsOnFloor;
 
-        characterFeet = character.Feet;
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
         blackboard.isGrounded = true;
-
-        characterFeet.onExited += checkIsOnFloorDelegate;
 
         animator.SetTrigger("Ground");
 
@@ -39,14 +33,18 @@ public class GroundedState : CharacterState
         base.OnExit();
         blackboard.isGrounded = false;
 
-        characterFeet.onExited -= checkIsOnFloorDelegate;
-
         animator.ResetTrigger("Ground");
         //EditorDebug.Log("GROUNDED EXIT");
     }
 
     protected override void OnUpdate()
     {
+        if(!IsOnFloor(floorLayers))
+        {
+            stateMachine.Trigger(Character.Trigger.Fall);
+            return;
+        }
+
         for(int i = 0; i < orders.Count; i++)
         {
             Character.Order order = orders[i];
@@ -59,11 +57,19 @@ public class GroundedState : CharacterState
         }
     }
 
-    private void CheckIsOnFloor(Collider2D collider)
+    private bool IsOnFloor(int layerMask)
     {
-        if(collider.gameObject.layer == Reg.floorLayer || collider.gameObject.layer == Reg.objectLayer)
-        {
-            stateMachine.Trigger(Character.Trigger.Fall);
-        }
+        Bounds bounds = character.Collider.bounds;
+        float height = 0.05f;
+
+        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
+        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
+
+        EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
+        EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
+
+        return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
+            Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
+
     }
 }
