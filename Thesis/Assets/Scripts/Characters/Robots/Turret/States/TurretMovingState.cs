@@ -25,11 +25,13 @@ public class TurretMovingState : CharacterState
 
             if (order == Character.Order.OrderMoveLeft)
             {
-                character.transform.Rotate(Vector3.forward, character.MovementVelocity);
+                //character.transform.Rotate(Vector3.forward, character.MovementVelocity);
+                rigidbody2D.AddTorque(character.MovementVelocity, ForceMode2D.Force);
             }
             else if(order == Character.Order.OrderMoveRight)
             {
-                character.transform.Rotate(Vector3.forward, -character.MovementVelocity);
+                //character.transform.Rotate(Vector3.forward, -character.MovementVelocity);
+                rigidbody2D.AddTorque(-character.MovementVelocity, ForceMode2D.Force);
             }
             else
             {
