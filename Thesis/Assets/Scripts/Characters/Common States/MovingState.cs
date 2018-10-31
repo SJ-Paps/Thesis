@@ -12,7 +12,7 @@ public class MovingState : CharacterState
 
     public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
-        rigidbody2D = character.GetComponent<Rigidbody2D>();
+        rigidbody2D = character.RigidBody2D;
     }
 
     protected override void OnEnter()
