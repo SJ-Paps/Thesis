@@ -64,6 +64,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         get { return handPoint; }
     }
 
+    public Transform CheckerForGrapple
+    {
+        get { return checkerForGrapple; }
+    }
 
     [SerializeField]
     private bool facingLeft;
@@ -76,6 +80,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     [SerializeField]
     protected Transform handPoint;
+
+    [SerializeField]
+    protected Transform checkerForGrapple;
 
     public bool blockFacing;
 
@@ -90,7 +97,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Falling,
         Hidden,
         Attacking,
-        Pushing
+        Pushing,
+        Grappling
     }
 
     public enum Trigger
@@ -106,7 +114,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         StopMoving,
         StopHiding,
         StopPushing,
-        Push
+        Push,
+        Grapple
     }
 
     public enum Order
@@ -116,7 +125,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         OrderJump,
         OrderAttack,
         OrderHide,
-        OrderPush
+        OrderPush,
+        OrderGrapple
     }
 
     public class Blackboard

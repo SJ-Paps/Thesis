@@ -6,6 +6,8 @@ public class FallingState : CharacterState
 {
     private float contactNormalOffsetY = 0.5f;
     private float contactNormalOffsetX = 0.2f;
+    private RaycastHit2D raycastHit2D;
+    private float circlecastRadius = 0.1f;
 
     private int floorLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
 
@@ -22,6 +24,11 @@ public class FallingState : CharacterState
 
     protected override void OnUpdate()
     {
+        EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + (Vector2)character.CheckerForGrapple.right * circlecastRadius, Color.red);
+        EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + ((Vector2)character.CheckerForGrapple.right * -1) * circlecastRadius, Color.red);
+        EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + ((Vector2)character.CheckerForGrapple.up * -1) * circlecastRadius, Color.red);
+        EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + (Vector2)character.CheckerForGrapple.up * circlecastRadius, Color.red);
+
         if(IsOnFloor(floorLayers))
         {
             stateMachine.Trigger(Character.Trigger.Ground);
