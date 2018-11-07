@@ -53,6 +53,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return blackboard.isPushing; }
     }
+    public bool IsGrappled
+    {
+        get { return blackboard.isGrappled; }
+    }
 
 	public Eyes Eyes
     {
@@ -68,6 +72,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return checkerForGrapple; }
     }
+
+    public Collider2D LastLedgeDetected;
 
     [SerializeField]
     private bool facingLeft;
@@ -114,6 +120,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         StopMoving,
         StopHiding,
         StopPushing,
+        StopGrappling,
         Push,
         Grapple
     }
@@ -135,6 +142,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         public bool isHidden;
         public bool isGrounded;
         public bool isPushing;
+        public bool isGrappled;
         public bool movingHorizontal;
     }
 

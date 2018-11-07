@@ -7,7 +7,10 @@ public class FallingState : CharacterState
     private float contactNormalOffsetY = 0.5f;
     private float contactNormalOffsetX = 0.2f;
     private RaycastHit2D raycastHit2D;
+    private Collider2D auxColl;
     private float circlecastRadius = 0.1f;
+
+    private int ledgeLayer = 1 << Reg.ledgeLayer;
 
     private int floorLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
 
@@ -29,6 +32,7 @@ public class FallingState : CharacterState
         EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + ((Vector2)character.CheckerForGrapple.up * -1) * circlecastRadius, Color.red);
         EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + (Vector2)character.CheckerForGrapple.up * circlecastRadius, Color.red);
 
+        CheckingForLedge();
         if(IsOnFloor(floorLayers))
         {
             stateMachine.Trigger(Character.Trigger.Ground);
@@ -55,6 +59,16 @@ public class FallingState : CharacterState
         return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
             Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
 
+    }
+
+    private void CheckingForLedge() {
+
+        auxColl = Physics2D.OverlapCircle(character.CheckerForGrapple.position, circlecastRadius, ledgeLayer);
+        if(auxColl != null)
+        {
+            character.LastLedgeDetected = auxColl;
+            stateMachine.Trigger(Character.Trigger.Grapple);
+        }
     }
 
 }

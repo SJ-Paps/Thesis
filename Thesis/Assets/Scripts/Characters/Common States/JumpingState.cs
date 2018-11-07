@@ -11,7 +11,7 @@ public class JumpingState : CharacterState {
     private float maxVelocity = 4;
     private float height;
     private Vector2 jumpForce = Vector2.up * 0.8f;
-    private RaycastHit2D raycastHit2D;
+    private Collider2D auxColl;
     private float circlecastRadius = 0.1f;
 
     private int ledgeLayer = 1 << Reg.ledgeLayer;
@@ -45,6 +45,7 @@ public class JumpingState : CharacterState {
         EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + ((Vector2)character.CheckerForGrapple.up * -1) * circlecastRadius, Color.red);
         EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + (Vector2)character.CheckerForGrapple.up * circlecastRadius, Color.red);
 
+        //EditorDebug.Log("por checkear");
         CheckingForLedge();
         Jump();
 
@@ -59,7 +60,6 @@ public class JumpingState : CharacterState {
     private void Jump()
     {
         jumping = false;
-        CheckingForLedge();
 
         for(int i = 0; i < orders.Count; i++)
         {
@@ -90,11 +90,12 @@ public class JumpingState : CharacterState {
 
     private void CheckingForLedge() 
     {
-        raycastHit2D = Physics2D.CircleCast(character.CheckerForGrapple.position, circlecastRadius, character.CheckerForGrapple.right, 0, ledgeLayer);
-
-        if(raycastHit2D != false)
+        //EditorDebug.Log("por checkear");
+        auxColl = Physics2D.OverlapCircle(character.CheckerForGrapple.position, circlecastRadius, ledgeLayer);
+        if(auxColl != null)
         {
-            EditorDebug.Log(raycastHit2D.collider.transform.gameObject);
+            //EditorDebug.Log("checkeando");
+            character.LastLedgeDetected = auxColl;
             stateMachine.Trigger(Character.Trigger.Grapple);
         }
     }
