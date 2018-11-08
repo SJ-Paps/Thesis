@@ -57,6 +57,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return blackboard.isGrappled; }
     }
+    public bool IsClimbingLedge
+    {
+        get { return blackboard.isClimbingLedge; }
+    }
 
 	public Eyes Eyes
     {
@@ -143,6 +147,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         public bool isGrounded;
         public bool isPushing;
         public bool isGrappled;
+        public bool isClimbingLedge;
         public bool movingHorizontal;
     }
 

@@ -8,8 +8,8 @@ public class GrapplingState : CharacterState
     FSM<Character.State, Character.Trigger> characterActionFSM;
     private Rigidbody2D rigidbody2D;
     private BoxCollider2D collider2D;
-    private float verticalClimbingSpeed = 0.8f;
-    private float horizontalClimbingSpeed = 0.8f;
+    private float verticalClimbingSpeed = 1.2f;
+    private float horizontalClimbingSpeed = 1.2f;
 
     private int ledgeLayer = 1 << Reg.ledgeLayer;
 
@@ -42,11 +42,22 @@ public class GrapplingState : CharacterState
         {
             Grappled();
         }
-        else
+        if(character.IsClimbingLedge)
         {
             ClimbLedge();
         }
+        else
+        {
+            for(int i = 0; i < orders.Count; i++)
+            {
+                Character.Order order = orders[i];
 
+                if(order == Character.Order.OrderGrapple)
+                {
+                    blackboard.isClimbingLedge = true;
+                }
+            }
+        }
     }
 
     protected override void OnExit() 
@@ -60,11 +71,12 @@ public class GrapplingState : CharacterState
     {
         rigidbody2D.gravityScale = 0;
         rigidbody2D.velocity = Vector2.zero;
-        blackboard.isGrappled = false;
     }
 
     private void ClimbLedge()
     {
+        blackboard.isGrappled = false;
+
         if((collider2D.bounds.center.y - collider2D.bounds.extents.y) < (character.LastLedgeDetected.bounds.center.y + character.LastLedgeDetected.bounds.extents.y))
         {
             rigidbody2D.isKinematic = true;
@@ -72,15 +84,33 @@ public class GrapplingState : CharacterState
         }
         else if((collider2D.bounds.center.y + collider2D.bounds.extents.y) >= (character.LastLedgeDetected.bounds.center.y + character.LastLedgeDetected.bounds.extents.y))
         {
-            if((collider2D.bounds.center.x - collider2D.bounds.extents.x) < (character.LastLedgeDetected.bounds.center.x - character.LastLedgeDetected.bounds.extents.x))
+            if(!character.FacingLeft)
             {
-                character.transform.Translate(new Vector3(horizontalClimbingSpeed * Time.deltaTime, 0f, 0f));
+                if((collider2D.bounds.center.x - collider2D.bounds.extents.x) < (character.LastLedgeDetected.bounds.center.x - character.LastLedgeDetected.bounds.extents.x))
+                {
+                    character.transform.Translate(new Vector3(horizontalClimbingSpeed * Time.deltaTime, 0f, 0f));
+                }
+                else
+                {
+                    rigidbody2D.gravityScale = 1f;
+                    rigidbody2D.isKinematic = false;
+                    blackboard.isClimbingLedge = false;
+                    stateMachine.Trigger(Character.Trigger.Fall);
+                }
             }
             else
             {
-                rigidbody2D.gravityScale = 1f;
-                rigidbody2D.isKinematic = false;
-                stateMachine.Trigger(Character.Trigger.Fall);
+                if((collider2D.bounds.center.x + collider2D.bounds.extents.x) > (character.LastLedgeDetected.bounds.center.x + character.LastLedgeDetected.bounds.extents.x))
+                {
+                    character.transform.Translate(new Vector3(horizontalClimbingSpeed * Time.deltaTime, 0f, 0f));
+                }
+                else
+                {
+                    rigidbody2D.gravityScale = 1f;
+                    rigidbody2D.isKinematic = false;
+                    blackboard.isClimbingLedge = false;
+                    stateMachine.Trigger(Character.Trigger.Fall);
+                }
             }
         }
     }
