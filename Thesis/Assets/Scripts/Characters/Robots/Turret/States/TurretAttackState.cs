@@ -8,9 +8,11 @@ using System;
 public class TurretAttackState : CharacterState
 {
 
-    private DeadlyType deadly = DeadlyType.Bullet;
+    private DeadlyType deadly;
 
-    private int targetLayers = 1 << Reg.playerLayer;
+    private int targetLayers;
+
+    private float shootDistance;
 
     [SerializeField]
     private Transform gunPoint;
@@ -38,7 +40,7 @@ public class TurretAttackState : CharacterState
 
     private void Shoot()
     {
-        RaycastHit2D hit = Physics2D.Raycast(gunPoint.position, character.transform.up, 4, targetLayers);
+        RaycastHit2D hit = Physics2D.Raycast(gunPoint.position, character.transform.up, shootDistance, targetLayers);
 
         if(hit.collider != null)
         {
@@ -55,5 +57,6 @@ public class TurretAttackState : CharacterState
     {
         deadly = DeadlyType.Bullet;
         targetLayers = 1 << Reg.playerLayer;
+        shootDistance = 10;
     }
 }

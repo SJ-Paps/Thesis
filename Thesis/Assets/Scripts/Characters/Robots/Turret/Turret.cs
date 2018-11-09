@@ -6,7 +6,8 @@ public class Turret : Character
     [SerializeField]
     protected TurretAttackState attackState;
 
-    
+    [SerializeField]
+    protected TurretMovingState movingState;
 
     protected override void Awake()
     {
@@ -14,8 +15,10 @@ public class Turret : Character
 
         FSM<State, Trigger> movingFSM = new FSM<State, Trigger>();
 
+        movingState.SetCharacterData(movingFSM, State.Moving, this, orders, blackboard);
+
         movingFSM.AddState(new TurretIdleState(movingFSM, State.Idle, this, orders, blackboard));
-        movingFSM.AddState(new TurretMovingState(movingFSM, State.Moving, this, orders, blackboard));
+        movingFSM.AddState(movingState);
 
         movingFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
         movingFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.Idle);

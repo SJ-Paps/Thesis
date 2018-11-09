@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using SAM.FSM;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class TurretMovingState : CharacterState
 {
+    [SerializeField]
+    private float leftLimit, rightLimit;
+
+    private float currentRotationReference;
 
     public TurretMovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard) : base(fsm, state, character, orders, blackboard)
     {
@@ -24,13 +30,34 @@ public class TurretMovingState : CharacterState
 
             if (order == Character.Order.OrderMoveLeft)
             {
-                character.transform.Rotate(Vector3.forward, character.MovementVelocity * Time.deltaTime);
-                //character.RigidBody2D.AddTorque(character.MovementVelocity, ForceMode2D.Force);
+                if(currentRotationReference < leftLimit)
+                {
+                    float rotation = character.MovementVelocity * Time.deltaTime;
+
+                    if(currentRotationReference + rotation > leftLimit)
+                    {
+                        rotation = leftLimit - currentRotationReference;
+                    }
+
+                    character.transform.Rotate(Vector3.forward, rotation);
+                    currentRotationReference += rotation;
+                }
             }
             else if(order == Character.Order.OrderMoveRight)
             {
-                character.transform.Rotate(Vector3.forward, -character.MovementVelocity * Time.deltaTime);
-                //character.RigidBody2D.AddTorque(-character.MovementVelocity, ForceMode2D.Force);
+                if(currentRotationReference > rightLimit)
+                {
+                    float rotation = -character.MovementVelocity * Time.deltaTime;
+
+                    if (currentRotationReference + rotation < rightLimit)
+                    {
+                        rotation = rightLimit - currentRotationReference;
+                    }
+
+                    character.transform.Rotate(Vector3.forward, rotation);
+                    currentRotationReference += rotation;
+                }
+                
             }
             else
             {
