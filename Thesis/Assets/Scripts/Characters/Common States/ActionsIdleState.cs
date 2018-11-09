@@ -16,6 +16,7 @@ public class ActionsIdleState : CharacterState
     private float raycastDistance;
     private float cooldownOfHiding;
     private bool canHide;
+    private Animator animator;
 
     public ActionsIdleState(FSM<Character.State, Character.Trigger> fsm,
         Character.State state,
@@ -41,6 +42,8 @@ public class ActionsIdleState : CharacterState
         timerOfHiding = new SyncTimer();
         timerOfHiding.onTick += EnteringToTheHidingPlace;
         timerOfHiding.Interval = cooldownOfHiding;
+
+        animator = character.Animator;
     }
 
     protected override void OnEnter()

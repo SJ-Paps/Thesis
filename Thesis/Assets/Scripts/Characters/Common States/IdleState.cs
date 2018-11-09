@@ -1,11 +1,14 @@
 ﻿using SAM.FSM;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class CharacterIdleState : CharacterState
 {
+    private Animator animator;
+
     public CharacterIdleState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
-
+        animator = character.Animator;
     }
 
     protected override void OnEnter()

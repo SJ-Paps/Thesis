@@ -1,10 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using SAM.FSM;
 using UnityEngine;
-using SAM.FSM;
 
 public class Turret : Character
 {
+    [SerializeField]
+    protected TurretAttackState attackState;
+
+    
+
     protected override void Awake()
     {
         base.Awake();
@@ -19,12 +22,26 @@ public class Turret : Character
 
         movingFSM.StartBy(State.Idle);
 
+        FSM<State, Trigger> actionFSM = new FSM<State, Trigger>();
+
+        attackState.SetCharacterData(actionFSM, State.Attacking, this, orders, blackboard);
+
+        actionFSM.AddState(new TurretActionIdleState(actionFSM, State.Idle, this, orders, blackboard));
+        actionFSM.AddState(attackState);
+        
+
+        actionFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
+        actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
+
+        actionFSM.StartBy(State.Idle);
+
         AddStateMachineWhenAlive(movingFSM);
+        AddStateMachineWhenAlive(actionFSM);
     }
 
     public override void GetEnslaved()
     {
-        
+
     }
 
     protected override void OnFacingChanged(bool facingLeft)

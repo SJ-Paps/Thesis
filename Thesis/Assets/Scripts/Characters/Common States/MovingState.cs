@@ -10,9 +10,13 @@ public class MovingState : CharacterState
 
     private float xVelocityDeadZone = 0.1f;
 
+    private Animator animator;
+
     public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
         rigidbody2D = character.RigidBody2D;
+
+        animator = character.Animator;
     }
 
     protected override void OnEnter()

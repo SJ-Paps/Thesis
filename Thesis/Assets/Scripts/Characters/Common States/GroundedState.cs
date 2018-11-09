@@ -10,13 +10,15 @@ public class GroundedState : CharacterState
 
     private int floorLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
 
+    private Animator animator;
+
     public GroundedState(FSM<Character.State, Character.Trigger> fsm,
        Character.State state,
        Character character,
        List<Character.Order> orderList,
        Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
     {
-
+        animator = character.Animator;
     }
 
     protected override void OnEnter()

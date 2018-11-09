@@ -79,7 +79,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public bool blockFacing;
 
-    public enum State
+    public enum State : byte
     {
         Alive,
         Dead,
@@ -93,7 +93,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Pushing
     }
 
-    public enum Trigger
+    public enum Trigger : byte
     {
         Die,
         Move,
@@ -109,7 +109,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Push
     }
 
-    public enum Order
+    public enum Order : byte
     {
         OrderMoveLeft,
         OrderMoveRight,
