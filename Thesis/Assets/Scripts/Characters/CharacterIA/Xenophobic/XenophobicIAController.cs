@@ -7,9 +7,9 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
     public enum State
     {
-        CalmedDown,
+        Alertless,
         Aware,
-        FullAlert,
+        Alertful,
         Patrolling,
         Seeking
     }
@@ -85,16 +85,16 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
         alertnessFSM = new FSM<State, Trigger>();
 
-        alertnessFSM.AddState(new XenophobicAlertlessState(alertnessFSM, State.CalmedDown, this, blackboard));
+        alertnessFSM.AddState(new XenophobicAlertlessState(alertnessFSM, State.Alertless, this, blackboard));
         alertnessFSM.AddState(new XenophobicAwareState(alertnessFSM, State.Aware, this, blackboard));
-        alertnessFSM.AddState(new XenophobicFullAlertState(alertnessFSM, State.FullAlert, this, blackboard));
+        alertnessFSM.AddState(new XenophobicFullAlertState(alertnessFSM, State.Alertful, this, blackboard));
 
-        alertnessFSM.MakeTransition(State.CalmedDown, Trigger.GetAware, State.Aware);
-        alertnessFSM.MakeTransition(State.Aware, Trigger.SetFullAlert, State.FullAlert);
-        alertnessFSM.MakeTransition(State.FullAlert, Trigger.CalmDown, State.Aware);
-        alertnessFSM.MakeTransition(State.Aware, Trigger.CalmDown, State.CalmedDown);
+        alertnessFSM.MakeTransition(State.Alertless, Trigger.GetAware, State.Aware);
+        alertnessFSM.MakeTransition(State.Aware, Trigger.SetFullAlert, State.Alertful);
+        alertnessFSM.MakeTransition(State.Alertful, Trigger.CalmDown, State.Aware);
+        alertnessFSM.MakeTransition(State.Aware, Trigger.CalmDown, State.Alertless);
 
-        alertnessFSM.StartBy(State.CalmedDown);
+        alertnessFSM.StartBy(State.Alertless);
 
 
         behaviourFSM = new FSM<State, Trigger>();
@@ -117,7 +117,7 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         behaviourFSM.UpdateCurrentState();
     }
 
-    void Update()
+    protected void Update()
     {
         if(Slave != null)
         {

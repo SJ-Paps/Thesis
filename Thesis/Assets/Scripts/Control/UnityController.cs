@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
-using System;
 
-public delegate void ChangeControlDelegate(IControllable previousSlave, IControllable newSlave);
+public delegate void ChangeControlDelegate<TSlave, TOrder>(TSlave previousSlave, TSlave newSlave) where TSlave : IControllable<TOrder> where TOrder : struct;
 
-public abstract class UnityController : MonoBehaviour
+public interface IController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
 {
-    public abstract void Control();
+    void Control();
+    void SetSlave(TSlave slave);
 }
 
-public abstract class UnityController<TSlave, TOrder> : UnityController where TSlave : IControllable<TOrder> where TOrder : struct
+public abstract class UnityController<TSlave, TOrder> : MonoBehaviour, IController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
 {
-    public event ChangeControlDelegate onSlaveChanged;
+    public event ChangeControlDelegate<TSlave, TOrder> onSlaveChanged;
 
     [SerializeField]
     protected TSlave slave;
@@ -22,6 +22,8 @@ public abstract class UnityController<TSlave, TOrder> : UnityController where TS
             return slave;
         }
     }
+
+    public abstract void Control();
 
     public void SetSlave(TSlave slave)
     {
