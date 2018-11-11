@@ -216,52 +216,6 @@ MonoBehaviour:
         type: 2}
   leftLimit: 110
   rightLimit: -110
---- !u!1 &262201337
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 262201338}
-  - component: {fileID: 262201339}
-  m_Layer: 0
-  m_Name: TurretController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &262201338
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 262201337}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0973152, y: 0.47205877, z: 0.103515625}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &262201339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 262201337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fb4cdeea222b5a45882ee07359e5ea2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slave: {fileID: 207164086}
-  turretAlertlessState:
-    movementVelocity: 50
-  turretAlertFulState:
-    movementVelocity: 100
-    timeUntilCalmDown: 2
 --- !u!1 &594538633
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,6 +251,21 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.data[5].orders.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.data[5].key.keys.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4051299886331970, guid: a77ffe7ced49f394a9cef0a121018932, type: 2}
       propertyPath: m_LocalPosition.x
       value: -2.06378
@@ -333,7 +302,37 @@ Prefab:
         type: 2}
       propertyPath: slave
       value: 
-      objectReference: {fileID: 1502701907}
+      objectReference: {fileID: 207164086}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.data[5].key.name
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.data[5].key.keys.Array.data[0]
+      value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.data[5].key.keys.Array.data[1]
+      value: 354
+      objectReference: {fileID: 0}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.data[5].key.keys.Array.data[2]
+      value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.data[5].orders.Array.data[0]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 2}
+      propertyPath: keyOrders.Array.data[5].key.isKeyDown
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a77ffe7ced49f394a9cef0a121018932, type: 2}
   m_IsPrefabAsset: 0
@@ -469,12 +468,6 @@ Transform:
   m_Father: {fileID: 1760961765}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1502701907 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
-    type: 2}
-  m_PrefabInternal: {fileID: 176838649}
-  m_Script: {fileID: 11500000, guid: c3effee286e0c054ba316790fe60b2d1, type: 3}
 --- !u!1 &1617182547
 GameObject:
   m_ObjectHideFlags: 0
