@@ -9,6 +9,7 @@ public class TurretAttackState : CharacterState
 {
     public enum State
     {
+        Idle,
         Charging,
         Shooting
     }
@@ -32,16 +33,19 @@ public class TurretAttackState : CharacterState
 
         attackSubStateMachine = new FSM<State, Trigger>();
 
+
         chargeState.InitializeState(attackSubStateMachine, State.Charging, character, blackboard);
         shootState.InitializeState(attackSubStateMachine, State.Shooting, character, blackboard);
 
+        attackSubStateMachine.AddState(State.Idle);
         attackSubStateMachine.AddState(chargeState);
         attackSubStateMachine.AddState(shootState);
 
+        attackSubStateMachine.MakeTransition(State.Idle, Trigger.GoNext, State.Charging);
         attackSubStateMachine.MakeTransition(State.Charging, Trigger.GoNext, State.Shooting);
-        attackSubStateMachine.MakeTransition(State.Shooting, Trigger.GoNext, State.Charging);
+        attackSubStateMachine.MakeTransition(State.Shooting, Trigger.GoNext, State.Idle);
 
-        attackSubStateMachine.StartBy(State.Charging);
+        attackSubStateMachine.StartBy(State.Idle);
 
         attackSubStateMachine.onStateChanged += OnStateChanged;
     }
@@ -56,7 +60,7 @@ public class TurretAttackState : CharacterState
 
     protected override void OnEnter()
     {
-
+        attackSubStateMachine.Trigger(Trigger.GoNext);
     }
 
     protected override void OnExit()

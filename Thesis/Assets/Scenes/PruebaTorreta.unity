@@ -259,7 +259,7 @@ MonoBehaviour:
     movementVelocity: 50
   turretAlertFulState:
     movementVelocity: 70
-    timeUntilCalmDown: 10
+    timeUntilCalmDown: 2
 --- !u!1 &594538633
 GameObject:
   m_ObjectHideFlags: 0
