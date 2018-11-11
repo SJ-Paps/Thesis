@@ -210,8 +210,10 @@ MonoBehaviour:
     chargeState:
       chargeTime: 1
     shootState:
-      shootDistance: 5
+      shootDistance: 10
       gunPoint: {fileID: 594538634}
+      bulletPrefab: {fileID: 1896856774948096, guid: 7f7e6a57c71d7b046aca53e60e43d9db,
+        type: 2}
   leftLimit: 110
   rightLimit: -110
 --- !u!1 &262201337
