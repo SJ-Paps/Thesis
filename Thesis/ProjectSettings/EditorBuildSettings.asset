@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/LevelPrimerParcial.unity
     guid: e67ac3f6400dc0d4bb731892be674d7f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PruebaTorreta.unity
     guid: 43563442b73e8c24ab9f16e21c0a70f5
   m_configObjects: {}
