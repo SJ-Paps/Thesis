@@ -60,7 +60,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: MoveLeft
       keys: 6100000014010000
-    orders: 00000000
+    orders: 00
   - key:
       isAxis: 1
       lessThanZero: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: MoveRight
       keys: 6400000013010000
-    orders: 01000000
+    orders: 01
   - key:
       isAxis: 0
       lessThanZero: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Jump
       keys: 200000005e010000
-    orders: 02000000
+    orders: 02
   - key:
       isAxis: 0
       lessThanZero: 0
@@ -84,7 +84,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Hide
       keys: 710000006201000065000000
-    orders: 04000000
+    orders: 04
   - key:
       isAxis: 0
       lessThanZero: 0
@@ -92,4 +92,4 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Push
       keys: 710000006201000065000000
-    orders: 05000000
+    orders: 05

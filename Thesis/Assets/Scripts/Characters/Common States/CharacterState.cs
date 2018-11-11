@@ -10,7 +10,7 @@ public abstract class CharacterState : State<Character.State, Character.Trigger>
 
     protected CharacterState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard) : base(fsm, state)
     {
-        SetCharacterData(fsm, state, character, orders, blackboard);
+        InitializeState(fsm, state, character, orders, blackboard);
     }
 
     protected CharacterState() : base(null, Character.State.Idle)
@@ -18,7 +18,7 @@ public abstract class CharacterState : State<Character.State, Character.Trigger>
 
     }
 
-    public void SetCharacterData(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    public virtual void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
         this.character = character;
         this.orders = orders;

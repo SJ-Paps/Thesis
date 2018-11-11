@@ -20,7 +20,8 @@ public class XenophobicAwareState : XenophobicIAState
 
     private int findProbability = 15;
 
-    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
+    private int blockingLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+    private int targetLayers = (1 << Reg.playerLayer);
 
     public XenophobicAwareState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
     {
@@ -72,7 +73,7 @@ public class XenophobicAwareState : XenophobicIAState
     {
         if (collider.gameObject.layer == Reg.playerLayer)
         {
-            if(characterEyes.IsVisible(collider, visionLayers))
+            if(characterEyes.IsVisible(collider, blockingLayers, targetLayers))
             {
                 if (GameManager.Instance.GetPlayer().IsHidden)
                 {
@@ -80,7 +81,7 @@ public class XenophobicAwareState : XenophobicIAState
                     {
                         UpdatePosition(collider.transform.position);
 
-                        if(characterEyes.IsNear(collider, visionLayers, hiddenDetectionDistance))
+                        if(characterEyes.IsNear(collider, blockingLayers, targetLayers, hiddenDetectionDistance))
                         {
                             SetFullAlert(collider.transform.position);
                         }
@@ -90,7 +91,7 @@ public class XenophobicAwareState : XenophobicIAState
                 {
                     UpdatePosition(collider.transform.position);
 
-                    if (characterEyes.IsNear(collider, visionLayers, fullAlertDetectionDistance))
+                    if (characterEyes.IsNear(collider, blockingLayers, targetLayers, fullAlertDetectionDistance))
                     {
                         SetFullAlert(collider.transform.position);
                     }

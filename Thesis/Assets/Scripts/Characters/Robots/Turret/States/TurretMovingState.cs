@@ -1,21 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using SAM.FSM;
-using UnityEngine;
+﻿using SAM.FSM;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class TurretMovingState : CharacterState
 {
-    [SerializeField]
-    private float leftLimit, rightLimit;
-
-    private float currentRotationReference;
-
-    public TurretMovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard) : base(fsm, state, character, orders, blackboard)
-    {
-
-    }
+    private Turret turret;
 
     protected override void OnEnter()
     {
@@ -30,34 +21,15 @@ public class TurretMovingState : CharacterState
 
             if (order == Character.Order.OrderMoveLeft)
             {
-                if(currentRotationReference < leftLimit)
-                {
-                    float rotation = character.MovementVelocity * Time.deltaTime;
+                float rotation = character.MovementVelocity * Time.deltaTime;
 
-                    if(currentRotationReference + rotation > leftLimit)
-                    {
-                        rotation = leftLimit - currentRotationReference;
-                    }
-
-                    character.transform.Rotate(Vector3.forward, rotation);
-                    currentRotationReference += rotation;
-                }
+                turret.Rotate(rotation);
             }
             else if(order == Character.Order.OrderMoveRight)
             {
-                if(currentRotationReference > rightLimit)
-                {
-                    float rotation = -character.MovementVelocity * Time.deltaTime;
+                float rotation = -character.MovementVelocity * Time.deltaTime;
 
-                    if (currentRotationReference + rotation < rightLimit)
-                    {
-                        rotation = rightLimit - currentRotationReference;
-                    }
-
-                    character.transform.Rotate(Vector3.forward, rotation);
-                    currentRotationReference += rotation;
-                }
-                
+                turret.Rotate(rotation);
             }
             else
             {
@@ -69,5 +41,12 @@ public class TurretMovingState : CharacterState
     protected override void OnExit()
     {
         
+    }
+
+    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    {
+        base.InitializeState(fsm, state, character, orders, blackboard);
+
+        turret = (Turret)character;
     }
 }

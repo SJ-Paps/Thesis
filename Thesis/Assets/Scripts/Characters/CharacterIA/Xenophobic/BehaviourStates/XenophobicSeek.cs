@@ -19,7 +19,8 @@ public class XenophobicSeek : XenophobicIAState
     private float movementVelocity = 4.5f;
     private float previousVelocity;
 
-    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
+    private int blockingLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+    private int targetLayers = (1 << Reg.playerLayer);
 
     private float attackDetectionDistance = 1f;
 
@@ -58,7 +59,7 @@ public class XenophobicSeek : XenophobicIAState
         }
         else
         {
-            if (blackboard.PlayerData != null && controller.Slave.Eyes.IsVisibleAndNear(GameManager.Instance.GetPlayer().Collider, visionLayers, attackDetectionDistance))
+            if (blackboard.PlayerData != null && controller.Slave.Eyes.IsVisibleAndNear(GameManager.Instance.GetPlayer().Collider, blockingLayers, targetLayers, attackDetectionDistance))
             {
                 controller.Slave.SetOrder(Character.Order.OrderAttack);
             }

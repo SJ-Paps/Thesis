@@ -9,7 +9,8 @@ public class XenophobicAlertlessState : XenophobicIAState {
     private Action<Collider2D> onSomethingDetectedDelegate;
     private Eyes characterEyes;
 
-    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
+    private int blockingLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+    private int targetLayers = (1 << Reg.playerLayer);
 
 
     public XenophobicAlertlessState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
@@ -44,7 +45,7 @@ public class XenophobicAlertlessState : XenophobicIAState {
 
     private void AnalyzeDetection(Collider2D collider)
     {
-        if(characterEyes.IsVisible(collider, visionLayers))
+        if(characterEyes.IsVisible(collider, blockingLayers, targetLayers))
         {
             if(collider.gameObject.layer == Reg.playerLayer && GameManager.Instance.GetPlayer().IsHidden == false)
             {

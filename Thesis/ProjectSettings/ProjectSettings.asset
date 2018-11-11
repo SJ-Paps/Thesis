@@ -617,7 +617,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 1955fe22-9eed-4fa6-b290-7f858dc64214
   projectName: The Ungiving
   organizationId: sante-4251971

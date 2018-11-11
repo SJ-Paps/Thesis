@@ -20,7 +20,8 @@ public class XenophobicFullAlertState : XenophobicIAState
 
     private Action<Collider2D> onSomethingDetectedDelegate;
 
-    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
+    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+    private int targetLayers = (1 << Reg.playerLayer);
 
     private const float baseFindProbability = 60;
     private const float maxFindProbability = 100;
@@ -83,11 +84,11 @@ public class XenophobicFullAlertState : XenophobicIAState
     {
         if (collider.gameObject.layer == Reg.playerLayer)
         {
-            if (characterEyes.IsVisible(collider, visionLayers))
+            if (characterEyes.IsVisible(collider, visionLayers, targetLayers))
             {
                 if (blackboard.PlayerData == null && GameManager.Instance.GetPlayer().IsHidden)
                 {
-                    if(characterEyes.IsNear(collider, visionLayers, hiddenDetectionDistance))
+                    if(characterEyes.IsNear(collider, visionLayers, targetLayers, hiddenDetectionDistance))
                     {
                         if (Random.Range(1, 100) <= findProbability)
                         {

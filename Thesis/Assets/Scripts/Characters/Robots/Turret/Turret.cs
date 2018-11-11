@@ -9,13 +9,35 @@ public class Turret : Character
     [SerializeField]
     protected TurretMovingState movingState;
 
+    [SerializeField]
+    private float leftLimit, rightLimit;
+
+    public float LeftLimit
+    {
+        get
+        {
+            return leftLimit;
+        }
+    }
+
+    public float RightLimit
+    {
+        get
+        {
+            return rightLimit;
+        }
+    }
+
+    private float currentRotationReference;
+
     protected override void Awake()
     {
+        
         base.Awake();
 
         FSM<State, Trigger> movingFSM = new FSM<State, Trigger>();
 
-        movingState.SetCharacterData(movingFSM, State.Moving, this, orders, blackboard);
+        movingState.InitializeState(movingFSM, State.Moving, this, orders, blackboard);
 
         movingFSM.AddState(new TurretIdleState(movingFSM, State.Idle, this, orders, blackboard));
         movingFSM.AddState(movingState);
@@ -27,7 +49,7 @@ public class Turret : Character
 
         FSM<State, Trigger> actionFSM = new FSM<State, Trigger>();
 
-        attackState.SetCharacterData(actionFSM, State.Attacking, this, orders, blackboard);
+        attackState.InitializeState(actionFSM, State.Attacking, this, orders, blackboard);
 
         actionFSM.AddState(new TurretActionIdleState(actionFSM, State.Idle, this, orders, blackboard));
         actionFSM.AddState(attackState);
@@ -50,5 +72,25 @@ public class Turret : Character
     protected override void OnFacingChanged(bool facingLeft)
     {
         
+    }
+
+    public void Rotate(float rotation)
+    {
+        if (currentRotationReference + rotation > leftLimit)
+        {
+            rotation = leftLimit - currentRotationReference;
+        }
+        else if (currentRotationReference + rotation < rightLimit)
+        {
+            rotation = rightLimit - currentRotationReference;
+        }
+
+        transform.Rotate(Vector3.forward, rotation);
+        currentRotationReference += rotation;
+    }
+
+    public bool IsOverLimit()
+    {
+        return currentRotationReference == leftLimit || currentRotationReference == rightLimit;
     }
 }
