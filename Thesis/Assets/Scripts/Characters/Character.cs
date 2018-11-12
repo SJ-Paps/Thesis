@@ -325,4 +325,50 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
             onTriggerExit2D(collider);
         }
     }
+
+    public virtual bool IsOnFloor(int layers)
+    {
+        Bounds bounds = Collider.bounds;
+        float height = 0.05f;
+
+        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
+        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
+
+        Vector2 leftEndPoint = new Vector2(rightPoint.x, rightPoint.y - height);
+        Vector2 rightEndPoint = new Vector2(leftPoint.x, leftPoint.y - height);
+
+        EditorDebug.DrawLine(leftPoint, leftEndPoint, Color.green);
+        EditorDebug.DrawLine(rightPoint, rightEndPoint, Color.green);
+
+        return Physics2D.Linecast(leftPoint, leftEndPoint, layers) ||
+            Physics2D.Linecast(rightPoint, rightEndPoint, layers);
+
+    }
+
+    public virtual bool CheckWall(int wallLayers)
+    {
+        Bounds bounds = Collider.bounds;
+
+        float separation = 0.3f;
+        float xDir = transform.right.x;
+
+        Vector2 wallCheckingPointBegin = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
+        Vector2 wallCheckingPointEnd = new Vector2(wallCheckingPointBegin.x + (xDir * separation), bounds.center.y + bounds.extents.y);
+
+        return SJUtil.Linecast2D(wallCheckingPointBegin, wallCheckingPointEnd, wallLayers);
+    }
+
+    public virtual bool CheckIsFloorAhead(int walkableLayers)
+    {
+        Bounds bounds = Collider.bounds;
+
+        float checkDistance = 0.5f;
+        float xDir = transform.right.x;
+
+        Vector2 floorCheckingPointBegin = new Vector2(bounds.center.x + (bounds.extents.x * xDir), bounds.center.y - (bounds.extents.y / 2));
+        Vector2 floorCheckingPointEnd = floorCheckingPointBegin + (new Vector2(xDir, -1) * checkDistance);
+
+        return SJUtil.Linecast2D(floorCheckingPointBegin, floorCheckingPointEnd, walkableLayers);
+    }
+
 }

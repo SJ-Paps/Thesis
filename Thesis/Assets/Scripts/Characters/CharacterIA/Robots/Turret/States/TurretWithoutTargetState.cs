@@ -43,7 +43,7 @@ public class TurretWithoutTargetState : TurretIAState
         base.InitializeState(stateMachine, state, controller, blackboard);
 
         analyzeDetectionDelegate = AnalyzeDetection;
-        blockingLayers = (1 << Reg.wallLayer) | (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+        blockingLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
         targetLayers = 1 << Reg.playerLayer;
         currentMoveOrder = Character.Order.OrderMoveLeft;
     }

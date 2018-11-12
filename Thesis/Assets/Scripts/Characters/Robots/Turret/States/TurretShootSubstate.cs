@@ -27,7 +27,7 @@ public class TurretShootSubstate : TurretAttackSubstate
         base.InitializeState(stateMachine, state, character, blackboard);
 
         deadly = DeadlyType.Bullet;
-        targetLayers = (1 << Reg.playerLayer) | (1 << Reg.floorLayer) | (1 << Reg.wallLayer) | (1 << Reg.objectLayer);
+        targetLayers = (1 << Reg.playerLayer) | (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
 
         bullets = new GameObject[2];
 

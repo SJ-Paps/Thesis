@@ -1863,6 +1863,16 @@ Prefab:
       propertyPath: slave
       value: 
       objectReference: {fileID: 800068553}
+    - target: {fileID: 114514272132214802, guid: 3d2fc06823a48b1419ff7cd1399f1788,
+        type: 2}
+      propertyPath: patrolState.minPatrolTime
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114514272132214802, guid: 3d2fc06823a48b1419ff7cd1399f1788,
+        type: 2}
+      propertyPath: patrolState.maxPatrolTime
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d2fc06823a48b1419ff7cd1399f1788, type: 2}
   m_IsPrefabAsset: 0

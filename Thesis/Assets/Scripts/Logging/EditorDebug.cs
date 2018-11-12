@@ -22,4 +22,11 @@ public class EditorDebug
         Debug.DrawLine(origin, end, color);
 #endif
     }
+
+    public static void DrawLine(Vector3 origin, Vector3 end, Color color, float duration)
+    {
+#if UNITY_EDITOR && !LOG_OFF
+        Debug.DrawLine(origin, end, color, duration);
+#endif
+    }
 }

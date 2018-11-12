@@ -1,4 +1,6 @@
-﻿public abstract class Tribal : Character
-{
+﻿using UnityEngine;
 
+public abstract class Tribal : Character
+{
+    
 }

@@ -52,3 +52,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slave: {fileID: 0}
+  alertlessState:
+    eyesSize: {x: 9, y: 1}
+  awareState:
+    awareTime: 4
+    eyesSize: {x: 9, y: 5}
+    fullAlertDetectionDistance: 6
+    hiddenDetectionDistance: 1
+    findProbability: 15
+  fullAlertState:
+    eyeSize: {x: 12, y: 5}
+    fullAlertTime: 10
+    playerDetectedTime: 6
+    hiddenDetectionDistance: 1.5
+    baseFindProbability: 60
+    maxFindProbability: 100
+  patrolState:
+    minPatrolTime: 4
+    maxPatrolTime: 6
+  seekState:
+    positionReachedMarginX: 1
+    positionReachedMarginY: 1
+    renewPatrolTime: 4
+    movementVelocity: 4.5
+    attackDetectionDistance: 1
