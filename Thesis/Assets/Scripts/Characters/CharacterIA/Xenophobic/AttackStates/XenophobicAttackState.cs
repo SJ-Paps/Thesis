@@ -1,14 +1,18 @@
 ﻿using SAM.FSM;
 using System.Collections.Generic;
+using System;
 
-public class XenophobicAttackState : CharacterAttackState
+[Serializable]
+public class XenophobicAttackState : CharacterState
 {
-    new private Xenophobic character;
+    private Xenophobic xenophobic;
     private Weapon weapon;
 
-    public XenophobicAttackState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Xenophobic controller, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, controller, orderList, blackboard)
+    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
-        character = controller;
+        base.InitializeState(fsm, state, character, orders, blackboard);
+
+        xenophobic = (Xenophobic)character;
     }
 
     protected override void OnEnter()
@@ -17,9 +21,9 @@ public class XenophobicAttackState : CharacterAttackState
 
         EditorDebug.Log("XENOPHOBIC ATTACK ENTER");
 
-        weapon = character.Weapon;
+        weapon = xenophobic.Weapon;
         weapon.UseWeapon();
-        character.Animator.SetTrigger("Attack");
+        xenophobic.Animator.SetTrigger("Attack");
     }
 
     protected override void OnUpdate()

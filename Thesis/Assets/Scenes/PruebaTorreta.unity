@@ -216,6 +216,12 @@ MonoBehaviour:
         type: 2}
   leftLimit: 110
   rightLimit: -110
+--- !u!114 &279080471 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
+    type: 2}
+  m_PrefabInternal: {fileID: 176838649}
+  m_Script: {fileID: 11500000, guid: c3effee286e0c054ba316790fe60b2d1, type: 3}
 --- !u!1 &594538633
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +308,7 @@ Prefab:
         type: 2}
       propertyPath: slave
       value: 
-      objectReference: {fileID: 207164086}
+      objectReference: {fileID: 279080471}
     - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
         type: 2}
       propertyPath: keyOrders.Array.data[5].key.name

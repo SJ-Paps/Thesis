@@ -8,11 +8,6 @@ public class TurretMovingState : CharacterState
 {
     private Turret turret;
 
-    protected override void OnEnter()
-    {
-
-    }
-
     protected override void OnUpdate()
     {
         for (int i = 0; i < orders.Count; i++)
@@ -36,11 +31,6 @@ public class TurretMovingState : CharacterState
                 stateMachine.Trigger(Character.Trigger.StopMoving);
             }
         }
-    }
-
-    protected override void OnExit()
-    {
-        
     }
 
     public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)

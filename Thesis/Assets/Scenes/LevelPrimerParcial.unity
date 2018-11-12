@@ -26430,6 +26430,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
+        type: 2}
+      propertyPath: jumpingState.maxHeight
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 2}
   m_IsPrefabAsset: 0

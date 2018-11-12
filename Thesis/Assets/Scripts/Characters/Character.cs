@@ -146,7 +146,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     private FSM<State, Trigger> aliveFSM;
 
+    [SerializeField]
     private CharacterAliveState alive;
+    [SerializeField]
     private CharacterDeadState dead;
 
     protected List<Order> orders;
@@ -174,8 +176,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
         aliveFSM = new FSM<State, Trigger>();
 
-        alive = new CharacterAliveState(aliveFSM, State.Alive, this, orders, blackboard);
-        dead = new CharacterDeadState(aliveFSM, State.Dead, this, orders, blackboard);
+        alive.InitializeState(aliveFSM, State.Alive, this, orders, blackboard);
+        dead.InitializeState(aliveFSM, State.Dead, this, orders, blackboard);
 
         aliveFSM.AddState(alive);
         aliveFSM.AddState(dead);
@@ -324,5 +326,52 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         {
             onTriggerExit2D(collider);
         }
+    }
+
+    public virtual bool IsOnFloor(int layerMask)
+    {
+        Bounds bounds = Collider.bounds;
+        float height = 0.05f;
+
+        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
+        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
+
+        EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
+        EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
+
+        return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
+            Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
+
+    }
+
+    public virtual bool CheckWall(int layers)
+    {
+        Bounds bounds = Collider.bounds;
+
+        float separation = 0.15f;
+        float xDir = transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
+        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), bounds.center.y + bounds.extents.y);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return Physics2D.Linecast(beginPoint, endPoint, layers);
+    }
+
+    public virtual bool CheckFloorAhead(int layers)
+    {
+        Bounds bounds = Collider.bounds;
+
+        float separation = 0.5f;
+        float yDistance = 2f;
+        float xDir = transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));
+        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), beginPoint.y - yDistance);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return Physics2D.Linecast(beginPoint, endPoint, layers);
     }
 }

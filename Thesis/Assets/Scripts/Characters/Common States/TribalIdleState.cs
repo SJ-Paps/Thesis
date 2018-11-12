@@ -1,13 +1,17 @@
 ﻿using SAM.FSM;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class CharacterIdleState : CharacterState
+[Serializable]
+public class TribalIdleState : CharacterState
 {
     private Animator animator;
 
-    public CharacterIdleState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
+    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
+        base.InitializeState(fsm, state, character, orders, blackboard);
+
         animator = character.Animator;
     }
 

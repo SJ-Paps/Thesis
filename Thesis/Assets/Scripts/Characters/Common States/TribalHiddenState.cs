@@ -4,25 +4,23 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class HiddenState : CharacterState 
+[Serializable]
+public class TribalHiddenState : CharacterState 
 {
     private FSM<Character.State, Character.Trigger> characterJumpingFSM;
     private FSM<Character.State, Character.Trigger> characterMovementFSM;
     private SyncTimer timerForComingOut;
-    private float cooldownForComingOut;
 
-    public HiddenState(FSM<Character.State, Character.Trigger> fsm, 
-       Character.State state,
-       Character character,
-       List<Character.Order> orders,
-       Character.Blackboard blackboard,
-       FSM<Character.State,Character.Trigger> jumpingFSM,
-       FSM<Character.State, Character.Trigger> movementFSM) : base(fsm, state, character, orders, blackboard)
+    [SerializeField]
+    private float cooldownForComingOut = 0.7f;
+
+    public void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard, FSM<Character.State, Character.Trigger> jumpingFSM, FSM<Character.State, Character.Trigger> movementFSM)
     {
+        base.InitializeState(fsm, state, character, orders, blackboard);
+
         characterJumpingFSM = jumpingFSM;
         characterMovementFSM = movementFSM;
         timerForComingOut = new SyncTimer();
-        cooldownForComingOut = 0.7f;
 
         timerForComingOut.onTick += StopTimerForComingOut;
         timerForComingOut.Interval = cooldownForComingOut;

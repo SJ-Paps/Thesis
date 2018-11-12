@@ -4,40 +4,35 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class ActionsIdleState : CharacterState 
+[Serializable]
+public class TribalActionsIdleState : CharacterState 
 {
     private FSM<Character.State, Character.Trigger> characterJumpingFSM;
     private FSM<Character.State, Character.Trigger> characterMovementFSM;
+
     private Action<Collider2D> checkingForEnteringToTheHidingPlaceMethod;
     private Action<Collider2D> checkingForExitingOfTheHidingPlaceMethod;
+
     private Rigidbody2D characterRigidBody2D;
     private SyncTimer timerOfHiding;
-    private RaycastHit2D raycastHit2D;
-    private float raycastDistance;
-    private float cooldownOfHiding;
+
+    [SerializeField]
+    private float pushCheckDistance = 0.4f, cooldownOfHiding = 0.7f;
+
     private bool canHide;
     private Animator animator;
 
-    public ActionsIdleState(FSM<Character.State, Character.Trigger> fsm,
-        Character.State state,
-        Character character,
-        List<Character.Order> orders,
-        FSM<Character.State,Character.Trigger> jumpingFSM,
-        FSM<Character.State, Character.Trigger> movementFSM,
-        Character.Blackboard blackboard) : base(fsm, state, character, orders, blackboard)
+    public void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard, FSM<Character.State, Character.Trigger> jumpingFSM, FSM<Character.State, Character.Trigger> movementFSM)
     {
+        base.InitializeState(fsm, state, character, orders, blackboard);
+
         characterJumpingFSM = jumpingFSM;
         characterMovementFSM = movementFSM;
 
         checkingForEnteringToTheHidingPlaceMethod += CheckingForEnteringToTheHidingPlace;
         checkingForExitingOfTheHidingPlaceMethod += CheckingForExitingOfTheHidingPlace;
 
-        characterRigidBody2D = character.GetComponent<Rigidbody2D>();
-
-        raycastDistance = 0.4f;
-        cooldownOfHiding = 0.7f;
-        
-        raycastHit2D = new RaycastHit2D();
+        characterRigidBody2D = character.RigidBody2D;
 
         timerOfHiding = new SyncTimer();
         timerOfHiding.onTick += EnteringToTheHidingPlace;
@@ -69,7 +64,7 @@ public class ActionsIdleState : CharacterState
     {
         timerOfHiding.Update(Time.deltaTime);
 
-        EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * raycastDistance, Color.red);
+        EditorDebug.DrawLine(character.transform.position, (Vector2)character.transform.localPosition + (Vector2)character.transform.right * pushCheckDistance, Color.red);
 
         if (character.IsMovingHorizontal)
         {
@@ -123,7 +118,7 @@ public class ActionsIdleState : CharacterState
 
     private void CheckPushable()
     {
-        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance, 1 << Reg.objectLayer);
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, pushCheckDistance, 1 << Reg.objectLayer);
 
         if (raycastHit2D && character.IsGrounded)
         {

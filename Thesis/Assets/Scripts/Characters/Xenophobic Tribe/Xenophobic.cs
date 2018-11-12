@@ -1,9 +1,10 @@
-﻿using SAM.FSM;
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 
 public class Xenophobic : Tribal, IAudibleListener
 {
+    [SerializeField]
+    protected XenophobicAttackState attackState;
+
     [SerializeField]
     protected Weapon weapon;
 
@@ -20,52 +21,16 @@ public class Xenophobic : Tribal, IAudibleListener
         }
     }
 
-    protected FSM<State, Trigger> actionFSM;
-    protected FSM<State, Trigger> movementFSM;
-    protected FSM<State, Trigger> jumpingFSM;
-
     protected override void Awake()
     {
         base.Awake();
 
-        movementFSM = new FSM<State, Trigger>();
+        attackState.InitializeState(actionFSM, State.Attacking, this, orders, blackboard);
 
-        movementFSM.AddState(new CharacterIdleState(movementFSM, State.Idle, this, orders, blackboard));
-        movementFSM.AddState(new MovingState(movementFSM, State.Moving, this, orders, blackboard));
-
-        movementFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
-        movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.Idle);
-
-        movementFSM.StartBy(State.Idle);
-
-
-        jumpingFSM = new FSM<State, Trigger>();
-
-        jumpingFSM.AddState(new GroundedState(jumpingFSM, State.Grounded, this, orders, blackboard));
-        jumpingFSM.AddState(new JumpingState(jumpingFSM, State.Jumping, this, orders, blackboard));
-        jumpingFSM.AddState(new FallingState(jumpingFSM, State.Falling, this, orders, blackboard));
-
-        jumpingFSM.MakeTransition(State.Grounded, Trigger.Jump, State.Jumping);
-        jumpingFSM.MakeTransition(State.Grounded, Trigger.Fall, State.Falling);
-        jumpingFSM.MakeTransition(State.Jumping, Trigger.Fall, State.Falling);
-        jumpingFSM.MakeTransition(State.Falling, Trigger.Ground, State.Grounded);
-
-        jumpingFSM.StartBy(State.Falling);
-
-
-        actionFSM = new FSM<State, Trigger>();
-
-        actionFSM.AddState(new ActionsIdleState(actionFSM, State.Idle, this, orders, jumpingFSM, movementFSM, blackboard));
-        actionFSM.AddState(new XenophobicAttackState(actionFSM, State.Attacking, this, orders, blackboard));
+        actionFSM.AddState(attackState);
 
         actionFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
         actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
-
-        actionFSM.StartBy(State.Idle);
-
-        AddStateMachineWhenAlive(movementFSM);
-        AddStateMachineWhenAlive(jumpingFSM);
-        AddStateMachineWhenAlive(actionFSM);
         
     }
 

@@ -71,7 +71,7 @@ public class XenophobicPatrol : XenophobicIAState
         {
             bool validatedCollision = false;
 
-            if(contact.collider.gameObject.layer == Reg.wallLayer||
+            if(contact.collider.gameObject.layer == Reg.floorLayer||
                 contact.collider.gameObject.layer == Reg.objectLayer)
             {
                 validatedCollision = true;

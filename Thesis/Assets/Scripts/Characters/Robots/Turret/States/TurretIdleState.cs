@@ -1,19 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using SAM.FSM;
-using UnityEngine;
+﻿using System;
 
+[Serializable]
 public class TurretIdleState : CharacterState
 {
-    public TurretIdleState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard) : base(fsm, state, character, orders, blackboard)
-    {
-
-    }
-
-    protected override void OnEnter()
-    {
-
-    }
 
     protected override void OnUpdate()
     {
@@ -26,10 +15,5 @@ public class TurretIdleState : CharacterState
                 stateMachine.Trigger(Character.Trigger.Move);
             }
         }
-    }
-
-    protected override void OnExit()
-    {
-
     }
 }

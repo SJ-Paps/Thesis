@@ -8,11 +8,6 @@ public abstract class CharacterState : State<Character.State, Character.Trigger>
     protected List<Character.Order> orders;
     protected Character.Blackboard blackboard;
 
-    protected CharacterState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard) : base(fsm, state)
-    {
-        InitializeState(fsm, state, character, orders, blackboard);
-    }
-
     protected CharacterState() : base(null, Character.State.Idle)
     {
 

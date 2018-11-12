@@ -1,24 +1,28 @@
 ﻿using SAM.FSM;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-public class JumpingState : CharacterState {
+[Serializable]
+public class TribalJumpingState : CharacterState {
 
     private bool jumping;
     private Rigidbody2D rigidbody2D;
     private Collider2D collider;
-    private float maxHeight;
-    private float maxVelocity = 4;
-    private float height;
-    private Vector2 jumpForce = Vector2.up * 0.8f;
+
+    [SerializeField]
+    private float maxHeight = 1, maxVelocity = 4, jumpForce = 0.8f;
+
+    private float currentMaxHeight;
 
     private Animator animator;
 
-    public JumpingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
+    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
-        rigidbody2D = character.GetComponent<Rigidbody2D>();
-        collider = character.GetComponent<Collider2D>();
-        height = collider.bounds.size.y;
+        base.InitializeState(fsm, state, character, orders, blackboard);
+
+        rigidbody2D = character.RigidBody2D;
+        collider = character.Collider;
 
         animator = character.Animator;
     }
@@ -33,9 +37,11 @@ public class JumpingState : CharacterState {
 
         float initPosY = character.transform.position.y;
 
-        maxHeight = initPosY + height / 2.2f;
+        currentMaxHeight = initPosY + maxHeight;
 
-        rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
+        Vector2 jumpForceVector = new Vector2(0, jumpForce);
+
+        rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
     }
 
     protected override void OnUpdate()
@@ -60,9 +66,11 @@ public class JumpingState : CharacterState {
 
             if (order == Character.Order.OrderJump)
             {
-                rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
+                Vector2 jumpForceVector = new Vector2(0, jumpForce);
 
-                if (character.transform.position.y < maxHeight)
+                rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
+
+                if (character.transform.position.y < currentMaxHeight)
                 {
                     jumping = true;
                     break;

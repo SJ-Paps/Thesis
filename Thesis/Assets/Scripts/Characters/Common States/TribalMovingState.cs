@@ -1,19 +1,22 @@
 ﻿using SAM.FSM;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-public class MovingState : CharacterState
+[Serializable]
+public class TribalMovingState : CharacterState
 {
-    private RaycastHit2D raycastHit2D;
     private Rigidbody2D rigidbody2D;
-    private Vector2 moveForce = new Vector2(0.2f, 0);
 
-    private float xVelocityDeadZone = 0.1f;
+    [SerializeField]
+    private float moveForce = 0.2f, xVelocityDeadZone = 0.1f;
 
     private Animator animator;
 
-    public MovingState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
+    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
+        base.InitializeState(fsm, state, character, orders, blackboard);
+
         rigidbody2D = character.RigidBody2D;
 
         animator = character.Animator;
@@ -36,6 +39,8 @@ public class MovingState : CharacterState
 
     protected override void OnUpdate()
     {
+        Vector2 moveForceVector = new Vector2(moveForce, 0);
+
         for (int i = 0; i < orders.Count; i++)
         {
             Character.Order order = orders[i];
@@ -46,7 +51,7 @@ public class MovingState : CharacterState
 
                 blackboard.movingHorizontal = true;
 
-                rigidbody2D.AddForce(moveForce * -1, ForceMode2D.Impulse);
+                rigidbody2D.AddForce(moveForceVector * -1, ForceMode2D.Impulse);
                 break;
             }
             else if (order == Character.Order.OrderMoveRight)
@@ -55,7 +60,7 @@ public class MovingState : CharacterState
 
                 blackboard.movingHorizontal = true;
 
-                rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
+                rigidbody2D.AddForce(moveForceVector, ForceMode2D.Impulse);
                 break;
             }
             else
@@ -71,11 +76,11 @@ public class MovingState : CharacterState
 
         if (rigidbody2D.velocity.x >= character.MovementVelocity)
         {
-            rigidbody2D.AddForce(-1 * moveForce, ForceMode2D.Impulse);
+            rigidbody2D.AddForce(-1 * moveForceVector, ForceMode2D.Impulse);
         }
         else if (rigidbody2D.velocity.x <= -character.MovementVelocity)
         {
-            rigidbody2D.AddForce(moveForce, ForceMode2D.Impulse);
+            rigidbody2D.AddForce(moveForceVector, ForceMode2D.Impulse);
         }
 
         if (rigidbody2D.velocity.x > -xVelocityDeadZone && rigidbody2D.velocity.x < xVelocityDeadZone)

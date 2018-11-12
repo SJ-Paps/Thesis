@@ -80,9 +80,12 @@ public class Eyes : MonoBehaviour
 
             RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
 
-            EditorDebug.Log(hit.collider.name);
+            if(hit)
+            {
+                EditorDebug.Log(hit.collider.name);
 
-            return hit.collider == collider;
+                return hit.collider == collider;
+            }
         }
 
         return false;
@@ -96,7 +99,10 @@ public class Eyes : MonoBehaviour
 
             RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
 
-            return hit.distance <= distance;
+            if(hit)
+            {
+                return hit.distance <= distance;
+            }
         }
 
         return false;
@@ -110,7 +116,10 @@ public class Eyes : MonoBehaviour
 
             RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
 
-            return hit.collider == collider && hit.distance <= distance;
+            if(hit)
+            {
+                return hit.collider == collider && hit.distance <= distance;
+            }
         }
 
         return false;

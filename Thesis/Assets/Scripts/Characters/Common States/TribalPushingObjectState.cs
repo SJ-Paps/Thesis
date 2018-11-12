@@ -1,29 +1,28 @@
 ﻿using SAM.FSM;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class PushingObjectState : CharacterState {
+[Serializable]
+public class TribalPushingObjectState : CharacterState {
 
-    private RaycastHit2D raycastHit2D;
-    private float raycastDistance;
+    [SerializeField]
+    private float pushCheckDistance = 0.4f;
+
     private FixedJoint2D objectFixedJoint2D;
     private Rigidbody2D characterRigidbody;
 
     private Character.Order expectedOrder;
 
-    private int objectLayerMask = 1 << Reg.objectLayer;
+    private int objectLayerMask;
 
-    public PushingObjectState(
-       FSM<Character.State, Character.Trigger> fsm,
-       Character.State state,
-       Character character,
-       List<Character.Order> orders,
-       Character.Blackboard blackboard,
-       FSM<Character.State, Character.Trigger> jumpingFSM,
-       FSM<Character.State, Character.Trigger> movementFSM) : base (fsm, state, character, orders, blackboard)
+    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
-        raycastDistance = 0.4f;
-        characterRigidbody = character.GetComponent<Rigidbody2D>();
+        base.InitializeState(fsm, state, character, orders, blackboard);
+
+        characterRigidbody = character.RigidBody2D;
+
+        objectLayerMask = 1 << Reg.objectLayer;
     }
 
     protected override void OnEnter() {
@@ -31,7 +30,7 @@ public class PushingObjectState : CharacterState {
 
         blackboard.isPushing = true;
 
-        raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, raycastDistance, objectLayerMask);
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(character.transform.position, (Vector2)character.transform.right, pushCheckDistance, objectLayerMask);
 
         objectFixedJoint2D = raycastHit2D.transform.GetComponent<FixedJoint2D>();
         objectFixedJoint2D.enabled = true;
