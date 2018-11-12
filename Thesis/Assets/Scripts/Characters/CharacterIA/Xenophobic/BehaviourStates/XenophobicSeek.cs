@@ -61,7 +61,7 @@ public class XenophobicSeekState : XenophobicIAState
     {
         renewPatrolTimer.Update(Time.deltaTime);
 
-        if (hasPositionTarget && IsPositionReached(lastSeekedPosition) == false)
+        if (ShouldStop() == false && hasPositionTarget && IsPositionReached(lastSeekedPosition) == false)
         {
             SearchAtPosition(lastSeekedPosition);
         }
@@ -118,6 +118,11 @@ public class XenophobicSeekState : XenophobicIAState
         }
 
         return false;
+    }
+
+    private bool ShouldStop()
+    {
+        return controller.Slave.CheckWall(Reg.walkableLayerMask) || controller.Slave.CheckFloorAhead(Reg.walkableLayerMask) == false;
     }
 
 }

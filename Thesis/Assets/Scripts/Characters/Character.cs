@@ -36,7 +36,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     }
     public bool FacingLeft
     {
-        get { return facingLeft; }
+        get { return transform.right.x < 0; }
     }
     public float MovementVelocity
     {
@@ -63,10 +63,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         get { return handPoint; }
     }
-
-
-    [SerializeField]
-    private bool facingLeft;
 
     [SerializeField]
     protected float movementVelocity = 1;
@@ -242,17 +238,17 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public void Face(bool left)
     {
-        if(!blockFacing && facingLeft != left)
+        if(!blockFacing && FacingLeft != left)
         {
-            facingLeft = left;
+            transform.Rotate(Vector3.up, 180);
 
-            OnFacingChanged(facingLeft);
+            OnFacingChanged(FacingLeft);
         }
     }
 
     protected virtual void OnFacingChanged(bool facingLeft)
     {
-        transform.Rotate(Vector3.up, 180);
+        
     }
 
     public void NotifyDetection()

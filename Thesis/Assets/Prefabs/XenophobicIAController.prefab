@@ -68,8 +68,8 @@ MonoBehaviour:
     baseFindProbability: 60
     maxFindProbability: 100
   patrolState:
-    minTime: 4
-    maxTime: 6
+    minTime: 6
+    maxTime: 10
   seekState:
     positionReachedMarginX: 1
     positionReachedMarginY: 1

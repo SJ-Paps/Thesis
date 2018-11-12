@@ -1808,16 +1808,6 @@ Prefab:
       propertyPath: slave
       value: 
       objectReference: {fileID: 800068553}
-    - target: {fileID: 114514272132214802, guid: 3d2fc06823a48b1419ff7cd1399f1788,
-        type: 2}
-      propertyPath: patrolState.minTime
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114514272132214802, guid: 3d2fc06823a48b1419ff7cd1399f1788,
-        type: 2}
-      propertyPath: patrolState.maxTime
-      value: 6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d2fc06823a48b1419ff7cd1399f1788, type: 2}
   m_IsPrefabAsset: 0
@@ -2332,7 +2322,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4433058846736354, guid: 23bea5bff898fab408cd13503806161e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 66.21
+      value: 65.07
       objectReference: {fileID: 0}
     - target: {fileID: 4433058846736354, guid: 23bea5bff898fab408cd13503806161e, type: 2}
       propertyPath: m_LocalPosition.y
@@ -26558,6 +26548,10 @@ Prefab:
         type: 2}
       propertyPath: m_SortingOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1876717677632278, guid: c952837c115dbc64b8554346c3bee377, type: 2}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c952837c115dbc64b8554346c3bee377, type: 2}
