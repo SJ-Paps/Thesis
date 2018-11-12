@@ -363,8 +363,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         Bounds bounds = Collider.bounds;
 
-        float separation = 0.5f;
-        float yDistance = 2f;
+        float separation = 1f;
+        float yDistance = 0.5f;
         float xDir = transform.right.x;
 
         Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));

@@ -1,15 +1,15 @@
 ﻿using SAM.FSM;
 using UnityEngine;
 using System;
+using SAM.Timers;
 
 [Serializable]
 public class XenophobicPatrolState : XenophobicIAState
 {
     [SerializeField]
-    private float xMargin = 4f;
+    private float minTime = 4f, maxTime = 6f;
 
-    private float worldLeftXMargin;
-    private float worldRightXMargin;
+    private SyncTimer patrolTimer;
 
     private Character.Order currentOrder;
 
@@ -20,13 +20,56 @@ public class XenophobicPatrolState : XenophobicIAState
         base.InitializeState(fsm, state, controller, blackboard);
 
         onLastDetectionPositionChangedDelegate += Seek;
+
+        patrolTimer = new SyncTimer();
+        patrolTimer.onTick += TickTurn;
     }
+
+
     protected override void OnEnter()
     {
-        controller.Slave.onCollisionEnter2D += CheckCollision;
         blackboard.onLastDetectionPositionChanged += onLastDetectionPositionChangedDelegate;
 
-        if(controller.Slave.FacingLeft)
+        Turn();
+    }
+
+    protected override void OnUpdate()
+    {
+        patrolTimer.Update(Time.deltaTime);
+
+        if(ShouldTurn())
+        {
+            Turn();
+        }
+
+        controller.Slave.SetOrder(currentOrder);
+    }
+
+    private float CalculatePatrolTime()
+    {
+        return UnityEngine.Random.Range(minTime, maxTime);
+    }
+
+    private bool ShouldTurn()
+    {
+        return controller.Slave.CheckWall(Reg.walkableLayerMask) || controller.Slave.CheckFloorAhead(Reg.walkableLayerMask) == false;
+    }
+
+    private void Seek(Vector2 position)
+    {
+        stateMachine.Trigger(XenophobicIAController.Trigger.Seek);
+    }
+
+    private void TickTurn(SyncTimer timer)
+    {
+        Turn();
+    }
+
+    private void Turn()
+    {
+        float xDir = controller.Slave.transform.right.x;
+
+        if (xDir < 0)
         {
             currentOrder = Character.Order.OrderMoveRight;
         }
@@ -35,64 +78,7 @@ public class XenophobicPatrolState : XenophobicIAState
             currentOrder = Character.Order.OrderMoveLeft;
         }
 
-        CalculatePatrolMargins();
-    }
-
-    protected override void OnExit()
-    {
-        controller.Slave.onCollisionEnter2D -= CheckCollision;
-    }
-
-    protected override void OnUpdate()
-    {
-        if(currentOrder == Character.Order.OrderMoveLeft && controller.Slave.transform.position.x < worldLeftXMargin)
-        {
-            currentOrder = Character.Order.OrderMoveRight;
-        }
-        else if(currentOrder == Character.Order.OrderMoveRight && controller.Slave.transform.position.x > worldRightXMargin)
-        {
-            currentOrder = Character.Order.OrderMoveLeft;
-        }
-
-        controller.Slave.SetOrder(currentOrder);
-    }
-
-    private void CalculatePatrolMargins()
-    {
-        worldLeftXMargin = controller.Slave.transform.position.x - xMargin;
-        worldRightXMargin = controller.Slave.transform.position.x + xMargin;
-    }
-
-    private void Seek(Vector2 position)
-    {
-        stateMachine.Trigger(XenophobicIAController.Trigger.Seek);
-    }
-
-    private void CheckCollision(Collision2D collision)
-    {
-        foreach(ContactPoint2D contact in collision.contacts)
-        {
-            bool validatedCollision = false;
-
-            if(contact.collider.gameObject.layer == Reg.floorLayer||
-                contact.collider.gameObject.layer == Reg.objectLayer)
-            {
-                validatedCollision = true;
-            }
-
-            if(validatedCollision)
-            {
-                if(contact.normal.x == Vector2.right.x && currentOrder == Character.Order.OrderMoveLeft)
-                {
-                    currentOrder = Character.Order.OrderMoveRight;
-                }
-                else if(contact.normal.x == Vector2.left.x && currentOrder == Character.Order.OrderMoveRight)
-                {
-                    currentOrder = Character.Order.OrderMoveLeft;
-                }
-
-                CalculatePatrolMargins();
-            }
-        }
+        patrolTimer.Interval = CalculatePatrolTime();
+        patrolTimer.Start();
     }
 }
