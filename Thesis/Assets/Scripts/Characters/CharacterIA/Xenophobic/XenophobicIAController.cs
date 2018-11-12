@@ -73,10 +73,27 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
     protected Blackboard blackboard;
 
+    [SerializeField]
+    protected XenophobicAlertlessState alertlessState;
+
+    [SerializeField]
+    protected XenophobicAwareState awareState;
+
+    [SerializeField]
+    protected XenophobicAlertfulState alertfulState;
+
+    [SerializeField]
+    protected XenophobicPatrolState patrolState;
+
+    [SerializeField]
+    protected XenophobicSeekState seekState;
+
     protected FSM<State, Trigger> alertnessFSM;
     protected FSM<State, Trigger> behaviourFSM;
 
     public Eyes SlaveEyes { get; protected set; }
+
+
 
     void Start()
     {
@@ -85,9 +102,13 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
         alertnessFSM = new FSM<State, Trigger>();
 
-        alertnessFSM.AddState(new XenophobicAlertlessState(alertnessFSM, State.Alertless, this, blackboard));
-        alertnessFSM.AddState(new XenophobicAwareState(alertnessFSM, State.Aware, this, blackboard));
-        alertnessFSM.AddState(new XenophobicFullAlertState(alertnessFSM, State.Alertful, this, blackboard));
+        alertlessState.InitializeState(alertnessFSM, State.Alertless, this, blackboard);
+        awareState.InitializeState(alertnessFSM, State.Aware, this, blackboard);
+        alertfulState.InitializeState(alertnessFSM, State.Alertful, this, blackboard);
+
+        alertnessFSM.AddState(alertlessState);
+        alertnessFSM.AddState(awareState);
+        alertnessFSM.AddState(alertfulState);
 
         alertnessFSM.MakeTransition(State.Alertless, Trigger.GetAware, State.Aware);
         alertnessFSM.MakeTransition(State.Aware, Trigger.SetFullAlert, State.Alertful);
@@ -99,8 +120,11 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
         behaviourFSM = new FSM<State, Trigger>();
 
-        behaviourFSM.AddState(new XenophobicPatrol(behaviourFSM, State.Patrolling, this, blackboard));
-        behaviourFSM.AddState(new XenophobicSeek(behaviourFSM, State.Seeking, this, blackboard));
+        patrolState.InitializeState(behaviourFSM, State.Patrolling, this, blackboard);
+        seekState.InitializeState(behaviourFSM, State.Seeking, this, blackboard);
+
+        behaviourFSM.AddState(patrolState);
+        behaviourFSM.AddState(seekState);
 
         behaviourFSM.MakeTransition(State.Patrolling, Trigger.Seek, State.Seeking);
         behaviourFSM.MakeTransition(State.Seeking, Trigger.Patrol, State.Patrolling);

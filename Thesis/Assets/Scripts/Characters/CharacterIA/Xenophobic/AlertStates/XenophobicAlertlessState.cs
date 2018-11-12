@@ -2,22 +2,26 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class XenophobicAlertlessState : XenophobicIAState {
 
+    [SerializeField]
     private Vector2 eyesSize = new Vector2(9, 1);
 
     private Action<Collider2D> onSomethingDetectedDelegate;
     private Eyes characterEyes;
+    
+    private int targetLayers;
 
-    private int blockingLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
-    private int targetLayers = (1 << Reg.playerLayer);
-
-
-    public XenophobicAlertlessState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
     {
+        base.InitializeState(fsm, state, controller, blackboard);
+
         onSomethingDetectedDelegate += AnalyzeDetection;
 
         characterEyes = controller.SlaveEyes;
+
+        targetLayers = (1 << Reg.playerLayer);
     }
 
     protected override void OnEnter()
@@ -47,7 +51,7 @@ public class XenophobicAlertlessState : XenophobicIAState {
     {
         Debug.Log("LALORA");
 
-        if (characterEyes.IsVisible(collider, blockingLayers, targetLayers))
+        if (characterEyes.IsVisible(collider, Reg.walkableLayerMask, targetLayers))
         {
             if(collider.gameObject.layer == Reg.playerLayer && GameManager.Instance.GetPlayer().IsHidden == false)
             {

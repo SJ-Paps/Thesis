@@ -82,8 +82,6 @@ public class Eyes : MonoBehaviour
 
             if(hit)
             {
-                EditorDebug.Log(hit.collider.name);
-
                 return hit.collider == collider;
             }
         }

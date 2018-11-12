@@ -2,8 +2,10 @@
 using UnityEngine;
 using System;
 
-public class XenophobicPatrol : XenophobicIAState
+[Serializable]
+public class XenophobicPatrolState : XenophobicIAState
 {
+    [SerializeField]
     private float xMargin = 4f;
 
     private float worldLeftXMargin;
@@ -13,11 +15,12 @@ public class XenophobicPatrol : XenophobicIAState
 
     private Action<Vector2> onLastDetectionPositionChangedDelegate;
 
-    public XenophobicPatrol(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
     {
+        base.InitializeState(fsm, state, controller, blackboard);
+
         onLastDetectionPositionChangedDelegate += Seek;
     }
-
     protected override void OnEnter()
     {
         controller.Slave.onCollisionEnter2D += CheckCollision;

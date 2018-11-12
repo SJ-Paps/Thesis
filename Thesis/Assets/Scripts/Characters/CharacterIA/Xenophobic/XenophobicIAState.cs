@@ -5,10 +5,17 @@ public abstract class XenophobicIAState : State<XenophobicIAController.State, Xe
     protected XenophobicIAController controller;
     protected XenophobicIAController.Blackboard blackboard;
 
-    public XenophobicIAState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state)
+    public XenophobicIAState() : base(null, default(XenophobicIAController.State))
+    {
+        
+    }
+
+    public virtual void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
     {
         this.controller = controller;
         this.blackboard = blackboard;
+        stateMachine = fsm;
+        InnerState = state;
     }
 
     protected override void OnEnter()
