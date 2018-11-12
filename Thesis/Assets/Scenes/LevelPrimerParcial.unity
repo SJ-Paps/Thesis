@@ -1151,11 +1151,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4836639023251566, guid: 23bea5bff898fab408cd13503806161e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 66.21
+      value: 105.6
       objectReference: {fileID: 0}
     - target: {fileID: 4836639023251566, guid: 23bea5bff898fab408cd13503806161e, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6.52
+      value: 0.58
       objectReference: {fileID: 0}
     - target: {fileID: 4836639023251566, guid: 23bea5bff898fab408cd13503806161e, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1193,6 +1193,31 @@ Prefab:
     - target: {fileID: 1524478571638484, guid: 23bea5bff898fab408cd13503806161e, type: 2}
       propertyPath: m_Layer
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114521391852233380, guid: 23bea5bff898fab408cd13503806161e,
+        type: 2}
+      propertyPath: brakeState.drag
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 114521391852233380, guid: 23bea5bff898fab408cd13503806161e,
+        type: 2}
+      propertyPath: brakeState.xDeadZone
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114521391852233380, guid: 23bea5bff898fab408cd13503806161e,
+        type: 2}
+      propertyPath: jumpingState.maxHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114521391852233380, guid: 23bea5bff898fab408cd13503806161e,
+        type: 2}
+      propertyPath: jumpingState.jumpForce.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114521391852233380, guid: 23bea5bff898fab408cd13503806161e,
+        type: 2}
+      propertyPath: brakeState.dragForce.x
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23bea5bff898fab408cd13503806161e, type: 2}
@@ -1517,7 +1542,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 351241444}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.4, y: -3.03, z: -10}
+  m_LocalPosition: {x: 97.6, y: -1.12, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -26410,11 +26435,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4974510637164506, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -4.95
+      value: 92.9
       objectReference: {fileID: 0}
     - target: {fileID: 4974510637164506, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3.47
+      value: -2.3
       objectReference: {fileID: 0}
     - target: {fileID: 4974510637164506, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 2}
       propertyPath: m_LocalPosition.z
@@ -26439,6 +26464,31 @@ Prefab:
     - target: {fileID: 4974510637164506, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
+        type: 2}
+      propertyPath: jumpingState.maxHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
+        type: 2}
+      propertyPath: jumpingState.jumpForce.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
+        type: 2}
+      propertyPath: brakeState.drag
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
+        type: 2}
+      propertyPath: brakeState.xDeadZone
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
+        type: 2}
+      propertyPath: brakeState.dragForce.x
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 2}

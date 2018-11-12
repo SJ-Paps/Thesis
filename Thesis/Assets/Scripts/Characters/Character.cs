@@ -90,7 +90,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Falling,
         Hidden,
         Attacking,
-        Pushing
+        Pushing,
+        SlowingDown
     }
 
     public enum Trigger : byte
@@ -174,8 +175,11 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
         aliveFSM = new FSM<State, Trigger>();
 
-        alive = new CharacterAliveState(aliveFSM, State.Alive, this, orders, blackboard);
-        dead = new CharacterDeadState(aliveFSM, State.Dead, this, orders, blackboard);
+        alive = new CharacterAliveState();
+        dead = new CharacterDeadState();
+
+        alive.InitializeState(aliveFSM, State.Alive, this, orders, blackboard);
+        dead.InitializeState(aliveFSM, State.Dead, this, orders, blackboard);
 
         aliveFSM.AddState(alive);
         aliveFSM.AddState(dead);

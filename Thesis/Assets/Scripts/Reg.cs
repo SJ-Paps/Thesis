@@ -34,5 +34,5 @@ public static class Reg
     public const int playerDetectionLayer = 16;
     public const int itemLayer = 17;
 
-    public static readonly int walkableLayers = (1 << floorLayer) | (1 << objectLayer);
+    public static readonly int walkableLayerMask = (1 << floorLayer) | (1 << objectLayer);
 }
