@@ -1,19 +1,13 @@
 ﻿using SAM.FSM;
 using UnityEngine;
 
-public class Turret : Robot
+public class Turret : Character
 {
     [SerializeField]
-    protected TurretIdleState idleState;
+    protected TurretAttackState attackState;
 
     [SerializeField]
     protected TurretMovingState movingState;
-
-    [SerializeField]
-    protected TurretActionIdleState actionIdleState;
-
-    [SerializeField]
-    protected TurretAttackState attackState;
 
     [SerializeField]
     private float leftLimit, rightLimit;
@@ -43,11 +37,9 @@ public class Turret : Robot
 
         FSM<State, Trigger> movingFSM = new FSM<State, Trigger>();
 
+        movingState.InitializeState(movingFSM, State.Moving, this, orders, blackboard);
 
-        movingState.InitializeState(movingFSM, State.Idle, this, orders, blackboard);
-        idleState.InitializeState(movingFSM, State.Moving, this, orders, blackboard);
-
-        movingFSM.AddState(idleState);
+        movingFSM.AddState(new TurretIdleState(movingFSM, State.Idle, this, orders, blackboard));
         movingFSM.AddState(movingState);
 
         movingFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
@@ -57,10 +49,9 @@ public class Turret : Robot
 
         FSM<State, Trigger> actionFSM = new FSM<State, Trigger>();
 
-        actionIdleState.InitializeState(actionFSM, State.Idle, this, orders, blackboard);
         attackState.InitializeState(actionFSM, State.Attacking, this, orders, blackboard);
 
-        actionFSM.AddState(actionIdleState);
+        actionFSM.AddState(new TurretActionIdleState(actionFSM, State.Idle, this, orders, blackboard));
         actionFSM.AddState(attackState);
         
 

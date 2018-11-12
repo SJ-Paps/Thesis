@@ -1,0 +1,58 @@
+﻿using SAM.FSM;
+using System;
+using UnityEngine;
+
+public class XenophobicAlertlessState : XenophobicIAState {
+
+    private Vector2 eyesSize = new Vector2(9, 1);
+
+    private Action<Collider2D> onSomethingDetectedDelegate;
+    private Eyes characterEyes;
+
+    private int blockingLayers = (1 << Reg.floorLayer) | (1 << Reg.objectLayer);
+    private int targetLayers = (1 << Reg.playerLayer);
+
+
+    public XenophobicAlertlessState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    {
+        onSomethingDetectedDelegate += AnalyzeDetection;
+
+        characterEyes = controller.SlaveEyes;
+    }
+
+    protected override void OnEnter()
+    {
+        if(characterEyes != null)
+        {
+            characterEyes.Trigger2D.ChangeSize(eyesSize);
+
+            characterEyes.Trigger2D.onStay += onSomethingDetectedDelegate;
+        }
+    }
+
+    protected override void OnUpdate()
+    {
+
+    }
+
+    protected override void OnExit()
+    {
+        if (characterEyes != null)
+        {
+            characterEyes.Trigger2D.onStay -= onSomethingDetectedDelegate;
+        }
+    }
+
+    private void AnalyzeDetection(Collider2D collider)
+    {
+        Debug.Log("LALORA");
+
+        if (characterEyes.IsVisible(collider, blockingLayers, targetLayers))
+        {
+            if(collider.gameObject.layer == Reg.playerLayer && GameManager.Instance.GetPlayer().IsHidden == false)
+            {
+                stateMachine.Trigger(XenophobicIAController.Trigger.GetAware);
+            }
+        }
+    }
+}

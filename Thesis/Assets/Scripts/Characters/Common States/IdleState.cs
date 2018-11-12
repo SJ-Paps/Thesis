@@ -1,18 +1,21 @@
-﻿using System.Collections;
+﻿using SAM.FSM;
 using System.Collections.Generic;
-using SAM.FSM;
 using UnityEngine;
 
-public class TurretIdleState : CharacterState
+public class CharacterIdleState : CharacterState
 {
-    public TurretIdleState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard) : base(fsm, state, character, orders, blackboard)
-    {
+    private Animator animator;
 
+    public CharacterIdleState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard) : base(fsm, state, character, orderList, blackboard)
+    {
+        animator = character.Animator;
     }
 
     protected override void OnEnter()
     {
+        animator.SetTrigger("Idle");
 
+        EditorDebug.Log("IDLE ENTER");
     }
 
     protected override void OnUpdate()
@@ -24,12 +27,13 @@ public class TurretIdleState : CharacterState
             if (order == Character.Order.OrderMoveLeft || order == Character.Order.OrderMoveRight)
             {
                 stateMachine.Trigger(Character.Trigger.Move);
+                break;
             }
         }
     }
 
     protected override void OnExit()
     {
-
+        animator.ResetTrigger("Idle");
     }
 }
