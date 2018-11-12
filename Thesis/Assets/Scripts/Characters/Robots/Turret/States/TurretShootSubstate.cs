@@ -65,8 +65,6 @@ public class TurretShootSubstate : TurretAttackSubstate
     {
         RaycastHit2D hit = Physics2D.Raycast(gunPoint.position, character.transform.up, shootDistance, targetLayers);
 
-        
-
         if (hit.collider != null)
         {
             nextBullet.transform.position = hit.point;

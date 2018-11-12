@@ -32,8 +32,7 @@ public class TurretAttackState : CharacterState
         base.InitializeState(fsm, state, character, orders, blackboard);
 
         attackSubStateMachine = new FSM<State, Trigger>();
-
-
+        
         chargeState.InitializeState(attackSubStateMachine, State.Charging, character, blackboard);
         shootState.InitializeState(attackSubStateMachine, State.Shooting, character, blackboard);
 
