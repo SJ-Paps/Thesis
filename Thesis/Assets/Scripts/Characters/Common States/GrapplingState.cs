@@ -1,4 +1,5 @@
 ﻿using SAM.FSM;
+using SAM.Timers;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class GrapplingState : CharacterState
     FSM<Character.State, Character.Trigger> characterActionFSM;
     private Rigidbody2D rigidbody2D;
     private BoxCollider2D collider2D;
+    private SyncTimer timerOfReleasingLedge;
+    private float cooldownForChangingToFallingState = 0.25f;
     private float verticalClimbingSpeed = 1.2f;
     private float horizontalClimbingSpeed = 1.2f;
 
@@ -26,6 +29,10 @@ public class GrapplingState : CharacterState
         characterActionFSM = actionFSM;
         rigidbody2D = character.GetComponent<Rigidbody2D>();
         collider2D = character.GetComponent<BoxCollider2D>();
+
+        timerOfReleasingLedge = new SyncTimer();
+        timerOfReleasingLedge.onTick += EnteringToFallingState;
+        timerOfReleasingLedge.Interval = cooldownForChangingToFallingState;
     }
 
     protected override void OnEnter() 
@@ -36,17 +43,23 @@ public class GrapplingState : CharacterState
         blackboard.isGrappled = true;
     }
 
-    protected override void OnUpdate() 
-    {
+    protected override void OnUpdate() {
+        timerOfReleasingLedge.Update(Time.deltaTime);
+
         if(character.IsGrappled)
         {
             Grappled();
         }
-        if(character.IsClimbingLedge)
+        else if(character.IsClimbingLedge)
         {
             ClimbLedge();
         }
-        else
+        else if(character.ReleasingLedge)
+        {
+            ReleaseLedge();
+        }
+
+        if(!character.ReleasingLedge && !character.IsClimbingLedge)
         {
             for(int i = 0; i < orders.Count; i++)
             {
@@ -55,6 +68,13 @@ public class GrapplingState : CharacterState
                 if(order == Character.Order.OrderGrapple)
                 {
                     blackboard.isClimbingLedge = true;
+                    blackboard.isGrappled = false;
+                }
+                else if(order == Character.Order.OrderReleaseLedge)
+                {
+                    blackboard.releasingLedge = true;
+                    blackboard.isGrappled = false;
+                    timerOfReleasingLedge.Start();
                 }
             }
         }
@@ -62,6 +82,9 @@ public class GrapplingState : CharacterState
 
     protected override void OnExit() 
     {
+        blackboard.isGrappled = false;
+        blackboard.isClimbingLedge = false;
+        blackboard.releasingLedge = false;
         characterMovementFSM.Active = true;
         characterActionFSM.Active = true;
         base.OnExit();
@@ -73,9 +96,20 @@ public class GrapplingState : CharacterState
         rigidbody2D.velocity = Vector2.zero;
     }
 
+    private void ReleaseLedge()
+    {
+        rigidbody2D.gravityScale = 1f;
+        rigidbody2D.isKinematic = false;
+    }
+
+    private void EnteringToFallingState(SyncTimer timer)
+    {
+        EditorDebug.Log("ENTERING TO FALLING STATE");
+        stateMachine.Trigger(Character.Trigger.Fall);
+    }
+
     private void ClimbLedge()
     {
-        blackboard.isGrappled = false;
 
         if((collider2D.bounds.center.y - collider2D.bounds.extents.y) < (character.LastLedgeDetected.bounds.center.y + character.LastLedgeDetected.bounds.extents.y))
         {
@@ -94,7 +128,6 @@ public class GrapplingState : CharacterState
                 {
                     rigidbody2D.gravityScale = 1f;
                     rigidbody2D.isKinematic = false;
-                    blackboard.isClimbingLedge = false;
                     stateMachine.Trigger(Character.Trigger.Fall);
                 }
             }
@@ -108,7 +141,6 @@ public class GrapplingState : CharacterState
                 {
                     rigidbody2D.gravityScale = 1f;
                     rigidbody2D.isKinematic = false;
-                    blackboard.isClimbingLedge = false;
                     stateMachine.Trigger(Character.Trigger.Fall);
                 }
             }

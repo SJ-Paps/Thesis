@@ -33,6 +33,7 @@ public class FallingState : CharacterState
         EditorDebug.DrawLine(character.CheckerForGrapple.position, (Vector2)character.CheckerForGrapple.position + (Vector2)character.CheckerForGrapple.up * circlecastRadius, Color.red);
 
         CheckingForLedge();
+
         if(IsOnFloor(floorLayers))
         {
             stateMachine.Trigger(Character.Trigger.Ground);
