@@ -4,6 +4,22 @@ using UnityEngine;
 public abstract class Tribal : Character
 {
     [SerializeField]
+    protected CollectableObject currentCollectableObject;
+
+    public CollectableObject CurrentCollectableObject
+    {
+        get
+        {
+            return currentCollectableObject;
+        }
+
+        protected set
+        {
+            currentCollectableObject = value;
+        }
+    }
+
+    [SerializeField]
     protected TribalIdleState idleState;
 
     [SerializeField]
@@ -32,9 +48,16 @@ public abstract class Tribal : Character
 
     protected FSM<State, Trigger> movementFSM, jumpingFSM, actionFSM;
 
+    
+
     protected override void Awake()
     {
         base.Awake();
+
+        if(CurrentCollectableObject != null)
+        {
+            CurrentCollectableObject.Collect(this);
+        }
 
         movementFSM = new FSM<State, Trigger>();
 

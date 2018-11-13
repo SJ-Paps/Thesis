@@ -2362,6 +2362,11 @@ Prefab:
       propertyPath: slowDownState.brakeForce
       value: 3.08
       objectReference: {fileID: 0}
+    - target: {fileID: 114440784764609724, guid: 23bea5bff898fab408cd13503806161e,
+        type: 2}
+      propertyPath: currentCollectableObject
+      value: 
+      objectReference: {fileID: 1651552948}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23bea5bff898fab408cd13503806161e, type: 2}
   m_IsPrefabAsset: 0

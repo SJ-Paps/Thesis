@@ -21,9 +21,12 @@ public class XenophobicAttackState : CharacterState
 
         EditorDebug.Log("XENOPHOBIC ATTACK ENTER");
 
-        weapon = xenophobic.Weapon;
-        weapon.UseWeapon();
-        xenophobic.Animator.SetTrigger("Attack");
+        if (xenophobic.CurrentCollectableObject != null && xenophobic.CurrentCollectableObject is Weapon)
+        {
+            weapon = (Weapon)xenophobic.CurrentCollectableObject;
+            weapon.Activate();
+            xenophobic.Animator.SetTrigger("Attack");
+        }
     }
 
     protected override void OnUpdate()
