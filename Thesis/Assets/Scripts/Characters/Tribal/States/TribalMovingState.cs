@@ -11,6 +11,10 @@ public class TribalMovingState : CharacterState
     [SerializeField]
     private float moveForce = 0.2f, xVelocityDeadZone = 0.1f;
 
+    private Character.Order enteringOrder;
+    private int forceDirectionMultiplier;
+    private bool isGoingLeft;
+
     private Animator animator;
 
     public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
@@ -25,6 +29,27 @@ public class TribalMovingState : CharacterState
     protected override void OnEnter()
     {
         base.OnEnter();
+
+        foreach (Character.Order order in orders)
+        {
+            if (order == Character.Order.OrderMoveLeft)
+            {
+                enteringOrder = order;
+                forceDirectionMultiplier = -1;
+                isGoingLeft = true;
+
+                break;
+            }
+            else if(order == Character.Order.OrderMoveRight)
+            {
+                enteringOrder = order;
+                forceDirectionMultiplier = 1;
+                isGoingLeft = false;
+
+                break;
+            }
+        }
+
         animator.SetTrigger("Move");
 
         EditorDebug.Log("MOVING ENTER");
@@ -39,55 +64,50 @@ public class TribalMovingState : CharacterState
 
     protected override void OnUpdate()
     {
-        Vector2 moveForceVector = new Vector2(moveForce, 0);
-
-        for (int i = 0; i < orders.Count; i++)
+        if(character.IsGrounded)
         {
-            Character.Order order = orders[i];
+            Vector2 moveForceVector = new Vector2(moveForce, 0);
 
-            if (order == Character.Order.OrderMoveLeft)
+            for (int i = 0; i < orders.Count; i++)
             {
-                character.Face(true);
+                Character.Order order = orders[i];
 
-                blackboard.movingHorizontal = true;
+                if (order == enteringOrder)
+                {
+                    if (character.IsGrounded)
+                    {
+                        character.Face(isGoingLeft);
 
-                rigidbody2D.AddForce(moveForceVector * -1, ForceMode2D.Impulse);
-                break;
+                        blackboard.movingHorizontal = true;
+
+                        rigidbody2D.AddForce(moveForceVector * forceDirectionMultiplier, ForceMode2D.Impulse);
+
+                        if (rigidbody2D.velocity.x >= character.MovementVelocity)
+                        {
+                            rigidbody2D.AddForce(-1 * moveForceVector, ForceMode2D.Impulse);
+                        }
+                        else if (rigidbody2D.velocity.x <= -character.MovementVelocity)
+                        {
+                            rigidbody2D.AddForce(moveForceVector, ForceMode2D.Impulse);
+                        }
+                    }
+
+                    return;
+                }
+                else if (order == Character.Order.OrderStopMoving || (isGoingLeft && order == Character.Order.OrderMoveRight) || (!isGoingLeft && order == Character.Order.OrderMoveLeft))
+                {
+                    stateMachine.Trigger(Character.Trigger.StopMoving);
+                    return;
+                }
+
             }
-            else if (order == Character.Order.OrderMoveRight)
-            {
-                character.Face(false);
 
-                blackboard.movingHorizontal = true;
-
-                rigidbody2D.AddForce(moveForceVector, ForceMode2D.Impulse);
-                break;
-            }
-            else
-            {
-                blackboard.movingHorizontal = false;
-            }
-        }
-
-        if(orders.Count == 0)
-        {
             blackboard.movingHorizontal = false;
-        }
 
-        if (rigidbody2D.velocity.x >= character.MovementVelocity)
-        {
-            rigidbody2D.AddForce(-1 * moveForceVector, ForceMode2D.Impulse);
+            if (rigidbody2D.velocity.x > -xVelocityDeadZone && rigidbody2D.velocity.x < xVelocityDeadZone)
+            {
+                stateMachine.Trigger(Character.Trigger.StopMoving);
+            }
         }
-        else if (rigidbody2D.velocity.x <= -character.MovementVelocity)
-        {
-            rigidbody2D.AddForce(moveForceVector, ForceMode2D.Impulse);
-        }
-
-        if (rigidbody2D.velocity.x > -xVelocityDeadZone && rigidbody2D.velocity.x < xVelocityDeadZone)
-        {
-            stateMachine.Trigger(Character.Trigger.StopMoving);
-        }
-
-        base.OnUpdate();
     }
 }

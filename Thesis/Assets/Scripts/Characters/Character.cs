@@ -81,6 +81,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Dead,
         Idle,
         Moving,
+        SlowingDown,
         Grounded,
         Jumping,
         Falling,
@@ -109,6 +110,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     {
         OrderMoveLeft,
         OrderMoveRight,
+        OrderStopMoving,
         OrderJump,
         OrderAttack,
         OrderHide,

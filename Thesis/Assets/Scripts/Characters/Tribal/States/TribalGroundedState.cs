@@ -35,18 +35,21 @@ public class TribalGroundedState : CharacterState
 
     protected override void OnUpdate()
     {
+        
         if(!character.IsOnFloor(Reg.walkableLayerMask))
         {
             stateMachine.Trigger(Character.Trigger.Fall);
             return;
         }
 
-        for(int i = 0; i < orders.Count; i++)
+        for (int i = 0; i < orders.Count; i++)
         {
             Character.Order order = orders[i];
 
             if (order == Character.Order.OrderJump)
             {
+                Debug.Log("DALE PUTA");
+
                 stateMachine.Trigger(Character.Trigger.Jump);
                 break;
             }

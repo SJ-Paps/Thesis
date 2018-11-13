@@ -10,6 +10,9 @@ public abstract class Tribal : Character
     protected TribalMovingState movingState;
 
     [SerializeField]
+    protected TribalSlowDownState slowDownState;
+
+    [SerializeField]
     protected TribalGroundedState groundedState;
 
     [SerializeField]
@@ -27,8 +30,6 @@ public abstract class Tribal : Character
     [SerializeField]
     protected TribalPushingObjectState pushingState;
 
-    
-
     protected FSM<State, Trigger> movementFSM, jumpingFSM, actionFSM;
 
     protected override void Awake()
@@ -39,12 +40,16 @@ public abstract class Tribal : Character
 
         idleState.InitializeState(movementFSM, State.Idle, this, orders, blackboard);
         movingState.InitializeState(movementFSM, State.Moving, this, orders, blackboard);
+        slowDownState.InitializeState(movementFSM, State.SlowingDown, this, orders, blackboard);
 
         movementFSM.AddState(idleState);
         movementFSM.AddState(movingState);
+        movementFSM.AddState(slowDownState);
 
         movementFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
-        movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.Idle);
+        movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.SlowingDown);
+        movementFSM.MakeTransition(State.SlowingDown, Trigger.StopMoving, State.Idle);
+        movementFSM.MakeTransition(State.SlowingDown, Trigger.Move, State.Moving);
 
         movementFSM.StartBy(State.Idle);
 

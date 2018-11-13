@@ -1807,7 +1807,7 @@ Prefab:
         type: 2}
       propertyPath: slave
       value: 
-      objectReference: {fileID: 800068553}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d2fc06823a48b1419ff7cd1399f1788, type: 2}
   m_IsPrefabAsset: 0
@@ -1857,12 +1857,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &800068553 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114440784764609724, guid: 23bea5bff898fab408cd13503806161e,
-    type: 2}
-  m_PrefabInternal: {fileID: 1003389707}
-  m_Script: {fileID: 11500000, guid: fdd9f0abc8fb7ab49aff725c618b9fb0, type: 3}
 --- !u!1 &889928919
 GameObject:
   m_ObjectHideFlags: 0
@@ -2357,6 +2351,11 @@ Prefab:
       propertyPath: weapon
       value: 
       objectReference: {fileID: 1651552948}
+    - target: {fileID: 114440784764609724, guid: 23bea5bff898fab408cd13503806161e,
+        type: 2}
+      propertyPath: slowDownState.brakeForce
+      value: 1.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23bea5bff898fab408cd13503806161e, type: 2}
   m_IsPrefabAsset: 0
@@ -26424,8 +26423,8 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
         type: 2}
-      propertyPath: jumpingState.maxHeight
-      value: 0.3
+      propertyPath: slowDownState.brakeForce
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 2}

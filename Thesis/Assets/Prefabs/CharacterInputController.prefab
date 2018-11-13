@@ -76,7 +76,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Jump
       keys: 200000005e010000
-    orders: 02
+    orders: 03
   - key:
       isAxis: 0
       lessThanZero: 0

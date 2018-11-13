@@ -446,11 +446,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3effee286e0c054ba316790fe60b2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  facingLeft: 0
   movementVelocity: 3.4
   eyes: {fileID: 0}
   handPoint: {fileID: 0}
   blockFacing: 0
+  movingState:
+    moveForce: 0.2
+  slowDownState:
+    xVelocityDeadZone: 0.1
+    brakeForce: 1.5
+  jumpingState:
+    maxHeight: 0.3
+    maxVelocity: 4
+    jumpForce: 0.8
+  actionIdleState:
+    pushCheckDistance: 0.4
+    cooldownOfHiding: 0.7
+  hiddenState:
+    cooldownForComingOut: 0.7
+  pushingState:
+    pushCheckDistance: 0.4
 --- !u!210 &210091369285195754
 SortingGroup:
   m_ObjectHideFlags: 1
