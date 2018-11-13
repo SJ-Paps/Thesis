@@ -61,11 +61,14 @@ public class XenophobicSeekState : XenophobicIAState
     {
         renewPatrolTimer.Update(Time.deltaTime);
 
-        if(ShouldStop())
+        bool shouldStop = ShouldStop();
+
+        if (shouldStop)
         {
             controller.Slave.SetOrder(Character.Order.OrderStopMoving);
         }
-        else if(hasPositionTarget && IsPositionReached(lastSeekedPosition) == false)
+
+        if(!shouldStop && hasPositionTarget && IsPositionReached(lastSeekedPosition) == false)
         {
             SearchAtPosition(lastSeekedPosition);
         }

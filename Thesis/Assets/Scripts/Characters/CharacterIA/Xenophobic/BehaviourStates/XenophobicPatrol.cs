@@ -28,6 +28,8 @@ public class XenophobicPatrolState : XenophobicIAState
 
     protected override void OnEnter()
     {
+        EditorDebug.Log("XENOPHOBIC PATROL ENTER");
+
         blackboard.onLastDetectionPositionChanged += onLastDetectionPositionChangedDelegate;
 
         Turn();
@@ -43,6 +45,11 @@ public class XenophobicPatrolState : XenophobicIAState
         }
 
         controller.Slave.SetOrder(currentOrder);
+    }
+
+    protected override void OnExit()
+    {
+        EditorDebug.Log("XENOPHOBIC PATROL EXIT");
     }
 
     private float CalculatePatrolTime()

@@ -30,10 +30,8 @@ public class TribalSlowDownState : CharacterState
     protected override void OnEnter()
     {
         EditorDebug.Log("SLOW DOWN ENTER");
-
-        Debug.Log(rigidbody2D.velocity);
+        
         rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x / brakeForce, rigidbody2D.velocity.y);
-        Debug.Log(rigidbody2D.velocity);
     }
 
     protected override void OnUpdate()
