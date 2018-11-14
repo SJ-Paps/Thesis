@@ -2,7 +2,9 @@
 using SAM.Timers;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class GrapplingState : CharacterState 
 {
     FSM<Character.State, Character.Trigger> characterMovementFSM;
@@ -10,9 +12,9 @@ public class GrapplingState : CharacterState
     private Rigidbody2D rigidbody2D;
     private BoxCollider2D collider2D;
     private SyncTimer timerOfReleasingLedge;
-    private float cooldownForChangingToFallingState = 0.25f;
-    private float verticalClimbingSpeed = 1.2f;
-    private float horizontalClimbingSpeed = 1.2f;
+
+    [SerializeField]
+    private float cooldownForChangingToFallingState = 0.25f, verticalClimbingSpeed = 1.2f, horizontalClimbingSpeed = 1.2f;
 
     private int ledgeLayer = 1 << Reg.ledgeLayer;
 
@@ -27,8 +29,9 @@ public class GrapplingState : CharacterState
     {
         characterMovementFSM = movementFSM;
         characterActionFSM = actionFSM;
-        rigidbody2D = character.GetComponent<Rigidbody2D>();
-        collider2D = character.GetComponent<BoxCollider2D>();
+
+        rigidbody2D = character.RigidBody2D;
+        collider2D = (BoxCollider2D)character.Collider;
 
         timerOfReleasingLedge = new SyncTimer();
         timerOfReleasingLedge.onTick += EnteringToFallingState;
@@ -41,25 +44,19 @@ public class GrapplingState : CharacterState
         characterMovementFSM.Active = false;
         characterActionFSM.Active = false;
         blackboard.isGrappled = true;
+
+        Grappled();
     }
 
     protected override void OnUpdate() {
         timerOfReleasingLedge.Update(Time.deltaTime);
 
-        if(character.IsGrappled)
-        {
-            Grappled();
-        }
-        else if(character.IsClimbingLedge)
+        if(character.IsClimbingLedge)
         {
             ClimbLedge();
         }
-        else if(character.ReleasingLedge)
-        {
-            ReleaseLedge();
-        }
 
-        if(!character.ReleasingLedge && !character.IsClimbingLedge)
+        if(!character.IsClimbingLedge && character.IsGrappled)
         {
             for(int i = 0; i < orders.Count; i++)
             {
@@ -72,8 +69,7 @@ public class GrapplingState : CharacterState
                 }
                 else if(order == Character.Order.OrderReleaseLedge)
                 {
-                    blackboard.releasingLedge = true;
-                    blackboard.isGrappled = false;
+                    ReleaseLedge();
                     timerOfReleasingLedge.Start();
                 }
             }
@@ -82,11 +78,10 @@ public class GrapplingState : CharacterState
 
     protected override void OnExit() 
     {
-        blackboard.isGrappled = false;
-        blackboard.isClimbingLedge = false;
-        blackboard.releasingLedge = false;
-        characterMovementFSM.Active = true;
-        characterActionFSM.Active = true;
+        EditorDebug.Log("GRAPLING EXIT");
+
+        timerOfReleasingLedge.Stop();
+
         base.OnExit();
     }
 
@@ -98,8 +93,13 @@ public class GrapplingState : CharacterState
 
     private void ReleaseLedge()
     {
+        blackboard.isClimbingLedge = false;
+        blackboard.isGrappled = false;
         rigidbody2D.gravityScale = 1f;
         rigidbody2D.isKinematic = false;
+
+        characterMovementFSM.Active = true;
+        characterActionFSM.Active = true;
     }
 
     private void EnteringToFallingState(SyncTimer timer)
@@ -110,7 +110,6 @@ public class GrapplingState : CharacterState
 
     private void ClimbLedge()
     {
-
         if((collider2D.bounds.center.y - collider2D.bounds.extents.y) < (character.LastLedgeDetected.bounds.center.y + character.LastLedgeDetected.bounds.extents.y))
         {
             rigidbody2D.isKinematic = true;
@@ -126,8 +125,7 @@ public class GrapplingState : CharacterState
                 }
                 else
                 {
-                    rigidbody2D.gravityScale = 1f;
-                    rigidbody2D.isKinematic = false;
+                    ReleaseLedge();
                     stateMachine.Trigger(Character.Trigger.Fall);
                 }
             }
@@ -139,8 +137,7 @@ public class GrapplingState : CharacterState
                 }
                 else
                 {
-                    rigidbody2D.gravityScale = 1f;
-                    rigidbody2D.isKinematic = false;
+                    ReleaseLedge();
                     stateMachine.Trigger(Character.Trigger.Fall);
                 }
             }
