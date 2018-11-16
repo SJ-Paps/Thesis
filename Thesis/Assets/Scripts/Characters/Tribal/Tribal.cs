@@ -1,6 +1,7 @@
 ﻿using SAM.FSM;
 using UnityEngine;
 
+
 public abstract class Tribal : Character
 {
     [SerializeField]
@@ -31,6 +32,7 @@ public abstract class Tribal : Character
     protected TribalPushingObjectState pushingState;
 
     protected FSM<State, Trigger> movementFSM, jumpingFSM, actionFSM;
+    
 
     protected override void Awake()
     {
