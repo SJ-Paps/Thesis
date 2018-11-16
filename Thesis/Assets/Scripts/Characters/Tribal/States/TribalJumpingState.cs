@@ -17,6 +17,8 @@ public class TribalJumpingState : CharacterState {
 
     private Animator animator;
 
+    private Action<Collision2D> onCollisionDelegate;
+
     public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
         base.InitializeState(fsm, state, character, orders, blackboard);
@@ -25,6 +27,10 @@ public class TribalJumpingState : CharacterState {
         collider = character.Collider;
 
         animator = character.Animator;
+
+        
+
+        onCollisionDelegate = OnCollision;
     }
 
     protected override void OnEnter()
@@ -42,6 +48,8 @@ public class TribalJumpingState : CharacterState {
         Vector2 jumpForceVector = new Vector2(0, jumpForce);
 
         rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
+
+        character.onCollisionStay2D += onCollisionDelegate;
     }
 
     protected override void OnUpdate()
@@ -54,6 +62,8 @@ public class TribalJumpingState : CharacterState {
     protected override void OnExit()
     {
         animator.ResetTrigger("Jump");
+
+        character.onCollisionStay2D -= onCollisionDelegate;
     }
 
     private void Jump()
@@ -86,6 +96,31 @@ public class TribalJumpingState : CharacterState {
         if (!jumping)
         {
             stateMachine.Trigger(Character.Trigger.Fall);
+        }
+    }
+
+    private void OnCollision(Collision2D collision)
+    {
+        for(int i = 0; i < collision.contacts.Length; i++)
+        {
+            float limit = 0.05f;
+
+            float yCeiling = collider.bounds.extents.y;
+            float xCeiling = collider.bounds.extents.x;
+
+            Vector2 point = collision.contacts[i].point;
+
+            float pointX = point.x;
+            float pointY = point.y;
+
+            float charY = character.transform.position.y + yCeiling - limit;
+            float charX = character.transform.position.x + xCeiling - limit;
+
+            if (pointY >= charY &&
+                pointX >= charX)
+            {
+                stateMachine.Trigger(Character.Trigger.Fall);
+            }
         }
     }
 }
