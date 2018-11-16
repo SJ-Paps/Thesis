@@ -46,12 +46,8 @@ public class TurretWithoutTargetState : TurretIAState
 
     private void AnalyzeDetection(Collider2D collider)
     {
-        Debug.Log("ANALYZING");
-
         if(collider.gameObject.layer == Reg.playerLayer && turretEyes.IsVisible(collider, Reg.walkableLayerMask, targetLayers))
         {
-            Debug.Log("ENTRO");
-
             blackboard.TargetPosition = collider.transform.position;
             stateMachine.Trigger(TurretIAController.Trigger.TargetFound);
         }
