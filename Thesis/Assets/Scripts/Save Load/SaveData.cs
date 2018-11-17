@@ -1,12 +1,17 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class SaveData : IEnumerable<KeyValuePair<string, string>>
+[JsonObject(MemberSerialization.OptIn)]
+public class SaveData
 {
-    private Dictionary<string, string> values;
+    [JsonProperty]
+    private string className;
 
+    [JsonProperty]
+    private Dictionary<string, string> values;
+    
     public int ValueCount
     {
         get
@@ -15,8 +20,10 @@ public class SaveData : IEnumerable<KeyValuePair<string, string>>
         }
     }
 
-    public SaveData()
+    public SaveData(string className)
     {
+        this.className = className;
+
         values = new Dictionary<string, string>();
     }
 
@@ -38,15 +45,5 @@ public class SaveData : IEnumerable<KeyValuePair<string, string>>
     public T GetAs<T>(string name)
     {
         return (T)Convert.ChangeType(values[name], typeof(T), System.Globalization.CultureInfo.InvariantCulture);
-    }
-
-    public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
-    {
-        return values.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
     }
 }
