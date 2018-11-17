@@ -57,6 +57,8 @@ public class TribalMovingState : CharacterState
 
     protected override void OnExit()
     {
+        EditorDebug.Log("MOVING EXIT");
+
         animator.ResetTrigger("Move");
 
         blackboard.movingHorizontal = false;
