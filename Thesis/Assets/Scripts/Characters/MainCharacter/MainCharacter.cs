@@ -36,8 +36,8 @@ public class MainCharacter : Tribal, ISaveable
     {
         SaveData data = new SaveData(GetType().Name);
 
-        data.AddValue("x", transform.position.x.ToString(System.Globalization.CultureInfo.InvariantCulture));
-        data.AddValue("y", transform.position.y.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        data.AddValue("x", transform.position.x);
+        data.AddValue("y", transform.position.y);
 
         return data;
     }

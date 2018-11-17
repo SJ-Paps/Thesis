@@ -29,7 +29,7 @@ public class SaveData
 
     public void AddValue(string name, object value)
     {
-        values.Add(name, value.ToString());
+        values.Add(name, string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}", value));
     }
 
     public void RemoveValue(string name)
