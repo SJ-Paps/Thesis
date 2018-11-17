@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class MainCharacter : Tribal, ISaveable
+public class MainCharacter : Tribal
 {
 
     protected override void Awake()
@@ -32,9 +32,9 @@ public class MainCharacter : Tribal, ISaveable
         enslaved = true;
     }
 
-    public SaveData Save()
+    public override SaveData Save()
     {
-        SaveData data = new SaveData(GetType().Name);
+        SaveData data = new SaveData(ClassName, true);
 
         data.AddValue("x", transform.position.x);
         data.AddValue("y", transform.position.y);
@@ -42,28 +42,8 @@ public class MainCharacter : Tribal, ISaveable
         return data;
     }
 
-    public void Load(SaveData data)
+    public override void Load(SaveData data)
     {
-        float x = data.GetAs<float>("x");
-        float y = data.GetAs<float>("y");
-
-        Debug.Log("MY X: " + x);
-        Debug.Log("MY Y: " + y);
-
-        Vector2 pos = new Vector2(x, y);
-
-        transform.position = pos;
-
-        Debug.Log("MY POS: " + pos);
-    }
-
-    public void PostSaveCallback()
-    {
-        
-    }
-
-    public void PostLoadCallback()
-    {
-        
+        transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
     }
 }

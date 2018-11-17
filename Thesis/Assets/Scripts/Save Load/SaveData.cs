@@ -7,7 +7,10 @@ using UnityEngine;
 public class SaveData
 {
     [JsonProperty]
-    private string className;
+    public string ClassName { get; private set; }
+
+    [JsonProperty]
+    public bool shouldBeInstanciatedOnLoad;
 
     [JsonProperty]
     private Dictionary<string, string> values;
@@ -22,10 +25,18 @@ public class SaveData
 
     public SaveData(string className)
     {
-        this.className = className;
+        ClassName = className;
 
         values = new Dictionary<string, string>();
     }
+
+    public SaveData(string className, bool shouldBeInstanciatedOnLoad) : this(className)
+    {
+        this.shouldBeInstanciatedOnLoad = shouldBeInstanciatedOnLoad;
+    }
+
+    [JsonConstructor]
+    private SaveData() { }
 
     public void AddValue(string name, object value)
     {

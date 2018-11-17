@@ -155,8 +155,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public Collider2D Collider { get; protected set; }
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
 
