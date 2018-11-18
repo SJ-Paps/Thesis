@@ -49,8 +49,6 @@ public class XenophobicAlertlessState : XenophobicIAState {
 
     private void AnalyzeDetection(Collider2D collider)
     {
-        Debug.Log("LALORA");
-
         if (characterEyes.IsVisible(collider, Reg.walkableLayerMask, targetLayers))
         {
             if(collider.gameObject.layer == Reg.playerLayer && GameManager.Instance.GetPlayer().IsHidden == false)

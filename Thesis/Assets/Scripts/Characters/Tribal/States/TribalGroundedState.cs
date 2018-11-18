@@ -48,8 +48,6 @@ public class TribalGroundedState : CharacterState
 
             if (order == Character.Order.OrderJump)
             {
-                Debug.Log("DALE PUTA");
-
                 stateMachine.Trigger(Character.Trigger.Jump);
                 break;
             }
