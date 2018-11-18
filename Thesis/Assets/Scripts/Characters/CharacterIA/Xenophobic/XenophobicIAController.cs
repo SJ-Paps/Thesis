@@ -130,9 +130,6 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         behaviourFSM.MakeTransition(State.Seeking, Trigger.Patrol, State.Patrolling);
 
         behaviourFSM.StartBy(State.Patrolling);
-
-        //Super provisorio
-        Slave.Weapon.SetUser(Slave);
     }
 
     public override void Control()

@@ -5,22 +5,6 @@ public class Xenophobic : Tribal, IAudibleListener
     [SerializeField]
     protected XenophobicAttackState attackState;
 
-    [SerializeField]
-    protected Weapon weapon;
-
-    public Weapon Weapon
-    {
-        get
-        {
-            return weapon;
-        }
-
-        protected set
-        {
-            weapon = value;
-        }
-    }
-
     protected override void Awake()
     {
         base.Awake();

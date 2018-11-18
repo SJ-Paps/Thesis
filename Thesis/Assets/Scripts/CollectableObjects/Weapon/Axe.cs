@@ -35,39 +35,52 @@ public class Axe : Weapon
         onTerminate = OnTerminate;
     }
 
+    public override bool Collect(Character user)
+    {
+        if(base.Collect(user))
+        {
+            rigidbody2D.isKinematic = true;
+
+            ConstraintSource source = new ConstraintSource();
+            source.sourceTransform = User.HandPoint;
+            source.weight = 1;
+
+            parentConstraint.AddSource(source);
+
+            parentConstraint.constraintActive = true;
+
+            parentConstraint.SetRotationOffset(0, new Vector3(0, 180, 0));
+
+            return true;
+        }
+
+        return false;
+    }
+
     protected void Update()
     {
         timer.Update(Time.deltaTime);
     }
 
-    public override void SetUser(Character character)
+    public override bool Drop()
     {
-        base.SetUser(character);
-        
-        rigidbody2D.isKinematic = true;
+        if(base.Drop())
+        {
+            rigidbody2D.isKinematic = false;
 
-        ConstraintSource source = new ConstraintSource();
-        source.sourceTransform = character.HandPoint;
-        source.weight = 1;
+            parentConstraint.RemoveSource(0);
 
-        parentConstraint.AddSource(source);
+            parentConstraint.constraintActive = false;
 
-        parentConstraint.constraintActive = true;
+            return true;
+        }
 
-        parentConstraint.SetRotationOffset(0, new Vector3(0, 180, 0));
-
-        //transform.rotation = character.transform.rotation;
+        return false;
     }
 
-    public override void Drop()
+    public override bool Throw()
     {
-        base.Drop();
-        
-        rigidbody2D.isKinematic = false;
-
-        parentConstraint.RemoveSource(0);
-
-        parentConstraint.constraintActive = false;
+        return Drop();
     }
 
     protected override void OnUseWeapon()
