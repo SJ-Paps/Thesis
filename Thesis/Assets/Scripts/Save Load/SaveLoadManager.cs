@@ -18,10 +18,28 @@ public class SaveLoadManager
         return instance;
     }
 
+    private List<ISaveable> saveables;
+
+    private SaveLoadManager()
+    {
+        saveables = new List<ISaveable>();
+    }
+
+    public void Subscribe(ISaveable saveable)
+    {
+        if(saveables.Contains(saveable) == false)
+        {
+            saveables.Add(saveable);
+        }
+    }
+
+    public void Desubscribe(ISaveable saveable)
+    {
+        saveables.Remove(saveable);
+    }
+
     public void SaveGame()
     {
-        ISaveable[] saveables = GameObject.FindObjectsOfType<SJMonoBehaviour>();
-
         IEnumerable<SaveData> saveData = ForeachSaveDataNotNull(saveables);
 
         Serialize(saveData);
@@ -29,9 +47,9 @@ public class SaveLoadManager
         CallPostSaveCallbacks(saveables);
     }
 
-    private IEnumerable<SaveData> ForeachSaveDataNotNull(ISaveable[] saveables)
+    private IEnumerable<SaveData> ForeachSaveDataNotNull(List<ISaveable> saveables)
     {
-        for(int i = 0; i < saveables.Length; i++)
+        for(int i = 0; i < saveables.Count; i++)
         {
             ISaveable saveable = saveables[i];
 
@@ -44,35 +62,17 @@ public class SaveLoadManager
         }
     }
 
-    private void CallPostSaveCallbacks(ISaveable[] saveables)
+    private void CallPostSaveCallbacks(List<ISaveable> saveables)
     {
-        for(int i = 0; i < saveables.Length; i++)
+        for(int i = 0; i < saveables.Count; i++)
         {
             saveables[i].PostSaveCallback();
         }
     }
 
-    public void LoadGame()
+    public SaveData[] LoadGame()
     {
-        SJMonoBehaviour[] saveables = GameObject.FindObjectsOfType<SJMonoBehaviour>();
-
-        SaveData[] saves = Deserialize(Path.Combine(Application.persistentDataPath, "save.sj"));
-
-        for (int i = 0; i < saveables.Length; i++)
-        {
-            SJMonoBehaviour saveable = saveables[i];
-
-            for(int j = 0; j < saves.Length; j++)
-            {
-                SaveData data = saves[j];
-                
-                if(data.ClassName == saveable.ClassName)
-                {
-                    saveable.Load(data);
-                    break;
-                }
-            }
-        }
+        return Deserialize(Path.Combine(Application.persistentDataPath, "save.sj"));
     }
 
     private void Serialize(IEnumerable<SaveData> saves)

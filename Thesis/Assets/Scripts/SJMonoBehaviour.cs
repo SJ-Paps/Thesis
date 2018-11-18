@@ -1,39 +1,22 @@
 ﻿using UnityEngine;
+using UnityEditor;
 
-public class SJMonoBehaviour : MonoBehaviour, ISaveable
+public abstract class SJMonoBehaviour : MonoBehaviour
 {
-    public string ClassName { get; private set; }
-
-    public bool IsInstantiated
-    {
-        get
-        {
-            return gameObject.scene.name != null;
-        }
-    }
+    [SerializeField]
+    public string prefabName;
 
     protected virtual void Awake()
     {
-        ClassName = GetType().Name;
+
     }
 
-    public virtual SaveData Save()
-    {
-        return null;
-    }
+#if UNITY_EDITOR
 
-    public virtual void Load(SaveData data)
+    private void OnValidate()
     {
 
     }
 
-    public virtual void PostSaveCallback()
-    {
-
-    }
-
-    public virtual void PostLoadCallback()
-    {
-
-    }
+#endif
 }

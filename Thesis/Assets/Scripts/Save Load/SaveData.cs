@@ -7,13 +7,13 @@ using UnityEngine;
 public class SaveData
 {
     [JsonProperty]
-    public string ClassName { get; private set; }
-
-    [JsonProperty]
-    public bool shouldBeInstanciatedOnLoad;
-
-    [JsonProperty]
     private Dictionary<string, string> values;
+
+    [JsonProperty]
+    private Guid guid;
+
+    [JsonProperty]
+    private string prefabName;
     
     public int ValueCount
     {
@@ -23,16 +23,29 @@ public class SaveData
         }
     }
 
-    public SaveData(string className)
+    public Guid GUID
     {
-        ClassName = className;
-
-        values = new Dictionary<string, string>();
+        get
+        {
+            return guid;
+        }
     }
 
-    public SaveData(string className, bool shouldBeInstanciatedOnLoad) : this(className)
+    public string PrefabName
     {
-        this.shouldBeInstanciatedOnLoad = shouldBeInstanciatedOnLoad;
+        get
+        {
+
+            return prefabName;
+        }
+    }
+
+    public SaveData(Guid guid, string prefabName)
+    {
+        this.guid = guid;
+        this.prefabName = prefabName;
+
+        values = new Dictionary<string, string>();
     }
 
     [JsonConstructor]

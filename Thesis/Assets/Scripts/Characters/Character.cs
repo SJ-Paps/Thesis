@@ -3,7 +3,7 @@ using System;
 using SAM.FSM;
 using System.Collections.Generic;
 
-public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
+public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
     public event Action<Collision2D> onCollisionStay2D;

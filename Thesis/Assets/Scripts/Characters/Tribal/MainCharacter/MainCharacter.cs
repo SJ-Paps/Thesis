@@ -32,17 +32,13 @@ public class MainCharacter : Tribal
         enslaved = true;
     }
 
-    public override SaveData Save()
+    protected override void OnSave(SaveData data)
     {
-        SaveData data = new SaveData(ClassName, true);
-
         data.AddValue("x", transform.position.x);
         data.AddValue("y", transform.position.y);
-
-        return data;
     }
 
-    public override void Load(SaveData data)
+    protected override void OnLoad(SaveData data)
     {
         transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
     }

@@ -561,6 +561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd9f0abc8fb7ab49aff725c618b9fb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabName: XenophobicEnemy
   movementVelocity: 1.5
   eyes: {fileID: 114704428089816536}
   handPoint: {fileID: 4356868908158410}

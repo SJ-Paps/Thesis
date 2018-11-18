@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
 
 	public float maxMovementInY;
-	public Transform target;
+	private Transform target;
 	private Vector3 posDiff = Vector3.zero;
 
 	void Start () {
-		posDiff = transform.position - target.position;	
+
+        target = GameManager.GetInstance().FindPlayer().transform;
+
+        posDiff = transform.position - target.position;	
 	}
 
 	void Update () {
