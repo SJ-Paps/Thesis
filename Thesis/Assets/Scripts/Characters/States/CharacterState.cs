@@ -1,8 +1,7 @@
 ﻿using SAM.FSM;
 using System.Collections.Generic;
-using UnityEngine;
 
-public abstract class CharacterState : State<Character.State, Character.Trigger>, ISerializationCallbackReceiver
+public abstract class CharacterState : State<Character.State, Character.Trigger>
 {
     protected Character character;
     protected List<Character.Order> orders;
@@ -36,15 +35,5 @@ public abstract class CharacterState : State<Character.State, Character.Trigger>
     protected override void OnExit()
     {
         
-    }
-
-    public virtual void OnBeforeSerialize()
-    {
-
-    }
-
-    public virtual void OnAfterDeserialize()
-    {
-
     }
 }

@@ -15,7 +15,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action onDead;
 
     protected Blackboard blackboard;
-
     
     public bool IsHidden
     {
