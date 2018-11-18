@@ -4,6 +4,14 @@ public class SJMonoBehaviour : MonoBehaviour, ISaveable
 {
     public string ClassName { get; private set; }
 
+    public bool IsInstantiated
+    {
+        get
+        {
+            return gameObject.scene.name != null;
+        }
+    }
+
     protected virtual void Awake()
     {
         ClassName = GetType().Name;

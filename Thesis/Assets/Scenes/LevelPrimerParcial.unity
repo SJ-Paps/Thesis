@@ -2313,6 +2313,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &980942206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 980942207}
+  - component: {fileID: 980942208}
+  m_Layer: 0
+  m_Name: XenophobicSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &980942207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 980942206}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 109.89, y: 1.6, z: 4.8671875}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &980942208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 980942206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f72844d5865623447a909b783bf8826b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 114440784764609724, guid: 23bea5bff898fab408cd13503806161e, type: 2}
+  colorTransparency: {r: 0, g: 0, b: 0, a: 0}
+  colorThreshold: 0.1
+  flipX: 0
+  flipY: 0
+  size: 1
 --- !u!1001 &1003389707
 Prefab:
   m_ObjectHideFlags: 0
@@ -26558,6 +26604,11 @@ Prefab:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 114049989352950548, guid: c952837c115dbc64b8554346c3bee377,
+        type: 2}
+      propertyPath: parentConstraint
+      value: 
+      objectReference: {fileID: 1651552949}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c952837c115dbc64b8554346c3bee377, type: 2}
   m_IsPrefabAsset: 0
@@ -26567,6 +26618,11 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1651552947}
   m_Script: {fileID: 11500000, guid: e76fc61b3b798c34fa1a8ea588d34068, type: 3}
+--- !u!1773428102 &1651552949 stripped
+ParentConstraint:
+  m_CorrespondingSourceObject: {fileID: 7973541675033199508, guid: c952837c115dbc64b8554346c3bee377,
+    type: 2}
+  m_PrefabInternal: {fileID: 1651552947}
 --- !u!1 &1673469513
 GameObject:
   m_ObjectHideFlags: 0

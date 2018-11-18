@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+[ExecuteInEditMode]
 public class SpawnPoint : MonoBehaviour {
 
     [SerializeField]
@@ -15,40 +16,47 @@ public class SpawnPoint : MonoBehaviour {
     }
 
     [SerializeField]
-    private Material spriteDefault;
-
-    [SerializeField]
     private Color colorTransparency;
 
     [SerializeField]
-    private float colorTransparencyThreshold = 0.1f;
+    private float colorThreshold = 0.1f;
 
     [SerializeField]
     private bool flipX, flipY;
 
     [SerializeField]
-    private int size = 2;
+    private float size = 2;
 
     private Texture2D prefabThumbnail;
+
+    private float xPos, yPos;
 
     public void Spawn()
     {
         Instantiate(prefab, transform.position, prefab.transform.rotation);
     }
 
-    void OnValidate()
+    void Update()
     {
-        prefabThumbnail = AssetPreview.GetAssetPreview(prefab.gameObject);
+
+        if (prefab != null)
+        {
+            prefabThumbnail = AssetPreview.GetAssetPreview(prefab.gameObject);
+        }
+
+        xPos = transform.position.x;
+        yPos = transform.position.y;
+
     }
 
     void OnDrawGizmos()
     {
-        if(prefab != null)
+        if (prefabThumbnail != null)
         {
             if (prefabThumbnail != null)
             {
-                int finalSizeX;
-                int finalSizeY;
+                float finalSizeX;
+                float finalSizeY;
 
                 if (flipX)
                 {
@@ -68,14 +76,7 @@ public class SpawnPoint : MonoBehaviour {
                     finalSizeY = -size;
                 }
 
-                if(spriteDefault == null)
-                {
-                    Gizmos.DrawGUITexture(new Rect(0, 0, finalSizeX, finalSizeY), prefabThumbnail);
-                }
-                else
-                {
-                    Gizmos.DrawGUITexture(new Rect(0, 0, finalSizeX, finalSizeY), prefabThumbnail, spriteDefault);
-                }
+                Gizmos.DrawGUITexture(new Rect(xPos, yPos, finalSizeX, finalSizeY), prefabThumbnail);
                 
             }
         }
