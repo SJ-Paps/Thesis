@@ -14,6 +14,11 @@ public class LoadingSceneCrossFade : MonoBehaviour
     private bool isShowing;
     private bool isHiding;
 
+    private void OnDestroy()
+    {
+        blackFade = null;
+    }
+
     public void ShowCrossFade(Action callback)
     {
         isShowing = true;
@@ -38,8 +43,6 @@ public class LoadingSceneCrossFade : MonoBehaviour
             while (blackFade.color.a > 0)
             {
                 blackFade.color = new Color(blackFade.color.r, blackFade.color.g, blackFade.color.b, blackFade.color.a - (velocity * Time.fixedDeltaTime));
-
-                Debug.Log(blackFade.color.a);
                 yield return null;
             }
 
@@ -55,8 +58,6 @@ public class LoadingSceneCrossFade : MonoBehaviour
             while (blackFade.color.a < 1)
             {
                 blackFade.color = new Color(blackFade.color.r, blackFade.color.g, blackFade.color.b, blackFade.color.a + (velocity * Time.fixedDeltaTime));
-
-                Debug.Log(blackFade.color.a);
 
                 yield return null;
             }
