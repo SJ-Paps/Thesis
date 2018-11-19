@@ -23,7 +23,7 @@ public class MainCharacter : Tribal
         }
         else if(Input.GetKeyDown(KeyCode.O))
         {
-            SaveLoadManager.GetInstance().LoadSaves();
+            SceneLoader.GetInstance().LoadGame();
         }
     }
 

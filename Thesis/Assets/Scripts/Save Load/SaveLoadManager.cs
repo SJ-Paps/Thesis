@@ -20,6 +20,8 @@ public class SaveLoadManager
 
     private List<ISaveable> saveables;
 
+    private static string saveFilePath = Path.Combine(Application.persistentDataPath, "save.sj");
+
     private SaveLoadManager()
     {
         saveables = new List<ISaveable>();
@@ -74,12 +76,17 @@ public class SaveLoadManager
 
     public SaveData[] LoadSaves()
     {
-        return Deserialize(Path.Combine(Application.persistentDataPath, "save.sj"));
+        if(SaveFileExists())
+        {
+            return Deserialize(saveFilePath);
+        }
+
+        return null;
     }
 
     public bool SaveFileExists()
     {
-        return true;
+        return File.Exists(saveFilePath);
     }
 
     private void Serialize(IEnumerable<SaveData> saves)
@@ -91,16 +98,9 @@ public class SaveLoadManager
 
     private SaveData[] Deserialize(string path)
     {
-        if(SaveFileExists())
-        {
-            string json = File.ReadAllText(Path.Combine(Application.persistentDataPath, "save.sj"));
+        string json = File.ReadAllText(Path.Combine(Application.persistentDataPath, "save.sj"));
 
-            return JsonConvert.DeserializeObject<SaveData[]>(json);
-        }
-        else
-        {
-            return null;
-        }
+        return JsonConvert.DeserializeObject<SaveData[]>(json);
         
     }
     
