@@ -11,7 +11,7 @@ public class CustomBuild
     
     private static void PlusVersion(float plusVersion)
     {
-        float version = float.Parse(PlayerSettings.bundleVersion);
+        float version = float.Parse(PlayerSettings.bundleVersion, System.Globalization.CultureInfo.InvariantCulture);
         version += plusVersion;
 
         PlayerSettings.bundleVersion = version.ToString();
