@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class LoadingSceneCrossFade : MonoBehaviour
 {
-    [SerializeField]
     private SpriteRenderer blackFade;
 
     [SerializeField]
@@ -14,9 +13,10 @@ public class LoadingSceneCrossFade : MonoBehaviour
     private bool isShowing;
     private bool isHiding;
 
-    private void OnDestroy()
+
+    private void Awake()
     {
-        blackFade = null;
+        blackFade = FindObjectOfType<SpriteRenderer>();
     }
 
     public void ShowCrossFade(Action callback)
