@@ -16,6 +16,11 @@ public abstract class SJMonoBehaviour : MonoBehaviour
         
     }
 
+    protected virtual void OnDestroy()
+    {
+
+    }
+
 #if UNITY_EDITOR
 
     private void OnValidate()

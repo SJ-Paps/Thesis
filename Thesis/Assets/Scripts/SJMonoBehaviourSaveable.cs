@@ -23,6 +23,13 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
         }
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        SaveLoadManager.GetInstance().Desubscribe(this);
+    }
+
     public SaveData Save()
     {
         SaveData save = new SaveData(saveGUID, prefabName);

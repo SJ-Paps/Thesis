@@ -1085,6 +1085,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &278465057
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4669560729082290, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 17.74
+      objectReference: {fileID: 0}
+    - target: {fileID: 4669560729082290, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 4669560729082290, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4669560729082290, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4669560729082290, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4669560729082290, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4669560729082290, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4669560729082290, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5a77f5621b454334cb9a7e096338cd8c, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &309760813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1392,7 +1434,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80dbdcd5f536d234d80a0395726099ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMovementInY: 0
 --- !u!114 &351241449
 MonoBehaviour:
   m_ObjectHideFlags: 0
