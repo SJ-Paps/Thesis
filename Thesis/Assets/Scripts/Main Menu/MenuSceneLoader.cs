@@ -7,5 +7,6 @@ public class MenuSceneLoader : MonoBehaviour {
 
         GameManager.GetInstance();
         MainMenu.GetInstance();
+        CoroutineManager.GetInstance();
 	}
 }

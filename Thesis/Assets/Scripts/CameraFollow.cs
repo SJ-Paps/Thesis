@@ -8,11 +8,22 @@ public class CameraFollow : MonoBehaviour {
     void Start() {
 
         z = transform.position.z;
-
-        target = GameManager.GetInstance().FindPlayer().transform;
 	}
 
 	void Update () {
-        transform.position = new Vector3(target.position.x, target.position.y, z);
+
+        if(target == null)
+        {
+            Character c = GameManager.GetInstance().FindPlayer();
+
+            if(c != null)
+            {
+                target = c.transform;
+            }
+        }
+        else
+        {
+            transform.position = new Vector3(target.position.x, target.position.y, z);
+        }
 	}
 }

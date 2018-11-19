@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using System.Collections;
+using System;
 
 public sealed class SceneLoader
 {
@@ -16,7 +18,12 @@ public sealed class SceneLoader
         return instance;
     }
 
-    private UnityAction<Scene, LoadSceneMode> onSceneLoadedDelegate;
+    private Action onSceneLoadedDelegate;
+    private IEnumerator waitLoadSceneAsyncCoroutine, waitNewGameLoadSceneAsyncCoroutine;
+
+    private int loadingSceneIndex = 1, baseLevelSceneIndex = 2;
+
+    private LoadingSceneCrossFade loadingSceneManager;
 
     private SceneLoader()
     {
@@ -25,36 +32,74 @@ public sealed class SceneLoader
 
     public void NewGame()
     {
-        int firstLevel = GetNextSceneIndex(true);
+        int firstLevel = GetCorrespondingSceneIndex(true);
 
         int[] defaultScenes = GetDefaultScenesFor(firstLevel);
 
-        SceneManager.LoadScene(firstLevel);
+        SceneManager.LoadScene(baseLevelSceneIndex);
+        LoadingSceneManager.GetInstance().ShowLoadingScreen();
 
-        if(defaultScenes != null)
-        {
-            for(int i = 0; i < defaultScenes.Length; i++)
-            {
-                SceneManager.LoadScene(defaultScenes[i], LoadSceneMode.Additive);
-            }
-        }
+        LoadNewGameAsync(firstLevel, defaultScenes);
     }
 
     public void LoadGame()
     {
-        if(SaveLoadManager.GetInstance().SaveFileExists())
+        if (SaveLoadManager.GetInstance().SaveFileExists())
         {
-            SceneManager.sceneLoaded += onSceneLoadedDelegate;
+            SceneManager.LoadScene(baseLevelSceneIndex);
+            LoadingSceneManager.GetInstance().ShowLoadingScreen();
 
-            SceneManager.LoadScene(GetNextSceneIndex(false));
+            LoadSavedGameAsync(GetCorrespondingSceneIndex(false));
         }
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void LoadNewGameAsync(int masterSceneIndex, int[] defaultScenes)
+    {
+        waitNewGameLoadSceneAsyncCoroutine = WaitLoadSceneAsync(masterSceneIndex, defaultScenes, LoadingSceneManager.GetInstance().HideLoadingScreen);
+
+        CoroutineManager.GetInstance().StartCoroutine(waitNewGameLoadSceneAsyncCoroutine);
+    }
+
+    private void LoadSavedGameAsync(int index)
+    {
+        waitLoadSceneAsyncCoroutine = WaitLoadSceneAsync(index, null, onSceneLoadedDelegate);
+
+        CoroutineManager.GetInstance().StartCoroutine(waitLoadSceneAsyncCoroutine);
+    }
+
+    private IEnumerator WaitLoadSceneAsync(int masterSceneIndex, int[] defaultScenes, Action callback)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(masterSceneIndex, LoadSceneMode.Additive);
+
+        while(!operation.isDone)
+        {
+            yield return null;
+        }
+
+        if (defaultScenes != null)
+        {
+            for (int i = 0; i < defaultScenes.Length; i++)
+            {
+                operation = SceneManager.LoadSceneAsync(defaultScenes[i], LoadSceneMode.Additive);
+
+                while(!operation.isDone)
+                {
+                    yield return null;
+                }
+            }
+        }
+
+        if(callback != null)
+        {
+            callback();
+        }
+    }
+
+    private void OnSceneLoaded()
     {
         LoadSaveables();
 
-        SceneManager.sceneLoaded -= onSceneLoadedDelegate;
+        LoadingSceneManager.GetInstance().HideLoadingScreen();
     }
 
     private void LoadSaveables()
@@ -83,35 +128,25 @@ public sealed class SceneLoader
         }
     }
 
-    public void LoadNextScene(int currentSceneIndex)
-    {
-
-    }
-
-    public void LoadPreviousScene(int currentSceneIndex)
-    {
-
-    }
-
-    private int GetNextSceneIndex(bool isNewGame)
+    private int GetCorrespondingSceneIndex(bool isNewGame)
     {
         //Esto esta de PlaceHolder
 
         if(isNewGame)
         {
-            return 1;
+            return 3;
         }
         else
         {
-            return 1;
+            return 3;
         }
     }
 
     private int[] GetDefaultScenesFor(int masterSceneIndex)
     {
-        if(masterSceneIndex == 1)
+        if(masterSceneIndex == 3)
         {
-            return new int[1] { 2 };
+            return new int[1] { 4 };
         }
 
         return null;
