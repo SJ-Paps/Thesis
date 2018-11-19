@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Xenophobic : Tribal, IAudibleListener
+public class Xenophobic : Tribal
 {
     [SerializeField]
     protected XenophobicAttackState attackState;
@@ -23,8 +23,15 @@ public class Xenophobic : Tribal, IAudibleListener
 
     }
 
-    public void Listen(ref AudibleData data)
+    protected override void OnSave(SaveData data)
     {
-        
+        data.AddValue("x", transform.position.x);
+        data.AddValue("y", transform.position.y);
     }
+
+    protected override void OnLoad(SaveData data)
+    {
+        transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
+    }
+
 }

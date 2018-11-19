@@ -95,8 +95,10 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
 
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         blackboard = new Blackboard();
         SlaveEyes = Slave.GetComponentInChildren<Eyes>();
 
@@ -147,5 +149,29 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         
     }
 
+    private Guid slaveGuid;
 
+    protected override void OnSave(SaveData data)
+    {
+        data.AddValue("s", Slave.saveGUID);
+    }
+
+    protected override void OnLoad(SaveData data)
+    {
+        slaveGuid = new Guid(data.GetAs<string>("s"));
+    }
+
+    public override void PostLoadCallback()
+    {
+        Xenophobic slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Xenophobic>(slaveGuid);
+
+        if(slave == null)
+        {
+            Debug.Log("XENOPHOBIC CONTROLLER SLAVE IS NULL");
+        }
+        else
+        {
+            SetSlave(slave);
+        }
+    }
 }

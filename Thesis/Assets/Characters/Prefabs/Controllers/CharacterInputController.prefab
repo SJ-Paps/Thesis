@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6673a453593e4d649bbe2cc4e331f725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabName: CharacterInputController
   slave: {fileID: 0}
   keyOrders:
   - key:
@@ -84,7 +85,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Hide
       keys: 710000006201000065000000
-    orders: 04
+    orders: 05
   - key:
       isAxis: 0
       lessThanZero: 0

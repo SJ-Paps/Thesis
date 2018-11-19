@@ -1393,7 +1393,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxMovementInY: 0
-  target: {fileID: 0}
 --- !u!114 &351241449
 MonoBehaviour:
   m_ObjectHideFlags: 0

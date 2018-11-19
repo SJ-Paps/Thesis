@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 public class PrefabNameUpdater : UnityEditor.AssetModificationProcessor
 {
-    private static string[] OnWillSaveAssets(string[] paths)
+    /*private static string[] OnWillSaveAssets(string[] paths)
     {
         string[] allAssets = AssetDatabase.GetAllAssetPaths();
 
@@ -21,15 +20,11 @@ public class PrefabNameUpdater : UnityEditor.AssetModificationProcessor
 
                 if(prefabBehaviour != null)
                 {
-                    Debug.Log(prefabBehaviour.name);
-
                     prefabBehaviour.prefabName = prefabBehaviour.name;
-
-                    Debug.Log(prefabBehaviour.prefabName);
                 }
             }
         }
 
         return paths;
-    }
+    }*/
 }

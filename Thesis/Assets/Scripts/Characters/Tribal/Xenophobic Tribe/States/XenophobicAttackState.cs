@@ -27,6 +27,10 @@ public class XenophobicAttackState : CharacterState
             weapon.Activate();
             xenophobic.Animator.SetTrigger("Attack");
         }
+        else
+        {
+            stateMachine.Trigger(Character.Trigger.StopAttacking);
+        }
     }
 
     protected override void OnUpdate()

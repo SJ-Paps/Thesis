@@ -45,6 +45,8 @@ public class SaveLoadManager
         Serialize(saveData);
 
         CallPostSaveCallbacks(saveables);
+
+        EditorDebug.Log("GUARDADO!");
     }
 
     private IEnumerable<SaveData> ForeachSaveDataNotNull(List<ISaveable> saveables)
@@ -70,9 +72,14 @@ public class SaveLoadManager
         }
     }
 
-    public SaveData[] LoadGame()
+    public SaveData[] LoadSaves()
     {
         return Deserialize(Path.Combine(Application.persistentDataPath, "save.sj"));
+    }
+
+    public bool SaveFileExists()
+    {
+        return true;
     }
 
     private void Serialize(IEnumerable<SaveData> saves)
@@ -84,9 +91,17 @@ public class SaveLoadManager
 
     private SaveData[] Deserialize(string path)
     {
-        string json = File.ReadAllText(Path.Combine(Application.persistentDataPath, "save.sj"));
+        if(SaveFileExists())
+        {
+            string json = File.ReadAllText(Path.Combine(Application.persistentDataPath, "save.sj"));
 
-        return JsonConvert.DeserializeObject<SaveData[]>(json);
+            return JsonConvert.DeserializeObject<SaveData[]>(json);
+        }
+        else
+        {
+            return null;
+        }
+        
     }
     
 }

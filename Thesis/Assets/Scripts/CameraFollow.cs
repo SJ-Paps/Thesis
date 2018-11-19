@@ -1,19 +1,18 @@
 ﻿using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
-
-	public float maxMovementInY;
+    
 	private Transform target;
-	private Vector3 posDiff = Vector3.zero;
+    private float z;
 
-	void Start () {
+    void Start() {
+
+        z = transform.position.z;
 
         target = GameManager.GetInstance().FindPlayer().transform;
-
-        posDiff = transform.position - target.position;	
 	}
 
 	void Update () {
-		transform.position = target.position + posDiff;
+        transform.position = new Vector3(target.position.x, target.position.y, z);
 	}
 }
