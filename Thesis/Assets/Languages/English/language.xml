@@ -29,6 +29,8 @@
 
     <line tag="confirmation_menu_message_exit">are you sure you want to quit?</line>
 
+    <line tag="loading">loading</line>
+
   </lines>
   
 </language>

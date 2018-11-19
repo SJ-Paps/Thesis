@@ -22,13 +22,12 @@
     <line tag="soundchannel_music">volumen de música</line>
     <line tag="soundchannel_effects">volumen de efectos</line>
     
-    
-    
     <line tag="confirmation_menu_submit">aceptar</line>
     <line tag="confirmation_menu_cancel">cancelar</line>
     
-    
     <line tag="confirmation_menu_message_exit">¿esta seguro de que desea salir?</line>
+    
+    <line tag="loading">cargando</line>
     
     
 
