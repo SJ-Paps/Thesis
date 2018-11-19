@@ -50,11 +50,7 @@ public class CharacterInputController : UnityInputController<Character, Characte
     {
         Character slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Character>(slaveGuid);
 
-        if(slave == null)
-        {
-            Debug.Log("CHARACTER CONTROLLER SLAVE IS NULL");
-        }
-        else
+        if(slave != null)
         {
             SetSlave(slave);
         }

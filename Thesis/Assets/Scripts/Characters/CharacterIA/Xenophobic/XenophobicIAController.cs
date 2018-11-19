@@ -165,11 +165,7 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
     {
         Xenophobic slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Xenophobic>(slaveGuid);
 
-        if(slave == null)
-        {
-            Debug.Log("XENOPHOBIC CONTROLLER SLAVE IS NULL");
-        }
-        else
+        if(slave != null)
         {
             SetSlave(slave);
         }

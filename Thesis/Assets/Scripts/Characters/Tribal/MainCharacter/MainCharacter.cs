@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 public class MainCharacter : Tribal
 {
@@ -11,20 +10,6 @@ public class MainCharacter : Tribal
         gameObject.layer = Reg.playerLayer;
 
         GameManager.GetInstance().GetPlayer();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            SaveLoadManager.GetInstance().SaveGame();
-        }
-        else if(Input.GetKeyDown(KeyCode.O))
-        {
-            SceneLoader.GetInstance().LoadGame();
-        }
     }
 
     public override void GetEnslaved()
