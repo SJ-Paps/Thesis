@@ -33,14 +33,14 @@ public class CustomBuild
     [MenuItem("Build/AutoVersionBuild")]
     private static void AutoVersionBuild()
     {
-        PlusVersion(0.1f);
+        PlusVersion(0.001f);
         Build(BuildOptions.None);
     }
 
     [MenuItem("Build/AutoVersionDevelopment")]
     private static void AutoVersionDevelopmentBuild()
     {
-        PlusVersion(0.1f);
+        PlusVersion(0.001f);
         Build(BuildOptions.Development);
     }
     
