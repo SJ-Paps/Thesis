@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Events;
+﻿using System;
 using System.Collections;
-using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public sealed class SceneLoader
 {
@@ -18,16 +17,15 @@ public sealed class SceneLoader
         return instance;
     }
 
-    private Action onSceneLoadedDelegate;
+    private Action onSceneLoadedFromSavedGameDelegate, onSceneLoadedFromNewGameDelegate;
     private IEnumerator waitLoadSceneAsyncCoroutine, waitNewGameLoadSceneAsyncCoroutine;
 
-    private int loadingSceneIndex = 1, baseLevelSceneIndex = 2;
-
-    private LoadingSceneCrossFade loadingSceneManager;
+    private int baseLevelSceneIndex = 2;
 
     private SceneLoader()
     {
-        onSceneLoadedDelegate = OnSceneLoaded;
+        onSceneLoadedFromSavedGameDelegate = OnSceneLoadedFromSavedGame;
+        onSceneLoadedFromNewGameDelegate = OnSceneLoadedFromNewGame;
     }
 
     public void NewGame()
@@ -35,7 +33,7 @@ public sealed class SceneLoader
         int firstLevel = GetCorrespondingSceneIndex(true);
 
         int[] defaultScenes = GetDefaultScenesFor(firstLevel);
-
+        
         SceneManager.LoadScene(baseLevelSceneIndex);
         LoadingSceneManager.GetInstance().ShowLoadingScreen();
 
@@ -55,14 +53,14 @@ public sealed class SceneLoader
 
     private void LoadNewGameAsync(int masterSceneIndex, int[] defaultScenes)
     {
-        waitNewGameLoadSceneAsyncCoroutine = WaitLoadSceneAsync(masterSceneIndex, defaultScenes, LoadingSceneManager.GetInstance().HideLoadingScreen);
+        waitNewGameLoadSceneAsyncCoroutine = WaitLoadSceneAsync(masterSceneIndex, defaultScenes, onSceneLoadedFromNewGameDelegate);
 
         CoroutineManager.GetInstance().StartCoroutine(waitNewGameLoadSceneAsyncCoroutine);
     }
 
     private void LoadSavedGameAsync(int index)
     {
-        waitLoadSceneAsyncCoroutine = WaitLoadSceneAsync(index, null, onSceneLoadedDelegate);
+        waitLoadSceneAsyncCoroutine = WaitLoadSceneAsync(index, null, onSceneLoadedFromSavedGameDelegate);
 
         CoroutineManager.GetInstance().StartCoroutine(waitLoadSceneAsyncCoroutine);
     }
@@ -95,10 +93,15 @@ public sealed class SceneLoader
         }
     }
 
-    private void OnSceneLoaded()
+    private void OnSceneLoadedFromSavedGame()
     {
         LoadSaveables();
 
+        LoadingSceneManager.GetInstance().HideLoadingScreen();
+    }
+
+    private void OnSceneLoadedFromNewGame()
+    {
         LoadingSceneManager.GetInstance().HideLoadingScreen();
     }
 
