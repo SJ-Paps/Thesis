@@ -71,7 +71,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         get { return handPoint; }
     }
 
-    public Collider2D LastLedgeDetected;
+    
 
     [SerializeField] 
     protected float movementVelocity = 1;
@@ -81,10 +81,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     [SerializeField]
     protected Transform handPoint;
-
-    [SerializeField]
-    protected Transform checkerForGrapple;
-
+    
     public bool blockFacing;
 
     public enum State : byte
@@ -142,6 +139,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         public bool isGrappled;
         public bool isClimbingLedge;
         public bool movingHorizontal;
+        public Collider2D LastLedgeDetected;
     }
 
     protected bool enslaved;

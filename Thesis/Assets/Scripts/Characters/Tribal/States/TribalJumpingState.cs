@@ -11,7 +11,9 @@ public class TribalJumpingState : CharacterState {
     private Collider2D collider;
 
     [SerializeField]
-    private float maxHeight = 1, maxVelocity = 4, jumpForce = 0.8f;
+    private float maxHeight = 1, maxVelocity = 4, jumpForce = 0.8f, circlecastRadius = 0.1f;
+
+    private int ledgeLayer;
 
     private float currentMaxHeight;
 
@@ -28,7 +30,7 @@ public class TribalJumpingState : CharacterState {
 
         animator = character.Animator;
 
-        
+        ledgeLayer = 1 << Reg.ledgeLayer;
 
         onCollisionDelegate = OnCollision;
     }
@@ -54,6 +56,7 @@ public class TribalJumpingState : CharacterState {
 
     protected override void OnUpdate()
     {
+        CheckingForLedge();
         Jump();
 
         base.OnUpdate();
@@ -121,6 +124,23 @@ public class TribalJumpingState : CharacterState {
             {
                 stateMachine.Trigger(Character.Trigger.Fall);
             }
+        }
+    }
+
+    private void CheckingForLedge()
+    {
+        Bounds bounds = character.Collider.bounds;
+        float xDir = character.transform.right.x;
+
+        Vector2 detectionPoint = new Vector2(bounds.center.x + ((bounds.extents.x + 0.1f) * xDir), bounds.center.y + bounds.extents.y);
+
+        Collider2D auxColl = Physics2D.OverlapPoint(detectionPoint, ledgeLayer);
+
+        if (auxColl != null)
+        {
+            //EditorDebug.Log("checkeando");
+            blackboard.LastLedgeDetected = auxColl;
+            stateMachine.Trigger(Character.Trigger.Grapple);
         }
     }
 }
