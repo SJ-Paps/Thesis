@@ -4,14 +4,67 @@ using System;
 
 public class Eyes : MonoBehaviour
 {
-    public Trigger2D Trigger2D { get; protected set; }
+    private Trigger2D trigger2D;
+
+    public Trigger2D Trigger2D
+    {
+        get
+        {
+            if(trigger2D == null)
+            {
+                trigger2D = GetComponent<Trigger2D>();
+            }
+
+            return trigger2D;
+        }
+
+        protected set
+        {
+            trigger2D = value;
+        }
+    }
 
     [SerializeField]
     protected Transform eyePoint;
 
-    void Awake()
+
+    public event Action<Collider2D> onEntered
     {
-        Trigger2D = GetComponent<Trigger2D>();
+        add
+        {
+            Trigger2D.onEntered += value;
+        }
+
+        remove
+        {
+            Trigger2D.onEntered -= value;
+        }
+    }
+
+    public event Action<Collider2D> onStay
+    {
+        add
+        {
+            Trigger2D.onStay += value;
+        }
+
+        remove
+        {
+            Trigger2D.onStay -= value;
+        }
+    }
+
+    public event Action<Collider2D> onExited
+    {
+        add
+        {
+            Trigger2D.onExited += value;
+        }
+
+        remove
+        {
+            Trigger2D.onExited -= value;
+        }
     }
 
     public void SetEyePoint(Transform eyePoint)
@@ -19,37 +72,52 @@ public class Eyes : MonoBehaviour
         this.eyePoint = eyePoint;
     }
 
-    public bool IsVisible(Collider2D collider, int layerMask)
+    public bool IsVisible(Collider2D collider, int blockingLayers, int targetLayer)
     {
         if(eyePoint != null)
         {
-            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, layerMask);
-            
-            return hit.collider == collider;
+            int finalLayerMask = blockingLayers | targetLayer;
+
+            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
+
+            if(hit)
+            {
+                return hit.collider == collider;
+            }
         }
 
         return false;
     }
 
-    public bool IsNear(Collider2D collider, int layerMask, float distance)
+    public bool IsNear(Collider2D collider, int blockingLayers, int targetLayer, float distance)
     {
         if (eyePoint != null)
         {
-            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, layerMask);
+            int finalLayerMask = blockingLayers | targetLayer;
 
-            return hit.distance <= distance;
+            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
+
+            if(hit)
+            {
+                return hit.distance <= distance;
+            }
         }
 
         return false;
     }
 
-    public bool IsVisibleAndNear(Collider2D collider, int layerMask, float distance)
+    public bool IsVisibleAndNear(Collider2D collider, int blockingLayers, int targetLayer, float distance)
     {
         if (eyePoint != null)
         {
-            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, layerMask);
+            int finalLayerMask = blockingLayers | targetLayer;
 
-            return hit.collider == collider && hit.distance <= distance;
+            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
+
+            if(hit)
+            {
+                return hit.collider == collider && hit.distance <= distance;
+            }
         }
 
         return false;

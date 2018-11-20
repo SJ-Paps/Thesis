@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class MainMenuButtonController : SJMonoBehaviour {
 
     [SerializeField]
-    private Button newGame, resumeGame, options, exitDesktop, exitMainMenu;
+    private Button newGame, loadGame, resumeGame, options, exitDesktop, exitMainMenu;
 
     private Canvas canvas;
 
@@ -13,7 +13,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private LocalizedTextLibrary localizedTextLibrary;
     
-	void Awake () {
+	protected override void Awake () {
 
         localizedTextLibrary = LocalizedTextLibrary.GetInstance();
 
@@ -27,6 +27,9 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
         //new game button
         newGame.onClick.AddListener(GoNewGame);
+
+        //load game button
+        loadGame.onClick.AddListener(LoadGame);
 
         //resume game button
         resumeGame.onClick.AddListener(HideMenu);
@@ -62,8 +65,12 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private void GoNewGame()
     {
-        Logger.AnalyticsCustomEvent("Start_Level");
-        SceneManager.LoadScene(1);
+        SceneLoader.GetInstance().NewGame();
+    }
+
+    private void LoadGame()
+    {
+        SceneLoader.GetInstance().LoadGame();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -74,6 +81,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
                 resumeGame.gameObject.SetActive(false);
                 exitMainMenu.gameObject.SetActive(false);
                 newGame.gameObject.SetActive(true);
+                loadGame.gameObject.SetActive(true);
                 exitDesktop.gameObject.SetActive(true);
                 options.gameObject.SetActive(true);
 
@@ -83,6 +91,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
                 resumeGame.gameObject.SetActive(true);
                 exitMainMenu.gameObject.SetActive(true);
                 newGame.gameObject.SetActive(false);
+                loadGame.gameObject.SetActive(false);
                 exitDesktop.gameObject.SetActive(true);
                 options.gameObject.SetActive(true);
 

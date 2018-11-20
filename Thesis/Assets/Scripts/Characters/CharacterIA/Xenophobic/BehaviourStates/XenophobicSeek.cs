@@ -3,12 +3,15 @@ using SAM.Timers;
 using System;
 using UnityEngine;
 
-public class XenophobicSeek : XenophobicIAState
+[Serializable]
+public class XenophobicSeekState : XenophobicIAState
 {
-    private float positionReachedMarginX = 1f;
-    private float positionReachedMarginY = 1f;
+    [SerializeField]
+    private float positionReachedMarginX = 1f, positionReachedMarginY = 1f;
 
     private SyncTimer renewPatrolTimer;
+
+    [SerializeField]
     private float renewPatrolTime = 4f;
 
     private bool hasPositionTarget;
@@ -16,21 +19,27 @@ public class XenophobicSeek : XenophobicIAState
 
     private Action<Vector2> updatePositionDelegate;
 
+    [SerializeField]
     private float movementVelocity = 4.5f;
+
     private float previousVelocity;
+    
+    private int targetLayers;
 
-    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
-
+    [SerializeField]
     private float attackDetectionDistance = 1f;
 
-    public XenophobicSeek(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
     {
+        base.InitializeState(fsm, state, controller, blackboard);
+
         updatePositionDelegate += UpdatePosition;
 
         renewPatrolTimer = new SyncTimer();
         renewPatrolTimer.Interval = renewPatrolTime;
         renewPatrolTimer.onTick += RenewPatrol;
-        
+
+        targetLayers = (1 << Reg.playerLayer);
     }
 
     protected override void OnEnter()
@@ -52,13 +61,20 @@ public class XenophobicSeek : XenophobicIAState
     {
         renewPatrolTimer.Update(Time.deltaTime);
 
-        if (hasPositionTarget && IsPositionReached(lastSeekedPosition) == false)
+        bool shouldStop = ShouldStop();
+
+        if (shouldStop)
+        {
+            controller.Slave.SetOrder(Character.Order.OrderStopMoving);
+        }
+
+        if(!shouldStop && hasPositionTarget && IsPositionReached(lastSeekedPosition) == false)
         {
             SearchAtPosition(lastSeekedPosition);
         }
         else
         {
-            if (blackboard.PlayerData != null && controller.Slave.Eyes.IsVisibleAndNear(GameManager.Instance.GetPlayer().Collider, visionLayers, attackDetectionDistance))
+            if (blackboard.PlayerData != null && controller.Slave.Eyes.IsVisibleAndNear(GameManager.Instance.GetPlayer().Collider, Reg.walkableLayerMask, targetLayers, attackDetectionDistance))
             {
                 controller.Slave.SetOrder(Character.Order.OrderAttack);
             }
@@ -109,6 +125,11 @@ public class XenophobicSeek : XenophobicIAState
         }
 
         return false;
+    }
+
+    private bool ShouldStop()
+    {
+        return controller.Slave.CheckWall(Reg.walkableLayerMask) || controller.Slave.CheckFloorAhead(Reg.walkableLayerMask) == false;
     }
 
 }

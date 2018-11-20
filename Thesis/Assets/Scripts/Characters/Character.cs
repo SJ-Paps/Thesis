@@ -3,7 +3,7 @@ using System;
 using SAM.FSM;
 using System.Collections.Generic;
 
-public abstract class Character : SJMonoBehaviour, IControllable<Character.Order>, IMortal
+public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>, IMortal
 {
     public event Action<Collision2D> onCollisionEnter2D;
     public event Action<Collision2D> onCollisionStay2D;
@@ -15,7 +15,6 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     public event Action onDead;
 
     protected Blackboard blackboard;
-
     
     public bool IsHidden
     {
@@ -36,7 +35,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
     }
     public bool FacingLeft
     {
-        get { return facingLeft; }
+        get { return transform.right.x < 0; }
     }
     public float MovementVelocity
     {
@@ -72,17 +71,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         get { return handPoint; }
     }
 
-    public Transform CheckerForGrapple
-    {
-        get { return checkerForGrapple; }
-    }
-
     public Collider2D LastLedgeDetected;
 
-    [SerializeField]
-    private bool facingLeft;
-
-    [SerializeField]
+    [SerializeField] 
     protected float movementVelocity = 1;
 
     [SerializeField]
@@ -96,12 +87,13 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public bool blockFacing;
 
-    public enum State
+    public enum State : byte
     {
         Alive,
         Dead,
         Idle,
         Moving,
+        SlowingDown,
         Grounded,
         Jumping,
         Falling,
@@ -111,7 +103,7 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Grappling
     }
 
-    public enum Trigger
+    public enum Trigger : byte
     {
         Die,
         Move,
@@ -128,10 +120,11 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         Grapple
     }
 
-    public enum Order
+    public enum Order : byte
     {
         OrderMoveLeft,
         OrderMoveRight,
+        OrderStopMoving,
         OrderJump,
         OrderAttack,
         OrderHide,
@@ -169,7 +162,9 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     private FSM<State, Trigger> aliveFSM;
 
+    [SerializeField]
     private CharacterAliveState alive;
+    [SerializeField]
     private CharacterDeadState dead;
 
     protected List<Order> orders;
@@ -178,8 +173,10 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public Collider2D Collider { get; protected set; }
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
 
@@ -197,8 +194,8 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
         aliveFSM = new FSM<State, Trigger>();
 
-        alive = new CharacterAliveState(aliveFSM, State.Alive, this, orders, blackboard);
-        dead = new CharacterDeadState(aliveFSM, State.Dead, this, orders, blackboard);
+        alive.InitializeState(aliveFSM, State.Alive, this, orders, blackboard);
+        dead.InitializeState(aliveFSM, State.Dead, this, orders, blackboard);
 
         aliveFSM.AddState(alive);
         aliveFSM.AddState(dead);
@@ -263,17 +260,16 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
 
     public void Face(bool left)
     {
-        if(!blockFacing && facingLeft != left)
+        if(!blockFacing && FacingLeft != left)
         {
-            facingLeft = left;
+            transform.Rotate(Vector3.up, 180);
 
-            OnFacingChanged(facingLeft);
+            OnFacingChanged(FacingLeft);
         }
     }
 
     protected virtual void OnFacingChanged(bool facingLeft)
     {
-        transform.Rotate(Vector3.up, 180);
     }
 
     public void NotifyDetection()
@@ -347,5 +343,52 @@ public abstract class Character : SJMonoBehaviour, IControllable<Character.Order
         {
             onTriggerExit2D(collider);
         }
+    }
+
+    public virtual bool IsOnFloor(int layerMask)
+    {
+        Bounds bounds = Collider.bounds;
+        float height = 0.05f;
+
+        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
+        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
+
+        EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
+        EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
+
+        return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
+            Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
+
+    }
+
+    public virtual bool CheckWall(int layers)
+    {
+        Bounds bounds = Collider.bounds;
+
+        float separation = 0.15f;
+        float xDir = transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
+        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), bounds.center.y + bounds.extents.y);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return Physics2D.Linecast(beginPoint, endPoint, layers);
+    }
+
+    public virtual bool CheckFloorAhead(int layers)
+    {
+        Bounds bounds = Collider.bounds;
+
+        float separation = 1f;
+        float yDistance = 0.5f;
+        float xDir = transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));
+        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), beginPoint.y - yDistance);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return Physics2D.Linecast(beginPoint, endPoint, layers);
     }
 }

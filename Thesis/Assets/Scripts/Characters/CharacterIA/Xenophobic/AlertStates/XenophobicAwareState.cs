@@ -4,26 +4,30 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[Serializable]
 public class XenophobicAwareState : XenophobicIAState
 {
     private Eyes characterEyes;
 
     private SyncTimer awareTimer;
-    private float awareTime = 4f;
 
+    [SerializeField]
     private Vector2 eyesSize = new Vector2(9, 5);
 
-    private float fullAlertDetectionDistance = 6f;
-    private float hiddenDetectionDistance = 1f;
+    [SerializeField]
+    private float fullAlertDetectionDistance = 6f, hiddenDetectionDistance = 1f, awareTime = 4f;
 
     private Action<Collider2D> onSomethingDetectedStayDelegate;
 
+    [SerializeField]
     private int findProbability = 15;
+    
+    private int targetLayers;
 
-    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
-
-    public XenophobicAwareState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
     {
+        base.InitializeState(fsm, state, controller, blackboard);
+
         characterEyes = controller.SlaveEyes;
 
         awareTimer = new SyncTimer();
@@ -31,6 +35,8 @@ public class XenophobicAwareState : XenophobicIAState
         awareTimer.onTick += CalmDown;
 
         onSomethingDetectedStayDelegate += AnalyzeDetection;
+
+        targetLayers = (1 << Reg.playerLayer);
     }
 
     protected override void OnEnter()
@@ -72,7 +78,7 @@ public class XenophobicAwareState : XenophobicIAState
     {
         if (collider.gameObject.layer == Reg.playerLayer)
         {
-            if(characterEyes.IsVisible(collider, visionLayers))
+            if(characterEyes.IsVisible(collider, Reg.walkableLayerMask, targetLayers))
             {
                 if (GameManager.Instance.GetPlayer().IsHidden)
                 {
@@ -80,7 +86,7 @@ public class XenophobicAwareState : XenophobicIAState
                     {
                         UpdatePosition(collider.transform.position);
 
-                        if(characterEyes.IsNear(collider, visionLayers, hiddenDetectionDistance))
+                        if(characterEyes.IsNear(collider, Reg.walkableLayerMask, targetLayers, hiddenDetectionDistance))
                         {
                             SetFullAlert(collider.transform.position);
                         }
@@ -90,7 +96,7 @@ public class XenophobicAwareState : XenophobicIAState
                 {
                     UpdatePosition(collider.transform.position);
 
-                    if (characterEyes.IsNear(collider, visionLayers, fullAlertDetectionDistance))
+                    if (characterEyes.IsNear(collider, Reg.walkableLayerMask, targetLayers, fullAlertDetectionDistance))
                     {
                         SetFullAlert(collider.transform.position);
                     }

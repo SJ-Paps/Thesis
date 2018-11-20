@@ -4,30 +4,33 @@ using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
 
-public class XenophobicFullAlertState : XenophobicIAState
+[Serializable]
+public class XenophobicAlertfulState : XenophobicIAState
 {
+    [SerializeField]
     private Vector2 eyeSize = new Vector2(12, 5);
 
     private Eyes characterEyes;
 
     private SyncTimer fullAlertTimer;
-    private float fullAlertTime = 10f;
-
     private SyncTimer playerDetectedTimer;
-    private float playerDetectedTime = 6f;
 
-    private float hiddenDetectionDistance = 1.5f;
+    [SerializeField]
+    private float playerDetectedTime = 6f, fullAlertTime = 10f, hiddenDetectionDistance = 1.5f;
 
     private Action<Collider2D> onSomethingDetectedDelegate;
+    
+    private int targetLayers;
 
-    private int visionLayers = (1 << Reg.floorLayer) | (1 << Reg.playerLayer) | (1 << Reg.objectLayer);
+    [SerializeField]
+    private float baseFindProbability = 60, maxFindProbability = 100;
 
-    private const float baseFindProbability = 60;
-    private const float maxFindProbability = 100;
-    private float findProbability = baseFindProbability;
+    private float findProbability;
 
-    public XenophobicFullAlertState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard) : base(fsm, state, controller, blackboard)
+    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
     {
+        base.InitializeState(fsm, state, controller, blackboard);
+
         characterEyes = controller.SlaveEyes;
 
         fullAlertTimer = new SyncTimer();
@@ -39,6 +42,10 @@ public class XenophobicFullAlertState : XenophobicIAState
         playerDetectedTimer.onTick += LosePlayerData;
 
         onSomethingDetectedDelegate += AnalyzeDetection;
+
+        findProbability = baseFindProbability;
+
+        targetLayers = (1 << Reg.playerLayer);
     }
 
     protected override void OnEnter()
@@ -83,11 +90,11 @@ public class XenophobicFullAlertState : XenophobicIAState
     {
         if (collider.gameObject.layer == Reg.playerLayer)
         {
-            if (characterEyes.IsVisible(collider, visionLayers))
+            if (characterEyes.IsVisible(collider, Reg.walkableLayerMask, targetLayers))
             {
                 if (blackboard.PlayerData == null && GameManager.Instance.GetPlayer().IsHidden)
                 {
-                    if(characterEyes.IsNear(collider, visionLayers, hiddenDetectionDistance))
+                    if(characterEyes.IsNear(collider, Reg.walkableLayerMask, targetLayers, hiddenDetectionDistance))
                     {
                         if (Random.Range(1, 100) <= findProbability)
                         {

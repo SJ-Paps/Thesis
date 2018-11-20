@@ -4,7 +4,8 @@ public enum DeadlyType
 {
     Water,
     Sharp,
-    Fall
+    Fall,
+    Bullet
 }
 
 public class Deadly : MonoBehaviour {

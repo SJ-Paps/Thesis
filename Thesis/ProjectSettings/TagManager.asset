@@ -21,10 +21,10 @@ TagManager:
   - Floor
   - Hide
   - Object
-  - OnlyPlayerStuff
-  - Wall
+  - PlayerDetection
   - Item
   - Ledge
+  - 
   - 
   - 
   - 

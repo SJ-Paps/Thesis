@@ -11,6 +11,7 @@
     <line tag="menu_button_exit">salir al escritorio</line>
     <line tag="menu_button_exit_main_menu">salir al menu principal</line>
     <line tag="menu_button_new_game">nueva partida</line>
+    <line tag="menu_button_load_game">cargar partida</line>
     <line tag="menu_button_resume_game">volver al juego</line>
     <line tag="menu_back">atrás</line>
     
@@ -21,13 +22,12 @@
     <line tag="soundchannel_music">volumen de música</line>
     <line tag="soundchannel_effects">volumen de efectos</line>
     
-    
-    
     <line tag="confirmation_menu_submit">aceptar</line>
     <line tag="confirmation_menu_cancel">cancelar</line>
     
-    
     <line tag="confirmation_menu_message_exit">¿esta seguro de que desea salir?</line>
+    
+    <line tag="loading">cargando</line>
     
     
 

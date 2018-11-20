@@ -1,18 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
+    
+	private Transform target;
+    private float z;
 
-	public float maxMovementInY;
-	public Transform target;
-	private Vector3 posDiff = Vector3.zero;
+    void Start() {
 
-	void Start () {
-		posDiff = transform.position - target.position;	
+        z = transform.position.z;
 	}
 
 	void Update () {
-		transform.position = target.position + posDiff;
+
+        if(target == null)
+        {
+            Character c = GameManager.GetInstance().FindPlayer();
+
+            if(c != null)
+            {
+                target = c.transform;
+            }
+        }
+        else
+        {
+            transform.position = new Vector3(target.position.x, target.position.y, z);
+        }
 	}
 }

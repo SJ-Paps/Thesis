@@ -31,8 +31,10 @@ public static class Reg
 	public const int floorLayer = 13;
     public const int hideLayer = 14;
     public const int objectLayer = 15;
-    public const int onlyPlayerStuffLayer = 16;
-    public const int wallLayer = 17;
-    public const int itemLayer = 18;
-    public const int ledgeLayer = 19;
+    public const int playerDetectionLayer = 16;
+    public const int itemLayer = 17;
+	public const int ledgeLayer = 19;
+
+    public static readonly int walkableLayerMask = (1 << floorLayer) | (1 << objectLayer);
+    
 }

@@ -103,10 +103,8 @@ public class GameManager : SJMonoBehaviour {
 
     private void OnPlayerDead()
     {
-        SceneManager.LoadScene(0);
+        SceneLoader.GetInstance().LoadGame();
     }
-
-
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {

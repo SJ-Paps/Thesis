@@ -2,7 +2,7 @@
 
 public class BoxTrigger2D : Trigger2D
 {
-    void Awake()
+    protected virtual void Awake()
     {
         InnerCollider = GetComponent<BoxCollider2D>();
     }

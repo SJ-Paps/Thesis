@@ -20,6 +20,8 @@ public class CharacterInputController : UnityInputController<Character, Characte
         Control();
     }
 
+    private Guid slaveGuid;
+
     public override void Control()
     {
         for (int i = 0; i < keyOrders.Length; i++)
@@ -31,6 +33,26 @@ public class CharacterInputController : UnityInputController<Character, Characte
                     slave.SetOrder(order);
                 }
             }
+        }
+    }
+
+    protected override void OnSave(SaveData data)
+    {
+        data.AddValue("s", Slave.saveGUID);
+    }
+
+    protected override void OnLoad(SaveData data)
+    {
+        slaveGuid = new Guid(data.GetAs<string>("s"));
+    }
+
+    public override void PostLoadCallback()
+    {
+        Character slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Character>(slaveGuid);
+
+        if(slave != null)
+        {
+            SetSlave(slave);
         }
     }
 }
