@@ -38,7 +38,6 @@ public class Turret : Robot
 
     protected override void Awake()
     {
-        
         base.Awake();
 
         FSM<State, Trigger> movingFSM = new FSM<State, Trigger>();
@@ -100,5 +99,16 @@ public class Turret : Robot
     public bool IsOverLimit()
     {
         return currentRotationReference == leftLimit || currentRotationReference == rightLimit;
+    }
+
+    protected override void OnSave(SaveData data)
+    {
+        data.AddValue("x", transform.position.x);
+        data.AddValue("y", transform.position.y);
+    }
+
+    protected override void OnLoad(SaveData data)
+    {
+        transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
     }
 }

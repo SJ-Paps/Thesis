@@ -86,9 +86,20 @@ public class TurretIAController : UnityController<Turret, Character.Order>
         }
     }
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         blackboard = new Blackboard();
+
+        
+
+
+    }
+
+    protected override void Start()
+    {
+        base.Start();
 
         alertFSM = new FSM<State, Trigger>();
         searchTargetFSM = new FSM<State, Trigger>();
@@ -112,10 +123,8 @@ public class TurretIAController : UnityController<Turret, Character.Order>
 
         searchTargetFSM.MakeTransition(State.WithoutTarget, Trigger.TargetFound, State.WithTarget);
         searchTargetFSM.MakeTransition(State.WithTarget, Trigger.TargetLost, State.WithoutTarget);
-        
+
         searchTargetFSM.StartBy(State.WithoutTarget);
-
-
     }
 
     void Update()
@@ -127,5 +136,27 @@ public class TurretIAController : UnityController<Turret, Character.Order>
     {
         alertFSM.UpdateCurrentState();
         searchTargetFSM.UpdateCurrentState();
+    }
+
+    private Guid slaveGuid;
+
+    protected override void OnSave(SaveData data)
+    {
+        data.AddValue("s", Slave.saveGUID);
+    }
+
+    protected override void OnLoad(SaveData data)
+    {
+        slaveGuid = new Guid(data.GetAs<string>("s"));
+    }
+
+    public override void PostLoadCallback()
+    {
+        Turret slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Turret>(slaveGuid);
+
+        if (slave != null)
+        {
+            SetSlave(slave);
+        }
     }
 }

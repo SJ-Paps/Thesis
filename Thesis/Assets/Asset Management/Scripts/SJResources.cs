@@ -38,6 +38,6 @@ public class SJResources
     {
         GameObject gameObject = resources.LoadAsset<GameObject>(gameObjectAssetName);
 
-        return gameObject.GetComponent<T>();
+        return gameObject.GetComponentInChildren<T>();
     }
 }

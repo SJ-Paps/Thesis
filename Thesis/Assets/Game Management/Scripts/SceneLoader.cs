@@ -117,9 +117,9 @@ public sealed class SceneLoader
             {
                 SaveData current = saves[i];
 
-                SJMonoBehaviourSaveable saveable = SJResources.Instance.LoadGameObjectAndGetComponent<SJMonoBehaviourSaveable>(current.PrefabName);
+                GameObject obj = SJResources.Instance.LoadAsset<GameObject>(current.PrefabName);
 
-                saveables[i] = GameObject.Instantiate<SJMonoBehaviourSaveable>(saveable);
+                saveables[i] = GameObject.Instantiate(obj).GetComponentInChildren<SJMonoBehaviourSaveable>();
 
                 saveables[i].Load(current);
             }

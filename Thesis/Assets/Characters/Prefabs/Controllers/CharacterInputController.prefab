@@ -94,3 +94,19 @@ MonoBehaviour:
       name: Push
       keys: 710000006201000065000000
     orders: 06
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 1
+      isKeyReleased: 0
+      name: Grapple
+      keys: 20000000
+    orders: 07
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 1
+      isKeyReleased: 0
+      name: ReleaseLedge
+      keys: 73000000
+    orders: 08

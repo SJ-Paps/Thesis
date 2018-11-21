@@ -153,6 +153,9 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
 
     protected override void OnSave(SaveData data)
     {
+        Debug.Log(Slave);
+        Debug.Log(data);
+
         data.AddValue("s", Slave.saveGUID);
     }
 
