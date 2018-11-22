@@ -17,6 +17,8 @@ public class TribalMovingState : CharacterState
 
     private Animator animator;
 
+    private Action onFixedUpdateDelegate;
+
     public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
         base.InitializeState(fsm, state, character, orders, blackboard);
@@ -24,6 +26,8 @@ public class TribalMovingState : CharacterState
         rigidbody2D = character.RigidBody2D;
 
         animator = character.Animator;
+
+        onFixedUpdateDelegate = ApplyForce;
     }
 
     protected override void OnEnter()
@@ -50,6 +54,8 @@ public class TribalMovingState : CharacterState
             }
         }
 
+        character.onFixedUpdate += onFixedUpdateDelegate;
+
         animator.SetTrigger("Move");
 
         EditorDebug.Log("MOVING ENTER");
@@ -62,15 +68,15 @@ public class TribalMovingState : CharacterState
         animator.ResetTrigger("Move");
 
         blackboard.movingHorizontal = false;
+
+        character.onFixedUpdate -= onFixedUpdateDelegate;
     }
 
     protected override void OnUpdate()
     {
         if(character.IsGrounded)
         {
-            Vector2 moveForceVector = new Vector2(moveForce, 0);
-
-            for (int i = 0; i < orders.Count; i++)
+            for (int i = 0; i < orders.Count && character.CanMove; i++)
             {
                 Character.Order order = orders[i];
 
@@ -81,17 +87,6 @@ public class TribalMovingState : CharacterState
                         character.Face(isGoingLeft);
 
                         blackboard.movingHorizontal = true;
-
-                        rigidbody2D.AddForce(moveForceVector * forceDirectionMultiplier, ForceMode2D.Impulse);
-
-                        if (rigidbody2D.velocity.x >= character.MovementVelocity)
-                        {
-                            rigidbody2D.AddForce(-1 * moveForceVector, ForceMode2D.Impulse);
-                        }
-                        else if (rigidbody2D.velocity.x <= -character.MovementVelocity)
-                        {
-                            rigidbody2D.AddForce(moveForceVector, ForceMode2D.Impulse);
-                        }
                     }
 
                     return;
@@ -109,6 +104,25 @@ public class TribalMovingState : CharacterState
             if (rigidbody2D.velocity.x > -xVelocityDeadZone && rigidbody2D.velocity.x < xVelocityDeadZone)
             {
                 stateMachine.Trigger(Character.Trigger.StopMoving);
+            }
+        }
+    }
+
+    private void ApplyForce()
+    {
+        if(blackboard.movingHorizontal)
+        {
+            Vector2 moveForceVector = new Vector2(moveForce, 0);
+
+            rigidbody2D.AddForce(moveForceVector * forceDirectionMultiplier, ForceMode2D.Impulse);
+
+            if (rigidbody2D.velocity.x >= character.MovementVelocity)
+            {
+                rigidbody2D.AddForce(-1 * moveForceVector, ForceMode2D.Impulse);
+            }
+            else if (rigidbody2D.velocity.x <= -character.MovementVelocity)
+            {
+                rigidbody2D.AddForce(moveForceVector, ForceMode2D.Impulse);
             }
         }
     }

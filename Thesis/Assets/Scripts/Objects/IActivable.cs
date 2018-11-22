@@ -2,5 +2,5 @@
 
 public interface IActivable
 {
-    void Activate();
+    void Activate(Character user);
 }

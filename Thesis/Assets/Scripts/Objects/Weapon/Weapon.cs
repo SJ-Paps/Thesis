@@ -4,12 +4,12 @@ public abstract class Weapon : CollectableObject, IActivable, IThrowable {
     
     public virtual bool BeingUsed { get; protected set; }
     
-    protected virtual void Awake()
+    protected override void Awake()
     {
-
+        base.Awake();
     }
 
-    public void Activate()
+    public void Activate(Character user)
     {
         if(User != null && !BeingUsed)
         {

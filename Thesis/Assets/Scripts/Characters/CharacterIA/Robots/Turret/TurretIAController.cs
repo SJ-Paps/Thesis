@@ -138,6 +138,11 @@ public class TurretIAController : UnityController<Turret, Character.Order>
         searchTargetFSM.UpdateCurrentState();
     }
 
+    public override bool ShouldBeSaved()
+    {
+        return true;
+    }
+
     private Guid slaveGuid;
 
     protected override void OnSave(SaveData data)

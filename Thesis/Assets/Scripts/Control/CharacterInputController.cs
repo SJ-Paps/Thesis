@@ -36,6 +36,11 @@ public class CharacterInputController : UnityInputController<Character, Characte
         }
     }
 
+    public override bool ShouldBeSaved()
+    {
+        return true;
+    }
+
     protected override void OnSave(SaveData data)
     {
         data.AddValue("s", Slave.saveGUID);

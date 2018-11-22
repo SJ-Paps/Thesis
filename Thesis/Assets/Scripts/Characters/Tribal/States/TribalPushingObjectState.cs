@@ -22,7 +22,7 @@ public class TribalPushingObjectState : CharacterState {
 
         characterRigidbody = character.RigidBody2D;
 
-        objectLayerMask = 1 << Reg.objectLayer;
+        objectLayerMask = 1 << Reg.movableObject;
     }
 
     protected override void OnEnter() {

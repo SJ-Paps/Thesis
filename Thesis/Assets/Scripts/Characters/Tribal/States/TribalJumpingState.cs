@@ -11,7 +11,7 @@ public class TribalJumpingState : CharacterState {
     private Collider2D collider;
 
     [SerializeField]
-    private float maxHeight = 1, maxVelocity = 4, jumpForce = 0.8f, circlecastRadius = 0.1f;
+    private float maxHeight = 1, maxVelocity = 4, jumpForce = 0.8f, circlecastRadius = 0.1f, yVelocityDeadZone = 0.1f;
 
     private int ledgeLayer;
 
@@ -19,7 +19,7 @@ public class TribalJumpingState : CharacterState {
 
     private Animator animator;
 
-    private Action<Collision2D> onCollisionDelegate;
+    private Action onFixedUpdateDelegate;
 
     public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
@@ -32,7 +32,7 @@ public class TribalJumpingState : CharacterState {
 
         ledgeLayer = 1 << Reg.ledgeLayer;
 
-        onCollisionDelegate = OnCollision;
+        onFixedUpdateDelegate = ApplyForce;
     }
 
     protected override void OnEnter()
@@ -51,7 +51,7 @@ public class TribalJumpingState : CharacterState {
 
         rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
 
-        character.onCollisionStay2D += onCollisionDelegate;
+        character.onFixedUpdate += onFixedUpdateDelegate;
     }
 
     protected override void OnUpdate()
@@ -66,23 +66,19 @@ public class TribalJumpingState : CharacterState {
     {
         animator.ResetTrigger("Jump");
 
-        character.onCollisionStay2D -= onCollisionDelegate;
+        character.onFixedUpdate -= onFixedUpdateDelegate;
     }
 
     private void Jump()
     {
         jumping = false;
 
-        for(int i = 0; i < orders.Count; i++)
+        for(int i = 0; i < orders.Count && character.CanMove; i++)
         {
             Character.Order order = orders[i];
 
             if (order == Character.Order.OrderJump)
             {
-                Vector2 jumpForceVector = new Vector2(0, jumpForce);
-
-                rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
-
                 if (character.transform.position.y < currentMaxHeight)
                 {
                     jumping = true;
@@ -96,35 +92,17 @@ public class TribalJumpingState : CharacterState {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, maxVelocity);
         }
 
-        if (!jumping)
+        if (!jumping || rigidbody2D.velocity.y < yVelocityDeadZone)
         {
             stateMachine.Trigger(Character.Trigger.Fall);
         }
     }
 
-    private void OnCollision(Collision2D collision)
+    private void ApplyForce()
     {
-        for(int i = 0; i < collision.contacts.Length; i++)
-        {
-            float limit = 0.05f;
+        Vector2 jumpForceVector = new Vector2(0, jumpForce);
 
-            float yCeiling = collider.bounds.extents.y;
-            float xCeiling = collider.bounds.extents.x;
-
-            Vector2 point = collision.contacts[i].point;
-
-            float pointX = point.x;
-            float pointY = point.y;
-
-            float charY = character.transform.position.y + yCeiling - limit;
-            float charX = character.transform.position.x + xCeiling - limit;
-
-            if (pointY >= charY &&
-                pointX >= charX)
-            {
-                stateMachine.Trigger(Character.Trigger.Fall);
-            }
-        }
+        rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
     }
 
     private void CheckingForLedge()

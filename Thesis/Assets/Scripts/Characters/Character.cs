@@ -10,6 +10,8 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     public event Action<Collider2D> onTriggerEnter2D;
     public event Action<Collider2D> onTriggerExit2D;
 
+    public event Action onFixedUpdate;
+
 	public event Action<Order> onOrderReceived;
     public event Action onDetected;
     public event Action onDead;
@@ -71,7 +73,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         get { return handPoint; }
     }
 
-    
+    public virtual bool CanMove { get; }
 
     [SerializeField] 
     protected float movementVelocity = 1;
@@ -127,7 +129,8 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         OrderHide,
         OrderPush,
         OrderGrapple,
-        OrderReleaseLedge
+        OrderReleaseLedge,
+        OrderActivate
     }
 
     public class Blackboard
@@ -208,6 +211,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         aliveFSM.UpdateCurrentState();
 
         ClearOrders();
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if(onFixedUpdate != null)
+        {
+            onFixedUpdate();
+        }
     }
 
     protected void AddStateMachineWhenAlive(FSM<State, Trigger> fsm)

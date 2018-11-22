@@ -32,11 +32,16 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
 
     public SaveData Save()
     {
-        SaveData save = new SaveData(saveGUID, prefabName);
+        if(ShouldBeSaved())
+        {
+            SaveData save = new SaveData(saveGUID, prefabName);
 
-        OnSave(save);
+            OnSave(save);
 
-        return save;
+            return save;
+        }
+
+        return null;
     }
 
     protected virtual void OnSave(SaveData data)
@@ -67,6 +72,8 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
     {
         
     }
+
+    public abstract bool ShouldBeSaved();
 
     public static T GetSJMonobehaviourSaveableBySaveGUID<T>(Guid guid) where T : class
     {

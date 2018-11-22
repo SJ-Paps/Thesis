@@ -1,4 +1,4 @@
-﻿public abstract class CollectableObject : SJMonoBehaviour, ICollectable {
+﻿public abstract class CollectableObject : ActivableObject, ICollectable {
 
     public Character User { get; protected set; }
 

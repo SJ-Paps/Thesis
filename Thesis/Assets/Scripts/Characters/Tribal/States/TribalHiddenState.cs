@@ -7,36 +7,37 @@ using System.Collections.Generic;
 [Serializable]
 public class TribalHiddenState : CharacterState 
 {
-    private FSM<Character.State, Character.Trigger> characterJumpingFSM;
-    private FSM<Character.State, Character.Trigger> characterMovementFSM;
     private SyncTimer timerForComingOut;
 
     [SerializeField]
     private float cooldownForComingOut = 0.7f;
 
-    public void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard, FSM<Character.State, Character.Trigger> jumpingFSM, FSM<Character.State, Character.Trigger> movementFSM)
+    private Rigidbody2D rigidbody2D;
+
+    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
         base.InitializeState(fsm, state, character, orders, blackboard);
-
-        characterJumpingFSM = jumpingFSM;
-        characterMovementFSM = movementFSM;
+        
         timerForComingOut = new SyncTimer();
 
         timerForComingOut.onTick += StopTimerForComingOut;
         timerForComingOut.Interval = cooldownForComingOut;
+
+        rigidbody2D = character.RigidBody2D;
     }
 
     protected override void OnEnter() 
     {
         blackboard.isHidden = true;
-        EnteringToTheHidingPlace();
+
+        rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
         EditorDebug.Log("HIDDEN ENTER");
     }
 
     protected override void OnExit()
     {
         blackboard.isHidden = false;
-        //  EditorDebug.Log("HIDDEN EXIT");
+        EditorDebug.Log("HIDDEN EXIT");
     }
 
     protected override void OnUpdate() 
@@ -60,16 +61,8 @@ public class TribalHiddenState : CharacterState
         }
     }
 
-    private void EnteringToTheHidingPlace() 
-    {
-        characterJumpingFSM.Active = false;
-        characterMovementFSM.Active = false;
-    }
-
     private void ComingOutOfTheHidingPlace() 
     {
-        characterJumpingFSM.Active = true;
-        characterMovementFSM.Active = true;
         stateMachine.Trigger(Character.Trigger.StopHiding);
     }
 

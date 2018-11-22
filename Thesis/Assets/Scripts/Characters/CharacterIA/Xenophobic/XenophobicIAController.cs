@@ -149,6 +149,11 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         
     }
 
+    public override bool ShouldBeSaved()
+    {
+        return true;
+    }
+
     private Guid slaveGuid;
 
     protected override void OnSave(SaveData data)

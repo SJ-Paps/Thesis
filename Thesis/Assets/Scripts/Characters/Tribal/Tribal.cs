@@ -51,9 +51,15 @@ public abstract class Tribal : Character
     protected TribalGrapplingState grapplingState;
 
     protected FSM<State, Trigger> movementFSM, jumpingFSM, actionFSM;
-    
 
-    
+    public override bool CanMove
+    {
+        get
+        {
+            return actionFSM.CurrentState.InnerState != State.Hidden;
+        }
+    }
+
 
     protected override void Awake()
     {
@@ -104,9 +110,9 @@ public abstract class Tribal : Character
 
         jumpingFSM.StartBy(State.Falling);
 
-        actionIdleState.InitializeState(actionFSM, State.Idle, this, orders, blackboard, jumpingFSM, movementFSM);
+        actionIdleState.InitializeState(actionFSM, State.Idle, this, orders, blackboard);
         pushingState.InitializeState(actionFSM, State.Pushing, this, orders, blackboard);
-        hiddenState.InitializeState(actionFSM, State.Hidden, this, orders, blackboard, jumpingFSM, movementFSM);
+        hiddenState.InitializeState(actionFSM, State.Hidden, this, orders, blackboard);
 
         actionFSM.AddState(actionIdleState);
         actionFSM.AddState(pushingState);

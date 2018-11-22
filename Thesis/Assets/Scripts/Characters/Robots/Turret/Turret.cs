@@ -101,6 +101,11 @@ public class Turret : Robot
         return currentRotationReference == leftLimit || currentRotationReference == rightLimit;
     }
 
+    public override bool ShouldBeSaved()
+    {
+        return true;
+    }
+
     protected override void OnSave(SaveData data)
     {
         data.AddValue("x", transform.position.x);

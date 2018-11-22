@@ -24,7 +24,7 @@ public class XenophobicAttackState : CharacterState
         if (xenophobic.CurrentCollectableObject != null && xenophobic.CurrentCollectableObject is Weapon)
         {
             weapon = (Weapon)xenophobic.CurrentCollectableObject;
-            weapon.Activate();
+            weapon.Activate(xenophobic);
             xenophobic.Animator.SetTrigger("Attack");
         }
         else

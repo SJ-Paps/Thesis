@@ -83,6 +83,11 @@ public class Axe : Weapon
         return Drop();
     }
 
+    public override bool ShouldBeSaved()
+    {
+        return false;
+    }
+
     protected override void OnUseWeapon()
     {
         BeingUsed = true;

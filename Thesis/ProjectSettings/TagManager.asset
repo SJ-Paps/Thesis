@@ -19,8 +19,8 @@ TagManager:
   - HostileDeadly
   - GeneralDeadly
   - Floor
-  - Hide
-  - Object
+  - ActivableObject
+  - MovableObject
   - PlayerDetection
   - Item
   - Ledge
