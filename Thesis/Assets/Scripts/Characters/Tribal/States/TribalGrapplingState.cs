@@ -7,8 +7,6 @@ using System;
 [Serializable]
 public class TribalGrapplingState : CharacterState 
 {
-    FSM<Character.State, Character.Trigger> characterMovementFSM;
-    FSM<Character.State, Character.Trigger> characterActionFSM;
     private Rigidbody2D rigidbody2D;
     private BoxCollider2D collider2D;
     private SyncTimer timerOfReleasingLedge;
@@ -18,12 +16,9 @@ public class TribalGrapplingState : CharacterState
 
     private int ledgeLayer;
 
-    public void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state,Character character,List<Character.Order> orderList,FSM<Character.State, Character.Trigger> movementFSM,FSM<Character.State, Character.Trigger> actionFSM, Character.Blackboard blackboard)
+    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state,Character character,List<Character.Order> orderList, Character.Blackboard blackboard)
     {
         base.InitializeState(fsm, state, character, orderList, blackboard);
-
-        characterMovementFSM = movementFSM;
-        characterActionFSM = actionFSM;
 
         rigidbody2D = character.RigidBody2D;
         collider2D = (BoxCollider2D)character.Collider;
@@ -38,8 +33,6 @@ public class TribalGrapplingState : CharacterState
     protected override void OnEnter() 
     {
         EditorDebug.Log("GRAPPLING ENTER");
-        characterMovementFSM.Active = false;
-        characterActionFSM.Active = false;
         blackboard.isGrappled = true;
 
         Grappled();
@@ -86,6 +79,7 @@ public class TribalGrapplingState : CharacterState
     {
         rigidbody2D.velocity = new Vector2(0, 0);
         rigidbody2D.gravityScale = 0;
+        rigidbody2D.isKinematic = true;
     }
 
     private void ReleaseLedge()
@@ -94,9 +88,6 @@ public class TribalGrapplingState : CharacterState
         blackboard.isGrappled = false;
         rigidbody2D.gravityScale = 1f;
         rigidbody2D.isKinematic = false;
-
-        characterMovementFSM.Active = true;
-        characterActionFSM.Active = true;
     }
 
     private void EnteringToFallingState(SyncTimer timer)
@@ -111,12 +102,12 @@ public class TribalGrapplingState : CharacterState
 
         if((collider2D.bounds.center.y - collider2D.bounds.extents.y) < (LastLedgeDetected.bounds.center.y + LastLedgeDetected.bounds.extents.y))
         {
-            rigidbody2D.isKinematic = true;
+            //rigidbody2D.isKinematic = true;
             character.transform.Translate(new Vector3(0f, verticalClimbingSpeed * Time.deltaTime, 0f));
         }
         else if((collider2D.bounds.center.y + collider2D.bounds.extents.y) >= (LastLedgeDetected.bounds.center.y + LastLedgeDetected.bounds.extents.y))
         {
-            if(!character.FacingLeft)
+            if (!character.FacingLeft)
             {
                 if((collider2D.bounds.center.x - collider2D.bounds.extents.x) < (LastLedgeDetected.bounds.center.x - LastLedgeDetected.bounds.extents.x))
                 {

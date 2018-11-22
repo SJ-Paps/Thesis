@@ -56,7 +56,7 @@ public abstract class Tribal : Character
     {
         get
         {
-            return actionFSM.CurrentState.InnerState != State.Hidden;
+            return actionFSM.CurrentState.InnerState != State.Hidden && actionFSM.CurrentState.InnerState != State.Grappling;
         }
     }
 
@@ -92,7 +92,7 @@ public abstract class Tribal : Character
         groundedState.InitializeState(jumpingFSM, State.Grounded, this, orders, blackboard);
         jumpingState.InitializeState(jumpingFSM, State.Jumping, this, orders, blackboard);
         fallingState.InitializeState(jumpingFSM, State.Falling, this, orders, blackboard);
-        grapplingState.InitializeState(jumpingFSM, State.Grappling, this, orders, movementFSM, actionFSM, blackboard);
+        grapplingState.InitializeState(jumpingFSM, State.Grappling, this, orders, blackboard);
 
 
         jumpingFSM.AddState(groundedState);
