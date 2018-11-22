@@ -462,6 +462,10 @@ MonoBehaviour:
     maxHeight: 0.3
     maxVelocity: 4
     jumpForce: 0.8
+    circlecastRadius: 0.1
+    yVelocityDeadZone: 0.1
+  fallingState:
+    circlecastRadius: 0.1
   actionIdleState:
     pushCheckDistance: 0.4
     cooldownOfHiding: 0.7
@@ -469,6 +473,10 @@ MonoBehaviour:
     cooldownForComingOut: 0.7
   pushingState:
     pushCheckDistance: 0.4
+  grapplingState:
+    cooldownForChangingToFallingState: 0.25
+    verticalClimbingSpeed: 1.2
+    horizontalClimbingSpeed: 1.2
 --- !u!210 &210091369285195754
 SortingGroup:
   m_ObjectHideFlags: 1

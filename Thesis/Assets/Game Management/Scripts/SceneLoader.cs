@@ -22,6 +22,8 @@ public sealed class SceneLoader
 
     private int baseLevelSceneIndex = 2;
 
+    private WaitForSeconds waitForSeconds = new WaitForSeconds(2f);
+
     private SceneLoader()
     {
         onSceneLoadedFromSavedGameDelegate = OnSceneLoadedFromSavedGame;
@@ -34,8 +36,8 @@ public sealed class SceneLoader
 
         int[] defaultScenes = GetDefaultScenesFor(firstLevel);
         
-        SceneManager.LoadScene(baseLevelSceneIndex);
-        LoadingSceneManager.GetInstance().ShowLoadingScreen();
+        /*SceneManager.LoadScene(baseLevelSceneIndex);
+        ShowLoadingScreen();*/
 
         LoadNewGameAsync(firstLevel, defaultScenes);
     }
@@ -44,8 +46,8 @@ public sealed class SceneLoader
     {
         if (SaveLoadManager.GetInstance().SaveFileExists())
         {
-            SceneManager.LoadScene(baseLevelSceneIndex);
-            LoadingSceneManager.GetInstance().ShowLoadingScreen();
+            /*SceneManager.LoadScene(baseLevelSceneIndex);
+            ShowLoadingScreen();*/
 
             LoadSavedGameAsync(GetCorrespondingSceneIndex(false));
         }
@@ -67,6 +69,14 @@ public sealed class SceneLoader
 
     private IEnumerator WaitLoadSceneAsync(int masterSceneIndex, int[] defaultScenes, Action callback)
     {
+        SceneManager.LoadScene(baseLevelSceneIndex);
+
+        yield return null;
+
+        ShowLoadingScreen();
+
+        yield return null;
+
         AsyncOperation operation = SceneManager.LoadSceneAsync(masterSceneIndex, LoadSceneMode.Additive);
 
         while(!operation.isDone)
@@ -87,7 +97,9 @@ public sealed class SceneLoader
             }
         }
 
-        if(callback != null)
+        yield return waitForSeconds;
+
+        if (callback != null)
         {
             callback();
         }
@@ -97,12 +109,12 @@ public sealed class SceneLoader
     {
         LoadSaveables();
 
-        LoadingSceneManager.GetInstance().HideLoadingScreen();
+        HideLoadingScreen();
     }
 
     private void OnSceneLoadedFromNewGame()
     {
-        LoadingSceneManager.GetInstance().HideLoadingScreen();
+        HideLoadingScreen();
     }
 
     private void LoadSaveables()
@@ -117,7 +129,11 @@ public sealed class SceneLoader
             {
                 SaveData current = saves[i];
 
+                Debug.Log(current.PrefabName);
+
                 GameObject obj = SJResources.Instance.LoadAsset<GameObject>(current.PrefabName);
+
+                Debug.Log(obj);
 
                 saveables[i] = GameObject.Instantiate(obj).GetComponentInChildren<SJMonoBehaviourSaveable>();
 
@@ -129,6 +145,16 @@ public sealed class SceneLoader
                 saveables[i].PostLoadCallback();
             }
         }
+    }
+
+    private void ShowLoadingScreen()
+    {
+        SceneManager.LoadScene(1, LoadSceneMode.Additive);
+    }
+
+    private void HideLoadingScreen()
+    {
+        SceneManager.UnloadSceneAsync(1);
     }
 
     private int GetCorrespondingSceneIndex(bool isNewGame)
