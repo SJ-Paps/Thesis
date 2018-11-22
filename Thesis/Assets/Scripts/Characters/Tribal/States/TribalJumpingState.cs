@@ -73,7 +73,7 @@ public class TribalJumpingState : CharacterState {
     {
         jumping = false;
 
-        for(int i = 0; i < orders.Count && character.CanMove; i++)
+        for(int i = 0; i < orders.Count; i++)
         {
             Character.Order order = orders[i];
 

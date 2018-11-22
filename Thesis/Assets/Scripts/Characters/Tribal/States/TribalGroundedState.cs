@@ -46,7 +46,7 @@ public class TribalGroundedState : CharacterState
         {
             Character.Order order = orders[i];
 
-            if (order == Character.Order.OrderJump)
+            if (order == Character.Order.OrderJump && character.CanMove)
             {
                 stateMachine.Trigger(Character.Trigger.Jump);
                 break;
