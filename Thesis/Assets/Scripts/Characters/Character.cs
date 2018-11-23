@@ -235,6 +235,8 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     {
         if(IsAlive)
         {
+            Collider.enabled = false;
+
             Die();
 
             return true;

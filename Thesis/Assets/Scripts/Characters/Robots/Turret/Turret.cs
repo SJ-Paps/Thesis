@@ -110,10 +110,19 @@ public class Turret : Robot
     {
         data.AddValue("x", transform.position.x);
         data.AddValue("y", transform.position.y);
+        data.AddValue("limitLeft", leftLimit);
+        data.AddValue("limitRight", rightLimit);
+        data.AddValue("rotation z", transform.rotation.z);
+        data.AddValue("rotation x", transform.rotation.x);
+        data.AddValue("rotation y", transform.rotation.y);
+        data.AddValue("rotation w", transform.rotation.w);
     }
 
     protected override void OnLoad(SaveData data)
     {
         transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
+        transform.localRotation = new Quaternion(data.GetAs<float>("rotation x"), data.GetAs<float>("rotation y"), data.GetAs<float>("rotation z"), data.GetAs<float>("rotation w"));
+        leftLimit = data.GetAs<float>("limitLeft");
+        rightLimit = data.GetAs<float>("limitRight");
     }
 }

@@ -33,8 +33,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116441603145986}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66.33953, y: -5.168862, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 86.12249, y: 3.0850058, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -74,6 +74,6 @@ MonoBehaviour:
   seekState:
     positionReachedMarginX: 1
     positionReachedMarginY: 1
-    renewPatrolTime: 4
+    renewPatrolTime: 0.35
     movementVelocity: 4.5
     attackDetectionDistance: 1

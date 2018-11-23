@@ -166,7 +166,7 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         slaveGuid = new Guid(data.GetAs<string>("s"));
     }
 
-    public override void PostLoadCallback()
+    public override void PostLoadCallback(SaveData data)
     {
         Xenophobic slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Xenophobic>(slaveGuid);
 

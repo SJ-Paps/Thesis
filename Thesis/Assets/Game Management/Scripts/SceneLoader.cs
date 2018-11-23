@@ -142,7 +142,7 @@ public sealed class SceneLoader
 
             for (int i = 0; i < saveables.Length; i++)
             {
-                saveables[i].PostLoadCallback();
+                saveables[i].PostLoadCallback(saves[i]);
             }
         }
     }

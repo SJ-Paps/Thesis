@@ -155,7 +155,7 @@ public class TurretIAController : UnityController<Turret, Character.Order>
         slaveGuid = new Guid(data.GetAs<string>("s"));
     }
 
-    public override void PostLoadCallback()
+    public override void PostLoadCallback(SaveData data)
     {
         Turret slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Turret>(slaveGuid);
 

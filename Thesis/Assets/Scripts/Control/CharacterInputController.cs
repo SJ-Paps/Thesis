@@ -51,7 +51,7 @@ public class CharacterInputController : UnityInputController<Character, Characte
         slaveGuid = new Guid(data.GetAs<string>("s"));
     }
 
-    public override void PostLoadCallback()
+    public override void PostLoadCallback(SaveData data)
     {
         Character slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Character>(slaveGuid);
 

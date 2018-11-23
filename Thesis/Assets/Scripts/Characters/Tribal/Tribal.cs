@@ -152,6 +152,20 @@ public abstract class Tribal : Character
 
     protected override void OnLoad(SaveData data)
     {
+        /*transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
+
+        if(data.ContainsValue("collectableGUID"))
+        {
+            Guid objGuid = new Guid(data.GetAs<string>("collectableGUID"));
+
+            CurrentCollectableObject = GetSJMonobehaviourSaveableBySaveGUID<CollectableObject>(objGuid);
+
+            CurrentCollectableObject.Collect(this);
+        }*/
+    }
+
+    public override void PostLoadCallback(SaveData data)
+    {
         transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
 
         if(data.ContainsValue("collectableGUID"))

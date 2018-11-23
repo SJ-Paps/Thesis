@@ -68,7 +68,7 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
 
     }
 
-    public virtual void PostLoadCallback()
+    public virtual void PostLoadCallback(SaveData data)
     {
         
     }

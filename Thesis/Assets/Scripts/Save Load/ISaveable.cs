@@ -10,6 +10,6 @@ public interface ISaveable
 
     void Load(SaveData data);
 
-    void PostLoadCallback();
+    void PostLoadCallback(SaveData dataSave);
 
 }
