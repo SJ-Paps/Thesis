@@ -70,4 +70,9 @@ public class SaveData
     {
         return (T)Convert.ChangeType(values[name], typeof(T), System.Globalization.CultureInfo.InvariantCulture);
     }
+
+    public bool ContainsValue(string key)
+    {
+        return values.ContainsKey(key);
+    }
 }
