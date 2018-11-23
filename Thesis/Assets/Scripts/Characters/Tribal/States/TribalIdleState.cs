@@ -28,7 +28,7 @@ public class TribalIdleState : CharacterState
         {
             Character.Order order = orders[i];
 
-            if (order == Character.Order.OrderMoveLeft || order == Character.Order.OrderMoveRight)
+            if ((order == Character.Order.OrderMoveLeft || order == Character.Order.OrderMoveRight) && character.CanMove)
             {
                 stateMachine.Trigger(Character.Trigger.Move);
                 break;

@@ -1,5 +1,6 @@
 ﻿using SAM.FSM;
 using UnityEngine;
+using System;
 
 
 public abstract class Tribal : Character
@@ -129,5 +130,37 @@ public abstract class Tribal : Character
         AddStateMachineWhenAlive(movementFSM);
         AddStateMachineWhenAlive(jumpingFSM);
         AddStateMachineWhenAlive(actionFSM);
+    }
+
+    public override bool ShouldBeSaved()
+    {
+        return true;
+    }
+
+    protected override void OnSave(SaveData data)
+    {
+        data.AddValue("x", transform.position.x);
+        data.AddValue("y", transform.position.y);
+        
+
+        if(CurrentCollectableObject != null)
+        {
+            data.AddValue("collectableGUID", CurrentCollectableObject.saveGUID);
+        }
+        
+    }
+
+    protected override void OnLoad(SaveData data)
+    {
+        transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
+
+        if(data.ContainsValue("collectableGUID"))
+        {
+            Guid objGuid = new Guid(data.GetAs<string>("collectableGUID"));
+
+            CurrentCollectableObject = GetSJMonobehaviourSaveableBySaveGUID<CollectableObject>(objGuid);
+
+            CurrentCollectableObject.Collect(this);
+        }
     }
 }

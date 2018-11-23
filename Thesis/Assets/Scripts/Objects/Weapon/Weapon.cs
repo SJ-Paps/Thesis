@@ -29,4 +29,9 @@ public abstract class Weapon : CollectableObject, IActivable, IThrowable {
 
     protected abstract void OnUseWeapon();
     public abstract bool Throw();
+
+    public override bool ShouldBeSaved()
+    {
+        return true;
+    }
 }

@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 4711893911533724}
   - component: {fileID: 212754815870120460}
   - component: {fileID: 61159447321307086}
-  m_Layer: 18
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e76fc61b3b798c34fa1a8ea588d34068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabName: Axe
   sharpEdge: {fileID: 61317313877734840}
   rigidbody2D: {fileID: 50413494165228158}
   parentConstraint: {fileID: 7973541675033199508}

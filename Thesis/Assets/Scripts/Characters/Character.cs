@@ -233,9 +233,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     public virtual bool Die(DeadlyType deadly)
     {
-        Die();
+        if(IsAlive)
+        {
+            Die();
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     protected bool Die()
