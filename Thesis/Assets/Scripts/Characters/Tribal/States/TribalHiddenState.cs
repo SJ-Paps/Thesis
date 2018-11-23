@@ -3,6 +3,7 @@ using SAM.Timers;
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Rendering;
 
 [Serializable]
 public class TribalHiddenState : CharacterState 
@@ -14,6 +15,8 @@ public class TribalHiddenState : CharacterState
 
     private Rigidbody2D rigidbody2D;
 
+    private SortingGroup sortingGroup;
+
     public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
     {
         base.InitializeState(fsm, state, character, orders, blackboard);
@@ -24,6 +27,8 @@ public class TribalHiddenState : CharacterState
         timerForComingOut.Interval = cooldownForComingOut;
 
         rigidbody2D = character.RigidBody2D;
+
+        sortingGroup = character.GetComponentInChildren<SortingGroup>();
     }
 
     protected override void OnEnter() 
@@ -31,12 +36,16 @@ public class TribalHiddenState : CharacterState
         blackboard.isHidden = true;
 
         rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+
+        sortingGroup.sortingOrder = 4;
         EditorDebug.Log("HIDDEN ENTER");
     }
 
     protected override void OnExit()
     {
         blackboard.isHidden = false;
+
+        sortingGroup.sortingOrder = 6;
         EditorDebug.Log("HIDDEN EXIT");
     }
 

@@ -36,9 +36,6 @@ public sealed class SceneLoader
 
         int[] defaultScenes = GetDefaultScenesFor(firstLevel);
         
-        /*SceneManager.LoadScene(baseLevelSceneIndex);
-        ShowLoadingScreen();*/
-
         LoadNewGameAsync(firstLevel, defaultScenes);
     }
 
@@ -46,9 +43,6 @@ public sealed class SceneLoader
     {
         if (SaveLoadManager.GetInstance().SaveFileExists())
         {
-            /*SceneManager.LoadScene(baseLevelSceneIndex);
-            ShowLoadingScreen();*/
-
             LoadSavedGameAsync(GetCorrespondingSceneIndex(false));
         }
     }
@@ -128,13 +122,9 @@ public sealed class SceneLoader
             for (int i = 0; i < saves.Length; i++)
             {
                 SaveData current = saves[i];
-
-                Debug.Log(current.PrefabName);
-
+                
                 GameObject obj = SJResources.Instance.LoadAsset<GameObject>(current.PrefabName);
-
-                Debug.Log(obj);
-
+                
                 saveables[i] = GameObject.Instantiate(obj).GetComponentInChildren<SJMonoBehaviourSaveable>();
 
                 saveables[i].Load(current);

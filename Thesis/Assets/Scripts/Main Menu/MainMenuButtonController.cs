@@ -60,7 +60,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private void GoMenu()
     {
-        SceneManager.LoadScene(0);
+        GameManager.Instance.GoMenu();
     }
 
     private void GoNewGame()

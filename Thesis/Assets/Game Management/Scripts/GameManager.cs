@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : SJMonoBehaviour {
 
@@ -37,11 +38,15 @@ public class GameManager : SJMonoBehaviour {
 
     public bool IsPaused { get; private set; }
 
+    private Action onPlayerDeadDelegate;
+
     private void Init()
     {
         DontDestroyOnLoad(this);
         
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        onPlayerDeadDelegate = OnPlayerDead;
     }
 
     public Character GetPlayer()
@@ -97,7 +102,8 @@ public class GameManager : SJMonoBehaviour {
     {
         if(player != null)
         {
-            player.onDead += OnPlayerDead;
+            player.onDead -= onPlayerDeadDelegate;
+            player.onDead += onPlayerDeadDelegate;
         }
     }
 
@@ -109,5 +115,11 @@ public class GameManager : SJMonoBehaviour {
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         player = null;
+
+    }
+
+    public void GoMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
