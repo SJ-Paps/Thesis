@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
-public static class Extensions
+public static class HSMExtensions
 {
     public static string FirstLetterToUpper(this string str)
     {
@@ -25,5 +26,19 @@ public static class Extensions
         return str;
     }
 
+    public static bool Contains<TState, TTrigger>(this List<HSMTransition<TState, TTrigger>> list, in HSMTransition<TState, TTrigger> transition, Func<TState, TState, bool> stateComparer, Func<TTrigger, TTrigger, bool> triggerComparer) where TState : unmanaged where TTrigger : unmanaged
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            HSMTransition<TState, TTrigger> current = list[i];
+
+            if (current.Equals(transition, stateComparer, triggerComparer))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }
