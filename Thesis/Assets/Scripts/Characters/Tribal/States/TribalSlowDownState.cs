@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
-using SAM.FSM;
 
 [Serializable]
-public class TribalSlowDownState : CharacterState
+public class TribalSlowDownState : TribalHSMState
 {
-    private Character.Order enteringOrder;
+    private Character.Trigger enteringOrder;
 
     [SerializeField]
     private float xVelocityDeadZone = 0.1f;
@@ -20,14 +17,12 @@ public class TribalSlowDownState : CharacterState
 
     private Rigidbody2D rigidbody2D;
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    public TribalSlowDownState(Character.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, character, orders, blackboard);
-
         rigidbody2D = character.RigidBody2D;
     }
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         EditorDebug.Log("SLOW DOWN ENTER");
         
@@ -49,5 +44,5 @@ public class TribalSlowDownState : CharacterState
     protected override void OnExit()
     {
         EditorDebug.Log("SLOW DOWN EXIT");
-    }
+    }*/
 }

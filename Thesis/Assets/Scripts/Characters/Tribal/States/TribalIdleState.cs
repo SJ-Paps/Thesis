@@ -1,16 +1,17 @@
-﻿using SAM.FSM;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 
-[Serializable]
-public class TribalIdleState : CharacterState
+public class TribalIdleState : TribalHSMState
 {
     private Animator animator;
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    public TribalIdleState(Character.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, character, orders, blackboard);
+        
+    }
+
+    protected override void OnCharacterReferencePropagated()
+    {
+        base.OnCharacterReferencePropagated();
 
         animator = character.Animator;
     }
@@ -19,25 +20,13 @@ public class TribalIdleState : CharacterState
     {
         animator.SetTrigger("Idle");
 
-        EditorDebug.Log("IDLE ENTER");
-    }
-
-    protected override void OnUpdate()
-    {
-        for (int i = 0; i < orders.Count; i++)
-        {
-            Character.Order order = orders[i];
-
-            if ((order == Character.Order.OrderMoveLeft || order == Character.Order.OrderMoveRight) && character.CanMove)
-            {
-                stateMachine.Trigger(Character.Trigger.Move);
-                break;
-            }
-        }
+        EditorDebug.Log("IDLE ENTER " + character.name);
     }
 
     protected override void OnExit()
     {
         animator.ResetTrigger("Idle");
+
+        EditorDebug.Log("IDLE EXIT " + character.name);
     }
 }

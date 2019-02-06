@@ -3,26 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[Serializable]
-public class TribalFallingState : CharacterState
+public class TribalFallingState : TribalHSMState
 {
-    [SerializeField]
-    private float circlecastRadius = 0.1f;
+    /*private float circlecastRadius = 0.1f;
 
     private int ledgeLayer;
 
-    private Animator animator;
+    private Animator animator;*/
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orderList, Character.Blackboard blackboard)
+    public TribalFallingState(Character.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, character, orderList, blackboard);
+        /*animator = character.Animator;
 
-        animator = character.Animator;
-
-        ledgeLayer = 1 << Reg.ledgeLayer;
+        ledgeLayer = 1 << Reg.ledgeLayer;*/
     }
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         animator.SetTrigger("Fall");
 
@@ -59,6 +55,6 @@ public class TribalFallingState : CharacterState
             blackboard.LastLedgeDetected = auxColl;
             stateMachine.Trigger(Character.Trigger.Grapple);
         }
-    }
+    }*/
 
 }

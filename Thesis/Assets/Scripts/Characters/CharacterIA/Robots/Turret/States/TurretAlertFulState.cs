@@ -3,10 +3,8 @@ using UnityEngine;
 using SAM.Timers;
 using SAM.FSM;
 
-[Serializable]
 public class TurretAlertFulState : TurretIAState
 {
-    [SerializeField]
     private float movementVelocity;
 
     private float previousVelocity;
@@ -14,11 +12,17 @@ public class TurretAlertFulState : TurretIAState
     private Action<Vector2> onTargetUpdatedDelegate;
 
     private SyncTimer calmDownTimer;
-
-    [SerializeField]
+    
     private float timeUntilCalmDown;
 
-    protected override void OnEnter()
+    public TurretAlertFulState(TurretIAController.State state, string debugName) : base(state, debugName)
+    {
+        calmDownTimer = new SyncTimer();
+        calmDownTimer.Interval = timeUntilCalmDown;
+        //calmDownTimer.onTick += CalmDown;
+    }
+
+    /*protected override void OnEnter()
     {
         previousVelocity = controller.Slave.MovementVelocity;
         controller.Slave.MovementVelocity = movementVelocity;
@@ -38,9 +42,7 @@ public class TurretAlertFulState : TurretIAState
     {
         base.InitializeState(stateMachine, state, controller, blackboard);
 
-        calmDownTimer = new SyncTimer();
-        calmDownTimer.Interval = timeUntilCalmDown;
-        calmDownTimer.onTick += CalmDown;
+        
     }
 
     private void CalmDown(SyncTimer timer)
@@ -51,5 +53,5 @@ public class TurretAlertFulState : TurretIAState
     private void OnTargetUpdated(Vector2 position)
     {
         calmDownTimer.Start();
-    }
+    }*/
 }

@@ -19,7 +19,7 @@ public class XenophobicAlertfulState : XenophobicIAState
     private float playerDetectedTime = 6f, fullAlertTime = 10f, hiddenDetectionDistance = 1.5f;
 
     private Action<Collider2D> onSomethingDetectedDelegate;
-    
+
     private int targetLayers;
 
     [SerializeField]
@@ -27,28 +27,26 @@ public class XenophobicAlertfulState : XenophobicIAState
 
     private float findProbability;
 
-    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
+    public XenophobicAlertfulState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, controller, blackboard);
-
         characterEyes = controller.SlaveEyes;
 
         fullAlertTimer = new SyncTimer();
         fullAlertTimer.Interval = fullAlertTime;
-        fullAlertTimer.onTick += CalmDown;
+        //fullAlertTimer.onTick += CalmDown;
 
         playerDetectedTimer = new SyncTimer();
         playerDetectedTimer.Interval = playerDetectedTime;
-        playerDetectedTimer.onTick += LosePlayerData;
+        //playerDetectedTimer.onTick += LosePlayerData;
 
-        onSomethingDetectedDelegate += AnalyzeDetection;
+        //onSomethingDetectedDelegate += AnalyzeDetection;
 
         findProbability = baseFindProbability;
 
         targetLayers = (1 << Reg.playerLayer);
     }
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         if (characterEyes != null)
         {
@@ -138,5 +136,5 @@ public class XenophobicAlertfulState : XenophobicIAState
 
         findProbability = maxFindProbability;
         playerDetectedTimer.Start();
-    }
+    }*/
 }

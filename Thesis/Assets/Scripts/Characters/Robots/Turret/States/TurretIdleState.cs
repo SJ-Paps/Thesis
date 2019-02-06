@@ -1,10 +1,14 @@
 ﻿using System;
 
-[Serializable]
-public class TurretIdleState : CharacterState
+public class TurretIdleState : CharacterHSMState
 {
 
-    protected override void OnUpdate()
+    public TurretIdleState(Character.State state, string debugName) : base(state, debugName)
+    {
+
+    }
+
+    /*protected override void OnUpdate()
     {
         for (int i = 0; i < orders.Count; i++)
         {
@@ -15,5 +19,5 @@ public class TurretIdleState : CharacterState
                 stateMachine.Trigger(Character.Trigger.Move);
             }
         }
-    }
+    }*/
 }

@@ -9,12 +9,12 @@ public class Xenophobic : Tribal
     {
         base.Awake();
 
-        attackState.InitializeState(actionFSM, State.Attacking, this, orders, blackboard);
+        /*attackState.InitializeState(actionFSM, State.Attacking, this, orders, blackboard);
 
         actionFSM.AddState(attackState);
 
         actionFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
-        actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
+        actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);*/
         
     }
 

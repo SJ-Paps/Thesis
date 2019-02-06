@@ -2,6 +2,9 @@
 using UnityEngine;
 using System;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 
 public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger> : ScriptableObject
@@ -55,6 +58,8 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
 
     private static void GetUniqueStates(Dictionary<HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger> baseAsset)
     {
+        
+
         if(relationDictionary.ContainsKey(baseAsset) == false)
         {
             relationDictionary.Add(baseAsset, baseAsset.CreateConcreteHSMState());
@@ -136,16 +141,23 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
     void OnValidate()
     {
 #if UNITY_EDITOR
-        if(script != null)
+        if (script != null)
         {
-            UnityEditor.MonoScript monoscript = (UnityEditor.MonoScript)script;
+            MonoScript monoscript = (MonoScript)script;
 
             if (monoscript == null)
             {
                 throw new InvalidOperationException("Text asset is not a valid Monoscript");
             }
 
-            stateClassFullName = monoscript.GetClass().FullName;
+            Type classType = monoscript.GetClass();
+
+            if(classType == null)
+            {
+                throw new NullReferenceException("The name of the class on the script " + script.name.ToUpper() + " doesn't match the script's name");
+            }
+
+            stateClassFullName = classType.FullName;
         }
 #endif
     }

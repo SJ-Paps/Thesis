@@ -2,7 +2,7 @@
 using UnityEngine;
 using System;
 
-public class XenophobicIAController : UnityController<Xenophobic, Character.Order>
+public class XenophobicIAController : UnityController<Xenophobic, Character.Trigger>
 {
 
     public enum State
@@ -71,7 +71,9 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         
     }
 
-    protected Blackboard blackboard;
+    public Eyes SlaveEyes { get; protected set; }
+
+    /*protected Blackboard blackboard;
 
     [SerializeField]
     protected XenophobicAlertlessState alertlessState;
@@ -91,7 +93,7 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
     protected FSM<State, Trigger> alertnessFSM;
     protected FSM<State, Trigger> behaviourFSM;
 
-    public Eyes SlaveEyes { get; protected set; }
+    
 
 
 
@@ -132,12 +134,12 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         behaviourFSM.MakeTransition(State.Seeking, Trigger.Patrol, State.Patrolling);
 
         behaviourFSM.StartBy(State.Patrolling);
-    }
+    }*/
 
     public override void Control()
     {
-        alertnessFSM.UpdateCurrentState();
-        behaviourFSM.UpdateCurrentState();
+        /*alertnessFSM.UpdateCurrentState();
+        behaviourFSM.UpdateCurrentState();*/
     }
 
     protected void Update()

@@ -5,8 +5,7 @@ using UnityEngine;
 using SAM.Timers;
 using System;
 
-[Serializable]
-public class TurretChargeSubstate : TurretAttackSubstate
+/*public class TurretChargeSubstate : TurretAttackSubstate
 {
     private SyncTimer chargeTimer;
 
@@ -46,4 +45,4 @@ public class TurretChargeSubstate : TurretAttackSubstate
         stateMachine.Trigger(TurretAttackState.Trigger.GoNext);
     }
     
-}
+}*/

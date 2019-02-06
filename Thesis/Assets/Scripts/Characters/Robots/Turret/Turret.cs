@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Turret : Robot
 {
-    [SerializeField]
+    /*[SerializeField]
     protected TurretIdleState idleState;
 
     [SerializeField]
@@ -13,7 +13,7 @@ public class Turret : Robot
     protected TurretMovingState movingState;
 
     [SerializeField]
-    protected TurretActionIdleState actionIdleState;
+    protected TurretActionIdleState actionIdleState;*/
 
     [SerializeField]
     private float leftLimit, rightLimit;
@@ -40,7 +40,7 @@ public class Turret : Robot
     {
         base.Awake();
 
-        FSM<State, Trigger> movingFSM = new FSM<State, Trigger>();
+        /*FSM<State, Trigger> movingFSM = new FSM<State, Trigger>();
 
         idleState.InitializeState(movingFSM, State.Idle, this, orders, blackboard);
         movingState.InitializeState(movingFSM, State.Moving, this, orders, blackboard);
@@ -68,7 +68,7 @@ public class Turret : Robot
         actionFSM.StartBy(State.Idle);
 
         AddStateMachineWhenAlive(movingFSM);
-        AddStateMachineWhenAlive(actionFSM);
+        AddStateMachineWhenAlive(actionFSM);*/
     }
 
     public override void GetEnslaved()

@@ -1,8 +1,8 @@
 ﻿using System;
 
-[Serializable]
-public class TurretActionIdleState : CharacterState
+/*public class TurretActionIdleState : CharacterState
 {
+    
 
     protected override void OnUpdate()
     {
@@ -16,4 +16,4 @@ public class TurretActionIdleState : CharacterState
             }
         }
     }
-}
+}*/

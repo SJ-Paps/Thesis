@@ -4,33 +4,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[Serializable]
-public class TribalGrapplingState : CharacterState 
+public class TribalGrapplingState : TribalHSMState
 {
     private Rigidbody2D rigidbody2D;
     private BoxCollider2D collider2D;
     private SyncTimer timerOfReleasingLedge;
-
-    [SerializeField]
+    
     private float cooldownForChangingToFallingState = 0.25f, verticalClimbingSpeed = 1.2f, horizontalClimbingSpeed = 1.2f;
 
     private int ledgeLayer;
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state,Character character,List<Character.Order> orderList, Character.Blackboard blackboard)
+    public TribalGrapplingState(Character.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, character, orderList, blackboard);
-
         rigidbody2D = character.RigidBody2D;
         collider2D = (BoxCollider2D)character.Collider;
 
         ledgeLayer = 1 << Reg.ledgeLayer;
 
         timerOfReleasingLedge = new SyncTimer();
-        timerOfReleasingLedge.onTick += EnteringToFallingState;
+        //timerOfReleasingLedge.onTick += EnteringToFallingState;
         timerOfReleasingLedge.Interval = cooldownForChangingToFallingState;
     }
 
-    protected override void OnEnter() 
+    /*protected override void OnEnter() 
     {
         EditorDebug.Log("GRAPPLING ENTER");
         blackboard.isGrappled = true;
@@ -132,5 +128,5 @@ public class TribalGrapplingState : CharacterState
                 }
             }
         }
-    }
+    }*/
 }

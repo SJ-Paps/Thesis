@@ -2,10 +2,10 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class XenophobicAlertlessState : XenophobicIAState {
 
-    [SerializeField]
+public class XenophobicAlertlessState : XenophobicIAState {
+    
+
     private Vector2 eyesSize = new Vector2(9, 1);
 
     private Action<Collider2D> onSomethingDetectedDelegate;
@@ -13,18 +13,16 @@ public class XenophobicAlertlessState : XenophobicIAState {
     
     private int targetLayers;
 
-    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
+    public XenophobicAlertlessState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, controller, blackboard);
-
-        onSomethingDetectedDelegate += AnalyzeDetection;
+        //onSomethingDetectedDelegate += AnalyzeDetection;
 
         characterEyes = controller.SlaveEyes;
 
         targetLayers = (1 << Reg.playerLayer);
     }
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         if(characterEyes != null)
         {
@@ -56,5 +54,5 @@ public class XenophobicAlertlessState : XenophobicIAState {
                 stateMachine.Trigger(XenophobicIAController.Trigger.GetAware);
             }
         }
-    }
+    }*/
 }

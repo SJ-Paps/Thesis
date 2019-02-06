@@ -4,7 +4,7 @@ using UnityEngine;
 using SAM.FSM;
 using System;
 
-public class TurretIAController : UnityController<Turret, Character.Order>
+public class TurretIAController : UnityController<Turret, Character.Trigger>
 {
     public enum State
     {
@@ -21,7 +21,7 @@ public class TurretIAController : UnityController<Turret, Character.Order>
         TargetFound,
         TargetLost
     }
-
+/*
     public class Blackboard
     {
         public event Action<Vector2> onTargetChanged;
@@ -125,7 +125,7 @@ public class TurretIAController : UnityController<Turret, Character.Order>
         searchTargetFSM.MakeTransition(State.WithTarget, Trigger.TargetLost, State.WithoutTarget);
 
         searchTargetFSM.StartBy(State.WithoutTarget);
-    }
+    }*/
 
     void Update()
     {
@@ -134,8 +134,8 @@ public class TurretIAController : UnityController<Turret, Character.Order>
 
     public override void Control()
     {
-        alertFSM.UpdateCurrentState();
-        searchTargetFSM.UpdateCurrentState();
+        /*alertFSM.UpdateCurrentState();
+        searchTargetFSM.UpdateCurrentState();*/
     }
 
     public override bool ShouldBeSaved()

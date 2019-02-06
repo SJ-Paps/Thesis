@@ -5,33 +5,29 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Rendering;
 
-[Serializable]
-public class TribalHiddenState : CharacterState 
+public class TribalHiddenState : TribalHSMState
 {
-    private SyncTimer timerForComingOut;
-
-    [SerializeField]
+    /*private SyncTimer timerForComingOut;
+    
     private float cooldownForComingOut = 0.7f;
 
     private Rigidbody2D rigidbody2D;
 
-    private SortingGroup sortingGroup;
+    private SortingGroup sortingGroup;*/
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    public TribalHiddenState(Character.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, character, orders, blackboard);
-        
-        timerForComingOut = new SyncTimer();
+        /*timerForComingOut = new SyncTimer();
 
-        timerForComingOut.onTick += StopTimerForComingOut;
+        //timerForComingOut.onTick += StopTimerForComingOut;
         timerForComingOut.Interval = cooldownForComingOut;
 
         rigidbody2D = character.RigidBody2D;
 
-        sortingGroup = character.GetComponentInChildren<SortingGroup>();
+        sortingGroup = character.GetComponentInChildren<SortingGroup>();*/
     }
 
-    protected override void OnEnter() 
+    /*protected override void OnEnter() 
     {
         blackboard.isHidden = true;
 
@@ -78,5 +74,5 @@ public class TribalHiddenState : CharacterState
     void StopTimerForComingOut(SyncTimer timer) 
     {
         ComingOutOfTheHidingPlace();
-    }
+    }*/
 }

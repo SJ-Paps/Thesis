@@ -1,21 +1,13 @@
 ﻿using SAM.FSM;
 
-public abstract class XenophobicIAState : State<XenophobicIAController.State, XenophobicIAController.Trigger>
+public abstract class XenophobicIAState : HSMState<XenophobicIAController.State, XenophobicIAController.Trigger>
 {
     protected XenophobicIAController controller;
     protected XenophobicIAController.Blackboard blackboard;
 
-    public XenophobicIAState() : base(null, default(XenophobicIAController.State))
+    public XenophobicIAState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        
-    }
 
-    public virtual void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
-    {
-        this.controller = controller;
-        this.blackboard = blackboard;
-        stateMachine = fsm;
-        InnerState = state;
     }
 
     protected override void OnEnter()

@@ -3,14 +3,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class TurretMovingState : CharacterState
+public class TurretMovingState : CharacterHSMState
 {
     private Turret turret;
 
+    public TurretMovingState(Character.State state, string debugName = null) : base(state, debugName)
+    {
+
+    }
+
     protected override void OnUpdate()
     {
-        for (int i = 0; i < orders.Count; i++)
+        /*for (int i = 0; i < orders.Count; i++)
         {
             Character.Order order = orders[i];
 
@@ -30,13 +34,6 @@ public class TurretMovingState : CharacterState
             {
                 stateMachine.Trigger(Character.Trigger.StopMoving);
             }
-        }
-    }
-
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
-    {
-        base.InitializeState(fsm, state, character, orders, blackboard);
-
-        turret = (Turret)character;
+        }*/
     }
 }

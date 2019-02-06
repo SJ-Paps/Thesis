@@ -1,12 +1,10 @@
-﻿using SAM.FSM;
+﻿using System;
 using UnityEngine;
-using System.Collections.Generic;
-using System;
 
-[Serializable]
-public class TribalJumpingState : CharacterState {
+public class TribalJumpingState : TribalHSMState
+{
 
-    private bool jumping;
+    /*private bool jumping;
     private Rigidbody2D rigidbody2D;
     private Collider2D collider;
 
@@ -19,23 +17,21 @@ public class TribalJumpingState : CharacterState {
 
     private Animator animator;
 
-    private Action onFixedUpdateDelegate;
+    private Action onFixedUpdateDelegate;*/
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    public TribalJumpingState(Character.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, character, orders, blackboard);
-
-        rigidbody2D = character.RigidBody2D;
+        /*rigidbody2D = character.RigidBody2D;
         collider = character.Collider;
 
         animator = character.Animator;
 
         ledgeLayer = 1 << Reg.ledgeLayer;
 
-        onFixedUpdateDelegate = ApplyForce;
+        //onFixedUpdateDelegate = ApplyForce;*/
     }
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         base.OnEnter();
 
@@ -52,24 +48,24 @@ public class TribalJumpingState : CharacterState {
         rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
 
         character.onFixedUpdate += onFixedUpdateDelegate;
-    }
+    }*/
 
     protected override void OnUpdate()
     {
-        CheckingForLedge();
-        Jump();
+        /*CheckingForLedge();
+        Jump();*/
 
         base.OnUpdate();
     }
 
-    protected override void OnExit()
+    /*protected override void OnExit()
     {
         animator.ResetTrigger("Jump");
 
         character.onFixedUpdate -= onFixedUpdateDelegate;
-    }
+    }*/
 
-    private void Jump()
+    /*private void Jump()
     {
         jumping = false;
 
@@ -120,5 +116,5 @@ public class TribalJumpingState : CharacterState {
             blackboard.LastLedgeDetected = auxColl;
             stateMachine.Trigger(Character.Trigger.Grapple);
         }
-    }
+    }*/
 }

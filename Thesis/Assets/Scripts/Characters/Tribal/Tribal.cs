@@ -22,6 +22,35 @@ public abstract class Tribal : Character
     }
 
     [SerializeField]
+    protected float movementVelocity;
+
+    public float MaxMovementVelocity
+    {
+        get
+        {
+            return MovementVelocity * 3;
+        }
+    }
+
+    public float MovementVelocity
+    {
+        get
+        {
+            return movementVelocity;
+        }
+
+        set
+        {
+            movementVelocity = value;
+
+            if(movementVelocity < 0)
+            {
+                movementVelocity = 0;
+            }
+        }
+    }
+
+    /*[SerializeField]
     protected TribalIdleState idleState;
 
     [SerializeField]
@@ -51,13 +80,14 @@ public abstract class Tribal : Character
     [SerializeField]
     protected TribalGrapplingState grapplingState;
 
-    protected FSM<State, Trigger> movementFSM, jumpingFSM, actionFSM;
+    protected FSM<State, Trigger> movementFSM, jumpingFSM, actionFSM;*/
 
     public override bool CanMove
     {
         get
         {
-            return actionFSM.CurrentState.InnerState != State.Hidden && actionFSM.CurrentState.InnerState != State.Grappling;
+            //return actionFSM.CurrentState.InnerState != State.Hidden && actionFSM.CurrentState.InnerState != State.Grappling;
+            return true;
         }
     }
 
@@ -71,7 +101,7 @@ public abstract class Tribal : Character
             CurrentCollectableObject.Collect(this);
         }
 
-        movementFSM = new FSM<State, Trigger>();
+        /*movementFSM = new FSM<State, Trigger>();
         jumpingFSM = new FSM<State, Trigger>();
         actionFSM = new FSM<State, Trigger>();
 
@@ -129,7 +159,7 @@ public abstract class Tribal : Character
 
         AddStateMachineWhenAlive(movementFSM);
         AddStateMachineWhenAlive(jumpingFSM);
-        AddStateMachineWhenAlive(actionFSM);
+        AddStateMachineWhenAlive(actionFSM);*/
     }
 
     public override bool ShouldBeSaved()

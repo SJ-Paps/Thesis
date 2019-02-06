@@ -3,30 +3,27 @@ using UnityEngine;
 using System;
 using SAM.Timers;
 
-[Serializable]
 public class XenophobicPatrolState : XenophobicIAState
 {
-    [SerializeField]
+
     private float minTime = 4f, maxTime = 6f;
 
     private SyncTimer patrolTimer;
 
-    private Character.Order currentOrder;
+    private Character.Trigger currentOrder;
 
     private Action<Vector2> onLastDetectionPositionChangedDelegate;
 
-    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
+    public XenophobicPatrolState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, controller, blackboard);
-
-        onLastDetectionPositionChangedDelegate += Seek;
+        //onLastDetectionPositionChangedDelegate += Seek;
 
         patrolTimer = new SyncTimer();
-        patrolTimer.onTick += TickTurn;
+        //patrolTimer.onTick += TickTurn;
     }
 
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         EditorDebug.Log("XENOPHOBIC PATROL ENTER");
 
@@ -87,5 +84,5 @@ public class XenophobicPatrolState : XenophobicIAState
 
         patrolTimer.Interval = CalculatePatrolTime();
         patrolTimer.Start();
-    }
+    }*/
 }

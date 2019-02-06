@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System;
 
-[Serializable]
-public class XenophobicAttackState : CharacterState
+public class XenophobicAttackState : CharacterHSMState
 {
     private Xenophobic xenophobic;
     private Weapon weapon;
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    public XenophobicAttackState(Character.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, character, orders, blackboard);
-
         xenophobic = (Xenophobic)character;
     }
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         base.OnEnter();
 
@@ -46,5 +43,5 @@ public class XenophobicAttackState : CharacterState
         base.OnExit();
 
         EditorDebug.Log("XENOPHOBIC ATTACK EXIT");
-    }
+    }*/
 }

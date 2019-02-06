@@ -3,29 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[Serializable]
-public class TribalPushingObjectState : CharacterState {
+public class TribalPushingObjectState : TribalHSMState
+{
 
-    [SerializeField]
+    /*[SerializeField]
     private float pushCheckDistance = 0.4f;
 
     private FixedJoint2D objectFixedJoint2D;
     private Rigidbody2D characterRigidbody;
 
-    private Character.Order expectedOrder;
+    private Character.Trigger expectedOrder;
 
-    private int objectLayerMask;
+    private int objectLayerMask;*/
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    public TribalPushingObjectState(Character.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, character, orders, blackboard);
+        /*characterRigidbody = character.RigidBody2D;
 
-        characterRigidbody = character.RigidBody2D;
-
-        objectLayerMask = 1 << Reg.movableObject;
+        objectLayerMask = 1 << Reg.movableObject;*/
     }
 
-    protected override void OnEnter() {
+    /*protected override void OnEnter() {
         base.OnEnter();
 
         blackboard.isPushing = true;
@@ -77,5 +75,5 @@ public class TribalPushingObjectState : CharacterState {
         }
 
         stateMachine.Trigger(Character.Trigger.StopPushing);
-    }
+    }*/
 }

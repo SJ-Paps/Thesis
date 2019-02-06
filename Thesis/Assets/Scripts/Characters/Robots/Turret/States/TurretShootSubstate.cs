@@ -2,8 +2,7 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class TurretShootSubstate : TurretAttackSubstate
+/*public class TurretShootSubstate : TurretAttackSubstate
 {
     [SerializeField]
     private float shootDistance;
@@ -94,4 +93,4 @@ public class TurretShootSubstate : TurretAttackSubstate
 
         return null;
     }
-}
+}*/

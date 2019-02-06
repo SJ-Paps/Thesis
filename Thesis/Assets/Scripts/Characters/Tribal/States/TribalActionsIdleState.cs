@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-[Serializable]
+/*[Serializable]
 public class TribalActionsIdleState : CharacterState 
 {
     [SerializeField]
@@ -120,4 +120,4 @@ public class TribalActionsIdleState : CharacterState
         }
 
     }
-}
+}*/

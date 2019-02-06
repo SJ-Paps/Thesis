@@ -3,8 +3,70 @@ using System;
 using SAM.FSM;
 using System.Collections.Generic;
 
-public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>, IMortal
+public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>, IMortal
 {
+    public enum State : byte
+    {
+        Base,
+        Alive,
+        Dead,
+        Idle,
+        Trotting,
+        SlowingDown,
+        Grounded,
+        OnAir,
+        Jumping,
+        Falling,
+        Hidden,
+        Attacking,
+        Pushing,
+        Grappling,
+        Standing,
+        Ducking,
+        ChoiceIdleOrMoving,
+        ChoiceJumpingOrFalling,
+        Walking,
+        Running,
+        Moving,
+        ChoiceWalkingOrTrottingOrRunning,
+    }
+
+    public enum Trigger : byte
+    {
+        Die,
+        MoveLeft,
+        MoveRight,
+        Ground,
+        Jump,
+        Fall,
+        Hide,
+        Attack,
+        StopAttacking,
+        StopMoving,
+        StopHiding,
+        StopPushing,
+        Push,
+        Grapple,
+        StandUp,
+        Duck,
+        Move,
+        Walk,
+        Trot,
+        Run
+    }
+
+    public class Blackboard
+    {
+        public bool isAlive;
+        public bool isHidden;
+        public bool isGrounded;
+        public bool isPushing;
+        public bool isGrappled;
+        public bool isClimbingLedge;
+        public bool movingHorizontal;
+        public Collider2D LastLedgeDetected;
+    }
+
     public event Action<Collision2D> onCollisionEnter2D;
     public event Action<Collision2D> onCollisionStay2D;
     public event Action<Collider2D> onTriggerEnter2D;
@@ -12,7 +74,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     public event Action onFixedUpdate;
 
-	public event Action<Order> onOrderReceived;
+	public event Action<Trigger> onOrderReceived;
     public event Action onDetected;
     public event Action onDead;
 
@@ -39,14 +101,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     {
         get { return transform.right.x < 0; }
     }
-    public float MovementVelocity
+    public float oldMovementVelocity
     {
-        get { return movementVelocity; }
+        get { return oldmovementVelocity; }
         set
         {
             if(value >= 0)
             {
-                movementVelocity = value;
+                oldmovementVelocity = value;
             }
         }
     }
@@ -76,7 +138,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     public virtual bool CanMove { get; }
 
     [SerializeField] 
-    protected float movementVelocity = 1;
+    protected float oldmovementVelocity = 1;
 
     [SerializeField]
     protected Eyes eyes;
@@ -85,65 +147,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     protected Transform handPoint;
     
     public bool blockFacing;
-
-    public enum State : byte
-    {
-        Alive,
-        Dead,
-        Idle,
-        Moving,
-        SlowingDown,
-        Grounded,
-        Jumping,
-        Falling,
-        Hidden,
-        Attacking,
-        Pushing,
-        Grappling
-    }
-
-    public enum Trigger : byte
-    {
-        Die,
-        Move,
-        Ground,
-        Jump,
-        Fall,
-        Hide,
-        Attack,
-        StopAttacking,
-        StopMoving,
-        StopHiding,
-        StopPushing,
-        Push,
-        Grapple
-    }
-
-    public enum Order : byte
-    {
-        OrderMoveLeft,
-        OrderMoveRight,
-        OrderStopMoving,
-        OrderJump,
-        OrderAttack,
-        OrderHide,
-        OrderPush,
-        OrderGrapple,
-        OrderReleaseLedge,
-        OrderActivate
-    }
-
-    public class Blackboard
-    {
-        public bool isAlive;
-        public bool isHidden;
-        public bool isGrounded;
-        public bool isPushing;
-        public bool isGrappled;
-        public bool isClimbingLedge;
-        public bool movingHorizontal;
-        public Collider2D LastLedgeDetected;
-    }
+    
 
     protected bool enslaved;
 
@@ -161,18 +165,17 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     public Animator Animator { get; protected set; }
     public Rigidbody2D RigidBody2D { get; protected set; }
 
-    private FSM<State, Trigger> aliveFSM;
-
-    [SerializeField]
-    private CharacterAliveState alive;
-    [SerializeField]
-    private CharacterDeadState dead;
-
-    protected List<Order> orders;
+    protected Queue<Trigger> orders;
 
     protected float groundDetectionDistance = 0.03f;
 
     public Collider2D Collider { get; protected set; }
+
+
+    [SerializeField]
+    private CharacterHSMStateAsset hsmAsset;
+
+    protected CharacterHSMState hsm;
 
     protected override void Awake()
     {
@@ -181,36 +184,32 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
 
+        blackboard = new Blackboard();
+
+        orders = new Queue<Trigger>();
+
+        Collider = GetComponent<Collider2D>();
+
         collisionCheckDeadlyDelegate = CheckDeadly;
         triggerCheckDeadlyDelegate = CheckDeadly;
 
         onCollisionEnter2D += collisionCheckDeadlyDelegate;
         onTriggerEnter2D += triggerCheckDeadlyDelegate;
 
-        blackboard = new Blackboard();
+        hsm = (CharacterHSMState)CharacterHSMStateAsset.BuildFromAsset(hsmAsset);
 
-        orders = new List<Order>();
+        hsm.PropagateCharacterReference(this);
 
-        Collider = GetComponent<Collider2D>();
-
-        aliveFSM = new FSM<State, Trigger>();
-
-        alive.InitializeState(aliveFSM, State.Alive, this, orders, blackboard);
-        dead.InitializeState(aliveFSM, State.Dead, this, orders, blackboard);
-
-        aliveFSM.AddState(alive);
-        aliveFSM.AddState(dead);
-
-        aliveFSM.MakeTransition(State.Alive, Trigger.Die, State.Dead);
-
-        aliveFSM.StartBy(State.Alive);
+        hsm.Enter();
     }
 
     protected virtual void Update()
     {
-        aliveFSM.UpdateCurrentState();
+        SendOrdersToStates();
 
-        ClearOrders();
+        hsm.Update();
+
+        
     }
 
     protected virtual void FixedUpdate()
@@ -221,14 +220,12 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    protected void AddStateMachineWhenAlive(FSM<State, Trigger> fsm)
+    private void SendOrdersToStates()
     {
-        alive.AddFSM(fsm);
-    }
-
-    protected void AddStateMachineWhenDead(FSM<State, Trigger> fsm)
-    {
-        dead.AddFSM(fsm);
+        while(orders.Count > 0)
+        {
+            hsm.SendEvent(orders.Dequeue());
+        }
     }
 
     public virtual bool Die(DeadlyType deadly)
@@ -247,7 +244,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     protected bool Die()
     {
-        aliveFSM.Trigger(Trigger.Die);
 
         if (onDead != null)
         {
@@ -259,19 +255,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     public abstract void GetEnslaved();
 
-    public virtual void SetOrder(Order order)
+    public virtual void SetOrder(Trigger order)
     {
-        orders.Add(order);
+        orders.Enqueue(order);
 
         if (onOrderReceived != null)
         {
             onOrderReceived(order);
         }
-    }
-
-    protected void ClearOrders()
-    {
-        orders.Clear();
     }
 
     public void Face(bool left)
@@ -300,10 +291,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     protected virtual void OnDetected()
     {
-        if(IsHidden)
-        {
-            SetOrder(Order.OrderHide);
-        }
+        
     }
 
     private void CheckDeadly(Collision2D collision)

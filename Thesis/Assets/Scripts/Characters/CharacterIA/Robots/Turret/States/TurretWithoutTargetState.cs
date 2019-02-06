@@ -10,9 +10,16 @@ public class TurretWithoutTargetState : TurretIAState
 
     private Action<Collider2D> analyzeDetectionDelegate;
 
-    private Character.Order currentMoveOrder;
+    private Character.Trigger currentMoveOrder;
 
-    protected override void OnEnter()
+    public TurretWithoutTargetState(TurretIAController.State state, string debugName) : base(state, debugName)
+    {
+        //analyzeDetectionDelegate = AnalyzeDetection;
+        targetLayers = 1 << Reg.playerLayer;
+        //currentMoveOrder = Character.Order.OrderMoveLeft;
+    }
+
+    /*protected override void OnEnter()
     {
         turretEyes = controller.CharacterEyes;
 
@@ -33,15 +40,6 @@ public class TurretWithoutTargetState : TurretIAState
         {
             turretEyes.onStay -= analyzeDetectionDelegate;
         }
-    }
-
-    public override void InitializeState(FSM<TurretIAController.State, TurretIAController.Trigger> stateMachine, TurretIAController.State state, TurretIAController controller, TurretIAController.Blackboard blackboard)
-    {
-        base.InitializeState(stateMachine, state, controller, blackboard);
-
-        analyzeDetectionDelegate = AnalyzeDetection;
-        targetLayers = 1 << Reg.playerLayer;
-        currentMoveOrder = Character.Order.OrderMoveLeft;
     }
 
     private void AnalyzeDetection(Collider2D collider)
@@ -68,5 +66,5 @@ public class TurretWithoutTargetState : TurretIAState
         }
 
         controller.Slave.SetOrder(currentMoveOrder);
-    }
+    }*/
 }

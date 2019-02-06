@@ -1,129 +1,132 @@
-﻿using SAM.FSM;
-using UnityEngine;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using System;
 
-[Serializable]
-public class TribalMovingState : CharacterState
+public class TribalMovingState : TribalHSMState
 {
-    private Rigidbody2D rigidbody2D;
-
-    [SerializeField]
-    private float moveForce = 0.2f, xVelocityDeadZone = 0.1f;
-
-    private Character.Order enteringOrder;
-    private int forceDirectionMultiplier;
-    private bool isGoingLeft;
-
-    private Animator animator;
+    private const int rightDirection = 1;
+    private const int noneDirection = 0;
 
     private Action onFixedUpdateDelegate;
 
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
+    private int currentMoveDirection;
+    private int previousMoveDirection;
+
+    private bool shouldMove;
+
+    public TribalMovingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
-        base.InitializeState(fsm, state, character, orders, blackboard);
-
-        rigidbody2D = character.RigidBody2D;
-
-        animator = character.Animator;
-
-        onFixedUpdateDelegate = ApplyForce;
+        onFixedUpdateDelegate = OnFixedUpdate;
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
 
-        foreach (Character.Order order in orders)
+        float currentVelocity = character.RigidBody2D.velocity.x;
+        
+        if(LastTrigger == Character.Trigger.MoveRight || currentVelocity > 0)
         {
-            if (order == Character.Order.OrderMoveLeft)
-            {
-                enteringOrder = order;
-                forceDirectionMultiplier = -1;
-                isGoingLeft = true;
-
-                break;
-            }
-            else if(order == Character.Order.OrderMoveRight)
-            {
-                enteringOrder = order;
-                forceDirectionMultiplier = 1;
-                isGoingLeft = false;
-
-                break;
-            }
+            Kick(rightDirection);
+        }
+        else if(LastTrigger == Character.Trigger.MoveLeft || currentVelocity < 0)
+        {
+            Kick(rightDirection * -1);
         }
 
         character.onFixedUpdate += onFixedUpdateDelegate;
 
-        animator.SetTrigger("Move");
-
-        EditorDebug.Log("MOVING ENTER");
-    }
-
-    protected override void OnExit()
-    {
-        EditorDebug.Log("MOVING EXIT");
-
-        animator.ResetTrigger("Move");
-
-        blackboard.movingHorizontal = false;
-
-        character.onFixedUpdate -= onFixedUpdateDelegate;
+        EditorDebug.Log("MOVING ENTER " + character.name);
     }
 
     protected override void OnUpdate()
     {
-        if(character.IsGrounded)
+        base.OnUpdate();
+
+        if(character.RigidBody2D.velocity.x == 0)
         {
-            for (int i = 0; i < orders.Count && character.CanMove; i++)
-            {
-                Character.Order order = orders[i];
+            SendEvent(Character.Trigger.StopMoving);
+        }
 
-                if (order == enteringOrder)
-                {
-                    if (character.IsGrounded)
-                    {
-                        character.Face(isGoingLeft);
+        
+        
+        
+    }
 
-                        blackboard.movingHorizontal = true;
-                    }
+    protected override void OnExit()
+    {
+        base.OnExit();
 
-                    return;
-                }
-                else if (order == Character.Order.OrderStopMoving || (isGoingLeft && order == Character.Order.OrderMoveRight) || (!isGoingLeft && order == Character.Order.OrderMoveLeft))
-                {
-                    stateMachine.Trigger(Character.Trigger.StopMoving);
-                    return;
-                }
+        character.onFixedUpdate -= onFixedUpdateDelegate;
 
-            }
+        EditorDebug.Log("MOVING EXIT " + character.name);
+    }
 
-            blackboard.movingHorizontal = false;
+    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    {
+        switch(trigger)
+        {
+            case Character.Trigger.MoveLeft:
 
-            if (rigidbody2D.velocity.x > -xVelocityDeadZone && rigidbody2D.velocity.x < xVelocityDeadZone)
-            {
-                stateMachine.Trigger(Character.Trigger.StopMoving);
-            }
+                currentMoveDirection = rightDirection * -1;
+                
+                shouldMove = true;
+
+                return TriggerResponse.Reject;
+
+            case Character.Trigger.MoveRight:
+
+                currentMoveDirection = rightDirection;
+                
+                shouldMove = true;
+
+                return TriggerResponse.Reject;
+
+            default:
+
+                return TriggerResponse.Accept;
+
         }
     }
 
-    private void ApplyForce()
+    private void OnFixedUpdate()
     {
-        if(blackboard.movingHorizontal)
+        if(shouldMove)
         {
-            Vector2 moveForceVector = new Vector2(moveForce, 0);
-
-            rigidbody2D.AddForce(moveForceVector * forceDirectionMultiplier, ForceMode2D.Impulse);
-
-            if (rigidbody2D.velocity.x >= character.MovementVelocity)
+            if (previousMoveDirection != currentMoveDirection)
             {
-                rigidbody2D.AddForce(-1 * moveForceVector, ForceMode2D.Impulse);
+                //posible animacion de cambiar de direccion de movimiento
+                MoveOnDirection(currentMoveDirection);
             }
-            else if (rigidbody2D.velocity.x <= -character.MovementVelocity)
+            else
             {
-                rigidbody2D.AddForce(moveForceVector, ForceMode2D.Impulse);
+                MoveOnDirection(currentMoveDirection);
+            }
+
+            if (character.RigidBody2D.velocity.x > character.MaxMovementVelocity || character.RigidBody2D.velocity.x < character.MaxMovementVelocity * -1)
+            {
+                ClampVelocity(currentMoveDirection);
             }
         }
+
+        previousMoveDirection = currentMoveDirection;
+
+        currentMoveDirection = noneDirection;
+    }
+
+    private void MoveOnDirection(int direction)
+    {
+        character.RigidBody2D.AddForce(new Vector2(direction * character.MovementVelocity, 0), ForceMode2D.Impulse);
+    }
+
+    private void ClampVelocity(int lastDirection)
+    {
+        MoveOnDirection(lastDirection * -1);
+    }
+
+    private void Kick(int direction)
+    {
+        character.RigidBody2D.AddForce(new Vector2(direction * character.MovementVelocity / 2, 0), ForceMode2D.Impulse);
     }
 }

@@ -4,42 +4,36 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[Serializable]
 public class XenophobicAwareState : XenophobicIAState
 {
     private Eyes characterEyes;
 
     private SyncTimer awareTimer;
-
-    [SerializeField]
+    
     private Vector2 eyesSize = new Vector2(9, 5);
-
-    [SerializeField]
+    
     private float fullAlertDetectionDistance = 6f, hiddenDetectionDistance = 1f, awareTime = 4f;
 
     private Action<Collider2D> onSomethingDetectedStayDelegate;
-
-    [SerializeField]
+    
     private int findProbability = 15;
     
     private int targetLayers;
 
-    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
+    public XenophobicAwareState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, controller, blackboard);
-
         characterEyes = controller.SlaveEyes;
 
         awareTimer = new SyncTimer();
         awareTimer.Interval = awareTime;
-        awareTimer.onTick += CalmDown;
+        /*awareTimer.onTick += CalmDown;
 
-        onSomethingDetectedStayDelegate += AnalyzeDetection;
+        onSomethingDetectedStayDelegate += AnalyzeDetection;*/
 
         targetLayers = (1 << Reg.playerLayer);
     }
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         if (characterEyes != null)
         {
@@ -119,5 +113,5 @@ public class XenophobicAwareState : XenophobicIAState
     private void CalmDown()
     {
         stateMachine.Trigger(XenophobicIAController.Trigger.CalmDown);
-    }
+    }*/
 }

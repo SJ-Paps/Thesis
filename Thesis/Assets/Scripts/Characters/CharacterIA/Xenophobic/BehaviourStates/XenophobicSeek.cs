@@ -3,46 +3,40 @@ using SAM.Timers;
 using System;
 using UnityEngine;
 
-[Serializable]
 public class XenophobicSeekState : XenophobicIAState
 {
-    [SerializeField]
     private float positionReachedMarginX = 1f, positionReachedMarginY = 1f;
 
     private SyncTimer renewPatrolTimer;
-
-    [SerializeField]
+    
     private float renewPatrolTime = 4f;
 
     private bool hasPositionTarget;
     private Vector2 lastSeekedPosition;
 
     private Action<Vector2> updatePositionDelegate;
-
-    [SerializeField]
+    
     private float movementVelocity = 4.5f;
 
     private float previousVelocity;
     
     private int targetLayers;
-
-    [SerializeField]
+    
     private float attackDetectionDistance = 1f;
 
-    public override void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
+    public XenophobicSeekState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        base.InitializeState(fsm, state, controller, blackboard);
-
-        updatePositionDelegate += UpdatePosition;
+        //updatePositionDelegate += UpdatePosition;
 
         renewPatrolTimer = new SyncTimer();
         renewPatrolTimer.Interval = renewPatrolTime;
-        renewPatrolTimer.onTick += RenewPatrol;
+        //renewPatrolTimer.onTick += RenewPatrol;
 
         targetLayers = (1 << Reg.playerLayer);
     }
+    
 
-    protected override void OnEnter()
+    /*protected override void OnEnter()
     {
         previousVelocity = controller.Slave.MovementVelocity;
         controller.Slave.MovementVelocity = movementVelocity;
@@ -130,6 +124,6 @@ public class XenophobicSeekState : XenophobicIAState
     private bool ShouldStop()
     {
         return controller.Slave.CheckWall(Reg.walkableLayerMask) || controller.Slave.CheckFloorAhead(Reg.walkableLayerMask) == false;
-    }
+    }*/
 
 }

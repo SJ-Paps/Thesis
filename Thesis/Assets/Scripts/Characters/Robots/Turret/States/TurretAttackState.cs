@@ -4,36 +4,12 @@ using SAM.FSM;
 using UnityEngine;
 using System;
 
-[Serializable]
-public class TurretAttackState : CharacterState
+public class TurretAttackState : CharacterHSMState
 {
-    public enum State
+
+    public TurretAttackState(Character.State state, string debugName) : base(state, debugName)
     {
-        Idle,
-        Charging,
-        Shooting
-    }
-
-    public enum Trigger
-    {
-        GoNext
-    }
-
-    [SerializeField]
-    private TurretChargeSubstate chargeState;
-
-    [SerializeField]
-    private TurretShootSubstate shootState;
-
-    private FSM<State, Trigger> attackSubStateMachine;
-
-    public override void InitializeState(FSM<Character.State, Character.Trigger> fsm, Character.State state, Character character, List<Character.Order> orders, Character.Blackboard blackboard)
-    {
-        base.InitializeState(fsm, state, character, orders, blackboard);
-
-        attackSubStateMachine = new FSM<State, Trigger>();
-        
-        chargeState.InitializeState(attackSubStateMachine, State.Charging, character, blackboard);
+        /*chargeState.InitializeState(attackSubStateMachine, State.Charging, character, blackboard);
         shootState.InitializeState(attackSubStateMachine, State.Shooting, character, blackboard);
 
         attackSubStateMachine.AddState(State.Idle);
@@ -46,10 +22,10 @@ public class TurretAttackState : CharacterState
 
         attackSubStateMachine.StartBy(State.Idle);
 
-        attackSubStateMachine.onStateChanged += OnStateChanged;
+        attackSubStateMachine.onStateChanged += OnStateChanged;*/
     }
 
-    private void OnStateChanged(State previous, State current)
+    /*private void OnStateChanged(State previous, State current)
     {
         if (previous == State.Shooting)
         {
@@ -70,12 +46,12 @@ public class TurretAttackState : CharacterState
     protected override void OnUpdate()
     {
         attackSubStateMachine.UpdateCurrentState();
-    }
+    }*/
 
     
 }
 
-public class TurretAttackSubstate : State<TurretAttackState.State, TurretAttackState.Trigger>
+/*public class TurretAttackSubstate : State<TurretAttackState.State, TurretAttackState.Trigger>
 {
     protected Character.Blackboard blackboard;
     protected Character character;
@@ -107,4 +83,4 @@ public class TurretAttackSubstate : State<TurretAttackState.State, TurretAttackS
     {
         
     }
-}
+}*/
