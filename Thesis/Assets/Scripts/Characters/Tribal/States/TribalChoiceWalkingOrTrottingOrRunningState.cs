@@ -9,9 +9,9 @@ public class TribalChoiceWalkingOrTrottingOrRunningState : TribalHSMState
 
     }
 
-    protected override void OnEnter()
+    protected override void OnUpdate()
     {
-        base.OnEnter();
+        base.OnUpdate();
 
         Redirect();
     }

@@ -16,6 +16,8 @@ public class TribalMovingState : TribalHSMState
 
     private bool shouldMove;
 
+    private bool isFirstUpdate;
+
     public TribalMovingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
         onFixedUpdateDelegate = OnFixedUpdate;
@@ -25,23 +27,19 @@ public class TribalMovingState : TribalHSMState
     {
         base.OnEnter();
 
-        float currentVelocity = character.RigidBody2D.velocity.x;
-        
-        if(LastTrigger == Character.Trigger.MoveRight || currentVelocity > 0)
-        {
-            MoveOnDirection(rightDirection);
-        }
-        else if(LastTrigger == Character.Trigger.MoveLeft || currentVelocity < 0)
-        {
-            MoveOnDirection(rightDirection * -1);
-        }
-
-        character.onFixedUpdate += onFixedUpdateDelegate;
+        isFirstUpdate = true;
     }
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
+
+        if(isFirstUpdate)
+        {
+            OnFirstUpdate();
+
+            isFirstUpdate = false;
+        }
 
         if(character.RigidBody2D.velocity.x == 0)
         {
@@ -101,6 +99,22 @@ public class TribalMovingState : TribalHSMState
         currentMoveDirection = noneDirection;
 
         shouldMove = false; //reseteo la variable a false, si llega un evento esta se seteara a true y podra moverse
+    }
+
+    private void OnFirstUpdate()
+    {
+        float currentVelocity = character.RigidBody2D.velocity.x;
+
+        if (LastEnteringTrigger == Character.Trigger.MoveRight || currentVelocity > 0)
+        {
+            MoveOnDirection(rightDirection);
+        }
+        else if (LastEnteringTrigger == Character.Trigger.MoveLeft || currentVelocity < 0)
+        {
+            MoveOnDirection(rightDirection * -1);
+        }
+
+        character.onFixedUpdate += onFixedUpdateDelegate;
     }
 
     private void MoveOnDirection(int direction)

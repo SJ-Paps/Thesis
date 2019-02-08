@@ -18,7 +18,7 @@ public class TribalChoiceJumpingOrFallingState : TribalHSMState
 
     private void Redirect()
     {
-        switch(LastTrigger)
+        switch(LastEnteringTrigger)
         {
             case Character.Trigger.Jump:
 

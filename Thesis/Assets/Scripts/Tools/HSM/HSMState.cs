@@ -8,8 +8,7 @@ public enum TriggerResponse : byte
     Reject
 }
 
-public delegate void StateChanged<TState>(TState previous, TState current) where TState : unmanaged;
-public delegate void TriggerReceived<TState, TTrigger>(HSMState<TState, TTrigger> receiver, TTrigger trigger) where TState : unmanaged where TTrigger : unmanaged;
+public delegate void StateChanged<TState, TTrigger>(TState previous, TState current, TTrigger trigger) where TState : unmanaged where TTrigger : unmanaged;
 
 public abstract class HSMState<TState, TTrigger> where TState : unmanaged where TTrigger : unmanaged
 {
@@ -39,7 +38,19 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         }
     }
 
-    public event StateChanged<TState> onStateChanged;
+    public event StateChanged<TState, TTrigger> onStateChanged;
+    public event StateChanged<TState, TTrigger> onAnyStateChanged
+    {
+        add
+        {
+            GetRoot().AddOnAnyStateChangedListener(value);
+        }
+
+        remove
+        {
+            GetRoot().RemoveOnAnyStateChangedListener(value);
+        }
+    }
 
     protected HSMState(TState stateId, string debugName = null, Func<TState, TState, bool> stateIdComparer = null, Func<TTrigger, TTrigger, bool> triggerComparer = null)
     {
@@ -182,6 +193,36 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
     protected virtual void OnExit()
     {
 
+    }
+
+    private void AddOnAnyStateChangedListener(StateChanged<TState, TTrigger> listener)
+    {
+        for(int i = 0; i < parallelChilds.Count; i++)
+        {
+            parallelChilds[i].AddOnAnyStateChangedListener(listener);
+        }
+
+        for (int i = 0; i < childs.Count; i++)
+        {
+            childs[i].AddOnAnyStateChangedListener(listener);
+        }
+
+        onStateChanged += listener;
+    }
+
+    private void RemoveOnAnyStateChangedListener(StateChanged<TState, TTrigger> listener)
+    {
+        for (int i = 0; i < parallelChilds.Count; i++)
+        {
+            parallelChilds[i].RemoveOnAnyStateChangedListener(listener);
+        }
+
+        for (int i = 0; i < childs.Count; i++)
+        {
+            childs[i].RemoveOnAnyStateChangedListener(listener);
+        }
+
+        onStateChanged -= listener;
     }
 
     public void AddChild(HSMState<TState, TTrigger> child)
@@ -461,7 +502,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
         if (onStateChanged != null)
         {
-            onStateChanged(transition.stateFrom, transition.stateTo);
+            onStateChanged(transition.stateFrom, transition.stateTo, transition.trigger);
         }
     }
 }

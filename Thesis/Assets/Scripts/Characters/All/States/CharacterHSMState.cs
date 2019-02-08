@@ -4,11 +4,11 @@ using System.Collections.Generic;
 public abstract class CharacterHSMState : HSMState<Character.State, Character.Trigger>
 {
     protected Character character;
+    protected Character.Trigger LastEnteringTrigger { get; private set; }
     protected Character.Trigger LastTrigger { get; private set; }
 
     protected CharacterHSMState(Character.State state, string debugName = null) : base(state, debugName)
     {
-
     }
 
     public void PropagateCharacterReference(Character reference)
@@ -37,14 +37,13 @@ public abstract class CharacterHSMState : HSMState<Character.State, Character.Tr
 
     private void InternalOnCharacterReferencePropagated()
     {
-        character.onOrderReceived += UpdateLastTrigger;
-
+        onAnyStateChanged += UpdateLastTriggers;
         OnCharacterReferencePropagated();
     }
 
     protected virtual void OnCharacterReferencePropagated()
     {
-
+        
     }
 
     protected override void OnEnter()
@@ -62,8 +61,13 @@ public abstract class CharacterHSMState : HSMState<Character.State, Character.Tr
         EditorDebug.Log(DebugName + " EXIT " + character.name);
     }
 
-    private void UpdateLastTrigger(Character.Trigger trigger)
+    private void UpdateLastTriggers(Character.State stateFrom, Character.State stateTo, Character.Trigger trigger)
     {
+        if(stateTo == StateId)
+        {
+            LastEnteringTrigger = trigger;
+        }
+
         LastTrigger = trigger;
     }
 }
