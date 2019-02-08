@@ -49,7 +49,7 @@ public abstract class CharacterHSMState : HSMState<Character.State, Character.Tr
 
     protected override void OnEnter()
     {
-
+        EditorDebug.Log(DebugName + " ENTER " + character.name);
     }
 
     protected override void OnUpdate()
@@ -59,7 +59,7 @@ public abstract class CharacterHSMState : HSMState<Character.State, Character.Tr
 
     protected override void OnExit()
     {
-        
+        EditorDebug.Log(DebugName + " EXIT " + character.name);
     }
 
     private void UpdateLastTrigger(Character.Trigger trigger)

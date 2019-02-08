@@ -907,10 +907,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabName: Main Character
-  oldmovementVelocity: 1
   eyes: {fileID: 0}
   handPoint: {fileID: 0}
   blockFacing: 0
   hsmAsset: {fileID: 11400000, guid: 94da28a8edfc32b45b08148c5a2adaed, type: 2}
   currentCollectableObject: {fileID: 0}
-  movementVelocity: 1.5
+  maxMovementVelocity: 2
+  acceleration: 0.5

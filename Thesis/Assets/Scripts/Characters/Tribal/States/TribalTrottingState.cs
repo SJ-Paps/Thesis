@@ -23,49 +23,21 @@ public class TribalTrottingState : TribalHSMState
 
     }
 
-    /*protected override void OnEnter()
+    protected override void OnEnter()
     {
         base.OnEnter();
 
-        foreach (Character.Order order in orders)
-        {
-            if (order == Character.Order.OrderMoveLeft)
-            {
-                enteringOrder = order;
-                forceDirectionMultiplier = -1;
-                isGoingLeft = true;
-
-                break;
-            }
-            else if(order == Character.Order.OrderMoveRight)
-            {
-                enteringOrder = order;
-                forceDirectionMultiplier = 1;
-                isGoingLeft = false;
-
-                break;
-            }
-        }
-
-        character.onFixedUpdate += onFixedUpdateDelegate;
-
-        animator.SetTrigger("Move");
-
-        EditorDebug.Log("MOVING ENTER");
+        character.Animator.SetTrigger(Tribal.TrotAnimatorTriggerName);
     }
 
     protected override void OnExit()
     {
-        EditorDebug.Log("MOVING EXIT");
+        base.OnExit();
 
-        animator.ResetTrigger("Move");
-
-        blackboard.movingHorizontal = false;
-
-        character.onFixedUpdate -= onFixedUpdateDelegate;
+        character.Animator.ResetTrigger(Tribal.TrotAnimatorTriggerName);
     }
 
-    protected override void OnUpdate()
+    /*protected override void OnUpdate()
     {
         if(character.IsGrounded)
         {

@@ -5,6 +5,8 @@ using System;
 
 public abstract class Tribal : Character
 {
+    public static readonly string TrotAnimatorTriggerName = "Move";
+
     [SerializeField]
     protected CollectableObject currentCollectableObject;
 
@@ -22,31 +24,28 @@ public abstract class Tribal : Character
     }
 
     [SerializeField]
-    protected float movementVelocity;
+    private float maxMovementVelocity;
+
+    [SerializeField]
+    private float acceleration;
+
+    private float velocityPercentageConstraint = 100;
+
+    private float constrainedVelocity;
 
     public float MaxMovementVelocity
     {
         get
         {
-            return MovementVelocity * 3;
+            return constrainedVelocity;
         }
     }
 
-    public float MovementVelocity
+    public float Acceleration
     {
         get
         {
-            return movementVelocity;
-        }
-
-        set
-        {
-            movementVelocity = value;
-
-            if(movementVelocity < 0)
-            {
-                movementVelocity = 0;
-            }
+            return acceleration;
         }
     }
 
@@ -100,6 +99,8 @@ public abstract class Tribal : Character
         {
             CurrentCollectableObject.Collect(this);
         }
+
+        AddVelocityConstraintByPercentage(100);
 
         /*movementFSM = new FSM<State, Trigger>();
         jumpingFSM = new FSM<State, Trigger>();
@@ -206,5 +207,17 @@ public abstract class Tribal : Character
 
             CurrentCollectableObject.Collect(this);
         }
+    }
+
+    public void AddVelocityConstraintByPercentage(float percentage)
+    {
+        velocityPercentageConstraint += percentage;
+
+        if(velocityPercentageConstraint < 0)
+        {
+            velocityPercentageConstraint = 0;
+        }
+
+        constrainedVelocity = (velocityPercentageConstraint * maxMovementVelocity) / 100;
     }
 }

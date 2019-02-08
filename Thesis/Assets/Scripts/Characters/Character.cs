@@ -101,17 +101,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     {
         get { return transform.right.x < 0; }
     }
-    public float oldMovementVelocity
-    {
-        get { return oldmovementVelocity; }
-        set
-        {
-            if(value >= 0)
-            {
-                oldmovementVelocity = value;
-            }
-        }
-    }
 	public bool IsPushing
     {
         get { return blackboard.isPushing; }
@@ -136,9 +125,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     }
 
     public virtual bool CanMove { get; }
-
-    [SerializeField] 
-    protected float oldmovementVelocity = 1;
 
     [SerializeField]
     protected Eyes eyes;
@@ -395,4 +381,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         return Physics2D.Linecast(beginPoint, endPoint, layers);
     }
+
+    
 }

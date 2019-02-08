@@ -18,15 +18,15 @@ public class TribalIdleState : TribalHSMState
 
     protected override void OnEnter()
     {
-        animator.SetTrigger("Idle");
+        base.OnEnter();
 
-        EditorDebug.Log("IDLE ENTER " + character.name);
+        animator.SetTrigger("Idle");
     }
 
     protected override void OnExit()
     {
-        animator.ResetTrigger("Idle");
+        base.OnExit();
 
-        EditorDebug.Log("IDLE EXIT " + character.name);
+        animator.ResetTrigger("Idle");
     }
 }
