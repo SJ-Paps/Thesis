@@ -5,14 +5,12 @@ using System;
 
 public class TribalMovingState : TribalHSMState
 {
-    private const int rightDirection = 1;
-    private const int leftDirection = -1;
-    private const int noneDirection = 0;
-
     private Action onFixedUpdateDelegate;
 
     private int currentMoveDirection;
     private int previousMoveDirection;
+
+    private float velocityDeadZone = 0.0002f;
 
     private bool shouldMove;
 
@@ -21,6 +19,8 @@ public class TribalMovingState : TribalHSMState
     public TribalMovingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
         onFixedUpdateDelegate = OnFixedUpdate;
+
+        activeDebug = true;
     }
 
     protected override void OnEnter()
@@ -28,8 +28,6 @@ public class TribalMovingState : TribalHSMState
         base.OnEnter();
 
         isFirstUpdate = true;
-
-
     }
 
     protected override void OnUpdate()
@@ -42,8 +40,7 @@ public class TribalMovingState : TribalHSMState
 
             isFirstUpdate = false;
         }
-
-        if(character.RigidBody2D.velocity.x == 0)
+        else if(character.RigidBody2D.velocity.x > (velocityDeadZone * -1) && character.RigidBody2D.velocity.x < velocityDeadZone)
         {
             SendEvent(Character.Trigger.StopMoving);
         }
@@ -63,7 +60,7 @@ public class TribalMovingState : TribalHSMState
         {
             case Character.Trigger.MoveLeft:
 
-                currentMoveDirection = leftDirection;
+                currentMoveDirection = (int)Vector2.left.x;
                 
                 shouldMove = true;
 
@@ -71,7 +68,7 @@ public class TribalMovingState : TribalHSMState
 
             case Character.Trigger.MoveRight:
 
-                currentMoveDirection = rightDirection;
+                currentMoveDirection = (int)Vector2.right.x;
                 
                 shouldMove = true;
 
@@ -84,7 +81,7 @@ public class TribalMovingState : TribalHSMState
         }
     }
 
-    private void OnFixedUpdate()
+    protected virtual void OnFixedUpdate()
     {
         if(shouldMove)
         {
@@ -98,7 +95,7 @@ public class TribalMovingState : TribalHSMState
 
         previousMoveDirection = currentMoveDirection;
 
-        currentMoveDirection = noneDirection;
+        currentMoveDirection = 0;
 
         shouldMove = false; //reseteo la variable a false, si llega un evento esta se seteara a true y podra moverse
     }
@@ -109,29 +106,34 @@ public class TribalMovingState : TribalHSMState
 
         if (LastEnteringTrigger == Character.Trigger.MoveRight || currentVelocity > 0)
         {
-            MoveOnDirection(rightDirection);
+            MoveOnDirection((int)Vector2.right.x);
         }
         else if (LastEnteringTrigger == Character.Trigger.MoveLeft || currentVelocity < 0)
         {
-            MoveOnDirection(leftDirection);
+            MoveOnDirection((int)Vector2.left.x);
         }
 
         character.onFixedUpdate += onFixedUpdateDelegate;
     }
 
-    private void MoveOnDirection(int direction)
+    protected void MoveOnDirection(int direction)
     {
         ApplyForceOnDirection(direction);
 
-        character.Face(direction < 0);
+        OnMoving();
     }
 
-    private void ApplyForceOnDirection(int direction)
+    protected virtual void OnMoving()
+    {
+        character.Face(currentMoveDirection < 0);
+    }
+
+    protected void ApplyForceOnDirection(int direction)
     {
         character.RigidBody2D.AddForce(new Vector2(direction * character.Acceleration, 0), ForceMode2D.Impulse);
     }
 
-    private void ClampVelocity(int lastDirection)
+    protected void ClampVelocity(int lastDirection)
     {
         ApplyForceOnDirection(lastDirection * -1);
     }

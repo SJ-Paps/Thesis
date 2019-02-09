@@ -28,6 +28,9 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         Running,
         Moving,
         ChoiceWalkingOrTrottingOrRunning,
+        CheckingForPushables,
+        ChoiceMovingByWillOrBraking,
+        Braking,
     }
 
     public enum Trigger : byte
@@ -56,7 +59,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     public class Blackboard
     {
-        
+        public MovableObject toPushMovableObject;
     }
 
     public event Action<Collision2D> onCollisionEnter2D;
@@ -144,7 +147,8 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         hsm = (CharacterHSMState)CharacterHSMStateAsset.BuildFromAsset(hsmAsset);
 
-        hsm.PropagateOwnerReference(this, blackboard);
+        hsm.PropagateOwnerReference(this);
+        hsm.PropagateBlackboardReference(blackboard);
 
         hsm.Enter();
     }
@@ -154,7 +158,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         SendOrdersToStates();
 
         hsm.Update();
-
         
     }
 
@@ -349,6 +352,35 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
 
         return Physics2D.Linecast(beginPoint, endPoint, layers);
+    }
+
+    public bool IsMovableObjectNear(float distance)
+    {
+        return IsMovableObjectNear(distance, out MovableObject temp);
+    }
+
+    public bool IsMovableObjectNear(float distance, out MovableObject outMovableObject)
+    {
+        outMovableObject = null;
+
+        Bounds bounds = Collider.bounds;
+        
+        float xDir = transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y);
+        Vector2 endPoint = new Vector2(beginPoint.x + distance, beginPoint.y);
+
+        RaycastHit2D raycastHit2D = Physics2D.Linecast(beginPoint, endPoint, 1 << Reg.movableObject);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.red);
+
+        if (raycastHit2D)
+        {
+            outMovableObject = raycastHit2D.transform.GetComponent<MovableObject>();
+            return true;
+        }
+
+        return false;
     }
 
     

@@ -6,6 +6,8 @@ using System;
 
 public class TribalGroundedState : TribalHSMState
 {
+    private float velocityDeadZone = 0.002f;
+
     public TribalGroundedState(Character.State state, string debugName) : base(state, debugName)
     {
 
@@ -22,7 +24,7 @@ public class TribalGroundedState : TribalHSMState
     {
         base.OnUpdate();
 
-        if (character.RigidBody2D.velocity.y < 0 && IsOnFloor(Reg.walkableLayerMask) == false)
+        if (character.RigidBody2D.velocity.y < velocityDeadZone && IsOnFloor(Reg.walkableLayerMask) == false)
         {
             SendEvent(Character.Trigger.Fall);
         }

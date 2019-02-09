@@ -463,6 +463,22 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return false;
     }
 
+    public bool IsParallelOfParent()
+    {
+        if(ActiveParent != null)
+        {
+            for (int i = 0; i < ActiveParent.parallelChilds.Count; i++)
+            {
+                if (stateIdComparer(ActiveParent.parallelChilds[i].StateId, StateId))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void BreakTransition(TState stateFrom, TTrigger trigger)
     {
         for (int i = 0; i < transitions.Count; i++)
@@ -508,7 +524,9 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     public bool SendEvent(TTrigger trigger)
     {
-        return InternalSendEvent(trigger);
+        var root = GetRoot();
+
+        return root.InternalSendEvent(trigger);
     }
 
     private bool InternalSendEvent(TTrigger trigger)
@@ -517,6 +535,14 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
         while (current != null)
         {
+            for (int i = 0; i < current.parallelChilds.Count; i++)
+            {
+                if (current.parallelChilds[i].InternalSendEvent(trigger))
+                {
+                    return true;
+                }
+            }
+
             TriggerResponse response = current.HandleEvent(trigger);
 
             switch (response)
@@ -535,18 +561,15 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
                         }
                     }
 
-                    for (int i = 0; i < current.parallelChilds.Count; i++)
+                    if(current.IsParallelOfParent())
                     {
-                        if (current.parallelChilds[i].SendEvent(trigger))
-                        {
-                            return true;
-                        }
+                        return false;
                     }
 
                     break;
 
                 case TriggerResponse.Reject:
-                    return false;
+                    return true;
             }
 
             current = current.ActiveParent;
@@ -562,6 +585,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     private void Transitionate(in HSMTransition<TState, TTrigger> transition)
     {
+
         ExitActiveNonParallelChild();
 
         ActiveNonParallelChild = GetImmediateChildState(transition.stateTo);

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
-  m_Name: TribalChoiceIdleOrTrottingState
+  m_Name: TribalChoiceIsMovingByWillOrBrakingState
   m_EditorClassIdentifier: 
-  script: {fileID: 11500000, guid: ae1feda4a54fc254ea81602edaa0462e, type: 3}
-  stateClassFullName: TribalChoiceIdleOrMovingState
-  debugName: Choice Idle Or Moving
-  stateId: 16
+  script: {fileID: 11500000, guid: 880411b855eeb024c9c0006570129317, type: 3}
+  stateClassFullName: TribalChoiceIsMovingByWillOrBrakingState
+  debugName: Choice Is Moving By Will Or Braking
+  stateId: 23
   startStateIndex: 0
   childs: []
   parallelChilds: []

@@ -2,6 +2,7 @@
 {
     protected Character character;
     protected Character.Trigger LastEnteringTrigger { get; private set; }
+    protected bool activeDebug;
 
     public Character Owner
     {
@@ -17,23 +18,23 @@
     {
     }
 
-    public void PropagateOwnerReference(Character reference, Character.Blackboard blackboard)
+    public void PropagateOwnerReference(Character reference)
     {
         CharacterHSMState root = (CharacterHSMState)GetRoot();
 
-        root.InternalPropagateOwnerReference(reference, blackboard);
+        root.InternalPropagateOwnerReference(reference);
     }
 
-    private void InternalPropagateOwnerReference(Character reference, Character.Blackboard blackboard)
+    private void InternalPropagateOwnerReference(Character reference)
     {
         for(int i = 0; i < parallelChilds.Count; i++)
         {
-            ((CharacterHSMState)parallelChilds[i]).InternalPropagateOwnerReference(reference, blackboard);
+            ((CharacterHSMState)parallelChilds[i]).InternalPropagateOwnerReference(reference);
         }
 
         for (int i = 0; i < childs.Count; i++)
         {
-            ((CharacterHSMState)childs[i]).InternalPropagateOwnerReference(reference, blackboard);
+            ((CharacterHSMState)childs[i]).InternalPropagateOwnerReference(reference);
         }
 
         for (int i = 0; i < transitions.Count; i++)
@@ -45,7 +46,6 @@
         }
         
         character = reference;
-        this.blackboard = blackboard;
 
         InternalOnCharacterReferencePropagated();
     }
@@ -63,17 +63,27 @@
 
     protected override void OnEnter()
     {
-        EditorDebug.Log(DebugName + " ENTER " + character.name);
+#if UNITY_EDITOR
+        if(activeDebug)
+        {
+            EditorDebug.Log(DebugName + " ENTER " + character.name);
+        }
+#endif
     }
 
     protected override void OnUpdate()
     {
-        
+
     }
 
     protected override void OnExit()
     {
-        EditorDebug.Log(DebugName + " EXIT " + character.name);
+#if UNITY_EDITOR
+        if(activeDebug)
+        {
+            EditorDebug.Log(DebugName + " EXIT " + character.name);
+        }
+#endif
     }
 
     private void CatchEnteringTrigger(Character.State stateFrom, Character.State stateTo, Character.Trigger trigger)
@@ -94,8 +104,33 @@
         }
     }
 
-    public void PropagateOwnerReference(Character ownerReference)
+    public void PropagateBlackboardReference(Character.Blackboard blackboard)
     {
-        throw new System.NotImplementedException();
+        CharacterHSMState root = (CharacterHSMState)GetRoot();
+
+        root.InternalPropagateBlackboardReference(blackboard);
+    }
+
+    private void InternalPropagateBlackboardReference(Character.Blackboard blackboard)
+    {
+        for (int i = 0; i < parallelChilds.Count; i++)
+        {
+            ((CharacterHSMState)parallelChilds[i]).InternalPropagateBlackboardReference(blackboard);
+        }
+
+        for (int i = 0; i < childs.Count; i++)
+        {
+            ((CharacterHSMState)childs[i]).InternalPropagateBlackboardReference(blackboard);
+        }
+
+        for (int i = 0; i < transitions.Count; i++)
+        {
+            foreach (CharacterGuardCondition guardCondition in transitions[i])
+            {
+                guardCondition.PropagateBlackboardReference(blackboard);
+            }
+        }
+
+        this.blackboard = blackboard;
     }
 }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
-  m_Name: TribalChoiceWalkingOrTrottingOrRunning
+  m_Name: TribalChoiceWalkingOrTrottingOrRunningState
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: 75925a047e6e64640bcc67dd70e65b4c, type: 3}
   stateClassFullName: TribalChoiceWalkingOrTrottingOrRunningState

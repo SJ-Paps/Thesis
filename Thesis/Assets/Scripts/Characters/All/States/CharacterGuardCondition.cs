@@ -14,11 +14,18 @@ public abstract class CharacterGuardCondition : GuardCondition, IOwnable<Charact
         }
     }
 
+    protected Character.Blackboard blackboard;
+
     public void PropagateOwnerReference(Character ownerReference)
     {
         character = ownerReference;
 
         OnOwnerReferencePropagated();
+    }
+
+    public void PropagateBlackboardReference(Character.Blackboard blackboard)
+    {
+        this.blackboard = blackboard;
     }
 
     protected virtual void OnOwnerReferencePropagated()
