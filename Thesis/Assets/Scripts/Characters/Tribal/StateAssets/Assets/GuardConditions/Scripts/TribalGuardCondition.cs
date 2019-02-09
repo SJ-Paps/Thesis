@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TribalHSMState : CharacterHSMState
+public abstract class TribalGuardCondition : CharacterGuardCondition
 {
     protected new Tribal character;
 
-    public TribalHSMState(Character.State stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnOwnerReferencePropagated()
     {
+        base.OnOwnerReferencePropagated();
+
         character = (Tribal)base.character;
     }
 }

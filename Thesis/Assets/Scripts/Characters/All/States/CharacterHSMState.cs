@@ -1,7 +1,15 @@
-﻿public abstract class CharacterHSMState : HSMState<Character.State, Character.Trigger>
+﻿public abstract class CharacterHSMState : HSMState<Character.State, Character.Trigger>, IOwnable<Character>
 {
     protected Character character;
     protected Character.Trigger LastEnteringTrigger { get; private set; }
+
+    public Character Owner
+    {
+        get
+        {
+            return character;
+        }
+    }
 
     protected Character.Blackboard blackboard;
 
@@ -9,23 +17,31 @@
     {
     }
 
-    public void PropagateCharacterReference(Character reference, Character.Blackboard blackboard)
+    public void PropagateOwnerReference(Character reference, Character.Blackboard blackboard)
     {
         CharacterHSMState root = (CharacterHSMState)GetRoot();
 
-        root.InternalPropagateCharacterReference(reference, blackboard);
+        root.InternalPropagateOwnerReference(reference, blackboard);
     }
 
-    private void InternalPropagateCharacterReference(Character reference, Character.Blackboard blackboard)
+    private void InternalPropagateOwnerReference(Character reference, Character.Blackboard blackboard)
     {
         for(int i = 0; i < parallelChilds.Count; i++)
         {
-            ((CharacterHSMState)parallelChilds[i]).InternalPropagateCharacterReference(reference, blackboard);
+            ((CharacterHSMState)parallelChilds[i]).InternalPropagateOwnerReference(reference, blackboard);
         }
 
         for (int i = 0; i < childs.Count; i++)
         {
-            ((CharacterHSMState)childs[i]).InternalPropagateCharacterReference(reference, blackboard);
+            ((CharacterHSMState)childs[i]).InternalPropagateOwnerReference(reference, blackboard);
+        }
+
+        for (int i = 0; i < transitions.Count; i++)
+        {
+            foreach(CharacterGuardCondition guardCondition in transitions[i])
+            {
+                guardCondition.PropagateOwnerReference(character);
+            }
         }
         
         character = reference;
@@ -37,10 +53,10 @@
     private void InternalOnCharacterReferencePropagated()
     {
         onAnyStateChanged += CatchEnteringTrigger;
-        OnCharacterReferencePropagated();
+        OnOwnerReferencePropagated();
     }
 
-    protected virtual void OnCharacterReferencePropagated()
+    protected virtual void OnOwnerReferencePropagated()
     {
         
     }
@@ -76,5 +92,10 @@
                 ((CharacterHSMState)ActiveNonParallelChild).LastEnteringTrigger = trigger;
             }
         }
+    }
+
+    public void PropagateOwnerReference(Character ownerReference)
+    {
+        throw new System.NotImplementedException();
     }
 }

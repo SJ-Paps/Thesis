@@ -25,3 +25,4 @@ MonoBehaviour:
   - stateFrom: 1
     trigger: 0
     stateTo: 2
+    guardConditions: []

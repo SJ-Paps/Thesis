@@ -101,11 +101,18 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
     {
         HSMState<TState, TTrigger> currentState = relationDictionary[baseAsset];
 
-        for (int j = 0; j < baseAsset.transitions.Length; j++)
+        for (int i = 0; i < baseAsset.transitions.Length; i++)
         {
-            HSMTransition<TState, TTrigger> transition = baseAsset.transitions[j].ToHSMTransition();
+            HSMTransition<TState, TTrigger> transition = baseAsset.transitions[i].ToHSMTransition();
 
-            currentState.MakeChildTransition(transition.stateFrom, transition.trigger, transition.stateTo);
+            currentState.MakeChildTransition(transition);
+        }
+
+        for (int i = 0; i < baseAsset.parallelChilds.Length; i++)
+        {
+            HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger> currentAssetChild = baseAsset.parallelChilds[i];
+
+            BuildTransitions(relationDictionary, currentAssetChild);
         }
 
         for (int i = 0; i < baseAsset.childs.Length; i++)

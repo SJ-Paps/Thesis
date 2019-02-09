@@ -9,9 +9,9 @@ public class TribalIdleState : TribalHSMState
         
     }
 
-    protected override void OnCharacterReferencePropagated()
+    protected override void OnOwnerReferencePropagated()
     {
-        base.OnCharacterReferencePropagated();
+        base.OnOwnerReferencePropagated();
 
         animator = character.Animator;
     }

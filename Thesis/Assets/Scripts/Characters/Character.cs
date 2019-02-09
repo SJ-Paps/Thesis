@@ -144,7 +144,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         hsm = (CharacterHSMState)CharacterHSMStateAsset.BuildFromAsset(hsmAsset);
 
-        hsm.PropagateCharacterReference(this, blackboard);
+        hsm.PropagateOwnerReference(this, blackboard);
 
         hsm.Enter();
     }

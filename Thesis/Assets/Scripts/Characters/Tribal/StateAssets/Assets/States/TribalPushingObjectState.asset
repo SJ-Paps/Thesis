@@ -10,44 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
-  m_Name: TribalStandingState
+  m_Name: TribalPushingObjectState
   m_EditorClassIdentifier: 
-  script: {fileID: 11500000, guid: 8429cfd53f1f7c4418901cc5d933d23f, type: 3}
-  stateClassFullName: TribalStandingState
-  debugName: Standing
-  stateId: 14
+  script: {fileID: 11500000, guid: f1cb5ea3386b9104c9f58366616209ac, type: 3}
+  stateClassFullName: TribalPushingObjectState
+  debugName: Pushing
+  stateId: 12
   startStateIndex: 0
   childs:
   - {fileID: 11400000, guid: 018b21b3242f61342a2323bfad1478fe, type: 2}
   - {fileID: 11400000, guid: 31967eac3f0f2ee438cba42e6ee50ab9, type: 2}
   - {fileID: 11400000, guid: 691c473c71284704092c4ba974f0d387, type: 2}
-  - {fileID: 11400000, guid: 1fe177b21ab1cf6448d0c0a04ccf7464, type: 2}
   parallelChilds: []
   transitions:
   - stateFrom: 16
-    trigger: 9
-    stateTo: 3
-  - stateFrom: 16
     trigger: 1
     stateTo: 20
+    guardConditions: []
   - stateFrom: 16
     trigger: 2
     stateTo: 20
+    guardConditions: []
+  - stateFrom: 16
+    trigger: 9
+    stateTo: 3
+    guardConditions: []
   - stateFrom: 3
     trigger: 1
     stateTo: 20
+    guardConditions: []
   - stateFrom: 3
     trigger: 2
     stateTo: 20
+    guardConditions: []
   - stateFrom: 20
     trigger: 9
     stateTo: 3
-  - stateFrom: 20
-    trigger: 12
-    stateTo: 12
-  - stateFrom: 3
-    trigger: 12
-    stateTo: 12
-  - stateFrom: 12
-    trigger: 11
-    stateTo: 16
+    guardConditions: []

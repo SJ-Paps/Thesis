@@ -11,9 +11,19 @@ public struct CharacterHSMTransition : IHSMTransitionSerializationWrapper<Charac
     [SerializeField]
     public Character.State stateTo;
 
+    [SerializeField]
+    public HSMGuardConditionAsset[] guardConditions;
+
     public HSMTransition<Character.State, Character.Trigger> ToHSMTransition()
     {
-        return new HSMTransition<Character.State, Character.Trigger>(stateFrom, trigger, stateTo);
+        HSMTransition<Character.State, Character.Trigger> transition = new HSMTransition<Character.State, Character.Trigger>(stateFrom, trigger, stateTo);
+
+        for(int i = 0; i < guardConditions.Length; i++)
+        {
+            transition.AddGuardCondition(guardConditions[i].CreateConcreteGuardCondition());
+        }
+
+        return transition;
     }
 }
 

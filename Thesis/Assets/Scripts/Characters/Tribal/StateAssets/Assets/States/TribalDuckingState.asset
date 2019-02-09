@@ -26,21 +26,28 @@ MonoBehaviour:
   - stateFrom: 16
     trigger: 9
     stateTo: 3
+    guardConditions: []
   - stateFrom: 16
     trigger: 1
     stateTo: 20
+    guardConditions: []
   - stateFrom: 16
     trigger: 2
     stateTo: 20
+    guardConditions: []
   - stateFrom: 3
     trigger: 1
     stateTo: 20
+    guardConditions: []
   - stateFrom: 3
     trigger: 2
     stateTo: 20
+    guardConditions: []
   - stateFrom: 20
     trigger: 9
     stateTo: 3
+    guardConditions: []
   - stateFrom: 16
     trigger: 16
     stateTo: 20
+    guardConditions: []

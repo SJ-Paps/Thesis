@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public enum TriggerResponse : byte
 {
@@ -414,9 +414,23 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return false;
     }
 
+    public bool MakeChildTransition(HSMTransition<TState, TTrigger> transition)
+    {
+        if (ContainsImmediateChildState(transition.stateFrom) && ContainsImmediateChildState(transition.stateTo))
+        {
+            if (!transitions.Contains(transition, stateIdComparer, triggerComparer))
+            {
+                transitions.Add(transition);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public bool ContainsChildTransition(TState childStateFrom, TTrigger trigger)
     {
-        return transitions.Contains(new HSMTransition<TState, TTrigger>(childStateFrom, trigger), stateIdComparer, triggerComparer);
+        return GetTransition(childStateFrom, trigger) != null;
     }
 
     public bool IsChildStateAbleToTransitionateTo(TState childStateFrom, TState childStateTo)
@@ -451,7 +465,16 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     public void BreakTransition(TState stateFrom, TTrigger trigger)
     {
-        transitions.Remove(new HSMTransition<TState, TTrigger>(stateFrom, trigger));
+        for (int i = 0; i < transitions.Count; i++)
+        {
+            HSMTransition<TState, TTrigger> current = transitions[i];
+
+            if (stateIdComparer(current.stateFrom, stateFrom) && triggerComparer(current.trigger, trigger))
+            {
+                transitions.RemoveAt(i);
+                break;
+            }
+        }
     }
 
     public void BreakAllTransitionFrom(TState state)
@@ -466,6 +489,21 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
                 i--;
             }
         }
+    }
+
+    public HSMTransition<TState, TTrigger> GetTransition(TState stateFrom, TTrigger trigger)
+    {
+        for (int i = 0; i < transitions.Count; i++)
+        {
+            var current = transitions[i];
+
+            if (stateIdComparer(current.stateFrom, stateFrom) && triggerComparer(current.trigger, trigger))
+            {
+                return current;
+            }
+        }
+
+        return default;
     }
 
     public bool SendEvent(TTrigger trigger)
@@ -487,12 +525,10 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
                     if (current.childs.Count > 0)
                     {
-                        HSMTransition<TState, TTrigger> transition = new HSMTransition<TState, TTrigger>(current.ActiveNonParallelChild.StateId, trigger);
-                        
-                        if (current.ContainsChildTransition(transition.stateFrom, trigger))
-                        {
-                            transition = current.transitions[current.transitions.IndexOf(transition)];
+                        HSMTransition<TState, TTrigger> transition = current.GetTransition(current.ActiveNonParallelChild.StateId, trigger);
 
+                        if (transition != null && transition.IsValidTransition())
+                        {
                             current.Transitionate(transition);
 
                             return true;
@@ -539,17 +575,21 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
     }
 }
 
-public readonly struct HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, TTrigger>> where TState : unmanaged where TTrigger : unmanaged
+public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, TTrigger>>, IEnumerable<GuardCondition> where TState : unmanaged where TTrigger : unmanaged
 {
     public readonly TState stateFrom;
     public readonly TTrigger trigger;
     public readonly TState stateTo;
+
+    protected List<GuardCondition> guardConditions;
 
     public HSMTransition(TState stateFrom, TTrigger trigger, TState stateTo)
     {
         this.stateFrom = stateFrom;
         this.trigger = trigger;
         this.stateTo = stateTo;
+
+        guardConditions = new List<GuardCondition>();
     }
 
     public HSMTransition(TState stateFrom, TTrigger trigger)
@@ -557,6 +597,32 @@ public readonly struct HSMTransition<TState, TTrigger> : IEquatable<HSMTransitio
         this.stateFrom = stateFrom;
         this.trigger = trigger;
         stateTo = default;
+    }
+
+    public void AddGuardCondition(GuardCondition guardCondition)
+    {
+        if(guardConditions.Contains(guardCondition) == false)
+        {
+            guardConditions.Add(guardCondition);
+        }
+    }
+
+    public void RemoveGuardCondition(GuardCondition guardCondition)
+    {
+        guardConditions.Remove(guardCondition);
+    }
+
+    public bool IsValidTransition()
+    {
+        for (int i = 0; i < guardConditions.Count; i++)
+        {
+            if(guardConditions[i].IsValid() == false)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public bool Equals(HSMTransition<TState, TTrigger> other)
@@ -567,5 +633,15 @@ public readonly struct HSMTransition<TState, TTrigger> : IEquatable<HSMTransitio
     public bool Equals(HSMTransition<TState, TTrigger> other, Func<TState, TState, bool> stateComparer, Func<TTrigger, TTrigger, bool> triggerComparer)
     {
         return stateComparer(stateFrom, other.stateFrom) && triggerComparer(trigger, other.trigger);
+    }
+
+    public IEnumerator<GuardCondition> GetEnumerator()
+    {
+        return guardConditions.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

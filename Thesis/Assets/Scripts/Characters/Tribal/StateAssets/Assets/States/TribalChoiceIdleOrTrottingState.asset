@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TribalChoiceIdleOrTrottingState
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: ae1feda4a54fc254ea81602edaa0462e, type: 3}
-  stateClassFullName: TribalChoiceIdleOrTrottingState
+  stateClassFullName: TribalChoiceIdleOrMovingState
   debugName: Choice Idle Or Moving
   stateId: 16
   startStateIndex: 0
