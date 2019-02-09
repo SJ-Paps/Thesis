@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalRunningState : TribalHSMState
 {
-    private float velocityConstraintPercentage = 50;
+    private float velocityConstraintPercentage = 90;
 
     private bool shouldExit;
 

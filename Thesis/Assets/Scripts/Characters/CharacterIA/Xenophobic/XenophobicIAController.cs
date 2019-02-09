@@ -1,6 +1,5 @@
-﻿using SAM.FSM;
+﻿using System;
 using UnityEngine;
-using System;
 
 public class XenophobicIAController : UnityController<Xenophobic, Character.Trigger>
 {

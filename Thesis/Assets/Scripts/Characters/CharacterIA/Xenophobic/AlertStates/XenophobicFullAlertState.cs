@@ -1,8 +1,6 @@
-﻿using SAM.FSM;
-using SAM.Timers;
-using UnityEngine;
+﻿using SAM.Timers;
 using System;
-using Random = UnityEngine.Random;
+using UnityEngine;
 
 [Serializable]
 public class XenophobicAlertfulState : XenophobicIAState

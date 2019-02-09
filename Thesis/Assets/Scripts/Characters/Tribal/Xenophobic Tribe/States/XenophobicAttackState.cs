@@ -1,8 +1,4 @@
-﻿using SAM.FSM;
-using System.Collections.Generic;
-using System;
-
-public class XenophobicAttackState : CharacterHSMState
+﻿public class XenophobicAttackState : CharacterHSMState
 {
     private Xenophobic xenophobic;
     private Weapon weapon;

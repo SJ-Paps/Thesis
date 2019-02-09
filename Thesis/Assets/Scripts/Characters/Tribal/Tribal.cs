@@ -1,11 +1,14 @@
-﻿using SAM.FSM;
+﻿using System;
 using UnityEngine;
-using System;
 
 
 public abstract class Tribal : Character
 {
-    public static readonly string TrotAnimatorTriggerName = "Move";
+    public const string TrotAnimatorTriggerName = "Move";
+    public const string IdleAnimatorTriggerName = "Idle";
+    public const string GroundAnimatorTriggerName = "Ground";
+    public const string FallAnimatorTriggerName = "Fall";
+    public const string JumpAnimatorTriggerName = "Jump";
 
     [SerializeField]
     protected CollectableObject currentCollectableObject;
@@ -24,10 +27,7 @@ public abstract class Tribal : Character
     }
 
     [SerializeField]
-    private float maxMovementVelocity;
-
-    [SerializeField]
-    private float acceleration;
+    private float maxMovementVelocity, acceleration;
 
     private float velocityPercentageConstraint = 100;
 
@@ -48,45 +48,23 @@ public abstract class Tribal : Character
             return acceleration;
         }
     }
-
-    /*[SerializeField]
-    protected TribalIdleState idleState;
-
+    
     [SerializeField]
-    protected TribalMovingState movingState;
+    private float jumpMaxHeight, jumpAcceleration;
 
-    [SerializeField]
-    protected TribalSlowDownState slowDownState;
-
-    [SerializeField]
-    protected TribalGroundedState groundedState;
-
-    [SerializeField]
-    protected TribalJumpingState jumpingState;
-
-    [SerializeField]
-    protected TribalFallingState fallingState;
-
-    [SerializeField]
-    protected TribalActionsIdleState actionIdleState;
-
-    [SerializeField]
-    protected TribalHiddenState hiddenState;
-
-    [SerializeField]
-    protected TribalPushingObjectState pushingState;
-
-    [SerializeField]
-    protected TribalGrapplingState grapplingState;
-
-    protected FSM<State, Trigger> movementFSM, jumpingFSM, actionFSM;*/
-
-    public override bool CanMove
+    public float JumpMaxHeight
     {
         get
         {
-            //return actionFSM.CurrentState.InnerState != State.Hidden && actionFSM.CurrentState.InnerState != State.Grappling;
-            return true;
+            return jumpMaxHeight;
+        }
+    }
+
+    public float JumpAcceleration
+    {
+        get
+        {
+            return jumpAcceleration;
         }
     }
 

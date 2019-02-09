@@ -28,6 +28,8 @@ public class TribalMovingState : TribalHSMState
         base.OnEnter();
 
         isFirstUpdate = true;
+
+
     }
 
     protected override void OnUpdate()
@@ -111,7 +113,7 @@ public class TribalMovingState : TribalHSMState
         }
         else if (LastEnteringTrigger == Character.Trigger.MoveLeft || currentVelocity < 0)
         {
-            MoveOnDirection(rightDirection * -1);
+            MoveOnDirection(leftDirection);
         }
 
         character.onFixedUpdate += onFixedUpdateDelegate;

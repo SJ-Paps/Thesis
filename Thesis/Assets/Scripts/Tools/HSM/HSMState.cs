@@ -353,6 +353,38 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return GetImmediateChildState(state) != null;
     }
 
+    public bool IsOnState(TState state)
+    {
+        var root = GetRoot();
+
+        return root.InternalIsOnState(state);
+    }
+
+    private bool InternalIsOnState(TState state)
+    {
+        for(int i = 0; i < parallelChilds.Count; i++)
+        {
+            if(parallelChilds[i].InternalIsOnState(state))
+            {
+                return true;
+            }
+        }
+
+        var current = this;
+
+        while(current != null)
+        {
+            if(stateIdComparer(current.StateId, state))
+            {
+                return true;
+            }
+
+            current = current.ActiveNonParallelChild;
+        }
+
+        return false;
+    }
+
     public void SetInitialState(TState stateId)
     {
         if(ContainsImmediateChildState(stateId))

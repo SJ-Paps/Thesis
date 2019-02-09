@@ -1,9 +1,4 @@
-﻿using SAM.FSM;
-using SAM.Timers;
-using UnityEngine;
-using System;
-using System.Collections.Generic;
-
+﻿
 /*[Serializable]
 public class TribalActionsIdleState : CharacterState 
 {

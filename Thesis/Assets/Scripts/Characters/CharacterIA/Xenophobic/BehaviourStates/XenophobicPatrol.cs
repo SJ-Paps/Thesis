@@ -1,7 +1,6 @@
-﻿using SAM.FSM;
-using UnityEngine;
+﻿using SAM.Timers;
 using System;
-using SAM.Timers;
+using UnityEngine;
 
 public class XenophobicPatrolState : XenophobicIAState
 {

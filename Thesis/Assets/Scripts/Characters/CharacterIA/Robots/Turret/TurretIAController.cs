@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using SAM.FSM;
-using System;
+﻿using System;
 
 public class TurretIAController : UnityController<Turret, Character.Trigger>
 {

@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using SAM.FSM;
-using UnityEngine;
-using System;
-
-public class TurretAttackState : CharacterHSMState
+﻿public class TurretAttackState : CharacterHSMState
 {
 
     public TurretAttackState(Character.State state, string debugName) : base(state, debugName)

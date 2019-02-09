@@ -51,6 +51,3 @@ MonoBehaviour:
   - stateFrom: 12
     trigger: 11
     stateTo: 16
-  - stateFrom: 16
-    trigger: 16
-    stateTo: 20

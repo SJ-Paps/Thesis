@@ -1,6 +1,4 @@
-﻿using SAM.FSM;
-
-public abstract class XenophobicIAState : HSMState<XenophobicIAController.State, XenophobicIAController.Trigger>
+﻿public abstract class XenophobicIAState : HSMState<XenophobicIAController.State, XenophobicIAController.Trigger>
 {
     protected XenophobicIAController controller;
     protected XenophobicIAController.Blackboard blackboard;

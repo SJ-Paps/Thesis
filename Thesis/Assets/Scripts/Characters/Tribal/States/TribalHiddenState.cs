@@ -1,11 +1,4 @@
-﻿using SAM.FSM;
-using SAM.Timers;
-using System;
-using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.Rendering;
-
-public class TribalHiddenState : TribalHSMState
+﻿public class TribalHiddenState : TribalHSMState
 {
     /*private SyncTimer timerForComingOut;
     

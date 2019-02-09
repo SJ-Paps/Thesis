@@ -1,47 +1,37 @@
-﻿using SAM.FSM;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 
 public class TribalFallingState : TribalHSMState
 {
-    /*private float circlecastRadius = 0.1f;
-
-    private int ledgeLayer;
-
-    private Animator animator;*/
-
     public TribalFallingState(Character.State state, string debugName) : base(state, debugName)
     {
-        /*animator = character.Animator;
-
-        ledgeLayer = 1 << Reg.ledgeLayer;*/
+        
     }
 
-    /*protected override void OnEnter()
+    protected override void OnEnter()
     {
-        animator.SetTrigger("Fall");
+        base.OnEnter();
 
-        EditorDebug.Log("FALLING ENTER " + character.name);
+        character.Animator.SetTrigger(Tribal.FallAnimatorTriggerName);
     }
 
     protected override void OnUpdate()
     {
-        CheckingForLedge();
+        base.OnUpdate();
 
-        if(character.IsOnFloor(Reg.walkableLayerMask))
+        if(character.RigidBody2D.velocity.y == 0 && IsOnFloor(Reg.walkableLayerMask))
         {
-            stateMachine.Trigger(Character.Trigger.Ground);
-            return;
+            SendEvent(Character.Trigger.Ground);
         }
     }
 
     protected override void OnExit()
     {
-        animator.ResetTrigger("Fall");
+        base.OnExit();
+
+        character.Animator.ResetTrigger(Tribal.FallAnimatorTriggerName);
     }
 
-    private void CheckingForLedge()
+    /*private void CheckingForLedge()
     {
         Bounds bounds = character.Collider.bounds;
         float xDir = character.transform.right.x;
@@ -56,5 +46,21 @@ public class TribalFallingState : TribalHSMState
             stateMachine.Trigger(Character.Trigger.Grapple);
         }
     }*/
+
+    private bool IsOnFloor(int layerMask)
+    {
+        Bounds bounds = character.Collider.bounds;
+        float height = 0.05f;
+
+        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
+        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
+
+        EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
+        EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
+
+        return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
+            Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
+
+    }
 
 }

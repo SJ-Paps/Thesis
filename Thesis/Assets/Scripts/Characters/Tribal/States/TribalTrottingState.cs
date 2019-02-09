@@ -1,9 +1,4 @@
-﻿using SAM.FSM;
-using UnityEngine;
-using System.Collections.Generic;
-using System;
-
-public class TribalTrottingState : TribalHSMState
+﻿public class TribalTrottingState : TribalHSMState
 {
     /*private Rigidbody2D rigidbody2D;
 

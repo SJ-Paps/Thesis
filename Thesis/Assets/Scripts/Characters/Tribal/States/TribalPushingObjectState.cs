@@ -1,9 +1,4 @@
-﻿using SAM.FSM;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-
-public class TribalPushingObjectState : TribalHSMState
+﻿public class TribalPushingObjectState : TribalHSMState
 {
 
     /*[SerializeField]

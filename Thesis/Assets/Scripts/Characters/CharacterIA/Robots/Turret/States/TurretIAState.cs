@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using SAM.FSM;
-
-public class TurretIAState : HSMState<TurretIAController.State, TurretIAController.Trigger>
+﻿public class TurretIAState : HSMState<TurretIAController.State, TurretIAController.Trigger>
 {
     protected TurretIAController controller;
 

@@ -4,104 +4,83 @@ using UnityEngine;
 public class TribalJumpingState : TribalHSMState
 {
 
-    /*private bool jumping;
-    private Rigidbody2D rigidbody2D;
-    private Collider2D collider;
-
-    [SerializeField]
-    private float maxHeight = 1, maxVelocity = 4, jumpForce = 0.8f, circlecastRadius = 0.1f, yVelocityDeadZone = 0.1f;
-
-    private int ledgeLayer;
+    private bool isOrderingJump;
 
     private float currentMaxHeight;
 
-    private Animator animator;
-
-    private Action onFixedUpdateDelegate;*/
+    private Action onFixedUpdateDelegate;
 
     public TribalJumpingState(Character.State state, string debugName) : base(state, debugName)
     {
-        /*rigidbody2D = character.RigidBody2D;
-        collider = character.Collider;
-
-        animator = character.Animator;
-
-        ledgeLayer = 1 << Reg.ledgeLayer;
-
-        //onFixedUpdateDelegate = ApplyForce;*/
+        onFixedUpdateDelegate = OnFixedUpdate;
     }
 
-    /*protected override void OnEnter()
+    protected override void OnEnter()
     {
         base.OnEnter();
 
-        animator.SetTrigger("Jump");
-
-        EditorDebug.Log("JUMPING ENTER");
-
-        float initPosY = character.transform.position.y;
-
-        currentMaxHeight = initPosY + maxHeight;
-
-        Vector2 jumpForceVector = new Vector2(0, jumpForce);
-
-        rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
+        currentMaxHeight = character.transform.position.y + character.JumpMaxHeight;
 
         character.onFixedUpdate += onFixedUpdateDelegate;
-    }*/
+
+        character.Animator.SetTrigger(Tribal.JumpAnimatorTriggerName);
+    }
 
     protected override void OnUpdate()
     {
-        /*CheckingForLedge();
-        Jump();*/
+        if(ShouldContinueJumping() == false)
+        {
+            SendEvent(Character.Trigger.Fall);
+        }
 
         base.OnUpdate();
     }
 
-    /*protected override void OnExit()
+    protected override void OnExit()
     {
-        animator.ResetTrigger("Jump");
+        base.OnExit();
 
         character.onFixedUpdate -= onFixedUpdateDelegate;
-    }*/
 
-    /*private void Jump()
+        character.Animator.ResetTrigger(Tribal.JumpAnimatorTriggerName);
+    }
+
+    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
     {
-        jumping = false;
-
-        for(int i = 0; i < orders.Count; i++)
+        switch(trigger)
         {
-            Character.Order order = orders[i];
+            case Character.Trigger.Jump:
 
-            if (order == Character.Order.OrderJump)
-            {
-                if (character.transform.position.y < currentMaxHeight)
-                {
-                    jumping = true;
-                    break;
-                }
-            }
-        }
+                isOrderingJump = true;
 
-        if(rigidbody2D.velocity.y > maxVelocity)
-        {
-            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, maxVelocity);
-        }
+                return TriggerResponse.Reject;
 
-        if (!jumping || rigidbody2D.velocity.y < yVelocityDeadZone)
-        {
-            stateMachine.Trigger(Character.Trigger.Fall);
+            default:
+
+                return TriggerResponse.Accept;
+
+
         }
     }
 
-    private void ApplyForce()
+    private bool ShouldContinueJumping()
     {
-        Vector2 jumpForceVector = new Vector2(0, jumpForce);
-
-        rigidbody2D.AddForce(jumpForceVector, ForceMode2D.Impulse);
+        return character.transform.position.y < currentMaxHeight && isOrderingJump;
     }
 
-    private void CheckingForLedge()
+    private void OnFixedUpdate()
+    {
+        Jump();
+
+        isOrderingJump = false;
+    }
+
+    private void Jump()
+    {
+        character.RigidBody2D.AddForce(new Vector2(0, character.JumpAcceleration), ForceMode2D.Impulse);
+    }
+
+    /*private void CheckingForLedge()
     {
         Bounds bounds = character.Collider.bounds;
         float xDir = character.transform.right.x;

@@ -1,9 +1,4 @@
-﻿using SAM.FSM;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TurretMovingState : CharacterHSMState
+﻿public class TurretMovingState : CharacterHSMState
 {
     private Turret turret;
 

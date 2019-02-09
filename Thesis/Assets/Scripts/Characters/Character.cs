@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System;
-using SAM.FSM;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>, IMortal
 {
@@ -57,14 +56,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     public class Blackboard
     {
-        public bool isAlive;
-        public bool isHidden;
-        public bool isGrounded;
-        public bool isPushing;
-        public bool isGrappled;
-        public bool isClimbingLedge;
-        public bool movingHorizontal;
-        public Collider2D LastLedgeDetected;
+        
     }
 
     public event Action<Collision2D> onCollisionEnter2D;
@@ -80,39 +72,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     protected Blackboard blackboard;
     
-    public bool IsHidden
-    {
-        get { return blackboard.isHidden; }
-    }
-    public bool IsMovingHorizontal
-    {
-        get { return blackboard.movingHorizontal; }
-    }
-    
-    public bool IsGrounded
-    {
-        get { return blackboard.isGrounded; }
-    }
-    public bool IsAlive
-    {
-        get { return blackboard.isAlive; }
-    }
-    public bool FacingLeft
-    {
-        get { return transform.right.x < 0; }
-    }
-	public bool IsPushing
-    {
-        get { return blackboard.isPushing; }
-    }
-    public bool IsGrappled
-    {
-        get { return blackboard.isGrappled; }
-    }
-    public bool IsClimbingLedge
-    {
-        get { return blackboard.isClimbingLedge; }
-    }
+    public bool IsFacingLeft { get; private set; }
 
 	public Eyes Eyes
     {
@@ -184,7 +144,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         hsm = (CharacterHSMState)CharacterHSMStateAsset.BuildFromAsset(hsmAsset);
 
-        hsm.PropagateCharacterReference(this);
+        hsm.PropagateCharacterReference(this, blackboard);
 
         hsm.Enter();
     }
@@ -206,6 +166,11 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
+    public bool IsOnState(State state)
+    {
+        return hsm.IsOnState(state);
+    }
+
     private void SendOrdersToStates()
     {
         while(orders.Count > 0)
@@ -214,9 +179,11 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
+
+
     public virtual bool Die(DeadlyType deadly)
     {
-        if(IsAlive)
+        if(IsOnState(State.Alive))
         {
             Collider.enabled = false;
 
@@ -253,11 +220,13 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     public void Face(bool left)
     {
-        if(!blockFacing && FacingLeft != left)
+        if(!blockFacing && IsFacingLeft != left)
         {
             transform.Rotate(Vector3.up, 180);
 
-            OnFacingChanged(FacingLeft);
+            IsFacingLeft = left;
+
+            OnFacingChanged(IsFacingLeft);
         }
     }
 

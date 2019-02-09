@@ -1,7 +1,6 @@
-﻿using System;
+﻿using SAM.Timers;
+using System;
 using UnityEngine;
-using SAM.Timers;
-using SAM.FSM;
 
 public class TurretAlertFulState : TurretIAState
 {
