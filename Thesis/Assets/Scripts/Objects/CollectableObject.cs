@@ -1,19 +1,23 @@
-﻿public abstract class CollectableObject : ActivableObject, ICollectable {
+﻿public abstract class CollectableObject : ActivableObject, ICollectable<Character> {
 
-    public Character User { get; protected set; }
+    public Character Owner { get; protected set; }
 
     public virtual bool Collect(Character user)
     {
-        User = user;
+        Owner = user;
 
         return true;
     }
 
     public virtual bool Drop()
     {
-        User = null;
+        Owner = null;
 
         return true;
     }
-	
+
+    public void PropagateOwnerReference(Character ownerReference)
+    {
+        
+    }
 }

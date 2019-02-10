@@ -17,7 +17,7 @@ public class TribalRunningState : TribalHSMState
     {
         base.OnEnter();
 
-        character.Animator.SetTrigger(Tribal.TrotAnimatorTriggerName);
+        character.Animator.SetTrigger(Tribal.RunAnimatorTriggerName);
 
         character.AddVelocityConstraintByPercentage(velocityConstraintPercentage);
 

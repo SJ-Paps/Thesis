@@ -1,6 +1,5 @@
 ﻿
-
-public interface IActivable
+public interface IActivable<TActivator> where TActivator : class
 {
-    void Activate(Character user);
+    void Activate(TActivator user);
 }

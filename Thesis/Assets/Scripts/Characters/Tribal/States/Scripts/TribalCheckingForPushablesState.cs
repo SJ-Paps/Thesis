@@ -51,15 +51,14 @@ public class TribalCheckingForPushablesState : CharacterHSMState
 
     private void CheckPushable()
     {
-        float pushCheckDistance = 0.2f;
+        Vector2 detectionSize = new Vector2((character.Collider.bounds.extents.x * 2) + Tribal.movableObjectDetectionOffset, character.Collider.bounds.extents.y * 2);
 
-        MovableObject movableObject;
+        MovableObject movableObject = SJUtil.FindActivable<MovableObject, Character>(character.Collider.bounds.center, detectionSize, character.transform.eulerAngles.z);
 
-        if(character.IsMovableObjectNear(pushCheckDistance, out movableObject))
+        if (movableObject != null)
         {
             blackboard.toPushMovableObject = movableObject;
             SendEvent(Character.Trigger.Push);
-            
         }
     }
 }

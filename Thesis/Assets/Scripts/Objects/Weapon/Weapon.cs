@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class Weapon : CollectableObject, IActivable, IThrowable {
+public abstract class Weapon : CollectableObject, IActivable<Character>, IThrowable {
     
     public virtual bool BeingUsed { get; protected set; }
     
@@ -9,9 +9,9 @@ public abstract class Weapon : CollectableObject, IActivable, IThrowable {
         base.Awake();
     }
 
-    public void Activate(Character user)
+    public override void Activate(Character user)
     {
-        if(User != null && !BeingUsed)
+        if(Owner != null && !BeingUsed)
         {
             OnUseWeapon();
         }

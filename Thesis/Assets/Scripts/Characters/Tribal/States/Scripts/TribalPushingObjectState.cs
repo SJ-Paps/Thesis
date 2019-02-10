@@ -19,14 +19,14 @@ public class TribalPushingObjectState : TribalHSMState
 
         if(targetMovableObject == null)
         {
-            float pushCheckDistance = 0.2f;
+            Vector2 detectionSize = new Vector2((character.Collider.bounds.extents.x * 2) + Tribal.movableObjectDetectionOffset, character.Collider.bounds.extents.y * 2);
 
-            character.IsMovableObjectNear(pushCheckDistance, out targetMovableObject);
+            targetMovableObject = SJUtil.FindActivable<MovableObject, Character>(character.Collider.bounds.center, detectionSize, character.transform.eulerAngles.z);
         }
 
         if(targetMovableObject != null)
         {
-            targetMovableObject.Connect(character.RigidBody2D);
+            targetMovableObject.Activate(character);
 
             character.blockFacing = true;
 
@@ -57,7 +57,7 @@ public class TribalPushingObjectState : TribalHSMState
 
         if(targetMovableObject != null)
         {
-            targetMovableObject.Disconnect();
+            targetMovableObject.Activate(character);
             targetMovableObject = null;
         }
 

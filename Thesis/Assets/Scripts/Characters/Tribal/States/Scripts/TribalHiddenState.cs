@@ -1,71 +1,65 @@
-﻿public class TribalHiddenState : TribalHSMState
+﻿using UnityEngine;
+
+public class TribalHiddenState : TribalHSMState
 {
-    /*private SyncTimer timerForComingOut;
-    
-    private float cooldownForComingOut = 0.7f;
-
-    private Rigidbody2D rigidbody2D;
-
-    private SortingGroup sortingGroup;*/
+    private Hide currentHide;
 
     public TribalHiddenState(Character.State state, string debugName) : base(state, debugName)
     {
-        /*timerForComingOut = new SyncTimer();
-
-        //timerForComingOut.onTick += StopTimerForComingOut;
-        timerForComingOut.Interval = cooldownForComingOut;
-
-        rigidbody2D = character.RigidBody2D;
-
-        sortingGroup = character.GetComponentInChildren<SortingGroup>();*/
+        activeDebug = true;
     }
 
-    /*protected override void OnEnter() 
+    protected override void OnEnter() 
     {
-        blackboard.isHidden = true;
+        base.OnEnter();
 
-        rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+        currentHide = blackboard.toHidePlace;
 
-        sortingGroup.sortingOrder = 4;
-        EditorDebug.Log("HIDDEN ENTER");
+        if(currentHide == null)
+        {
+            Vector2 detectionSize = new Vector2((character.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, character.Collider.bounds.extents.y * 2);
+
+            currentHide = SJUtil.FindActivable<Hide, Character>(character.Collider.bounds.center, detectionSize, character.transform.eulerAngles.z);
+        }
+
+        if(currentHide == null)
+        {
+            SendEvent(Character.Trigger.StopHiding);
+        }
+
+        currentHide.Activate(character);
+
+        character.Animator.SetTrigger(Tribal.HideAnimatorTriggerName);
+
     }
 
     protected override void OnExit()
     {
-        blackboard.isHidden = false;
+        base.OnExit();
 
-        sortingGroup.sortingOrder = 6;
-        EditorDebug.Log("HIDDEN EXIT");
+        currentHide.Activate(character);
+
+        currentHide = null;
+
+        character.Animator.ResetTrigger(Tribal.HideAnimatorTriggerName);
     }
 
     protected override void OnUpdate() 
     {
-        Hide();
+        base.OnUpdate();
     }
 
-    private void Hide() 
+    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
     {
-        timerForComingOut.Update(Time.deltaTime);
-
-        for (int i = 0; i < orders.Count; i++)
+        switch(trigger)
         {
-            Character.Order ev = orders[i];
+            case Character.Trigger.Jump:
 
-            if (ev == Character.Order.OrderHide && !timerForComingOut.Active) 
-            {
-                EditorDebug.Log("LLAMADO AL TIMER HIDDEN");
-                timerForComingOut.Start();
-            }
+                return TriggerResponse.Reject;
+
+            default:
+
+                return TriggerResponse.Accept;
         }
     }
-
-    private void ComingOutOfTheHidingPlace() 
-    {
-        stateMachine.Trigger(Character.Trigger.StopHiding);
-    }
-
-    void StopTimerForComingOut(SyncTimer timer) 
-    {
-        ComingOutOfTheHidingPlace();
-    }*/
 }

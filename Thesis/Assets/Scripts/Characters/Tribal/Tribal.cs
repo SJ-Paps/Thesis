@@ -5,10 +5,16 @@ using UnityEngine;
 public abstract class Tribal : Character
 {
     public const string TrotAnimatorTriggerName = "Move";
+    public const string RunAnimatorTriggerName = "Move";
+    public const string WalkAnimatorTriggerName = "Move";
     public const string IdleAnimatorTriggerName = "Idle";
     public const string GroundAnimatorTriggerName = "Ground";
     public const string FallAnimatorTriggerName = "Fall";
     public const string JumpAnimatorTriggerName = "Jump";
+    public const string HideAnimatorTriggerName = "Idle";
+
+    public const float activableDetectionOffset = 0.2f;
+    public const float movableObjectDetectionOffset = 0.2f;
 
     [SerializeField]
     protected CollectableObject currentCollectableObject;

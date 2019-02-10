@@ -41,7 +41,7 @@
         {
             foreach(CharacterGuardCondition guardCondition in transitions[i])
             {
-                guardCondition.PropagateOwnerReference(character);
+                guardCondition.PropagateOwnerReference(reference);
             }
         }
         

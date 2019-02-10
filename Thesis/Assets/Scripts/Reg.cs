@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 using System.IO;
-using System;
+using UnityEngine;
 
 public static class Reg
 {
@@ -29,12 +29,13 @@ public static class Reg
     public const int hostileDeadlyLayer = 11;
     public const int generalDeadlyLayer = 12;
 	public const int floorLayer = 13;
-    public const int activableObject = 14;
-    public const int movableObject = 15;
+    public const int activableObjectLayer = 14;
+    public const int movableObjectLayer = 15;
     public const int playerDetectionLayer = 16;
     public const int itemLayer = 17;
 	public const int ledgeLayer = 18;
 
-    public static readonly int walkableLayerMask = (1 << floorLayer) | (1 << movableObject);
+    public static readonly int walkableLayerMask = (1 << floorLayer) | (1 << movableObjectLayer);
+    public static readonly int activableLayerMask = (1 << movableObjectLayer) | (1 << activableObjectLayer);
     
 }

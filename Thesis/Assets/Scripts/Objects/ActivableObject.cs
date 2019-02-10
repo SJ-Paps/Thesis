@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class ActivableObject : SJMonoBehaviourSaveable, IActivable
+public abstract class ActivableObject : SJMonoBehaviourSaveable, IActivable<Character>
 {
     public virtual void Activate(Character user)
     {

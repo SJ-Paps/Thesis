@@ -17,7 +17,7 @@ public class TribalWalkingState : TribalHSMState
     {
         base.OnEnter();
 
-        character.Animator.SetTrigger(Tribal.TrotAnimatorTriggerName);
+        character.Animator.SetTrigger(Tribal.WalkAnimatorTriggerName);
 
         character.AddVelocityConstraintByPercentage(velocityConstraintPercentage * -1);
 
@@ -40,7 +40,7 @@ public class TribalWalkingState : TribalHSMState
     {
         base.OnExit();
 
-        character.Animator.ResetTrigger(Tribal.TrotAnimatorTriggerName);
+        character.Animator.ResetTrigger(Tribal.WalkAnimatorTriggerName);
 
         character.AddVelocityConstraintByPercentage(velocityConstraintPercentage);
     }

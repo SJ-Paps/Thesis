@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class MovableObject : SJMonoBehaviour {
+public class MovableObject : ActivableObject {
 
     protected Joint2D joint;
 
@@ -14,21 +14,28 @@ public class MovableObject : SJMonoBehaviour {
         joint = GetComponent<Joint2D>();
     }
 
-    public void Connect(Rigidbody2D rigidbody)
-    {
-        joint.enabled = true;
-        joint.connectedBody = rigidbody;
-    }
-
-    public void Disconnect()
-    {
-        joint.enabled = false;
-        joint.connectedBody = null;
-    }
-
     public Joint2D GetJoint()
     {
         return joint;
+    }
+
+    public override void Activate(Character user)
+    {
+        if(joint.enabled == false)
+        {
+            joint.enabled = true;
+            joint.connectedBody = user.RigidBody2D;
+        }
+        else
+        {
+            joint.enabled = false;
+            joint.connectedBody = null;
+        }
+    }
+
+    public override bool ShouldBeSaved()
+    {
+        return true;
     }
 
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public static class SJUtil
 {
-    public static T FindActivable<T>(Vector2 center, Vector2 size, float angle) where T : IActivable
+    public static T FindActivable<T, TActivator>(Vector2 center, Vector2 size, float angle) where T : IActivable<TActivator> where TActivator : class
     {
-        Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, 1 << Reg.activableObject);
+        Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, Reg.activableLayerMask);
 
         for (int i = 0; i < nearObjects.Length; i++)
         {
@@ -21,9 +21,9 @@ public static class SJUtil
         return default(T);
     }
 
-    public static void FindActivables<T>(Vector2 center, Vector2 size, float angle, List<T> activablesStorage) where T : IActivable
+    public static void FindActivables<T, TActivator>(Vector2 center, Vector2 size, float angle, List<T> activablesStorage) where T : IActivable<TActivator> where TActivator : class
     {
-        Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, 1 << Reg.activableObject);
+        Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, Reg.activableLayerMask);
 
         for (int i = 0; i < nearObjects.Length; i++)
         {

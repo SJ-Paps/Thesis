@@ -51,11 +51,13 @@ MonoBehaviour:
   - stateFrom: 20
     trigger: 12
     stateTo: 12
-    guardConditions: []
+    guardConditions:
+    - {fileID: 11400000, guid: d115b43db75ba9c4490d1248ffe50184, type: 2}
   - stateFrom: 3
     trigger: 12
     stateTo: 12
-    guardConditions: []
+    guardConditions:
+    - {fileID: 11400000, guid: d115b43db75ba9c4490d1248ffe50184, type: 2}
   - stateFrom: 12
     trigger: 11
     stateTo: 16
