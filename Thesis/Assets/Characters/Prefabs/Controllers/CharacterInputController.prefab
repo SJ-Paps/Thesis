@@ -118,3 +118,11 @@ MonoBehaviour:
       name: Run
       keys: 30010000
     orders: 13
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 0
+      isKeyReleased: 0
+      name: Duck
+      keys: 32010000
+    orders: 0f

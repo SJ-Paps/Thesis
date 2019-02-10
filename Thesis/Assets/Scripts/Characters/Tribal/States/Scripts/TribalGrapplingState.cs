@@ -14,7 +14,7 @@ public class TribalGrapplingState : TribalHSMState
     public TribalGrapplingState(Character.State state, string debugName) : base(state, debugName)
     {
         rigidbody2D = character.RigidBody2D;
-        collider2D = (BoxCollider2D)character.Collider;
+        //collider2D = (BoxCollider2D)character.Collider;
 
         ledgeLayer = 1 << Reg.ledgeLayer;
 

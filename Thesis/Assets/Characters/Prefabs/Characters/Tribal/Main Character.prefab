@@ -806,6 +806,7 @@ GameObject:
   - component: {fileID: 61745877276399668}
   - component: {fileID: 50339217002041110}
   - component: {fileID: 114061772566888022}
+  - component: {fileID: 8119978940151915061}
   m_Layer: 0
   m_Name: Main Character
   m_TagString: Untagged
@@ -860,7 +861,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0312348, y: 0.021718055}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -871,7 +872,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.82647336, y: 1.1370316}
+  m_Size: {x: 0.8, y: 1.1370316}
   m_EdgeRadius: 0
 --- !u!50 &50339217002041110
 Rigidbody2D:
@@ -907,12 +908,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabName: Main Character
+  maxMovementVelocity: 3
+  acceleration: 0.5
   eyes: {fileID: 0}
   handPoint: {fileID: 0}
   blockFacing: 0
   hsmAsset: {fileID: 11400000, guid: 94da28a8edfc32b45b08148c5a2adaed, type: 2}
   currentCollectableObject: {fileID: 0}
-  maxMovementVelocity: 2
-  acceleration: 0.5
   jumpMaxHeight: 0.5
   jumpAcceleration: 0.5
+--- !u!114 &8119978940151915061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989682149116770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c137c811ec22141af0ab0ab28f6740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

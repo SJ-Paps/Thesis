@@ -20,7 +20,7 @@ MonoBehaviour:
   childs:
   - {fileID: 11400000, guid: 018b21b3242f61342a2323bfad1478fe, type: 2}
   - {fileID: 11400000, guid: 31967eac3f0f2ee438cba42e6ee50ab9, type: 2}
-  - {fileID: 11400000, guid: bb9893e7d548f6f49ae5c73f9d346cc9, type: 2}
+  - {fileID: 11400000, guid: 691c473c71284704092c4ba974f0d387, type: 2}
   parallelChilds: []
   transitions:
   - stateFrom: 16

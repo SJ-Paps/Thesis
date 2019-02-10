@@ -32,28 +32,7 @@ public abstract class Tribal : Character
         }
     }
 
-    [SerializeField]
-    private float maxMovementVelocity, acceleration;
-
-    private float velocityPercentageConstraint = 100;
-
-    private float constrainedVelocity;
-
-    public float MaxMovementVelocity
-    {
-        get
-        {
-            return constrainedVelocity;
-        }
-    }
-
-    public float Acceleration
-    {
-        get
-        {
-            return acceleration;
-        }
-    }
+    
     
     [SerializeField]
     private float jumpMaxHeight, jumpAcceleration;
@@ -83,8 +62,6 @@ public abstract class Tribal : Character
         {
             CurrentCollectableObject.Collect(this);
         }
-
-        AddVelocityConstraintByPercentage(100);
 
         /*movementFSM = new FSM<State, Trigger>();
         jumpingFSM = new FSM<State, Trigger>();
@@ -193,15 +170,5 @@ public abstract class Tribal : Character
         }
     }
 
-    public void AddVelocityConstraintByPercentage(float percentage)
-    {
-        velocityPercentageConstraint += percentage;
-
-        if(velocityPercentageConstraint < 0)
-        {
-            velocityPercentageConstraint = 0;
-        }
-
-        constrainedVelocity = (velocityPercentageConstraint * maxMovementVelocity) / 100;
-    }
+    
 }

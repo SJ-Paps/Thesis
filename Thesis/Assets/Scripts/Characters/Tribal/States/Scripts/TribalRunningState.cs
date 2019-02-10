@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class TribalRunningState : TribalHSMState
 {
-    private float velocityConstraintPercentage = 90;
+    private float velocityConstraintPercentage = 180;
 
     private bool shouldExit;
+
+    private int velocityConstraintId;
 
     public TribalRunningState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
@@ -19,7 +21,7 @@ public class TribalRunningState : TribalHSMState
 
         character.Animator.SetTrigger(Tribal.RunAnimatorTriggerName);
 
-        character.AddVelocityConstraintByPercentage(velocityConstraintPercentage);
+        velocityConstraintId = character.AddVelocityConstraintByPercentageAndGetConstraintId(velocityConstraintPercentage);
 
         shouldExit = false;
     }
@@ -42,7 +44,7 @@ public class TribalRunningState : TribalHSMState
 
         character.Animator.ResetTrigger(Tribal.TrotAnimatorTriggerName);
 
-        character.AddVelocityConstraintByPercentage(velocityConstraintPercentage * -1);
+        character.RemoveVelocityConstraintById(velocityConstraintId);
     }
 
     protected override TriggerResponse HandleEvent(Character.Trigger trigger)

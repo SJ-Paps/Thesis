@@ -63,10 +63,57 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         public Hide toHidePlace;
     }
 
-    public event Action<Collision2D> onCollisionEnter2D;
-    public event Action<Collision2D> onCollisionStay2D;
-    public event Action<Collider2D> onTriggerEnter2D;
-    public event Action<Collider2D> onTriggerExit2D;
+    public event Action<Collision2D> onCollisionEnter2D
+    {
+        add
+        {
+            Collider.onEnteredCollision += value;
+        }
+
+        remove
+        {
+            Collider.onEnteredCollision -= value;
+        }
+    }
+
+    public event Action<Collision2D> onCollisionStay2D
+    {
+        add
+        {
+            Collider.onStayCollision += value;
+        }
+
+        remove
+        {
+            Collider.onStayCollision -= value;
+        }
+    }
+
+    public event Action<Collider2D> onTriggerEnter2D
+    {
+        add
+        {
+            Collider.onEnteredTrigger += value;
+        }
+
+        remove
+        {
+            Collider.onEnteredTrigger -= value;
+        }
+    }
+
+    public event Action<Collider2D> onTriggerExit2D
+    {
+        add
+        {
+            Collider.onExitedTrigger += value;
+        }
+
+        remove
+        {
+            Collider.onExitedTrigger -= value;
+        }
+    }
 
     public event Action onFixedUpdate;
 
@@ -89,6 +136,27 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     }
 
     public virtual bool CanMove { get; }
+
+    [SerializeField]
+    private float maxMovementVelocity, acceleration;
+
+    private PercentageReversibleNumber velocity;
+
+    public double MaxMovementVelocity
+    {
+        get
+        {
+            return velocity.CurrentValue;
+        }
+    }
+
+    public float Acceleration
+    {
+        get
+        {
+            return acceleration;
+        }
+    }
 
     [SerializeField]
     protected Eyes eyes;
@@ -117,9 +185,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     protected Queue<Trigger> orders;
 
-    protected float groundDetectionDistance = 0.03f;
-
-    public Collider2D Collider { get; protected set; }
+    public SJCollider2D Collider { get; protected set; }
 
 
     [SerializeField]
@@ -138,7 +204,9 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         orders = new Queue<Trigger>();
 
-        Collider = GetComponent<Collider2D>();
+        velocity = new PercentageReversibleNumber(maxMovementVelocity);
+
+        Collider = GetComponent<SJCollider2D>();
 
         collisionCheckDeadlyDelegate = CheckDeadly;
         triggerCheckDeadlyDelegate = CheckDeadly;
@@ -159,7 +227,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         SendOrdersToStates();
 
         hsm.Update();
-        
     }
 
     protected virtual void FixedUpdate()
@@ -276,54 +343,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(onCollisionEnter2D != null)
-        {
-            onCollisionEnter2D(collision);
-        }
-    }
-
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        if(onCollisionStay2D != null)
-        {
-            onCollisionStay2D(collision);
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D collider) 
-    {
-        if (onTriggerEnter2D != null) 
-        {
-            onTriggerEnter2D(collider);
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (onTriggerExit2D != null)
-        {
-            onTriggerExit2D(collider);
-        }
-    }
-
-    public virtual bool IsOnFloor(int layerMask)
-    {
-        Bounds bounds = Collider.bounds;
-        float height = 0.05f;
-
-        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
-        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
-
-        EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
-        EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
-
-        return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
-            Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
-
-    }
-
     public virtual bool CheckWall(int layers)
     {
         Bounds bounds = Collider.bounds;
@@ -355,5 +374,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         return Physics2D.Linecast(beginPoint, endPoint, layers);
     }
 
-    
+    public int AddVelocityConstraintByPercentageAndGetConstraintId(float percentage)
+    {
+        return velocity.AddPercentageConstraint(percentage);
+    }
+
+    public void RemoveVelocityConstraintById(int id)
+    {
+        velocity.ReversePercentageConstraint(id);
+    }
+
 }
