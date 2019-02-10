@@ -4,15 +4,15 @@ using System;
 
 public class Eyes : MonoBehaviour
 {
-    private Trigger2D trigger2D;
+    private SJCollider2D trigger2D;
 
-    public Trigger2D Trigger2D
+    public SJCollider2D Trigger2D
     {
         get
         {
             if(trigger2D == null)
             {
-                trigger2D = GetComponent<Trigger2D>();
+                trigger2D = GetComponent<SJCollider2D>();
             }
 
             return trigger2D;
@@ -32,12 +32,12 @@ public class Eyes : MonoBehaviour
     {
         add
         {
-            Trigger2D.onEntered += value;
+            Trigger2D.onEnteredTrigger += value;
         }
 
         remove
         {
-            Trigger2D.onEntered -= value;
+            Trigger2D.onEnteredTrigger -= value;
         }
     }
 
@@ -45,12 +45,12 @@ public class Eyes : MonoBehaviour
     {
         add
         {
-            Trigger2D.onStay += value;
+            Trigger2D.onStayTrigger += value;
         }
 
         remove
         {
-            Trigger2D.onStay -= value;
+            Trigger2D.onStayTrigger -= value;
         }
     }
 
@@ -58,12 +58,12 @@ public class Eyes : MonoBehaviour
     {
         add
         {
-            Trigger2D.onExited += value;
+            Trigger2D.onExitedTrigger += value;
         }
 
         remove
         {
-            Trigger2D.onExited -= value;
+            Trigger2D.onExitedTrigger -= value;
         }
     }
 

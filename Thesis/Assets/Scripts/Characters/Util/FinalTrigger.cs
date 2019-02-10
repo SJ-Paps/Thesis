@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FinalTrigger : BoxTrigger2D {
-
-    protected override void Awake()
+public class FinalTrigger : SJBoxCollider2D {
+    
+    protected override void OnAwake()
     {
-        base.Awake();
+        base.OnAwake();
 
-        onStay += Finish;
+        onStayTrigger += Finish;
     }
 
     private void Finish(Collider2D collider)

@@ -8,4 +8,11 @@ public class TribalDuckingState : TribalHSMState
     {
 
     }
+
+    protected override void OnEnter()
+    {
+        base.OnEnter();
+
+
+    }
 }

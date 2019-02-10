@@ -1,23 +1,23 @@
 ﻿using UnityEngine;
 using System;
 
-public class SaveGameTrigger : BoxTrigger2D
+public class SaveGameTrigger : SJBoxCollider2D
 {
     private Action<Collider2D> saveOnceDelegate;
 
-    protected override void Awake()
+    protected override void OnAwake()
     {
-        base.Awake();
+        base.OnAwake();
 
         saveOnceDelegate = SaveOnce;
 
-        onStay += saveOnceDelegate;
+        onStayTrigger += saveOnceDelegate;
     }
 
     private void SaveOnce(Collider2D collider)
     {
         SaveLoadManager.GetInstance().SaveGame();
         gameObject.SetActive(false);
-        onStay -= saveOnceDelegate;
+        onStayTrigger -= saveOnceDelegate;
     }
 }
