@@ -31,6 +31,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         CheckingForPushables,
         ChoiceMovingByWillOrBraking,
         Braking,
+        CheckingForLedges,
     }
 
     public enum Trigger : byte

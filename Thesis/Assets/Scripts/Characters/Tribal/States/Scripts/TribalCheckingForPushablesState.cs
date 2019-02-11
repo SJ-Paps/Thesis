@@ -16,8 +16,6 @@ public class TribalCheckingForPushablesState : CharacterHSMState
         timer.onTick += OnTimerTick;
         timer.Loop = true;
 
-        activeDebug = true;
-
         
     }
 

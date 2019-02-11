@@ -6,7 +6,7 @@ public class TribalHiddenState : TribalHSMState
 
     public TribalHiddenState(Character.State state, string debugName) : base(state, debugName)
     {
-        activeDebug = true;
+
     }
 
     protected override void OnEnter() 

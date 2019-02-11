@@ -71,6 +71,17 @@
 #endif
     }
 
+    protected void Log(object obj)
+    {
+#if UNITY_EDITOR
+        if(activeDebug)
+        {
+            UnityEngine.Debug.Log(obj);
+        }
+#endif
+    }
+
+
     protected override void OnUpdate()
     {
 

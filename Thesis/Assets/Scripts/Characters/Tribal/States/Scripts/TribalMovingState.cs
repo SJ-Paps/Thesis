@@ -19,8 +19,6 @@ public class TribalMovingState : TribalHSMState
     public TribalMovingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
         onFixedUpdateDelegate = OnFixedUpdate;
-
-        activeDebug = true;
     }
 
     protected override void OnEnter()

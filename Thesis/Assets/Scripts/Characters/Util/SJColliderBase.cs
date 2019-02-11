@@ -33,6 +33,8 @@ public abstract class SJCollider2DBase : SJColliderBase
         }
     }
 
+
+
     protected void Awake()
     {
         InnerCollider = GetComponent<Collider2D>();
