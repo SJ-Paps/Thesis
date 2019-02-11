@@ -8,7 +8,8 @@ public enum TriggerResponse : byte
     Reject
 }
 
-public delegate void StateChanged<TState, TTrigger>(TState previous, TState current, TTrigger trigger) where TState : unmanaged where TTrigger : unmanaged;
+public delegate void StateChangeEvent<TTrigger>(TTrigger trigger) where TTrigger : unmanaged;
+
 
 public abstract class HSMState<TState, TTrigger> where TState : unmanaged where TTrigger : unmanaged
 {
@@ -38,8 +39,10 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         }
     }
 
-    public event StateChanged<TState, TTrigger> onStateChanged;
-    public event StateChanged<TState, TTrigger> onAnyStateChanged
+    public event StateChangeEvent<TTrigger> onStateChanged;
+    public event StateChangeEvent<TTrigger> onBeforeTransitionate;
+
+    public event StateChangeEvent<TTrigger> onAnyStateChanged
     {
         add
         {
@@ -49,6 +52,19 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         remove
         {
             GetRoot().RemoveOnAnyStateChangedListener(value);
+        }
+    }
+
+    public event StateChangeEvent<TTrigger> onBeforeAnyTransitionate
+    {
+        add
+        {
+            GetRoot().AddOnBeforeAnyTransitionateListener(value);
+        }
+
+        remove
+        {
+            GetRoot().RemoveOnBeforeAnyTransitionateListener(value);
         }
     }
 
@@ -195,7 +211,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     }
 
-    private void AddOnAnyStateChangedListener(StateChanged<TState, TTrigger> listener)
+    private void AddOnAnyStateChangedListener(StateChangeEvent<TTrigger> listener)
     {
         for(int i = 0; i < parallelChilds.Count; i++)
         {
@@ -210,7 +226,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         onStateChanged += listener;
     }
 
-    private void RemoveOnAnyStateChangedListener(StateChanged<TState, TTrigger> listener)
+    private void RemoveOnAnyStateChangedListener(StateChangeEvent<TTrigger> listener)
     {
         for (int i = 0; i < parallelChilds.Count; i++)
         {
@@ -223,6 +239,36 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         }
 
         onStateChanged -= listener;
+    }
+
+    private void AddOnBeforeAnyTransitionateListener(StateChangeEvent<TTrigger> listener)
+    {
+        for (int i = 0; i < parallelChilds.Count; i++)
+        {
+            parallelChilds[i].AddOnBeforeAnyTransitionateListener(listener);
+        }
+
+        for (int i = 0; i < childs.Count; i++)
+        {
+            childs[i].AddOnBeforeAnyTransitionateListener(listener);
+        }
+
+        onBeforeTransitionate += listener;
+    }
+
+    private void RemoveOnBeforeAnyTransitionateListener(StateChangeEvent<TTrigger> listener)
+    {
+        for (int i = 0; i < parallelChilds.Count; i++)
+        {
+            parallelChilds[i].RemoveOnBeforeAnyTransitionateListener(listener);
+        }
+
+        for (int i = 0; i < childs.Count; i++)
+        {
+            childs[i].RemoveOnBeforeAnyTransitionateListener(listener);
+        }
+
+        onBeforeTransitionate -= listener;
     }
 
     public void AddChild(HSMState<TState, TTrigger> child)
@@ -362,6 +408,11 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     private bool InternalIsOnState(TState state)
     {
+        if(stateIdComparer(StateId, state))
+        {
+            return true;
+        }
+
         for(int i = 0; i < parallelChilds.Count; i++)
         {
             if(parallelChilds[i].InternalIsOnState(state))
@@ -370,16 +421,9 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
             }
         }
 
-        var current = this;
-
-        while(current != null)
+        if(ActiveNonParallelChild != null)
         {
-            if(stateIdComparer(current.StateId, state))
-            {
-                return true;
-            }
-
-            current = current.ActiveNonParallelChild;
+            return ActiveNonParallelChild.InternalIsOnState(state);
         }
 
         return false;
@@ -585,6 +629,10 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     private void Transitionate(in HSMTransition<TState, TTrigger> transition)
     {
+        if(onBeforeTransitionate != null)
+        {
+            onBeforeTransitionate(transition.trigger);
+        }
 
         ExitActiveNonParallelChild();
 
@@ -594,7 +642,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
         if (onStateChanged != null)
         {
-            onStateChanged(transition.stateFrom, transition.stateTo, transition.trigger);
+            onStateChanged(transition.trigger);
         }
     }
 }

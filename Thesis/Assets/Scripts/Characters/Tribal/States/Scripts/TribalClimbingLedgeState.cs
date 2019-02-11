@@ -9,6 +9,13 @@ public class TribalClimbingLedgeState : TribalClimbingState
         activeDebug = true;
     }
 
+    protected override void OnEnter()
+    {
+        base.OnEnter();
+
+
+    }
+
     protected override void OnUpdate()
     {
         base.OnUpdate();

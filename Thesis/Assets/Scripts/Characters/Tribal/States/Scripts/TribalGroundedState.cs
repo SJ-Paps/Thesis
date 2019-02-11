@@ -8,14 +8,20 @@ public class TribalGroundedState : TribalHSMState
 {
     private float velocityDeadZone = -0.002f;
 
+    private SyncTimer groundingTimer;
+    private float groundingInterval = 0.5f;
+
     public TribalGroundedState(Character.State state, string debugName) : base(state, debugName)
     {
-
+        groundingTimer = new SyncTimer();
+        groundingTimer.Interval = groundingInterval;
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
+
+        groundingTimer.Start();
 
         character.Animator.SetTrigger(Tribal.GroundAnimatorTriggerName);
     }
@@ -24,9 +30,11 @@ public class TribalGroundedState : TribalHSMState
     {
         base.OnUpdate();
 
+        groundingTimer.Update(Time.deltaTime);
+
         if (character.RigidBody2D.velocity.y < velocityDeadZone && IsOnFloor(Reg.walkableLayerMask) == false)
         {
-            //SendEvent(Character.Trigger.Fall);
+            SendEvent(Character.Trigger.Fall);
         }
     }
 
@@ -34,7 +42,19 @@ public class TribalGroundedState : TribalHSMState
     {
         base.OnExit();
 
+        groundingTimer.Stop();
+
         character.Animator.ResetTrigger(Tribal.GroundAnimatorTriggerName);
+    }
+
+    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    {
+        if(trigger == Character.Trigger.Jump && groundingTimer.Active)
+        {
+            return TriggerResponse.Reject;
+        }
+
+        return TriggerResponse.Accept;
     }
 
     private bool IsOnFloor(int layerMask)

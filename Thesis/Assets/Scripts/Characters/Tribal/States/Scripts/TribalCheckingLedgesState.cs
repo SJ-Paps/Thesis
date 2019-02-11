@@ -5,7 +5,7 @@ using SAM.Timers;
 
 public class TribalCheckingLedgesState : TribalHSMState
 {
-    private float yCenterOffset = 0.1f;
+    private float yCenterOffset = 0.03f;
 
     public TribalCheckingLedgesState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
@@ -30,53 +30,74 @@ public class TribalCheckingLedgesState : TribalHSMState
     {
         Log("CHECKING LEDGES");
 
-        float xDir = 0;
+        int xDirection = 0;
 
-        if(character.transform.right.x >= 0)
+        if (character.transform.right.x >= 0)
         {
-            xDir = 1;
+            xDirection = 1;
         }
         else
         {
-            xDir = -1;
+            xDirection = -1;
         }
 
-        Vector2 checkLedgeBoxSize = new Vector2(0.2f, character.Collider.bounds.extents.y);
-        Vector2 checkLedgeBoxCenter = new Vector2(character.Collider.bounds.center.x + ((character.Collider.offset.x + character.Collider.bounds.extents.x) * xDir),
-                                            character.Collider.bounds.center.y + character.Collider.offset.y + yCenterOffset);
+        Vector2 beginPoint = new Vector2(character.Collider.bounds.center.x + (character.Collider.bounds.extents.x * xDirection),
+                                                        character.Collider.bounds.center.y + character.Collider.bounds.extents.y);
 
-        if (IsInFrontOfLedge(checkLedgeBoxCenter, checkLedgeBoxSize))
+        if (IsInFrontOfLedge(beginPoint, xDirection, out RaycastHit2D hit))
         {
-            Log("IM IN FRONT OF A LEDGE");
+            Log("IM IN FRONT OF A WALKABLE OBJECT");
 
-            Vector2 checkIsValidLedgeBoxSize = character.Collider.bounds.size;
-            Vector2 checkIsValidLedgeBoxCenter = new Vector2(character.Collider.bounds.center.x + ((character.Collider.offset.x + character.Collider.bounds.size.x) * xDir),
-                                                        character.Collider.bounds.center.y + character.Collider.bounds.size.y + yCenterOffset);
-
-            if(IsValidForGrapplingAndClimbing(checkIsValidLedgeBoxCenter, checkIsValidLedgeBoxSize))
+            if(IsValidForGrapplingAndClimbing(beginPoint, xDirection, ref hit))
             {
                 Log("AND IT'S A VALID LEDGE");
                 SendEvent(Character.Trigger.HangLedge);
             }
             else
             {
-                Log("BUT IT'S NOT A VALID LEDGE");
+                Log("BUT IT'S NOT A LEDGE");
             }
         }
     }
 
 
-    private bool IsInFrontOfLedge(Vector2 boxCenter, Vector2 boxSize)
+    /*private bool IsInFrontOfLedge(Vector2 boxCenter, Vector2 boxSize)
     {
         Collider2D possibleLedge = Physics2D.OverlapBox(boxCenter, boxSize, character.transform.eulerAngles.z, Reg.walkableLayerMask);
 
         return possibleLedge != null;
-    }
+    }*/
 
-    private bool IsValidForGrapplingAndClimbing(Vector2 boxCenter, Vector2 boxSize)
+    /*private bool IsValidForGrapplingAndClimbing(Vector2 boxCenter, Vector2 boxSize)
     {
         Collider2D possibleObstacle = Physics2D.OverlapBox(boxCenter, boxSize, character.transform.eulerAngles.z, Reg.walkableLayerMask);
 
         return possibleObstacle == null;
+    }*/
+
+    private bool IsValidForGrapplingAndClimbing(Vector2 beginPoint, int direction, ref RaycastHit2D hit)
+    {
+        Vector2 checkIsValidLedgeBoxSize = character.Collider.bounds.size;
+        Vector2 checkIsValidLedgeBoxCenter = new Vector2(beginPoint.x + (character.Collider.bounds.extents.x * direction), hit.point.y + character.Collider.bounds.extents.y + yCenterOffset);
+
+        Debug.Log("POINT HIT: " + hit.point);
+        Debug.Log(checkIsValidLedgeBoxCenter);
+
+
+
+        Collider2D possibleObstacle = Physics2D.OverlapCapsule(checkIsValidLedgeBoxCenter, checkIsValidLedgeBoxSize, CapsuleDirection2D.Vertical, Reg.walkableLayerMask);
+
+        return possibleObstacle == null;
+    }
+
+    private bool IsInFrontOfLedge(Vector2 beginPoint, int direction, out RaycastHit2D hit)
+    {
+        Vector2 endPoint = new Vector2(beginPoint.x + (character.Collider.bounds.size.x * direction), beginPoint.y - character.Collider.bounds.size.y);
+
+        hit = Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return hit;
     }
 }

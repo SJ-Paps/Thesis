@@ -97,9 +97,9 @@
 #endif
     }
 
-    private void CatchEnteringTrigger(Character.State stateFrom, Character.State stateTo, Character.Trigger trigger)
+    private void CatchEnteringTrigger(Character.Trigger trigger)
     {
-        if(stateTo == StateId)
+        if(IsOnState(StateId))
         {
             LastEnteringTrigger = trigger;
 
