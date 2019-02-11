@@ -32,6 +32,11 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         ChoiceMovingByWillOrBraking,
         Braking,
         CheckingForLedges,
+        Hanging,
+        Climbing,
+        HangingLedge,
+        HangingRope,
+        HangingStair,
     }
 
     public enum Trigger : byte
@@ -55,7 +60,13 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         Move,
         Walk,
         Trot,
-        Run
+        Run,
+        ClimbUp,
+        ClimbDown,
+        HangLedge,
+        HangRope,
+        HangStair,
+        StopHanging,
     }
 
     public class Blackboard

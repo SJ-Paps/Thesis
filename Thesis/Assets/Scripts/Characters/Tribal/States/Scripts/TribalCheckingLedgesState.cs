@@ -56,6 +56,7 @@ public class TribalCheckingLedgesState : TribalHSMState
             if(IsValidForGrapplingAndClimbing(checkIsValidLedgeBoxCenter, checkIsValidLedgeBoxSize))
             {
                 Log("AND IT'S A VALID LEDGE");
+                SendEvent(Character.Trigger.HangLedge);
             }
             else
             {

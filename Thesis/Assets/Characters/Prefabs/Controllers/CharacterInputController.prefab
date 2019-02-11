@@ -126,3 +126,11 @@ MonoBehaviour:
       name: Duck
       keys: 32010000
     orders: 0f
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 0
+      isKeyReleased: 0
+      name: ClimbUp
+      keys: 110100007700000020000000
+    orders: 14
