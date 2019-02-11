@@ -25,6 +25,8 @@ public class TribalDuckingState : TribalHSMState
     protected override void OnEnter()
     {
         base.OnEnter();
+
+        float yFloor = character.Collider.bounds.center.y - character.Collider.bounds.extents.y;
         
         previousSizeX = character.Collider.GetSize().x;
         previousSizeY = character.Collider.GetSize().y;
@@ -33,10 +35,14 @@ public class TribalDuckingState : TribalHSMState
         previousOffsetY = character.Collider.offset.y;
         
         colliderSizeY = previousSizeY / 2;
+
+        if(colliderSizeY < previousSizeX)
+        {
+            colliderSizeY = previousSizeX;
+        }
         
         character.Collider.ChangeSize(new Vector2(previousSizeX, colliderSizeY));
-        character.Collider.offset = new Vector2(previousOffsetX, previousOffsetY - (previousSizeY / 2) + (colliderSizeY / 2));
-
+        character.Collider.offset = new Vector2(previousOffsetX, yFloor + colliderSizeY);
 
         velocityContraintId = character.AddVelocityConstraintByPercentageAndGetConstraintId(velocityConstraintPercentage);
 
@@ -47,7 +53,7 @@ public class TribalDuckingState : TribalHSMState
     {
         base.OnUpdate();
 
-        if(shouldStandUp)
+        if (shouldStandUp)
         {
             SendEvent(Character.Trigger.StandUp);
         }
@@ -69,6 +75,7 @@ public class TribalDuckingState : TribalHSMState
     {
         if(trigger == Character.Trigger.Duck)
         {
+            
             shouldStandUp = false;
             return TriggerResponse.Reject;
         }
