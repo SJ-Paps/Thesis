@@ -23,7 +23,7 @@ public class TribalJumpingState : TribalHSMState
 
         character.onFixedUpdate += onFixedUpdateDelegate;
 
-        character.Animator.SetTrigger(Tribal.JumpAnimatorTriggerName);
+        character.Animator.SetTrigger(Tribal.JumpAnimatorTrigger);
     }
 
     protected override void OnUpdate()
@@ -42,7 +42,7 @@ public class TribalJumpingState : TribalHSMState
 
         character.onFixedUpdate -= onFixedUpdateDelegate;
 
-        character.Animator.ResetTrigger(Tribal.JumpAnimatorTriggerName);
+        character.Animator.ResetTrigger(Tribal.JumpAnimatorTrigger);
     }
 
     protected override TriggerResponse HandleEvent(Character.Trigger trigger)

@@ -13,7 +13,7 @@ public class TribalFallingState : TribalHSMState
     {
         base.OnEnter();
 
-        character.Animator.SetTrigger(Tribal.FallAnimatorTriggerName);
+        character.Animator.SetTrigger(Tribal.FallAnimatorTrigger);
     }
 
     protected override void OnUpdate()
@@ -34,32 +34,18 @@ public class TribalFallingState : TribalHSMState
     {
         base.OnExit();
 
-        character.Animator.ResetTrigger(Tribal.FallAnimatorTriggerName);
+        character.Animator.ResetTrigger(Tribal.FallAnimatorTrigger);
     }
 
-    /*private void CheckingForLedge()
-    {
-        Bounds bounds = character.Collider.bounds;
-        float xDir = character.transform.right.x;
-
-        Vector2 detectionPoint = new Vector2(bounds.center.x + ((bounds.extents.x + 0.1f) * xDir), bounds.center.y + bounds.extents.y);
-
-        Collider2D auxColl = Physics2D.OverlapPoint(detectionPoint, ledgeLayer);
-
-        if (auxColl != null)
-        {
-            blackboard.LastLedgeDetected = auxColl;
-            stateMachine.Trigger(Character.Trigger.Grapple);
-        }
-    }*/
 
     private bool IsOnFloor(int layerMask)
     {
         Bounds bounds = character.Collider.bounds;
         float height = 0.05f;
+        float checkFloorNegativeOffsetX = -0.1f;
 
-        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
-        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
+        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x - checkFloorNegativeOffsetX, bounds.center.y - bounds.extents.y);
+        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x + checkFloorNegativeOffsetX, bounds.center.y - bounds.extents.y);
 
         EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
         EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using SAM.Timers;
 
-public class TribalCheckingForPushablesState : CharacterHSMState
+public class TribalCheckingForPushablesState : TribalHSMState
 {
     private SyncTimer timer;
+
+    private Vector2 checkBoxSize;
 
     public TribalCheckingForPushablesState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
@@ -24,6 +26,8 @@ public class TribalCheckingForPushablesState : CharacterHSMState
         base.OnEnter();
 
         blackboard.toPushMovableObject = null;
+
+        checkBoxSize = new Vector2(character.Collider.bounds.extents.x / 2, character.Collider.bounds.extents.y / 2);
 
         timer.Start();
     }
@@ -44,16 +48,9 @@ public class TribalCheckingForPushablesState : CharacterHSMState
 
     private void OnTimerTick(SyncTimer timer)
     {
-        CheckPushable();
-    }
+        MovableObject movableObject = character.CheckForMovableObject();
 
-    private void CheckPushable()
-    {
-        Vector2 detectionSize = new Vector2((character.Collider.bounds.extents.x * 2) + Tribal.movableObjectDetectionOffset, character.Collider.bounds.extents.y * 2);
-
-        MovableObject movableObject = SJUtil.FindActivable<MovableObject, Character>(character.Collider.bounds.center, detectionSize, character.transform.eulerAngles.z);
-
-        if (movableObject != null)
+        if(movableObject != null)
         {
             blackboard.toPushMovableObject = movableObject;
             SendEvent(Character.Trigger.Push);

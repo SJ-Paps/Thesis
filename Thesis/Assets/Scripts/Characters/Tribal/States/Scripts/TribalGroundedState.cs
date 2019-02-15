@@ -9,11 +9,15 @@ public class TribalGroundedState : TribalHSMState
     private float velocityDeadZone = -0.002f;
 
     private SyncTimer groundingTimer;
-    private float groundingInterval = 0.5f;
 
     public TribalGroundedState(Character.State state, string debugName) : base(state, debugName)
     {
+        activeDebug = true;
+
         groundingTimer = new SyncTimer();
+
+        float groundingInterval = 0.5f;
+
         groundingTimer.Interval = groundingInterval;
     }
 
@@ -23,7 +27,7 @@ public class TribalGroundedState : TribalHSMState
 
         groundingTimer.Start();
 
-        character.Animator.SetTrigger(Tribal.GroundAnimatorTriggerName);
+        character.Animator.SetTrigger(Tribal.GroundAnimatorTrigger);
     }
 
     protected override void OnUpdate()
@@ -44,7 +48,7 @@ public class TribalGroundedState : TribalHSMState
 
         groundingTimer.Stop();
 
-        character.Animator.ResetTrigger(Tribal.GroundAnimatorTriggerName);
+        character.Animator.ResetTrigger(Tribal.GroundAnimatorTrigger);
     }
 
     protected override TriggerResponse HandleEvent(Character.Trigger trigger)
@@ -61,9 +65,10 @@ public class TribalGroundedState : TribalHSMState
     {
         Bounds bounds = character.Collider.bounds;
         float height = 0.05f;
+        float checkFloorNegativeOffsetX = -0.1f;
 
-        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
-        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
+        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x - checkFloorNegativeOffsetX, bounds.center.y - bounds.extents.y);
+        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x + checkFloorNegativeOffsetX, bounds.center.y - bounds.extents.y);
 
         EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
         EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);

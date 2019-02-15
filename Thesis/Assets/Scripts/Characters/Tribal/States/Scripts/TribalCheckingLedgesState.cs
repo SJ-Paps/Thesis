@@ -51,6 +51,7 @@ public class TribalCheckingLedgesState : TribalHSMState
             if(IsValidForGrapplingAndClimbing(beginPoint, xDirection, ref hit))
             {
                 Log("AND IT'S A VALID LEDGE");
+                blackboard.ledgeCheckHit = hit;
                 SendEvent(Character.Trigger.HangLedge);
             }
             else
@@ -60,31 +61,11 @@ public class TribalCheckingLedgesState : TribalHSMState
         }
     }
 
-
-    /*private bool IsInFrontOfLedge(Vector2 boxCenter, Vector2 boxSize)
-    {
-        Collider2D possibleLedge = Physics2D.OverlapBox(boxCenter, boxSize, character.transform.eulerAngles.z, Reg.walkableLayerMask);
-
-        return possibleLedge != null;
-    }*/
-
-    /*private bool IsValidForGrapplingAndClimbing(Vector2 boxCenter, Vector2 boxSize)
-    {
-        Collider2D possibleObstacle = Physics2D.OverlapBox(boxCenter, boxSize, character.transform.eulerAngles.z, Reg.walkableLayerMask);
-
-        return possibleObstacle == null;
-    }*/
-
     private bool IsValidForGrapplingAndClimbing(Vector2 beginPoint, int direction, ref RaycastHit2D hit)
     {
         Vector2 checkIsValidLedgeBoxSize = character.Collider.bounds.size;
         Vector2 checkIsValidLedgeBoxCenter = new Vector2(beginPoint.x + (character.Collider.bounds.extents.x * direction), hit.point.y + character.Collider.bounds.extents.y + yCenterOffset);
-
-        Debug.Log("POINT HIT: " + hit.point);
-        Debug.Log(checkIsValidLedgeBoxCenter);
-
-
-
+        
         Collider2D possibleObstacle = Physics2D.OverlapCapsule(checkIsValidLedgeBoxCenter, checkIsValidLedgeBoxSize, CapsuleDirection2D.Vertical, Reg.walkableLayerMask);
 
         return possibleObstacle == null;

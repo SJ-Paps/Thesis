@@ -22,14 +22,14 @@
     {
         base.OnEnter();
 
-        character.Animator.SetTrigger(Tribal.TrotAnimatorTriggerName);
+        character.Animator.SetTrigger(Tribal.TrotAnimatorTrigger);
     }
 
     protected override void OnExit()
     {
         base.OnExit();
 
-        character.Animator.ResetTrigger(Tribal.TrotAnimatorTriggerName);
+        character.Animator.ResetTrigger(Tribal.TrotAnimatorTrigger);
     }
 
     /*protected override void OnUpdate()

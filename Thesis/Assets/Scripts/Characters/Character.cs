@@ -73,6 +73,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     {
         public MovableObject toPushMovableObject;
         public Hide toHidePlace;
+        public RaycastHit2D ledgeCheckHit;
     }
 
     public event Action<Collision2D> onCollisionEnter2D

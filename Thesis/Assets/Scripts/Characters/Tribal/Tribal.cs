@@ -1,20 +1,19 @@
 ﻿using System;
 using UnityEngine;
 
-
 public abstract class Tribal : Character
 {
-    public const string TrotAnimatorTriggerName = "Move";
-    public const string RunAnimatorTriggerName = "Move";
-    public const string WalkAnimatorTriggerName = "Move";
-    public const string IdleAnimatorTriggerName = "Idle";
-    public const string GroundAnimatorTriggerName = "Ground";
-    public const string FallAnimatorTriggerName = "Fall";
-    public const string JumpAnimatorTriggerName = "Jump";
-    public const string HideAnimatorTriggerName = "Idle";
+    public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
+    public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
+    public static readonly AnimatorParameterId WalkAnimatorTrigger = new AnimatorParameterId("Move");
+    public static readonly AnimatorParameterId IdleAnimatorTrigger = new AnimatorParameterId("Idle");
+    public static readonly AnimatorParameterId GroundAnimatorTrigger = new AnimatorParameterId("Ground");
+    public static readonly AnimatorParameterId FallAnimatorTrigger = new AnimatorParameterId("Fall");
+    public static readonly AnimatorParameterId JumpAnimatorTrigger = new AnimatorParameterId("Jump");
+    public static readonly AnimatorParameterId HideAnimatorTrigger = new AnimatorParameterId("Idle");
+    public static readonly AnimatorParameterId ClimbLedgeAnimatorTrigger = new AnimatorParameterId("ClimbLedge");
 
     public const float activableDetectionOffset = 0.2f;
-    public const float movableObjectDetectionOffset = 0.2f;
 
     [SerializeField]
     protected CollectableObject currentCollectableObject;
@@ -170,5 +169,26 @@ public abstract class Tribal : Character
         }
     }
 
-    
+    public MovableObject CheckForMovableObject()
+    {
+        float xDirection;
+
+        if (transform.right.x >= 0)
+        {
+            xDirection = 1;
+        }
+        else
+        {
+            xDirection = -1;
+        }
+
+        Vector2 checkBoxSize = new Vector2(Collider.bounds.extents.x / 2, Collider.bounds.extents.y / 2);
+
+        Vector2 center = Collider.bounds.center + new Vector3(Collider.bounds.extents.x * xDirection, 0);
+
+        MovableObject movableObject = SJUtil.FindActivable<MovableObject, Character>(center, checkBoxSize, transform.eulerAngles.z);
+
+        return movableObject;
+    }
+
 }

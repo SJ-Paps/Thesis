@@ -6,12 +6,14 @@ using System;
 public class MovableObject : ActivableObject {
 
     protected Joint2D joint;
+    protected new Rigidbody2D rigidbody2D;
 
     protected override void Awake()
     {
         base.Awake();
 
         joint = GetComponent<Joint2D>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     public Joint2D GetJoint()

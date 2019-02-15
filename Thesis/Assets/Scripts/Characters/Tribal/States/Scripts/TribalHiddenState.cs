@@ -29,7 +29,7 @@ public class TribalHiddenState : TribalHSMState
 
         currentHide.Activate(character);
 
-        character.Animator.SetTrigger(Tribal.HideAnimatorTriggerName);
+        character.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
 
     }
 
@@ -41,7 +41,7 @@ public class TribalHiddenState : TribalHSMState
 
         currentHide = null;
 
-        character.Animator.ResetTrigger(Tribal.HideAnimatorTriggerName);
+        character.Animator.ResetTrigger(Tribal.HideAnimatorTrigger);
     }
 
     protected override void OnUpdate() 

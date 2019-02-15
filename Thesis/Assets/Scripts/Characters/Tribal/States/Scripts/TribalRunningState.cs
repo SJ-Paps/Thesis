@@ -19,7 +19,7 @@ public class TribalRunningState : TribalHSMState
     {
         base.OnEnter();
 
-        character.Animator.SetTrigger(Tribal.RunAnimatorTriggerName);
+        character.Animator.SetTrigger(Tribal.RunAnimatorTrigger);
 
         velocityConstraintId = character.AddVelocityConstraintByPercentageAndGetConstraintId(velocityConstraintPercentage);
 
@@ -42,7 +42,7 @@ public class TribalRunningState : TribalHSMState
     {
         base.OnExit();
 
-        character.Animator.ResetTrigger(Tribal.TrotAnimatorTriggerName);
+        character.Animator.ResetTrigger(Tribal.TrotAnimatorTrigger);
 
         character.RemoveVelocityConstraintById(velocityConstraintId);
     }

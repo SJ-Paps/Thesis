@@ -20,14 +20,14 @@ public class TribalIdleState : TribalHSMState
     {
         base.OnEnter();
 
-        animator.SetTrigger(Tribal.IdleAnimatorTriggerName);
+        animator.SetTrigger(Tribal.IdleAnimatorTrigger);
     }
 
     protected override void OnExit()
     {
         base.OnExit();
 
-        animator.ResetTrigger(Tribal.IdleAnimatorTriggerName);
+        animator.ResetTrigger(Tribal.IdleAnimatorTrigger);
     }
 
     protected override TriggerResponse HandleEvent(Character.Trigger trigger)

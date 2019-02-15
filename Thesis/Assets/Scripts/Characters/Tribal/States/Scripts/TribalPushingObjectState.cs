@@ -19,9 +19,7 @@ public class TribalPushingObjectState : TribalHSMState
 
         if(targetMovableObject == null)
         {
-            Vector2 detectionSize = new Vector2((character.Collider.bounds.extents.x * 2) + Tribal.movableObjectDetectionOffset, character.Collider.bounds.extents.y * 2);
-
-            targetMovableObject = SJUtil.FindActivable<MovableObject, Character>(character.Collider.bounds.center, detectionSize, character.transform.eulerAngles.z);
+            targetMovableObject = character.CheckForMovableObject();
         }
 
         if(targetMovableObject != null)
