@@ -23,7 +23,6 @@ public class TribalClimbingLedgeState : TribalClimbingState
         previousRigidbody2DType = character.RigidBody2D.bodyType;
         
         character.RigidBody2D.isKinematic = true;
-        character.Collider.IsTrigger = true;
 
         CoroutineManager.GetInstance().StartCoroutine(climbCoroutine);
     }
@@ -31,7 +30,6 @@ public class TribalClimbingLedgeState : TribalClimbingState
     protected override void OnExit()
     {
         character.RigidBody2D.isKinematic = false;
-        character.Collider.IsTrigger = false;
 
         CoroutineManager.GetInstance().StopCoroutine(climbCoroutine);
     }
