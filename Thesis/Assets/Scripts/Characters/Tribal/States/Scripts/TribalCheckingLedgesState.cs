@@ -5,17 +5,14 @@ using SAM.Timers;
 
 public class TribalCheckingLedgesState : TribalHSMState
 {
-    private float yCenterOffset = 0.03f;
-
     private SyncTimer waiterToCheckTimer;
-    private float waiterToCheckInterval = 0.2f;
 
     public TribalCheckingLedgesState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
         activeDebug = true;
 
         waiterToCheckTimer = new SyncTimer();
-        waiterToCheckTimer.Interval = waiterToCheckInterval;
+        waiterToCheckTimer.Interval = 0.2f;
         waiterToCheckTimer.onTick += OnTimerTick;
     }
 
@@ -66,8 +63,8 @@ public class TribalCheckingLedgesState : TribalHSMState
         if (IsInFrontOfLedge(beginPoint, xDirection, out RaycastHit2D hit))
         {
             Log("IM IN FRONT OF A WALKABLE OBJECT");
-
-            if(IsValidForGrapplingAndClimbing(beginPoint, xDirection, ref hit))
+            
+            if(IsValidForGrappling(beginPoint, new Vector2(character.Collider.bounds.extents.x / 2, character.Collider.bounds.extents.y / 6), xDirection, ref hit))
             {
                 Log("AND IT'S A VALID LEDGE");
                 blackboard.ledgeCheckHit = hit;
@@ -80,19 +77,20 @@ public class TribalCheckingLedgesState : TribalHSMState
         }
     }
 
-    private bool IsValidForGrapplingAndClimbing(Vector2 beginPoint, int direction, ref RaycastHit2D hit)
+    private bool IsValidForGrappling(Vector2 beginPoint, Vector2 checkBoxSize, int direction, ref RaycastHit2D hit)
     {
-        Vector2 checkIsValidLedgeBoxSize = character.Collider.bounds.size;
-        Vector2 checkIsValidLedgeBoxCenter = new Vector2(beginPoint.x + (character.Collider.bounds.extents.x * direction), hit.point.y + character.Collider.bounds.extents.y + yCenterOffset);
+        float yCenterOffset = 0.03f;
+
+        Vector2 checkIsValidLedgeBoxCenter = new Vector2(beginPoint.x + (character.Collider.bounds.extents.x * direction), hit.point.y + checkBoxSize.y + yCenterOffset);
         
-        Collider2D possibleObstacle = Physics2D.OverlapCapsule(checkIsValidLedgeBoxCenter, checkIsValidLedgeBoxSize, CapsuleDirection2D.Vertical, Reg.walkableLayerMask);
+        Collider2D possibleObstacle = Physics2D.OverlapBox(checkIsValidLedgeBoxCenter, checkBoxSize, Reg.walkableLayerMask);
 
         return possibleObstacle == null;
     }
 
     private bool IsInFrontOfLedge(Vector2 beginPoint, int direction, out RaycastHit2D hit)
     {
-        Vector2 endPoint = new Vector2(beginPoint.x + (character.Collider.bounds.size.x * direction), beginPoint.y - character.Collider.bounds.size.y);
+        Vector2 endPoint = new Vector2(beginPoint.x + (character.Collider.bounds.size.x * direction), beginPoint.y - character.Collider.bounds.extents.y);
 
         hit = Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
 

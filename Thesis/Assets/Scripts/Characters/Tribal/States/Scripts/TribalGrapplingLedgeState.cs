@@ -22,7 +22,21 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
     protected override void OnEnter()
     {
         base.OnEnter();
-        
+
+        int xDirection;
+
+        if (character.transform.right.x >= 0)
+        {
+            xDirection = 1;
+        }
+        else
+        {
+            xDirection = -1;
+        }
+
+        grapplingPoint.gameObject.SetActive(true);
+        grapplingPoint.transform.position = new Vector2(character.Collider.bounds.center.x + (xDirection * character.Collider.bounds.extents.x), blackboard.ledgeCheckHit.point.y);
+
         isFirstUpdate = true;
     }
 
@@ -51,19 +65,6 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
 
     private void Grapple()
     {
-        int xDirection;
-
-        if(character.transform.right.x >= 0)
-        {
-            xDirection = 1;
-        }
-        else
-        {
-            xDirection = -1;
-        }
-
-        grapplingPoint.gameObject.SetActive(true);
-        grapplingPoint.transform.position = new Vector2(character.Collider.bounds.center.x + (xDirection * character.Collider.bounds.extents.x), blackboard.ledgeCheckHit.point.y);
         grapplingPoint.connectedBody = character.RigidBody2D;
         
     }
@@ -82,7 +83,40 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
             SendEvent(Character.Trigger.StopHanging);
             return true;
         }
+        else if(trigger == Character.Trigger.ClimbUp)
+        {
+            int xDirection = 0;
+
+            if (character.transform.right.x >= 0)
+            {
+                xDirection = 1;
+            }
+            else
+            {
+                xDirection = -1;
+            }
+
+            float yCenterOffset = 0.01f;
+
+            if (IsValidForGrapplingAndClimbing(new Vector2(grapplingPoint.transform.position.x + (xDirection * character.Collider.bounds.extents.x),
+                                                grapplingPoint.transform.position.y + character.Collider.bounds.extents.y + yCenterOffset),
+                                                character.Collider.bounds.size))
+            {
+                return false; //dejo que transicione
+            }
+            else
+            {
+                return true; //no lo dejo transicionar
+            }
+        }
 
         return false;
+    }
+
+    private bool IsValidForGrapplingAndClimbing(Vector2 center, Vector2 boxSize)
+    {
+        Collider2D possibleObstacle = Physics2D.OverlapCapsule(center, boxSize, CapsuleDirection2D.Vertical, Reg.walkableLayerMask);
+
+        return possibleObstacle == null;
     }
 }
