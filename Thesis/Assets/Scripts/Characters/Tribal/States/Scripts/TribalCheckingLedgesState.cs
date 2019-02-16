@@ -7,16 +7,30 @@ public class TribalCheckingLedgesState : TribalHSMState
 {
     private float yCenterOffset = 0.03f;
 
+    private SyncTimer waiterToCheckTimer;
+    private float waiterToCheckInterval = 0.2f;
+
     public TribalCheckingLedgesState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
         activeDebug = true;
+
+        waiterToCheckTimer = new SyncTimer();
+        waiterToCheckTimer.Interval = waiterToCheckInterval;
+        waiterToCheckTimer.onTick += OnTimerTick;
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
 
-        character.onCollisionStay2D += CheckLedges;
+        waiterToCheckTimer.Start();
+    }
+
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+
+        waiterToCheckTimer.Update(Time.deltaTime);
     }
 
     protected override void OnExit()
@@ -24,6 +38,11 @@ public class TribalCheckingLedgesState : TribalHSMState
         base.OnExit();
 
         character.onCollisionStay2D -= CheckLedges;
+    }
+
+    private void OnTimerTick(SyncTimer timer)
+    {
+        character.onCollisionStay2D += CheckLedges;
     }
 
     private void CheckLedges(Collision2D collision)
@@ -42,7 +61,7 @@ public class TribalCheckingLedgesState : TribalHSMState
         }
 
         Vector2 beginPoint = new Vector2(character.Collider.bounds.center.x + (character.Collider.bounds.extents.x * xDirection),
-                                                        character.Collider.bounds.center.y + character.Collider.bounds.extents.y);
+                                                        character.Collider.bounds.center.y + (character.Collider.bounds.extents.y));
 
         if (IsInFrontOfLedge(beginPoint, xDirection, out RaycastHit2D hit))
         {

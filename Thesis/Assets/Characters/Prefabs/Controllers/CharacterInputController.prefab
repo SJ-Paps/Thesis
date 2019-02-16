@@ -134,3 +134,11 @@ MonoBehaviour:
       name: ClimbUp
       keys: 110100007700000020000000
     orders: 14
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 1
+      isKeyReleased: 0
+      name: ClimbDown
+      keys: 1201000073000000
+    orders: 15
