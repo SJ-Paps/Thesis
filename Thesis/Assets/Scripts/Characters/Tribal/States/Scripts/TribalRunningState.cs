@@ -47,7 +47,7 @@ public class TribalRunningState : TribalHSMState
         character.RemoveVelocityConstraintById(velocityConstraintId);
     }
 
-    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Trigger trigger)
     {
         switch (trigger)
         {
@@ -55,11 +55,11 @@ public class TribalRunningState : TribalHSMState
 
                 shouldExit = false;
 
-                return TriggerResponse.Reject;
+                return true;
 
             default:
 
-                return TriggerResponse.Accept;
+                return false;
         }
     }
 }

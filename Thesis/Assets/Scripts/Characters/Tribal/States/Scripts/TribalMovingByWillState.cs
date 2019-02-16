@@ -30,14 +30,14 @@ public class TribalMovingByWillState : CharacterHSMState
         isMovingByWill = false;
     }
 
-    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Trigger trigger)
     {
         if(trigger == Character.Trigger.MoveLeft || trigger == Character.Trigger.MoveRight)
         {
             isMovingByWill = true;
         }
 
-        return TriggerResponse.Accept;
+        return false;
     }
 
 

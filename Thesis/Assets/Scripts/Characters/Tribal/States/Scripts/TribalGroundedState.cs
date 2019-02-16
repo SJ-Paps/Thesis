@@ -51,14 +51,14 @@ public class TribalGroundedState : TribalHSMState
         character.Animator.ResetTrigger(Tribal.GroundAnimatorTrigger);
     }
 
-    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Trigger trigger)
     {
         if(trigger == Character.Trigger.Jump && groundingTimer.Active)
         {
-            return TriggerResponse.Reject;
+            return true;
         }
 
-        return TriggerResponse.Accept;
+        return false;
     }
 
     private bool IsOnFloor(int layerMask)

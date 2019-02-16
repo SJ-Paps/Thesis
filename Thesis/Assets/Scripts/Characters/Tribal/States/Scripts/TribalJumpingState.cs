@@ -47,22 +47,15 @@ public class TribalJumpingState : TribalHSMState
         character.Animator.ResetTrigger(Tribal.JumpAnimatorTrigger);
     }
 
-    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Trigger trigger)
     {
-        switch(trigger)
+        if(trigger == Character.Trigger.Jump)
         {
-            case Character.Trigger.Jump:
-
-                isOrderingJump = true;
-
-                return TriggerResponse.Reject;
-
-            default:
-
-                return TriggerResponse.Accept;
-
-
+            isOrderingJump = true;
+            return true;
         }
+
+        return false;
     }
 
     private bool ShouldContinueJumping()

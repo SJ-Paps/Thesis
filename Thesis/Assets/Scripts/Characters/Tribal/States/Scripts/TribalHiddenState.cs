@@ -49,17 +49,13 @@ public class TribalHiddenState : TribalHSMState
         base.OnUpdate();
     }
 
-    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Trigger trigger)
     {
-        switch(trigger)
+        if(trigger == Character.Trigger.Jump)
         {
-            case Character.Trigger.Jump:
-
-                return TriggerResponse.Reject;
-
-            default:
-
-                return TriggerResponse.Accept;
+            return true;
         }
+
+        return false;
     }
 }

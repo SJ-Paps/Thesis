@@ -62,25 +62,24 @@ public class TribalPushingObjectState : TribalHSMState
         blackboard.toPushMovableObject = null;
     }
 
-    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Trigger trigger)
     {
         if(trigger == Character.Trigger.Push)
         {
-
             shouldKeepPushing = true;
         }
         if(trigger == Character.Trigger.StopPushing)
         {
             if(definitelyShouldStopPushing)
             {
-                return TriggerResponse.Accept;
+                return false;
             }
             else
             {
-                return TriggerResponse.Reject;
+                return true;
             }
         }
 
-        return TriggerResponse.Accept;
+        return false;
     }
 }

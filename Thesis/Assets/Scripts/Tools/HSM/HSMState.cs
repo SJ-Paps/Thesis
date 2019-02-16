@@ -2,12 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum TriggerResponse : byte
-{
-    Accept,
-    Reject
-}
-
 public delegate void StateChangeEvent<TTrigger>(TTrigger trigger) where TTrigger : unmanaged;
 
 
@@ -587,33 +581,28 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
                 }
             }
 
-            TriggerResponse response = current.HandleEvent(trigger);
-
-            switch (response)
+            if(current.HandleEvent(trigger) == false)
             {
-                case TriggerResponse.Accept:
+                if (current.childs.Count > 0)
+                {
+                    HSMTransition<TState, TTrigger> transition = current.GetTransition(current.ActiveNonParallelChild.StateId, trigger);
 
-                    if (current.childs.Count > 0)
+                    if (transition != null && transition.IsValidTransition())
                     {
-                        HSMTransition<TState, TTrigger> transition = current.GetTransition(current.ActiveNonParallelChild.StateId, trigger);
+                        current.Transitionate(transition);
 
-                        if (transition != null && transition.IsValidTransition())
-                        {
-                            current.Transitionate(transition);
-
-                            return true;
-                        }
+                        return true;
                     }
+                }
+            }
+            else
+            {
+                return true;
+            }
 
-                    if(current.IsParallelOfParent())
-                    {
-                        return false;
-                    }
-
-                    break;
-
-                case TriggerResponse.Reject:
-                    return true;
+            if (current.IsParallelOfParent())
+            {
+                return false;
             }
 
             current = current.ActiveParent;
@@ -622,9 +611,9 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return false;
     }
 
-    protected virtual TriggerResponse HandleEvent(TTrigger trigger)
+    protected virtual bool HandleEvent(TTrigger trigger)
     {
-        return TriggerResponse.Accept;
+        return false;
     }
 
     private void Transitionate(in HSMTransition<TState, TTrigger> transition)

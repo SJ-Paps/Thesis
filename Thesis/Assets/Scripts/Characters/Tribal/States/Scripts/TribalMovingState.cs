@@ -52,7 +52,7 @@ public class TribalMovingState : TribalHSMState
         character.onFixedUpdate -= onFixedUpdateDelegate;
     }
 
-    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Trigger trigger)
     {
         switch(trigger)
         {
@@ -62,7 +62,7 @@ public class TribalMovingState : TribalHSMState
                 
                 shouldMove = true;
 
-                return TriggerResponse.Reject;
+                return true;
 
             case Character.Trigger.MoveRight:
 
@@ -70,11 +70,11 @@ public class TribalMovingState : TribalHSMState
                 
                 shouldMove = true;
 
-                return TriggerResponse.Reject;
+                return true;
 
             default:
 
-                return TriggerResponse.Accept;
+                return false;
 
         }
     }

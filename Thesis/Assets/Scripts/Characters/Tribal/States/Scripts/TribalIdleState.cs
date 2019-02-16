@@ -29,9 +29,4 @@ public class TribalIdleState : TribalHSMState
 
         animator.ResetTrigger(Tribal.IdleAnimatorTrigger);
     }
-
-    protected override TriggerResponse HandleEvent(Character.Trigger trigger)
-    {
-        return base.HandleEvent(trigger);
-    }
 }
