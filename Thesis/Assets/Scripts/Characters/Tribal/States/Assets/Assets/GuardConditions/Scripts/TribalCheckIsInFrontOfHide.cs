@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalCheckIsInFrontOfHide : TribalGuardCondition
 {
-    public override bool IsValid()
+    protected override bool Validate()
     {
         Vector2 detectionSize = new Vector2((character.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, character.Collider.bounds.extents.y * 2);
 

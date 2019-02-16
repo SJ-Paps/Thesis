@@ -30,7 +30,8 @@ MonoBehaviour:
   - stateFrom: 15
     trigger: 14
     stateTo: 14
-    guardConditions: []
+    guardConditions:
+    - {fileID: 11400000, guid: c2d126f884d4e7843bec0c4e8357b854, type: 2}
   - stateFrom: 15
     trigger: 6
     stateTo: 10

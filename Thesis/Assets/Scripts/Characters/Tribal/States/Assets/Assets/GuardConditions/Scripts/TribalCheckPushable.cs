@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalCheckPushable : TribalGuardCondition
 {
-    public override bool IsValid()
+    protected override bool Validate()
     {
         return IsPushableReachable();
     }

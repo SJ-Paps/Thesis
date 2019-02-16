@@ -1,8 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class GuardCondition
+﻿public abstract class GuardCondition
 {
-    public abstract bool IsValid();
+    public bool invert;
+
+    public bool IsValid()
+    {
+        return Validate() ^ invert; //Exclusive OR operation
+    }
+
+    protected abstract bool Validate();
 }

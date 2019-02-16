@@ -15,9 +15,16 @@ public class HSMGuardConditionAsset : ScriptableObject
     [ReadOnly]
     protected string stateClassFullName;
 
+    [SerializeField]
+    protected bool invert;
+
     public GuardCondition CreateConcreteGuardCondition()
     {
-        return (GuardCondition)Activator.CreateInstance(Type.GetType(stateClassFullName));
+        GuardCondition guardCondition = (GuardCondition)Activator.CreateInstance(Type.GetType(stateClassFullName));
+
+        guardCondition.invert = invert;
+
+        return guardCondition;
     }
 
     void OnValidate()
