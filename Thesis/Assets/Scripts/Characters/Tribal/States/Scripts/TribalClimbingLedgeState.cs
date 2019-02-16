@@ -1,12 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using SAM.Timers;
 
 public class TribalClimbingLedgeState : TribalClimbingState
 {
-    private RigidbodyType2D previousRigidbody2DType;
-
     private IEnumerator climbCoroutine;
 
     public TribalClimbingLedgeState(Character.State stateId, string debugName = null) : base(stateId, debugName)
@@ -20,8 +16,7 @@ public class TribalClimbingLedgeState : TribalClimbingState
     {
         base.OnEnter();
 
-        previousRigidbody2DType = character.RigidBody2D.bodyType;
-        
+        character.RigidBody2D.velocity = new Vector2(0, 0);
         character.RigidBody2D.isKinematic = true;
 
         CoroutineManager.GetInstance().StartCoroutine(climbCoroutine);
@@ -38,35 +33,35 @@ public class TribalClimbingLedgeState : TribalClimbingState
     {
         while(true)
         {
-            float endPointOffsetX = 0.2f;
-            float endPointOffsetY = 0.1f;
-
-            float xDirection;
-
-            if(character.transform.right.x >= 0)
-            {
-                xDirection = 1;
-            }
-            else
-            {
-                xDirection = -1;
-            }
+            float endPointOffsetY = 0.02f;
 
             Vector2 startPoint = character.transform.position;
-            Vector2 endPoint = new Vector2(blackboard.ledgeCheckHit.point.x + (endPointOffsetX * xDirection), blackboard.ledgeCheckHit.point.y + character.Collider.bounds.extents.y + endPointOffsetY);
 
-            float acum = 0;
+            Vector2 endPointForY = new Vector2(character.transform.position.x, blackboard.ledgeCheckHit.point.y + character.Collider.bounds.extents.y + endPointOffsetY);
+            Vector2 endPointForX = new Vector2(blackboard.ledgeCheckHit.point.x, endPointForY.y);
+
+            float timeAcummulator = 0;
             float time = 0.5f;
 
-            while (acum < time)
+            while (timeAcummulator < time)
             {
-                acum += Time.deltaTime;
+                timeAcummulator += Time.deltaTime;
 
-                character.transform.position = Vector3.Lerp(startPoint, endPoint, acum / time);
+                character.transform.position = Vector3.Lerp(startPoint, endPointForY, timeAcummulator / time);
                 yield return null;
             }
 
-            character.transform.position = endPoint;
+            timeAcummulator = 0;
+
+            while (timeAcummulator < time)
+            {
+                timeAcummulator += Time.deltaTime;
+
+                character.transform.position = Vector3.Lerp(endPointForY, endPointForX, timeAcummulator / time);
+                yield return null;
+            }
+
+            character.transform.position = endPointForX;
 
             SendEvent(Character.Trigger.StopHanging);
 

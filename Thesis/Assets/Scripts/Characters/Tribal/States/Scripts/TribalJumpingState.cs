@@ -10,6 +10,8 @@ public class TribalJumpingState : TribalHSMState
 
     private Action onFixedUpdateDelegate;
 
+    private float velocityDeadZone = 0.002f;
+
     public TribalJumpingState(Character.State state, string debugName) : base(state, debugName)
     {
         onFixedUpdateDelegate = OnFixedUpdate;
@@ -65,7 +67,7 @@ public class TribalJumpingState : TribalHSMState
 
     private bool ShouldContinueJumping()
     {
-        return character.transform.position.y < currentMaxHeight && isOrderingJump;
+        return character.transform.position.y < currentMaxHeight && character.RigidBody2D.velocity.y > velocityDeadZone && isOrderingJump;
     }
 
     private void OnFixedUpdate()

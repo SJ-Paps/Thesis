@@ -16,7 +16,7 @@ public class TribalGroundedState : TribalHSMState
 
         groundingTimer = new SyncTimer();
 
-        float groundingInterval = 0.5f;
+        float groundingInterval = 0.2f;
 
         groundingTimer.Interval = groundingInterval;
     }
