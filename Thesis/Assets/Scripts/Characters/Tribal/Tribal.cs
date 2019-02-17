@@ -42,7 +42,7 @@ public abstract class Tribal : Character, ISeer
     }
 
     [SerializeField]
-    protected Eyes eyes;
+    protected EyeCollection eyes;
 
     [SerializeField]
     protected Transform handPoint;
@@ -148,7 +148,7 @@ public abstract class Tribal : Character, ISeer
         MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
     }
 
-    public Eyes GetEyes()
+    public EyeCollection GetEyes()
     {
         return eyes;
     }

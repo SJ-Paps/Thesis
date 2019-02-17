@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ISeer
 {
-    Eyes GetEyes();
+    EyeCollection GetEyes();
 }

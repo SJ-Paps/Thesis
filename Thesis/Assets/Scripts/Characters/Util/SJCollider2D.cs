@@ -71,4 +71,9 @@ public abstract class SJCollider2D : SJCollider2DBase {
             onStayCollision(collision);
         }
     }
+
+    public bool OverlapPoint(Vector2 point)
+    {
+        return InnerCollider.OverlapPoint(point);
+    }
 }

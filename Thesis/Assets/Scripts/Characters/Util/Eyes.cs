@@ -1,122 +1,293 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Collections;
 
-
-public class Eyes : MonoBehaviour
+[Serializable]
+public class EyeCollection : ICollection<Eyes>
 {
-    private SJCollider2D trigger2D;
+    public event Action<Collider2D, Eyes> onAnyEntered;
+    public event Action<Collider2D, Eyes> onAnyStay;
+    public event Action<Collider2D, Eyes> onAnyExited;
 
-    public SJCollider2D Trigger2D
+    private Action<Collider2D, Eyes> onEnteredTriggerDelegate;
+    private Action<Collider2D, Eyes> onStayTriggerDelegate;
+    private Action<Collider2D, Eyes> onExitedTriggerDelegate;
+
+    [SerializeField]
+    private List<Eyes> eyes;
+
+    public int Count
     {
         get
         {
-            if(trigger2D == null)
-            {
-                trigger2D = GetComponent<SJCollider2D>();
-            }
-
-            return trigger2D;
-        }
-
-        protected set
-        {
-            trigger2D = value;
+            return eyes.Count;
         }
     }
+
+    public bool IsReadOnly
+    {
+        get
+        {
+            return false;
+        }
+    }
+
+    public EyeCollection()
+    {
+        onEnteredTriggerDelegate = OnEnteredTrigger;
+        onStayTriggerDelegate = OnStayTrigger;
+        onExitedTriggerDelegate = OnExitedTrigger;
+
+        if (eyes == null)
+        {
+            eyes = new List<Eyes>();
+        }
+    }
+
+    private void OnEnteredTrigger(Collider2D collider, Eyes eye)
+    {
+        if(onAnyEntered != null)
+        {
+            onAnyEntered(collider, eye);
+        }
+    }
+
+    private void OnStayTrigger(Collider2D collider, Eyes eye)
+    {
+        if(onAnyStay != null)
+        {
+            onAnyStay(collider, eye);
+        }
+    }
+
+    private void OnExitedTrigger(Collider2D collider, Eyes eye)
+    {
+        if(onAnyExited != null)
+        {
+            onAnyExited(collider, eye);
+        }
+    }
+
+    private void Bind(Eyes eye)
+    {
+        if(eye == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        eye.onEntered += onEnteredTriggerDelegate;
+        eye.onStay += onStayTriggerDelegate;
+        eye.onExited += onExitedTriggerDelegate;
+    }
+
+    private void Clear(Eyes eye)
+    {
+        if (eye == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        eye.onEntered -= onEnteredTriggerDelegate;
+        eye.onStay -= onStayTriggerDelegate;
+        eye.onExited -= onExitedTriggerDelegate;
+    }
+
+    public IEnumerator<Eyes> GetEnumerator()
+    {
+        return eyes.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public void Add(Eyes item)
+    {
+        Bind(item);
+
+        eyes.Add(item);
+    }
+
+    public void Clear()
+    {
+        for(int i = 0; i < eyes.Count; i++)
+        {
+            Clear(eyes[i]);
+        }
+
+        eyes.Clear();
+    }
+
+    public bool Contains(Eyes item)
+    {
+        return eyes.Contains(item);
+    }
+
+    public void CopyTo(Eyes[] array, int arrayIndex)
+    {
+        eyes.CopyTo(array, arrayIndex);
+    }
+
+    public bool Remove(Eyes item)
+    {
+        if(eyes.Remove(item))
+        {
+            Clear(item);
+            return true;
+        }
+
+        return false;
+    }
+}
+
+public class Eyes : SJMonoBehaviour
+{
+    [SerializeField]
+    protected new SJCollider2D collider;
 
     [SerializeField]
     protected Transform eyePoint;
 
-
-    public event Action<Collider2D> onEntered
+    public SJCollider2D Collider
     {
-        add
+        get
         {
-            Trigger2D.onEnteredTrigger += value;
+            return collider;
         }
 
-        remove
+        set
         {
-            Trigger2D.onEnteredTrigger -= value;
-        }
-    }
+            bool shouldReBind = collider != value;
 
-    public event Action<Collider2D> onStay
-    {
-        add
-        {
-            Trigger2D.onStayTrigger += value;
-        }
+            collider = value;
 
-        remove
-        {
-            Trigger2D.onStayTrigger -= value;
-        }
-    }
-
-    public event Action<Collider2D> onExited
-    {
-        add
-        {
-            Trigger2D.onExitedTrigger += value;
-        }
-
-        remove
-        {
-            Trigger2D.onExitedTrigger -= value;
-        }
-    }
-
-    public void SetEyePoint(Transform eyePoint)
-    {
-        this.eyePoint = eyePoint;
-    }
-
-    public bool IsVisible(Collider2D collider, int blockingLayers, int targetLayer)
-    {
-        if(eyePoint != null)
-        {
-            int finalLayerMask = blockingLayers | targetLayer;
-
-            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
-
-            if(hit)
+            if(shouldReBind)
             {
-                return hit.collider == collider;
+                Bind(collider);
+            }
+        }
+    }
+
+    public Transform EyePoint
+    {
+        get
+        {
+            return eyePoint;
+        }
+
+        set
+        {
+            eyePoint = value;
+        }
+    }
+
+    public event Action<Collider2D, Eyes> onEntered;
+    public event Action<Collider2D, Eyes> onStay;
+    public event Action<Collider2D, Eyes> onExited;
+
+    private Action<Collider2D> onEnteredTriggerDelegate;
+    private Action<Collider2D> onStayTriggerDelegate;
+    private Action<Collider2D> onExitedTriggerDelegate;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        onEnteredTriggerDelegate = OnEnteredTrigger;
+        onStayTriggerDelegate = OnStayTrigger;
+        onExitedTriggerDelegate = OnExitedTrigger;
+
+        Bind(Collider);
+    }
+
+    private void Bind(SJCollider2D collider)
+    {
+        ClearPrevious();
+
+        if (collider != null)
+        {
+            this.collider = collider;
+
+            Collider.IsTrigger = true;
+
+            Collider.onEnteredTrigger += onEnteredTriggerDelegate;
+            Collider.onStayTrigger += onStayTriggerDelegate;
+            Collider.onExitedTrigger += onExitedTriggerDelegate;
+        }
+    }
+
+    private void ClearPrevious()
+    {
+        if(Collider != null)
+        {
+            Collider.onEnteredTrigger -= onEnteredTriggerDelegate;
+            Collider.onStayTrigger -= onStayTriggerDelegate;
+            Collider.onExitedTrigger -= onExitedTriggerDelegate;
+        }
+    }
+
+    private void OnEnteredTrigger(Collider2D collider)
+    {
+        if(onEntered != null)
+        {
+            onEntered(collider, this);
+        }
+    }
+
+    private void OnStayTrigger(Collider2D collider)
+    {
+        if(onStay != null)
+        {
+            onStay(collider, this);
+        }
+    }
+
+    private void OnExitedTrigger(Collider2D collider)
+    {
+        if(onExited != null)
+        {
+            onExited(collider, this);
+        }
+    }
+
+    public bool IsVisible(Collider2D collider, int visionBlockingLayerMask, int targetLayerMask)
+    {
+        if (eyePoint != null && Collider != null)
+        {
+            if(Collider.OverlapPoint(eyePoint.position))
+            {
+                int finalLayerMask = visionBlockingLayerMask | targetLayerMask;
+
+                RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.offset, finalLayerMask);
+
+                if (hit && Collider.OverlapPoint(hit.point))
+                {
+                    return hit.collider == collider;
+                }
             }
         }
 
         return false;
     }
 
-    public bool IsNear(Collider2D collider, int blockingLayers, int targetLayer, float distance)
+    public bool IsVisible(Collider2D collider, int visionBlockingLayerMask, int targetLayerMask, out RaycastHit2D hitInfo)
     {
-        if (eyePoint != null)
+        hitInfo = default;
+
+        if (eyePoint != null && Collider != null)
         {
-            int finalLayerMask = blockingLayers | targetLayer;
-
-            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
-
-            if(hit)
+            if (Collider.OverlapPoint(eyePoint.position))
             {
-                return hit.distance <= distance;
-            }
-        }
+                int finalLayerMask = visionBlockingLayerMask | targetLayerMask;
 
-        return false;
-    }
+                hitInfo = Physics2D.Linecast(eyePoint.position, collider.offset, finalLayerMask);
 
-    public bool IsVisibleAndNear(Collider2D collider, int blockingLayers, int targetLayer, float distance)
-    {
-        if (eyePoint != null)
-        {
-            int finalLayerMask = blockingLayers | targetLayer;
-
-            RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.transform.position, finalLayerMask);
-
-            if(hit)
-            {
-                return hit.collider == collider && hit.distance <= distance;
+                if (hitInfo && Collider.OverlapPoint(hitInfo.point))
+                {
+                    return hitInfo.collider == collider;
+                }
             }
         }
 

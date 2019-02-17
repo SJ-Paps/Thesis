@@ -25,7 +25,7 @@ public class Turret : Robot, ISeer
     public SJCollider2D BodyCollider { get; private set; }
 
     [SerializeField]
-    protected Eyes eyes;
+    protected EyeCollection eyes;
 
     [SerializeField]
     private float acceleration;
@@ -57,7 +57,7 @@ public class Turret : Robot, ISeer
         return true;
     }
 
-    public Eyes GetEyes()
+    public EyeCollection GetEyes()
     {
         return eyes;
     }
