@@ -5,7 +5,7 @@ using UnityEngine.Animations;
 
 public class Axe : Weapon
 {
-    private DeadlyType type;
+    private DamageType type;
 
     [SerializeField]
     private Collider2D sharpEdge;
@@ -27,7 +27,7 @@ public class Axe : Weapon
     {
         base.Awake();
 
-        type = DeadlyType.Sharp;
+        type = DamageType.Sharp;
 
         timer = new SyncTimer();
 
@@ -111,11 +111,11 @@ public class Axe : Weapon
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        IMortal mortal = collision.GetComponent<IMortal>();
+        IDamagable mortal = collision.GetComponent<IDamagable>();
 
         if(mortal != null)
         {
-            mortal.Die(type);
+            mortal.TakeDamage(1, type);
         }
     }
 }

@@ -7,8 +7,6 @@ public class TribalClimbingLedgeState : TribalClimbingState
 
     public TribalClimbingLedgeState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
-        activeDebug = true;
-
         climbCoroutine = ClimbCoroutine();
     }
 

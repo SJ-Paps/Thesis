@@ -12,8 +12,6 @@ public class TribalGroundedState : TribalHSMState
 
     public TribalGroundedState(Character.State state, string debugName) : base(state, debugName)
     {
-        activeDebug = true;
-
         groundingTimer = new SyncTimer();
 
         float groundingInterval = 0.2f;

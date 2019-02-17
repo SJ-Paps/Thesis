@@ -9,8 +9,6 @@ public class TribalCheckingLedgesState : TribalHSMState
 
     public TribalCheckingLedgesState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
-        activeDebug = true;
-
         waiterToCheckTimer = new SyncTimer();
         waiterToCheckTimer.Interval = 0.2f;
         waiterToCheckTimer.onTick += OnTimerTick;

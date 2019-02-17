@@ -25,6 +25,25 @@ public class Turret : Robot, ISeer
     public SJCollider2D BodyCollider { get; private set; }
 
     [SerializeField]
+    protected float chargeTimeBase;
+
+    public PercentageReversibleNumber ChargeTime { get; protected set; }
+
+    [SerializeField]
+    protected float shootDistance;
+
+    [SerializeField]
+    protected float shootDamageBase;
+
+    public PercentageReversibleNumber ShootDamage { get; protected set; }
+
+    [SerializeField]
+    protected Transform gunPoint;
+
+    [SerializeField]
+    protected GameObject bulletPrefab;
+
+    [SerializeField]
     protected EyeCollection eyes;
 
     [SerializeField]
@@ -38,12 +57,39 @@ public class Turret : Robot, ISeer
         }
     }
 
+    public float ShootDistance
+    {
+        get
+        {
+            return shootDistance;
+        }
+    }
+
+    public GameObject BulletPrefab
+    {
+        get
+        {
+            return bulletPrefab;
+        }
+    }
+
+    public Transform GunPoint
+    {
+        get
+        {
+            return gunPoint;
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
 
         HeadCollider = HeadRigidBody.GetComponent<SJCollider2D>();
         BodyCollider = BodyRigidBody.GetComponent<SJCollider2D>();
+
+        ChargeTime = new PercentageReversibleNumber(chargeTimeBase);
+        ShootDamage = new PercentageReversibleNumber(shootDamageBase);
     }
 
 

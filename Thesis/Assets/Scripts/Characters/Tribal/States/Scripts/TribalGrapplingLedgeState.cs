@@ -10,8 +10,6 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
 
     public TribalGrapplingLedgeState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
-        activeDebug = true;
-
         grapplingPoint = new GameObject("Character Grappling Ledge Point").AddComponent<SpringJoint2D>();
         grapplingPoint.autoConfigureDistance = false;
         grapplingPoint.distance = 0.2f;

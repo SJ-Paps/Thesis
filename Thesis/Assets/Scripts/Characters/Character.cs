@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>, IMortal
+public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>, IDamagable
 {
     public enum State : byte
     {
@@ -38,6 +38,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         HangingRope,
         HangingStair,
         CheckActivables,
+        Waiting,
     }
 
     public enum Trigger : byte
@@ -165,29 +166,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
 
 
-    public virtual bool Die(DeadlyType deadly)
+    public virtual void TakeDamage(float damage, DamageType damageType)
     {
-        /*if(IsOnState(State.Alive))
-        {
-            Collider.enabled = false;
+        hsm.SendEvent(Trigger.Die);
 
-            Die();
-
-            return true;
-        }*/
-
-        return false;
-    }
-
-    protected bool Die()
-    {
-
-        if (onDead != null)
+        if(onDead != null)
         {
             onDead();
         }
-
-        return true;
     }
 
     public abstract void GetEnslaved();

@@ -11,8 +11,6 @@ public class TurretMovingState : TurretHSMState
 
     public TurretMovingState(Character.State state, string debugName = null) : base(state, debugName)
     {
-        activeDebug = true;
-
         onFixedUpdateDelegate = OnFixedUpdate;
     }
 
