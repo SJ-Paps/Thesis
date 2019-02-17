@@ -5,7 +5,7 @@
 
     public XenophobicAttackState(Character.State state, string debugName) : base(state, debugName)
     {
-        xenophobic = (Xenophobic)character;
+        xenophobic = (Xenophobic)Owner;
     }
 
     /*protected override void OnEnter()

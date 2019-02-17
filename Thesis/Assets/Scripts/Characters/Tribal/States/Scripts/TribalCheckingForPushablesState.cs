@@ -25,9 +25,9 @@ public class TribalCheckingForPushablesState : TribalHSMState
     {
         base.OnEnter();
 
-        blackboard.toPushMovableObject = null;
+        Blackboard.toPushMovableObject = null;
 
-        checkBoxSize = new Vector2(character.Collider.bounds.extents.x / 2, character.Collider.bounds.extents.y / 2);
+        checkBoxSize = new Vector2(Owner.Collider.bounds.extents.x / 2, Owner.Collider.bounds.extents.y / 2);
 
         timer.Start();
     }
@@ -48,11 +48,11 @@ public class TribalCheckingForPushablesState : TribalHSMState
 
     private void OnTimerTick(SyncTimer timer)
     {
-        MovableObject movableObject = character.CheckForMovableObject();
+        MovableObject movableObject = Owner.CheckForMovableObject();
 
         if(movableObject != null)
         {
-            blackboard.toPushMovableObject = movableObject;
+            Blackboard.toPushMovableObject = movableObject;
             SendEvent(Character.Trigger.Push);
         }
     }

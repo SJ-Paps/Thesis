@@ -11,11 +11,11 @@ public class TribalCheckCeiling : TribalGuardCondition
 
     private bool IsCeiling()
     {
-        float rayLength = character.Collider.bounds.extents.y + 0.01f;
+        float rayLength = Owner.Collider.bounds.extents.y + 0.01f;
 
-        Vector2 startCheckPointLeft = new Vector2(character.Collider.bounds.center.x - character.Collider.bounds.extents.x, 
-                                                character.Collider.bounds.center.y + character.Collider.bounds.extents.y);
-        Vector2 startCheckPointRight = new Vector2(character.Collider.bounds.center.x + character.Collider.bounds.extents.x,
+        Vector2 startCheckPointLeft = new Vector2(Owner.Collider.bounds.center.x - Owner.Collider.bounds.extents.x, 
+                                                Owner.Collider.bounds.center.y + Owner.Collider.bounds.extents.y);
+        Vector2 startCheckPointRight = new Vector2(Owner.Collider.bounds.center.x + Owner.Collider.bounds.extents.x,
                                                 startCheckPointLeft.y);
 
         Vector2 endCheckPointLeft = new Vector2(startCheckPointLeft.x, startCheckPointLeft.y + rayLength);

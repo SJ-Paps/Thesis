@@ -13,7 +13,7 @@ public class TribalIdleState : TribalHSMState
     {
         base.OnOwnerReferencePropagated();
 
-        animator = character.Animator;
+        animator = Owner.Animator;
     }
 
     protected override void OnEnter()

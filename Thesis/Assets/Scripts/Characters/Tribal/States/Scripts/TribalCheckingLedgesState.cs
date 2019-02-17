@@ -32,12 +32,12 @@ public class TribalCheckingLedgesState : TribalHSMState
     {
         base.OnExit();
 
-        character.onCollisionStay2D -= CheckLedges;
+        Owner.onCollisionStay2D -= CheckLedges;
     }
 
     private void OnTimerTick(SyncTimer timer)
     {
-        character.onCollisionStay2D += CheckLedges;
+        Owner.onCollisionStay2D += CheckLedges;
     }
 
     private void CheckLedges(Collision2D collision)
@@ -46,7 +46,7 @@ public class TribalCheckingLedgesState : TribalHSMState
 
         int xDirection = 0;
 
-        if (character.transform.right.x >= 0)
+        if (Owner.transform.right.x >= 0)
         {
             xDirection = 1;
         }
@@ -55,17 +55,17 @@ public class TribalCheckingLedgesState : TribalHSMState
             xDirection = -1;
         }
 
-        Vector2 beginPoint = new Vector2(character.Collider.bounds.center.x + (character.Collider.bounds.extents.x * xDirection),
-                                                        character.Collider.bounds.center.y + (character.Collider.bounds.extents.y));
+        Vector2 beginPoint = new Vector2(Owner.Collider.bounds.center.x + (Owner.Collider.bounds.extents.x * xDirection),
+                                                        Owner.Collider.bounds.center.y + (Owner.Collider.bounds.extents.y));
 
         if (IsInFrontOfLedge(beginPoint, xDirection, out RaycastHit2D hit))
         {
             Log("IM IN FRONT OF A WALKABLE OBJECT");
             
-            if(IsValidForGrappling(beginPoint, new Vector2(character.Collider.bounds.extents.x / 2, character.Collider.bounds.extents.y / 6), xDirection, ref hit))
+            if(IsValidForGrappling(beginPoint, new Vector2(Owner.Collider.bounds.extents.x / 2, Owner.Collider.bounds.extents.y / 6), xDirection, ref hit))
             {
                 Log("AND IT'S A VALID LEDGE");
-                blackboard.ledgeCheckHit = hit;
+                Blackboard.ledgeCheckHit = hit;
                 SendEvent(Character.Trigger.HangLedge);
             }
             else
@@ -79,7 +79,7 @@ public class TribalCheckingLedgesState : TribalHSMState
     {
         float yCenterOffset = 0.03f;
 
-        Vector2 checkIsValidLedgeBoxCenter = new Vector2(beginPoint.x + (character.Collider.bounds.extents.x * direction), hit.point.y + checkBoxSize.y + yCenterOffset);
+        Vector2 checkIsValidLedgeBoxCenter = new Vector2(beginPoint.x + (Owner.Collider.bounds.extents.x * direction), hit.point.y + checkBoxSize.y + yCenterOffset);
         
         Collider2D possibleObstacle = Physics2D.OverlapBox(checkIsValidLedgeBoxCenter, checkBoxSize, Reg.walkableLayerMask);
 
@@ -88,7 +88,7 @@ public class TribalCheckingLedgesState : TribalHSMState
 
     private bool IsInFrontOfLedge(Vector2 beginPoint, int direction, out RaycastHit2D hit)
     {
-        Vector2 endPoint = new Vector2(beginPoint.x + (character.Collider.bounds.size.x * direction), beginPoint.y - character.Collider.bounds.extents.y);
+        Vector2 endPoint = new Vector2(beginPoint.x + (Owner.Collider.bounds.size.x * direction), beginPoint.y - Owner.Collider.bounds.extents.y);
 
         hit = Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
 

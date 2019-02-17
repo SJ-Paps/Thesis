@@ -1,64 +1,15 @@
-﻿public abstract class CharacterHSMState : HSMState<Character.State, Character.Trigger>, IOwnable<Character>, IBlackboardOwner<Character.Blackboard>
+﻿public abstract class CharacterHSMState : SJHSMState<Character.State, Character.Trigger, Character, Character.Blackboard>
 {
-    protected Character character;
     protected Character.Trigger LastEnteringTrigger { get; private set; }
-    protected bool activeDebug;
-
-    public Character Owner
-    {
-        get
-        {
-            return character;
-        }
-    }
-
-    protected Character.Blackboard blackboard;
 
     protected CharacterHSMState(Character.State state, string debugName = null) : base(state, debugName)
     {
+
     }
 
-    public void PropagateOwnerReference(Character reference)
-    {
-        CharacterHSMState root = (CharacterHSMState)GetRoot();
-
-        root.InternalPropagateOwnerReference(reference);
-    }
-
-    private void InternalPropagateOwnerReference(Character reference)
-    {
-        for(int i = 0; i < parallelChilds.Count; i++)
-        {
-            ((CharacterHSMState)parallelChilds[i]).InternalPropagateOwnerReference(reference);
-        }
-
-        for (int i = 0; i < childs.Count; i++)
-        {
-            ((CharacterHSMState)childs[i]).InternalPropagateOwnerReference(reference);
-        }
-
-        for (int i = 0; i < transitions.Count; i++)
-        {
-            foreach(CharacterGuardCondition guardCondition in transitions[i])
-            {
-                guardCondition.PropagateOwnerReference(reference);
-            }
-        }
-        
-        character = reference;
-
-        InternalOnCharacterReferencePropagated();
-    }
-
-    private void InternalOnCharacterReferencePropagated()
+    protected override void OnOwnerReferencePropagated()
     {
         onAnyStateChanged += CatchEnteringTrigger;
-        OnOwnerReferencePropagated();
-    }
-
-    protected virtual void OnOwnerReferencePropagated()
-    {
-        
     }
 
     protected override void OnEnter()
@@ -66,7 +17,7 @@
 #if UNITY_EDITOR
         if(activeDebug)
         {
-            EditorDebug.Log(DebugName + " ENTER " + character.name);
+            EditorDebug.Log(DebugName + " ENTER " + Owner.name);
         }
 #endif
     }
@@ -92,7 +43,7 @@
 #if UNITY_EDITOR
         if(activeDebug)
         {
-            EditorDebug.Log(DebugName + " EXIT " + character.name);
+            EditorDebug.Log(DebugName + " EXIT " + Owner.name);
         }
 #endif
     }
@@ -113,35 +64,5 @@
                 ((CharacterHSMState)ActiveNonParallelChild).LastEnteringTrigger = trigger;
             }
         }
-    }
-
-    public void PropagateBlackboardReference(Character.Blackboard blackboard)
-    {
-        CharacterHSMState root = (CharacterHSMState)GetRoot();
-
-        root.InternalPropagateBlackboardReference(blackboard);
-    }
-
-    private void InternalPropagateBlackboardReference(Character.Blackboard blackboard)
-    {
-        for (int i = 0; i < parallelChilds.Count; i++)
-        {
-            ((CharacterHSMState)parallelChilds[i]).InternalPropagateBlackboardReference(blackboard);
-        }
-
-        for (int i = 0; i < childs.Count; i++)
-        {
-            ((CharacterHSMState)childs[i]).InternalPropagateBlackboardReference(blackboard);
-        }
-
-        for (int i = 0; i < transitions.Count; i++)
-        {
-            foreach (CharacterGuardCondition guardCondition in transitions[i])
-            {
-                guardCondition.PropagateBlackboardReference(blackboard);
-            }
-        }
-
-        this.blackboard = blackboard;
     }
 }

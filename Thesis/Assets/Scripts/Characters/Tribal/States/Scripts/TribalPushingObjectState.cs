@@ -15,18 +15,18 @@ public class TribalPushingObjectState : TribalHSMState
     protected override void OnEnter() {
         base.OnEnter();
         
-        targetMovableObject = blackboard.toPushMovableObject;
+        targetMovableObject = Blackboard.toPushMovableObject;
 
         if(targetMovableObject == null)
         {
-            targetMovableObject = character.CheckForMovableObject();
+            targetMovableObject = Owner.CheckForMovableObject();
         }
 
         if(targetMovableObject != null)
         {
-            targetMovableObject.Activate(character);
+            targetMovableObject.Activate(Owner);
 
-            character.blockFacing = true;
+            Owner.blockFacing = true;
 
             shouldKeepPushing = true;
         }
@@ -51,15 +51,15 @@ public class TribalPushingObjectState : TribalHSMState
         definitelyShouldStopPushing = false;
         shouldKeepPushing = false;
 
-        character.blockFacing = false;
+        Owner.blockFacing = false;
 
         if(targetMovableObject != null)
         {
-            targetMovableObject.Activate(character);
+            targetMovableObject.Activate(Owner);
             targetMovableObject = null;
         }
 
-        blackboard.toPushMovableObject = null;
+        Blackboard.toPushMovableObject = null;
     }
 
     protected override bool HandleEvent(Character.Trigger trigger)

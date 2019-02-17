@@ -6,13 +6,14 @@ public class TribalCheckIsInFrontOfHide : TribalGuardCondition
 {
     protected override bool Validate()
     {
-        Vector2 detectionSize = new Vector2((character.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, character.Collider.bounds.extents.y * 2);
+        Vector2 detectionSize = new Vector2((Owner.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, Owner.Collider.bounds.extents.y * 2);
 
-        Hide hide = SJUtil.FindActivable<Hide, Character>(character.Collider.bounds.center, detectionSize, character.transform.eulerAngles.z);
+        Hide hide = SJUtil.FindActivable<Hide, Character>(Owner.Collider.bounds.center, detectionSize, Owner.transform.eulerAngles.z);
 
         if(hide != null)
         {
-            blackboard.toHidePlace = hide;
+            
+            Blackboard.toHidePlace = hide;
             return true;
         }
 

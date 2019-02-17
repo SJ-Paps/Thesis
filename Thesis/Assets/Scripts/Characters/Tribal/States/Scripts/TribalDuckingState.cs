@@ -26,13 +26,13 @@ public class TribalDuckingState : TribalHSMState
     {
         base.OnEnter();
 
-        float yFloor = character.Collider.bounds.center.y - character.Collider.bounds.extents.y;
+        float yFloor = Owner.Collider.bounds.center.y - Owner.Collider.bounds.extents.y;
         
-        previousSizeX = character.Collider.GetSize().x;
-        previousSizeY = character.Collider.GetSize().y;
+        previousSizeX = Owner.Collider.GetSize().x;
+        previousSizeY = Owner.Collider.GetSize().y;
 
-        previousOffsetX = character.Collider.offset.x;
-        previousOffsetY = character.Collider.offset.y;
+        previousOffsetX = Owner.Collider.offset.x;
+        previousOffsetY = Owner.Collider.offset.y;
         
         colliderSizeY = previousSizeY / 2;
 
@@ -41,10 +41,10 @@ public class TribalDuckingState : TribalHSMState
             colliderSizeY = previousSizeX;
         }
         
-        character.Collider.ChangeSize(new Vector2(previousSizeX, colliderSizeY));
-        character.Collider.offset = new Vector2(previousOffsetX, yFloor + colliderSizeY);
+        Owner.Collider.ChangeSize(new Vector2(previousSizeX, colliderSizeY));
+        Owner.Collider.offset = new Vector2(previousOffsetX, yFloor + colliderSizeY);
 
-        velocityContraintId = character.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
+        velocityContraintId = Owner.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
 
         shouldStandUp = false;
     }
@@ -65,10 +65,10 @@ public class TribalDuckingState : TribalHSMState
     {
         base.OnExit();
 
-        character.Collider.ChangeSize(new Vector2(previousSizeX, previousSizeY));
-        character.Collider.offset = new Vector2(previousOffsetX, previousOffsetY);
+        Owner.Collider.ChangeSize(new Vector2(previousSizeX, previousSizeY));
+        Owner.Collider.offset = new Vector2(previousOffsetX, previousOffsetY);
 
-        character.MaxVelocity.RemovePercentageConstraint(velocityContraintId);
+        Owner.MaxVelocity.RemovePercentageConstraint(velocityContraintId);
     }
 
     protected override bool HandleEvent(Character.Trigger trigger)

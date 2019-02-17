@@ -13,13 +13,13 @@ public class TribalHiddenState : TribalHSMState
     {
         base.OnEnter();
 
-        currentHide = blackboard.toHidePlace;
+        currentHide = Blackboard.toHidePlace;
 
         if(currentHide == null)
         {
-            Vector2 detectionSize = new Vector2((character.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, character.Collider.bounds.extents.y * 2);
+            Vector2 detectionSize = new Vector2((Owner.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, Owner.Collider.bounds.extents.y * 2);
 
-            currentHide = SJUtil.FindActivable<Hide, Character>(character.Collider.bounds.center, detectionSize, character.transform.eulerAngles.z);
+            currentHide = SJUtil.FindActivable<Hide, Character>(Owner.Collider.bounds.center, detectionSize, Owner.transform.eulerAngles.z);
         }
 
         if(currentHide == null)
@@ -28,9 +28,9 @@ public class TribalHiddenState : TribalHSMState
         }
         else
         {
-            currentHide.Activate(character);
+            currentHide.Activate(Owner);
 
-            character.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
+            Owner.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
         }
     }
 
@@ -40,11 +40,11 @@ public class TribalHiddenState : TribalHSMState
 
         if(currentHide != null)
         {
-            currentHide.Activate(character);
+            currentHide.Activate(Owner);
 
             currentHide = null;
 
-            character.Animator.ResetTrigger(Tribal.HideAnimatorTrigger);
+            Owner.Animator.ResetTrigger(Tribal.HideAnimatorTrigger);
         }
     }
 

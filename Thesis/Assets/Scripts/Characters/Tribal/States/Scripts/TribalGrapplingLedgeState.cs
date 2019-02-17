@@ -23,7 +23,7 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
 
         int xDirection;
 
-        if (character.transform.right.x >= 0)
+        if (Owner.transform.right.x >= 0)
         {
             xDirection = 1;
         }
@@ -33,7 +33,7 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
         }
 
         grapplingPoint.gameObject.SetActive(true);
-        grapplingPoint.transform.position = new Vector2(character.Collider.bounds.center.x + (xDirection * character.Collider.bounds.extents.x), blackboard.ledgeCheckHit.point.y);
+        grapplingPoint.transform.position = new Vector2(Owner.Collider.bounds.center.x + (xDirection * Owner.Collider.bounds.extents.x), Blackboard.ledgeCheckHit.point.y);
 
         isFirstUpdate = true;
     }
@@ -63,7 +63,7 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
 
     private void Grapple()
     {
-        grapplingPoint.connectedBody = character.RigidBody2D;
+        grapplingPoint.connectedBody = Owner.RigidBody2D;
         
     }
 
@@ -85,7 +85,7 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
         {
             int xDirection = 0;
 
-            if (character.transform.right.x >= 0)
+            if (Owner.transform.right.x >= 0)
             {
                 xDirection = 1;
             }
@@ -96,9 +96,9 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
 
             float yCenterOffset = 0.01f;
 
-            if (IsValidForGrapplingAndClimbing(new Vector2(grapplingPoint.transform.position.x + (xDirection * character.Collider.bounds.extents.x),
-                                                grapplingPoint.transform.position.y + character.Collider.bounds.extents.y + yCenterOffset),
-                                                character.Collider.bounds.size))
+            if (IsValidForGrapplingAndClimbing(new Vector2(grapplingPoint.transform.position.x + (xDirection * Owner.Collider.bounds.extents.x),
+                                                grapplingPoint.transform.position.y + Owner.Collider.bounds.extents.y + yCenterOffset),
+                                                Owner.Collider.bounds.size))
             {
                 return false; //dejo que transicione
             }

@@ -122,13 +122,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         blackboard = new Blackboard();
 
         orders = new Queue<Trigger>();
-
-        
-
-        
-
-        /*collisionCheckDeadlyDelegate = CheckDeadly;
-        triggerCheckDeadlyDelegate = CheckDeadly;*/
         
 
         hsm = CharacterHSMStateAsset.BuildFromAsset(hsmAsset, this, blackboard);

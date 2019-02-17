@@ -38,7 +38,7 @@ public class TribalMovingState : TribalHSMState
 
             isFirstUpdate = false;
         }
-        else if(character.RigidBody2D.velocity.x > (velocityDeadZone * -1) && character.RigidBody2D.velocity.x < velocityDeadZone)
+        else if(Owner.RigidBody2D.velocity.x > (velocityDeadZone * -1) && Owner.RigidBody2D.velocity.x < velocityDeadZone)
         {
             SendEvent(Character.Trigger.StopMoving);
         }
@@ -49,7 +49,7 @@ public class TribalMovingState : TribalHSMState
     {
         base.OnExit();
 
-        character.onFixedUpdate -= onFixedUpdateDelegate;
+        Owner.onFixedUpdate -= onFixedUpdateDelegate;
     }
 
     protected override bool HandleEvent(Character.Trigger trigger)
@@ -86,7 +86,7 @@ public class TribalMovingState : TribalHSMState
             MoveOnDirection(currentMoveDirection);
         }
 
-        if (character.RigidBody2D.velocity.x > character.MaxVelocity.CurrentValue || character.RigidBody2D.velocity.x < character.MaxVelocity.CurrentValue * -1)
+        if (Owner.RigidBody2D.velocity.x > Owner.MaxVelocity.CurrentValue || Owner.RigidBody2D.velocity.x < Owner.MaxVelocity.CurrentValue * -1)
         {
             ClampVelocity(currentMoveDirection);
         }
@@ -100,7 +100,7 @@ public class TribalMovingState : TribalHSMState
 
     private void OnFirstUpdate()
     {
-        float currentVelocity = character.RigidBody2D.velocity.x;
+        float currentVelocity = Owner.RigidBody2D.velocity.x;
 
         if (LastEnteringTrigger == Character.Trigger.MoveRight || currentVelocity > 0)
         {
@@ -111,7 +111,7 @@ public class TribalMovingState : TribalHSMState
             MoveOnDirection((int)Vector2.left.x);
         }
 
-        character.onFixedUpdate += onFixedUpdateDelegate;
+        Owner.onFixedUpdate += onFixedUpdateDelegate;
     }
 
     protected void MoveOnDirection(int direction)
@@ -123,12 +123,12 @@ public class TribalMovingState : TribalHSMState
 
     protected virtual void OnMoving()
     {
-        character.Face(currentMoveDirection < 0);
+        Owner.Face(currentMoveDirection < 0);
     }
 
     protected void ApplyForceOnDirection(int direction)
     {
-        character.RigidBody2D.AddForce(new Vector2(direction * character.Acceleration, 0), ForceMode2D.Impulse);
+        Owner.RigidBody2D.AddForce(new Vector2(direction * Owner.Acceleration, 0), ForceMode2D.Impulse);
     }
 
     protected void ClampVelocity(int lastDirection)

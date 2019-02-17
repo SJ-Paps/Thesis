@@ -19,9 +19,9 @@ public class TribalWalkingState : TribalHSMState
     {
         base.OnEnter();
 
-        character.Animator.SetTrigger(Tribal.WalkAnimatorTrigger);
+        Owner.Animator.SetTrigger(Tribal.WalkAnimatorTrigger);
 
-        velocityConstraintId = character.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
+        velocityConstraintId = Owner.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
 
         shouldExit = false;
     }
@@ -42,9 +42,9 @@ public class TribalWalkingState : TribalHSMState
     {
         base.OnExit();
 
-        character.Animator.ResetTrigger(Tribal.WalkAnimatorTrigger);
+        Owner.Animator.ResetTrigger(Tribal.WalkAnimatorTrigger);
 
-        character.MaxVelocity.RemovePercentageConstraint(velocityConstraintId);
+        Owner.MaxVelocity.RemovePercentageConstraint(velocityConstraintId);
     }
 
     protected override bool HandleEvent(Character.Trigger trigger)

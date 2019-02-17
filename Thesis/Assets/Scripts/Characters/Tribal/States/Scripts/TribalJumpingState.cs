@@ -21,11 +21,11 @@ public class TribalJumpingState : TribalHSMState
     {
         base.OnEnter();
 
-        currentMaxHeight = character.transform.position.y + character.JumpMaxHeight;
+        currentMaxHeight = Owner.transform.position.y + Owner.JumpMaxHeight;
 
-        character.onFixedUpdate += onFixedUpdateDelegate;
+        Owner.onFixedUpdate += onFixedUpdateDelegate;
 
-        character.Animator.SetTrigger(Tribal.JumpAnimatorTrigger);
+        Owner.Animator.SetTrigger(Tribal.JumpAnimatorTrigger);
     }
 
     protected override void OnUpdate()
@@ -42,9 +42,9 @@ public class TribalJumpingState : TribalHSMState
     {
         base.OnExit();
 
-        character.onFixedUpdate -= onFixedUpdateDelegate;
+        Owner.onFixedUpdate -= onFixedUpdateDelegate;
 
-        character.Animator.ResetTrigger(Tribal.JumpAnimatorTrigger);
+        Owner.Animator.ResetTrigger(Tribal.JumpAnimatorTrigger);
     }
 
     protected override bool HandleEvent(Character.Trigger trigger)
@@ -60,7 +60,7 @@ public class TribalJumpingState : TribalHSMState
 
     private bool ShouldContinueJumping()
     {
-        return character.transform.position.y < currentMaxHeight && character.RigidBody2D.velocity.y > velocityDeadZone && isOrderingJump;
+        return Owner.transform.position.y < currentMaxHeight && Owner.RigidBody2D.velocity.y > velocityDeadZone && isOrderingJump;
     }
 
     private void OnFixedUpdate()
@@ -72,7 +72,7 @@ public class TribalJumpingState : TribalHSMState
 
     private void Jump()
     {
-        character.RigidBody2D.AddForce(new Vector2(0, character.JumpAcceleration), ForceMode2D.Impulse);
+        Owner.RigidBody2D.AddForce(new Vector2(0, Owner.JumpAcceleration), ForceMode2D.Impulse);
     }
 
     /*private void CheckingForLedge()

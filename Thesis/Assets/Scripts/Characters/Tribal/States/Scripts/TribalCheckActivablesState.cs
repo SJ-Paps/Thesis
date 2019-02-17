@@ -13,27 +13,27 @@ public class TribalCheckActivablesState : TribalHSMState
     {
         if(trigger == Character.Trigger.Activate)
         {
-            MovableObject movableObject = character.CheckForMovableObject();
+            MovableObject movableObject = Owner.CheckForMovableObject();
 
             if(movableObject != null)
             {
-                blackboard.toPushMovableObject = movableObject;
+                Blackboard.toPushMovableObject = movableObject;
                 SendEvent(Character.Trigger.Push);
                 return true;
             }
 
-            IActivable<Tribal> activable = character.CheckForActivableObject<IActivable<Tribal>>();
+            IActivable<Tribal> activable = Owner.CheckForActivableObject<IActivable<Tribal>>();
 
             if(activable != null)
             {
                 if (activable is Hide hide)
                 {
-                    blackboard.toHidePlace = hide;
+                    Blackboard.toHidePlace = hide;
                     SendEvent(Character.Trigger.Hide);
                 }
                 else
                 {
-                    activable.Activate(character);
+                    activable.Activate(Owner);
                 }
             }
         }

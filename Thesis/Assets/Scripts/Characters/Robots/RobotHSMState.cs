@@ -11,6 +11,6 @@
     {
         base.OnOwnerReferencePropagated();
 
-        character = (Robot)base.character;
+        character = (Robot)base.Owner;
     }
 }

@@ -15,13 +15,13 @@ public class TribalMovingPushingState : TribalMovingState
     {
         base.OnEnter();
 
-        facingDirection = (int)character.transform.right.x;
+        facingDirection = (int)Owner.transform.right.x;
     }
 
     protected override void OnUpdate()
     {
-        if (character.RigidBody2D.velocity.x < 0 && facingDirection > 0
-            || character.RigidBody2D.velocity.x > 0 && facingDirection < 0)
+        if (Owner.RigidBody2D.velocity.x < 0 && facingDirection > 0
+            || Owner.RigidBody2D.velocity.x > 0 && facingDirection < 0)
         {
             SendEvent(Character.Trigger.StopPushing);
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalHSMState : CharacterHSMState
 {
-    protected new Tribal character;
+    public new Tribal Owner { get; set; }
 
     public TribalHSMState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
@@ -13,6 +13,7 @@ public class TribalHSMState : CharacterHSMState
 
     protected override void OnOwnerReferencePropagated()
     {
-        character = (Tribal)base.character;
+        base.OnOwnerReferencePropagated();
+        Owner = (Tribal)base.Owner;
     }
 }

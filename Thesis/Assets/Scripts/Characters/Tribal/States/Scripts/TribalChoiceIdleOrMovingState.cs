@@ -18,11 +18,11 @@ public class TribalChoiceIdleOrMovingState : TribalHSMState
 
     private void Redirect()
     {
-        if(character.RigidBody2D.velocity.x > 0)
+        if(Owner.RigidBody2D.velocity.x > 0)
         {
             SendEvent(Character.Trigger.MoveRight);
         }
-        else if(character.RigidBody2D.velocity.x < 0)
+        else if(Owner.RigidBody2D.velocity.x < 0)
         {
             SendEvent(Character.Trigger.MoveLeft);
         }

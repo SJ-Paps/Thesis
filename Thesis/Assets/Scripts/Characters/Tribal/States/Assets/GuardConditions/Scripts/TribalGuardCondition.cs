@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class TribalGuardCondition : CharacterGuardCondition
 {
-    protected new Tribal character;
+    protected new Tribal Owner;
 
     protected override void OnOwnerReferencePropagated()
     {
         base.OnOwnerReferencePropagated();
 
-        character = (Tribal)base.character;
+        Owner = (Tribal)base.Owner;
     }
 }

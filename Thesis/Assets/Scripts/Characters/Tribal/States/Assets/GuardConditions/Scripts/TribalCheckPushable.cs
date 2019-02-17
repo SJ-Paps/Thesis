@@ -11,6 +11,6 @@ public class TribalCheckPushable : TribalGuardCondition
 
     private bool IsPushableReachable()
     {
-        return character.CheckForMovableObject() != null;
+        return Owner.CheckForMovableObject() != null;
     }
 }

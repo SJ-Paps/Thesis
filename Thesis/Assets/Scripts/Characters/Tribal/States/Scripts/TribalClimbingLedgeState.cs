@@ -14,15 +14,15 @@ public class TribalClimbingLedgeState : TribalClimbingState
     {
         base.OnEnter();
 
-        character.RigidBody2D.velocity = new Vector2(0, 0);
-        character.RigidBody2D.isKinematic = true;
+        Owner.RigidBody2D.velocity = new Vector2(0, 0);
+        Owner.RigidBody2D.isKinematic = true;
 
         CoroutineManager.GetInstance().StartCoroutine(climbCoroutine);
     }
 
     protected override void OnExit()
     {
-        character.RigidBody2D.isKinematic = false;
+        Owner.RigidBody2D.isKinematic = false;
 
         CoroutineManager.GetInstance().StopCoroutine(climbCoroutine);
     }
@@ -33,10 +33,10 @@ public class TribalClimbingLedgeState : TribalClimbingState
         {
             float endPointOffsetY = 0.02f;
 
-            Vector2 startPoint = character.transform.position;
+            Vector2 startPoint = Owner.transform.position;
 
-            Vector2 endPointForY = new Vector2(character.transform.position.x, blackboard.ledgeCheckHit.point.y + character.Collider.bounds.extents.y + endPointOffsetY);
-            Vector2 endPointForX = new Vector2(blackboard.ledgeCheckHit.point.x, endPointForY.y);
+            Vector2 endPointForY = new Vector2(Owner.transform.position.x, Blackboard.ledgeCheckHit.point.y + Owner.Collider.bounds.extents.y + endPointOffsetY);
+            Vector2 endPointForX = new Vector2(Blackboard.ledgeCheckHit.point.x, endPointForY.y);
 
             float timeAcummulator = 0;
             float time = 0.5f;
@@ -45,7 +45,7 @@ public class TribalClimbingLedgeState : TribalClimbingState
             {
                 timeAcummulator += Time.deltaTime;
 
-                character.transform.position = Vector3.Lerp(startPoint, endPointForY, timeAcummulator / time);
+                Owner.transform.position = Vector3.Lerp(startPoint, endPointForY, timeAcummulator / time);
                 yield return null;
             }
 
@@ -55,11 +55,11 @@ public class TribalClimbingLedgeState : TribalClimbingState
             {
                 timeAcummulator += Time.deltaTime;
 
-                character.transform.position = Vector3.Lerp(endPointForY, endPointForX, timeAcummulator / time);
+                Owner.transform.position = Vector3.Lerp(endPointForY, endPointForX, timeAcummulator / time);
                 yield return null;
             }
 
-            character.transform.position = endPointForX;
+            Owner.transform.position = endPointForX;
 
             SendEvent(Character.Trigger.StopHanging);
 
