@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 public class PercentageReversibleNumber
 {
@@ -52,7 +53,7 @@ public class PercentageReversibleNumber
         return AddPercentageConstraint((double)percentage);
     }
 
-    public void ReversePercentageConstraint(int id)
+    public void RemovePercentageConstraint(int id)
     {
         if(id < 1 || id > constraints.Count - 1)
         {

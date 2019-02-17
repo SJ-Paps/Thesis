@@ -154,16 +154,8 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     [SerializeField]
     private float maxMovementVelocity, acceleration;
-
-    private PercentageReversibleNumber velocity;
-
-    public double MaxMovementVelocity
-    {
-        get
-        {
-            return velocity.CurrentValue;
-        }
-    }
+    
+    public PercentageReversibleNumber MaxVelocity { get; protected set; }
 
     public float Acceleration
     {
@@ -219,7 +211,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         orders = new Queue<Trigger>();
 
-        velocity = new PercentageReversibleNumber(maxMovementVelocity);
+        MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
 
         Collider = GetComponent<SJCollider2D>();
 
@@ -387,16 +379,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
 
         return Physics2D.Linecast(beginPoint, endPoint, layers);
-    }
-
-    public int AddVelocityConstraintByPercentageAndGetConstraintId(float percentage)
-    {
-        return velocity.AddPercentageConstraint(percentage);
-    }
-
-    public void RemoveVelocityConstraintById(int id)
-    {
-        velocity.ReversePercentageConstraint(id);
     }
 
 }

@@ -86,7 +86,7 @@ public class TribalMovingState : TribalHSMState
             MoveOnDirection(currentMoveDirection);
         }
 
-        if (character.RigidBody2D.velocity.x > character.MaxMovementVelocity || character.RigidBody2D.velocity.x < character.MaxMovementVelocity * -1)
+        if (character.RigidBody2D.velocity.x > character.MaxVelocity.CurrentValue || character.RigidBody2D.velocity.x < character.MaxVelocity.CurrentValue * -1)
         {
             ClampVelocity(currentMoveDirection);
         }

@@ -44,7 +44,7 @@ public class TribalDuckingState : TribalHSMState
         character.Collider.ChangeSize(new Vector2(previousSizeX, colliderSizeY));
         character.Collider.offset = new Vector2(previousOffsetX, yFloor + colliderSizeY);
 
-        velocityContraintId = character.AddVelocityConstraintByPercentageAndGetConstraintId(velocityConstraintPercentage);
+        velocityContraintId = character.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
 
         shouldStandUp = false;
     }
@@ -68,7 +68,7 @@ public class TribalDuckingState : TribalHSMState
         character.Collider.ChangeSize(new Vector2(previousSizeX, previousSizeY));
         character.Collider.offset = new Vector2(previousOffsetX, previousOffsetY);
 
-        character.RemoveVelocityConstraintById(velocityContraintId);
+        character.MaxVelocity.RemovePercentageConstraint(velocityContraintId);
     }
 
     protected override bool HandleEvent(Character.Trigger trigger)
