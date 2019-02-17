@@ -26,3 +26,7 @@ MonoBehaviour:
     trigger: 20
     stateTo: 27
     guardConditions: []
+  - stateFrom: 13
+    trigger: 4
+    stateTo: 27
+    guardConditions: []

@@ -560,6 +560,47 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return default;
     }
 
+    public T GetState<T>() where T : class
+    {
+        var root = GetRoot();
+
+        return root.InternalGetState<T>();
+    }
+
+    private T InternalGetState<T>() where T : class
+    {
+        if(this is T cached)
+        {
+            return cached;
+        }
+
+        for(int i = 0; i < parallelChilds.Count; i++)
+        {
+            var current = parallelChilds[i];
+
+            var state = current.InternalGetState<T>();
+
+            if (state != null)
+            {
+                return state;
+            }
+        }
+
+        for(int i = 0; i < childs.Count; i++)
+        {
+            var current = childs[i];
+
+            var state = current.InternalGetState<T>();
+
+            if(state != null)
+            {
+                return state;
+            }
+        }
+
+        return null;
+    }
+
     public bool SendEvent(TTrigger trigger)
     {
         var root = GetRoot();

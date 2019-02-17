@@ -169,7 +169,8 @@ public abstract class Tribal : Character
         }
     }
 
-    public MovableObject CheckForMovableObject()
+
+    public T CheckForActivableObject<T>() where T : class, IActivable<Character>
     {
         float xDirection;
 
@@ -182,13 +183,34 @@ public abstract class Tribal : Character
             xDirection = -1;
         }
 
-        Vector2 checkBoxSize = new Vector2(Collider.bounds.extents.x / 2, Collider.bounds.extents.y / 2);
-
-        Vector2 center = Collider.bounds.center + new Vector3(Collider.bounds.extents.x * xDirection, 0);
-
-        MovableObject movableObject = SJUtil.FindActivable<MovableObject, Character>(center, checkBoxSize, transform.eulerAngles.z);
-
-        return movableObject;
+        return SJUtil.FindActivable<T, Character>(new Vector2(Collider.bounds.center.x + (Collider.bounds.extents.x * xDirection), 0),
+                                        new Vector2(Collider.bounds.extents.x / 2, Collider.bounds.extents.y / 2), transform.eulerAngles.z);
     }
 
+    public T CheckForActivableObject<T>(Vector2 center, Vector2 detectionBoxSize) where T : class, IActivable<Character>
+    {
+        T activable = SJUtil.FindActivable<T, Character>(center, detectionBoxSize, transform.eulerAngles.z);
+
+        return activable;
+    }
+
+    public MovableObject CheckForMovableObject()
+    {
+        float checkMovableObjectDistanceX = 0.2f;
+
+        float xDirection;
+
+        if (transform.right.x >= 0)
+        {
+            xDirection = 1;
+        }
+        else
+        {
+            xDirection = -1;
+        }
+
+        return CheckForActivableObject<MovableObject>(new Vector2(Collider.bounds.center.x + (Collider.bounds.extents.x * xDirection),
+                                                                  Collider.bounds.center.y - Collider.bounds.extents.y / 3),
+                                                     new Vector2(checkMovableObjectDistanceX, Collider.bounds.extents.y));
+    }
 }

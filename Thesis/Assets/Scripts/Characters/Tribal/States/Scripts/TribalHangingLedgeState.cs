@@ -8,14 +8,4 @@ public class TribalHangingLedgeState : TribalHSMState
     {
         
     }
-
-    protected override bool HandleEvent(Character.Trigger trigger)
-    {
-        if(trigger == Character.Trigger.Jump)
-        {
-            return true;
-        }
-
-        return false;
-    }
 }

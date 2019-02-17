@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class SJUtil
 {
-    public static T FindActivable<T, TActivator>(Vector2 center, Vector2 size, float angle) where T : IActivable<TActivator> where TActivator : class
+    public static T FindActivable<T, TActivator>(Vector2 center, Vector2 size, float angle) where T : class, IActivable<TActivator> where TActivator : class
     {
         Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, Reg.activableLayerMask);
 

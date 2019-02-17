@@ -26,22 +26,26 @@ public class TribalHiddenState : TribalHSMState
         {
             SendEvent(Character.Trigger.StopHiding);
         }
+        else
+        {
+            currentHide.Activate(character);
 
-        currentHide.Activate(character);
-
-        character.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
-
+            character.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
+        }
     }
 
     protected override void OnExit()
     {
         base.OnExit();
 
-        currentHide.Activate(character);
+        if(currentHide != null)
+        {
+            currentHide.Activate(character);
 
-        currentHide = null;
+            currentHide = null;
 
-        character.Animator.ResetTrigger(Tribal.HideAnimatorTrigger);
+            character.Animator.ResetTrigger(Tribal.HideAnimatorTrigger);
+        }
     }
 
     protected override void OnUpdate() 

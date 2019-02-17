@@ -77,31 +77,7 @@ MonoBehaviour:
       isKeyReleased: 0
       name: Activate
       keys: 710000006201000065000000
-    orders: 06
-  - key:
-      isAxis: 0
-      lessThanZero: 0
-      isKeyDown: 0
-      isKeyReleased: 0
-      name: Push
-      keys: 710000006201000065000000
-    orders: 0c
-  - key:
-      isAxis: 0
-      lessThanZero: 0
-      isKeyDown: 1
-      isKeyReleased: 0
-      name: Grapple
-      keys: 20000000
-    orders: 07
-  - key:
-      isAxis: 0
-      lessThanZero: 0
-      isKeyDown: 1
-      isKeyReleased: 0
-      name: ReleaseLedge
-      keys: 73000000
-    orders: 08
+    orders: 1a
   - key:
       isAxis: 0
       lessThanZero: 0
@@ -132,7 +108,7 @@ MonoBehaviour:
       isKeyDown: 0
       isKeyReleased: 0
       name: ClimbUp
-      keys: 110100007700000020000000
+      keys: 1101000077000000
     orders: 14
   - key:
       isAxis: 0

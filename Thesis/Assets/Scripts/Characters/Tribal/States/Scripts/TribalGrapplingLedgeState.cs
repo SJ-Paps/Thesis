@@ -83,7 +83,7 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
             SendEvent(Character.Trigger.StopHanging);
             return true;
         }
-        else if(trigger == Character.Trigger.ClimbUp)
+        else if(trigger == Character.Trigger.ClimbUp || trigger == Character.Trigger.Jump)
         {
             int xDirection = 0;
 
