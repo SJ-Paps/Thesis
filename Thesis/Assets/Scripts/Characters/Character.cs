@@ -78,58 +78,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         public RaycastHit2D ledgeCheckHit;
     }
 
-    public event Action<Collision2D> onCollisionEnter2D
-    {
-        add
-        {
-            Collider.onEnteredCollision += value;
-        }
-
-        remove
-        {
-            Collider.onEnteredCollision -= value;
-        }
-    }
-
-    public event Action<Collision2D> onCollisionStay2D
-    {
-        add
-        {
-            Collider.onStayCollision += value;
-        }
-
-        remove
-        {
-            Collider.onStayCollision -= value;
-        }
-    }
-
-    public event Action<Collider2D> onTriggerEnter2D
-    {
-        add
-        {
-            Collider.onEnteredTrigger += value;
-        }
-
-        remove
-        {
-            Collider.onEnteredTrigger -= value;
-        }
-    }
-
-    public event Action<Collider2D> onTriggerExit2D
-    {
-        add
-        {
-            Collider.onExitedTrigger += value;
-        }
-
-        remove
-        {
-            Collider.onExitedTrigger -= value;
-        }
-    }
-
     public event Action onFixedUpdate;
 
 	public event Action<Trigger> onOrderReceived;
@@ -140,37 +88,9 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     
     public bool IsFacingLeft { get; private set; }
 
-	public Eyes Eyes
-    {
-        get { return eyes; }
-    }
-
-    public Transform HandPoint
-    {
-        get { return handPoint; }
-    }
-
-    public virtual bool CanMove { get; }
-
-    [SerializeField]
-    private float maxMovementVelocity, acceleration;
     
-    public PercentageReversibleNumber MaxVelocity { get; protected set; }
-
-    public float Acceleration
-    {
-        get
-        {
-            return acceleration;
-        }
-    }
-
-    [SerializeField]
-    protected Eyes eyes;
-
-    [SerializeField]
-    protected Transform handPoint;
     
+    [HideInInspector]
     public bool blockFacing;
     
 
@@ -184,15 +104,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    protected Action<Collision2D> collisionCheckDeadlyDelegate;
-    protected Action<Collider2D> triggerCheckDeadlyDelegate;
-
-    public Animator Animator { get; protected set; }
-    public Rigidbody2D RigidBody2D { get; protected set; }
-
     protected Queue<Trigger> orders;
-
-    public SJCollider2D Collider { get; protected set; }
 
 
     [SerializeField]
@@ -204,27 +116,21 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     {
         base.Awake();
 
-        Animator = GetComponent<Animator>();
-        RigidBody2D = GetComponent<Rigidbody2D>();
+        
 
         blackboard = new Blackboard();
 
         orders = new Queue<Trigger>();
 
-        MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
+        
 
-        Collider = GetComponent<SJCollider2D>();
+        
 
-        collisionCheckDeadlyDelegate = CheckDeadly;
-        triggerCheckDeadlyDelegate = CheckDeadly;
+        /*collisionCheckDeadlyDelegate = CheckDeadly;
+        triggerCheckDeadlyDelegate = CheckDeadly;*/
+        
 
-        onCollisionEnter2D += collisionCheckDeadlyDelegate;
-        onTriggerEnter2D += triggerCheckDeadlyDelegate;
-
-        hsm = (CharacterHSMState)CharacterHSMStateAsset.BuildFromAsset(hsmAsset);
-
-        hsm.PropagateOwnerReference(this);
-        hsm.PropagateBlackboardReference(blackboard);
+        hsm = CharacterHSMStateAsset.BuildFromAsset(hsmAsset, this, blackboard);
 
         hsm.Enter();
     }
@@ -261,14 +167,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     public virtual bool Die(DeadlyType deadly)
     {
-        if(IsOnState(State.Alive))
+        /*if(IsOnState(State.Alive))
         {
             Collider.enabled = false;
 
             Die();
 
             return true;
-        }
+        }*/
 
         return false;
     }
@@ -327,7 +233,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         
     }
 
-    private void CheckDeadly(Collision2D collision)
+    /*private void CheckDeadly(Collision2D collision)
     {
         if(collision.gameObject.layer == Reg.hostileDeadlyLayer || collision.gameObject.layer == Reg.generalDeadlyLayer)
         {
@@ -379,6 +285,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
 
         return Physics2D.Linecast(beginPoint, endPoint, layers);
-    }
+    }*/
 
 }

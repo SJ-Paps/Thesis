@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class Tribal : Character
+public abstract class Tribal : Character, ISeer
 {
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
@@ -31,8 +31,35 @@ public abstract class Tribal : Character
         }
     }
 
-    
-    
+    public Animator Animator { get; protected set; }
+    public Rigidbody2D RigidBody2D { get; protected set; }
+
+    public SJCollider2D Collider { get; protected set; }
+
+    public Transform HandPoint
+    {
+        get { return handPoint; }
+    }
+
+    [SerializeField]
+    protected Eyes eyes;
+
+    [SerializeField]
+    protected Transform handPoint;
+
+    [SerializeField]
+    private float maxMovementVelocity, acceleration;
+
+    public PercentageReversibleNumber MaxVelocity { get; protected set; }
+
+    public float Acceleration
+    {
+        get
+        {
+            return acceleration;
+        }
+    }
+
     [SerializeField]
     private float jumpMaxHeight, jumpAcceleration;
 
@@ -52,6 +79,58 @@ public abstract class Tribal : Character
         }
     }
 
+    public event Action<Collision2D> onCollisionEnter2D
+    {
+        add
+        {
+            Collider.onEnteredCollision += value;
+        }
+
+        remove
+        {
+            Collider.onEnteredCollision -= value;
+        }
+    }
+
+    public event Action<Collision2D> onCollisionStay2D
+    {
+        add
+        {
+            Collider.onStayCollision += value;
+        }
+
+        remove
+        {
+            Collider.onStayCollision -= value;
+        }
+    }
+
+    public event Action<Collider2D> onTriggerEnter2D
+    {
+        add
+        {
+            Collider.onEnteredTrigger += value;
+        }
+
+        remove
+        {
+            Collider.onEnteredTrigger -= value;
+        }
+    }
+
+    public event Action<Collider2D> onTriggerExit2D
+    {
+        add
+        {
+            Collider.onExitedTrigger += value;
+        }
+
+        remove
+        {
+            Collider.onExitedTrigger -= value;
+        }
+    }
+
 
     protected override void Awake()
     {
@@ -62,65 +141,16 @@ public abstract class Tribal : Character
             CurrentCollectableObject.Collect(this);
         }
 
-        /*movementFSM = new FSM<State, Trigger>();
-        jumpingFSM = new FSM<State, Trigger>();
-        actionFSM = new FSM<State, Trigger>();
+        Animator = GetComponent<Animator>();
+        RigidBody2D = GetComponent<Rigidbody2D>();
+        Collider = GetComponent<SJCollider2D>();
 
-        idleState.InitializeState(movementFSM, State.Idle, this, orders, blackboard);
-        movingState.InitializeState(movementFSM, State.Moving, this, orders, blackboard);
-        slowDownState.InitializeState(movementFSM, State.SlowingDown, this, orders, blackboard);
+        MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
+    }
 
-        movementFSM.AddState(idleState);
-        movementFSM.AddState(movingState);
-        movementFSM.AddState(slowDownState);
-
-        movementFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
-        movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.SlowingDown);
-        movementFSM.MakeTransition(State.SlowingDown, Trigger.StopMoving, State.Idle);
-        movementFSM.MakeTransition(State.SlowingDown, Trigger.Move, State.Moving);
-
-        movementFSM.StartBy(State.Idle);
-
-        groundedState.InitializeState(jumpingFSM, State.Grounded, this, orders, blackboard);
-        jumpingState.InitializeState(jumpingFSM, State.Jumping, this, orders, blackboard);
-        fallingState.InitializeState(jumpingFSM, State.Falling, this, orders, blackboard);
-        grapplingState.InitializeState(jumpingFSM, State.Grappling, this, orders, blackboard);
-
-
-        jumpingFSM.AddState(groundedState);
-        jumpingFSM.AddState(jumpingState);
-        jumpingFSM.AddState(fallingState);
-        jumpingFSM.AddState(grapplingState);
-
-        jumpingFSM.MakeTransition(State.Grounded, Trigger.Jump, State.Jumping);
-        jumpingFSM.MakeTransition(State.Grounded, Trigger.Fall, State.Falling);
-        jumpingFSM.MakeTransition(State.Jumping, Trigger.Fall, State.Falling);
-        jumpingFSM.MakeTransition(State.Falling, Trigger.Ground, State.Grounded);
-        jumpingFSM.MakeTransition(State.Jumping, Trigger.Grapple, State.Grappling);
-        jumpingFSM.MakeTransition(State.Falling, Trigger.Grapple, State.Grappling);
-        jumpingFSM.MakeTransition(State.Grappling, Trigger.Fall, State.Falling);
-
-        jumpingFSM.StartBy(State.Falling);
-
-        actionIdleState.InitializeState(actionFSM, State.Idle, this, orders, blackboard);
-        pushingState.InitializeState(actionFSM, State.Pushing, this, orders, blackboard);
-        hiddenState.InitializeState(actionFSM, State.Hidden, this, orders, blackboard);
-
-        actionFSM.AddState(actionIdleState);
-        actionFSM.AddState(pushingState);
-        actionFSM.AddState(hiddenState);
-
-        actionFSM.MakeTransition(State.Idle, Trigger.Hide, State.Hidden);
-        actionFSM.MakeTransition(State.Hidden, Trigger.StopHiding, State.Idle);
-
-        actionFSM.MakeTransition(State.Idle, Trigger.Push, State.Pushing);
-        actionFSM.MakeTransition(State.Pushing, Trigger.StopPushing, State.Idle);
-
-        actionFSM.StartBy(State.Idle);
-
-        AddStateMachineWhenAlive(movementFSM);
-        AddStateMachineWhenAlive(jumpingFSM);
-        AddStateMachineWhenAlive(actionFSM);*/
+    public Eyes GetEyes()
+    {
+        return eyes;
     }
 
     public override bool ShouldBeSaved()
@@ -170,7 +200,7 @@ public abstract class Tribal : Character
     }
 
 
-    public T CheckForActivableObject<T>() where T : class, IActivable<Character>
+    public T CheckForActivableObject<T>() where T : class, IActivable<Tribal>
     {
         float xDirection;
 
@@ -183,13 +213,13 @@ public abstract class Tribal : Character
             xDirection = -1;
         }
 
-        return SJUtil.FindActivable<T, Character>(new Vector2(Collider.bounds.center.x + (Collider.bounds.extents.x * xDirection), 0),
+        return SJUtil.FindActivable<T, Tribal>(new Vector2(Collider.bounds.center.x + (Collider.bounds.extents.x * xDirection), 0),
                                         new Vector2(Collider.bounds.extents.x / 2, Collider.bounds.extents.y / 2), transform.eulerAngles.z);
     }
 
-    public T CheckForActivableObject<T>(Vector2 center, Vector2 detectionBoxSize) where T : class, IActivable<Character>
+    public T CheckForActivableObject<T>(Vector2 center, Vector2 detectionBoxSize) where T : class, IActivable<Tribal>
     {
-        T activable = SJUtil.FindActivable<T, Character>(center, detectionBoxSize, transform.eulerAngles.z);
+        T activable = SJUtil.FindActivable<T, Tribal>(center, detectionBoxSize, transform.eulerAngles.z);
 
         return activable;
     }

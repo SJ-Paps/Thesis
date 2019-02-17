@@ -1,103 +1,55 @@
 ﻿using UnityEngine;
 
-public class Turret : Robot
+public class Turret : Robot, ISeer
 {
-    /*[SerializeField]
-    protected TurretIdleState idleState;
-
     [SerializeField]
-    protected TurretAttackState attackState;
+    protected Rigidbody2D head, body;
 
-    [SerializeField]
-    protected TurretMovingState movingState;
-
-    [SerializeField]
-    protected TurretActionIdleState actionIdleState;*/
-
-    [SerializeField]
-    private float leftLimit, rightLimit;
-
-    public float LeftLimit
+    public Rigidbody2D HeadRigidBody
     {
         get
         {
-            return leftLimit;
+            return head;
         }
     }
 
-    public float RightLimit
+    public Rigidbody2D BodyRigidBody
     {
         get
         {
-            return rightLimit;
+            return body;
         }
     }
 
-    private float currentRotationReference;
+    public SJCollider2D HeadCollider { get; private set; }
+    public SJCollider2D BodyCollider { get; private set; }
+
+    [SerializeField]
+    protected Eyes eyes;
+
+    [SerializeField]
+    private float acceleration;
+
+    public float Acceleration
+    {
+        get
+        {
+            return acceleration;
+        }
+    }
 
     protected override void Awake()
     {
         base.Awake();
 
-        /*FSM<State, Trigger> movingFSM = new FSM<State, Trigger>();
-
-        idleState.InitializeState(movingFSM, State.Idle, this, orders, blackboard);
-        movingState.InitializeState(movingFSM, State.Moving, this, orders, blackboard);
-
-        movingFSM.AddState(idleState);
-        movingFSM.AddState(movingState);
-
-        movingFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
-        movingFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.Idle);
-
-        movingFSM.StartBy(State.Idle);
-
-        FSM<State, Trigger> actionFSM = new FSM<State, Trigger>();
-
-        actionIdleState.InitializeState(actionFSM, State.Idle, this, orders, blackboard);
-        attackState.InitializeState(actionFSM, State.Attacking, this, orders, blackboard);
-
-        actionFSM.AddState(actionIdleState);
-        actionFSM.AddState(attackState);
-        
-
-        actionFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
-        actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
-
-        actionFSM.StartBy(State.Idle);
-
-        AddStateMachineWhenAlive(movingFSM);
-        AddStateMachineWhenAlive(actionFSM);*/
+        HeadCollider = HeadRigidBody.GetComponent<SJCollider2D>();
+        BodyCollider = BodyRigidBody.GetComponent<SJCollider2D>();
     }
+
 
     public override void GetEnslaved()
     {
 
-    }
-
-    protected override void OnFacingChanged(bool facingLeft)
-    {
-        
-    }
-
-    public void Rotate(float rotation)
-    {
-        if (currentRotationReference + rotation > leftLimit)
-        {
-            rotation = leftLimit - currentRotationReference;
-        }
-        else if (currentRotationReference + rotation < rightLimit)
-        {
-            rotation = rightLimit - currentRotationReference;
-        }
-
-        transform.Rotate(Vector3.forward, rotation);
-        currentRotationReference += rotation;
-    }
-
-    public bool IsOverLimit()
-    {
-        return currentRotationReference == leftLimit || currentRotationReference == rightLimit;
     }
 
     public override bool ShouldBeSaved()
@@ -105,23 +57,28 @@ public class Turret : Robot
         return true;
     }
 
+    public Eyes GetEyes()
+    {
+        return eyes;
+    }
+
     protected override void OnSave(SaveData data)
     {
-        data.AddValue("x", transform.parent.position.x);
+        /*data.AddValue("x", transform.parent.position.x);
         data.AddValue("y", transform.parent.position.y);
         data.AddValue("limitLeft", leftLimit);
         data.AddValue("limitRight", rightLimit);
         data.AddValue("rotation z", transform.parent.rotation.z);
         data.AddValue("rotation x", transform.parent.rotation.x);
         data.AddValue("rotation y", transform.parent.rotation.y);
-        data.AddValue("rotation w", transform.parent.rotation.w);
+        data.AddValue("rotation w", transform.parent.rotation.w);*/
     }
 
     protected override void OnLoad(SaveData data)
     {
-        transform.parent.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
+        /*transform.parent.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
         transform.parent.rotation = new Quaternion(data.GetAs<float>("rotation x"), data.GetAs<float>("rotation y"), data.GetAs<float>("rotation z"), data.GetAs<float>("rotation w"));
         leftLimit = data.GetAs<float>("limitLeft");
-        rightLimit = data.GetAs<float>("limitRight");
+        rightLimit = data.GetAs<float>("limitRight");*/
     }
 }

@@ -42,7 +42,7 @@ public class Axe : Weapon
             rigidbody2D.isKinematic = true;
 
             ConstraintSource source = new ConstraintSource();
-            source.sourceTransform = Owner.HandPoint;
+            //source.sourceTransform = Owner.HandPoint;
             source.weight = 1;
 
             parentConstraint.AddSource(source);

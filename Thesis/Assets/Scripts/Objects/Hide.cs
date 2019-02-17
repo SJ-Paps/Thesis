@@ -1,4 +1,4 @@
-﻿public class Hide : ActivableObject {
+﻿public class Hide : ActivableObject<Character> {
 
     public override void Activate(Character user)
     {

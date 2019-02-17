@@ -1,4 +1,4 @@
-﻿public abstract class CollectableObject : ActivableObject, ICollectable<Character> {
+﻿public abstract class CollectableObject : ActivableObject<Tribal>, ICollectable<Character> {
 
     public Character Owner { get; protected set; }
 

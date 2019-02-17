@@ -22,7 +22,7 @@ public class TribalCheckActivablesState : TribalHSMState
                 return true;
             }
 
-            IActivable<Character> activable = character.CheckForActivableObject<IActivable<Character>>();
+            IActivable<Tribal> activable = character.CheckForActivableObject<IActivable<Tribal>>();
 
             if(activable != null)
             {

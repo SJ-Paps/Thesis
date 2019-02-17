@@ -1,4 +1,4 @@
-﻿public class ContextualActivable : ActivableObject
+﻿public class ContextualActivable : ActivableObject<Tribal>
 {
     public override bool ShouldBeSaved()
     {

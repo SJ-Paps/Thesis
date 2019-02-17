@@ -1,4 +1,4 @@
-﻿public abstract class CharacterHSMState : HSMState<Character.State, Character.Trigger>, IOwnable<Character>
+﻿public abstract class CharacterHSMState : HSMState<Character.State, Character.Trigger>, IOwnable<Character>, IBlackboardOwner<Character.Blackboard>
 {
     protected Character character;
     protected Character.Trigger LastEnteringTrigger { get; private set; }

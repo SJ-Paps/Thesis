@@ -5,6 +5,13 @@ public class PercentageReversibleNumber
 {
     public double BaseValue { get; private set; }
     public double CurrentValue { get; private set; }
+    public float CurrentValueFloat
+    {
+        get
+        {
+            return (float)CurrentValue;
+        }
+    }
 
     private List<double> constraints;
 
