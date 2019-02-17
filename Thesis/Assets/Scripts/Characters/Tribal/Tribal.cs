@@ -134,16 +134,16 @@ public abstract class Tribal : Character, ISeer
 
     protected override void Awake()
     {
+        Animator = GetComponent<Animator>();
+        RigidBody2D = GetComponent<Rigidbody2D>();
+        Collider = GetComponent<SJCollider2D>();
+
         base.Awake();
 
         if(CurrentCollectableObject != null)
         {
             CurrentCollectableObject.Collect(this);
         }
-
-        Animator = GetComponent<Animator>();
-        RigidBody2D = GetComponent<Rigidbody2D>();
-        Collider = GetComponent<SJCollider2D>();
 
         MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
     }
