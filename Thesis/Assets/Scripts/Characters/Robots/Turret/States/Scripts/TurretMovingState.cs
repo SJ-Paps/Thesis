@@ -18,14 +18,14 @@ public class TurretMovingState : TurretHSMState
     {
         base.OnEnter();
 
-        character.onFixedUpdate += onFixedUpdateDelegate;
+        Owner.onFixedUpdate += onFixedUpdateDelegate;
     }
 
     private void OnFixedUpdate()
     {
         if(isOrderingMove)
         {
-            character.HeadRigidBody.AddTorque(currentDirectionX * character.Acceleration, ForceMode2D.Force);
+            Owner.HeadRigidBody.AddTorque(currentDirectionX * Owner.Acceleration.CurrentValueFloat, ForceMode2D.Force);
         }
         else
         {
@@ -41,7 +41,7 @@ public class TurretMovingState : TurretHSMState
     {
         base.OnExit();
 
-        character.onFixedUpdate -= onFixedUpdateDelegate;
+        Owner.onFixedUpdate -= onFixedUpdateDelegate;
     }
 
     protected override bool HandleEvent(Character.Trigger trigger)

@@ -1,6 +1,6 @@
-﻿public class Hide : ActivableObject<Character> {
+﻿public class Hide : ActivableObject<Tribal> {
 
-    public override void Activate(Character user)
+    public override void Activate(Tribal user)
     {
         base.Activate(user);
     }

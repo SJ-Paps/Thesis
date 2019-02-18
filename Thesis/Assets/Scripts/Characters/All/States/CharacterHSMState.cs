@@ -12,41 +12,7 @@
         onAnyStateChanged += CatchEnteringTrigger;
     }
 
-    protected override void OnEnter()
-    {
-#if UNITY_EDITOR
-        if(activeDebug)
-        {
-            EditorDebug.Log(DebugName + " ENTER " + Owner.name);
-        }
-#endif
-    }
-
-    protected void Log(object obj)
-    {
-#if UNITY_EDITOR
-        if(activeDebug)
-        {
-            UnityEngine.Debug.Log(obj);
-        }
-#endif
-    }
-
-
-    protected override void OnUpdate()
-    {
-
-    }
-
-    protected override void OnExit()
-    {
-#if UNITY_EDITOR
-        if(activeDebug)
-        {
-            EditorDebug.Log(DebugName + " EXIT " + Owner.name);
-        }
-#endif
-    }
+    
 
     private void CatchEnteringTrigger(Character.Trigger trigger)
     {

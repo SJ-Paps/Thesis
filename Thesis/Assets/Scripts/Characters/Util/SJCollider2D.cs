@@ -76,4 +76,9 @@ public abstract class SJCollider2D : SJCollider2DBase {
     {
         return InnerCollider.OverlapPoint(point);
     }
+
+    public bool IsTouching(Collider2D collider)
+    {
+        return InnerCollider.IsTouching(collider);
+    }
 }

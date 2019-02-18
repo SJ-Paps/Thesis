@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-[Serializable]
 public class EyeCollection : ICollection<Eyes>
 {
     public event Action<Collider2D, Eyes> onAnyEntered;
@@ -14,7 +13,7 @@ public class EyeCollection : ICollection<Eyes>
     private Action<Collider2D, Eyes> onStayTriggerDelegate;
     private Action<Collider2D, Eyes> onExitedTriggerDelegate;
 
-    [SerializeField]
+
     private List<Eyes> eyes;
 
     public int Count
@@ -39,10 +38,7 @@ public class EyeCollection : ICollection<Eyes>
         onStayTriggerDelegate = OnStayTrigger;
         onExitedTriggerDelegate = OnExitedTrigger;
 
-        if (eyes == null)
-        {
-            eyes = new List<Eyes>();
-        }
+        eyes = new List<Eyes>();
     }
 
     private void OnEnteredTrigger(Collider2D collider, Eyes eye)
@@ -238,7 +234,7 @@ public class Eyes : SJMonoBehaviour
 
     private void OnStayTrigger(Collider2D collider)
     {
-        if(onStay != null)
+        if (onStay != null)
         {
             onStay(collider, this);
         }
@@ -256,11 +252,22 @@ public class Eyes : SJMonoBehaviour
     {
         if (eyePoint != null && Collider != null)
         {
-            if(Collider.OverlapPoint(eyePoint.position))
+            if(Collider.OverlapPoint(eyePoint.position) && Collider.IsTouching(collider))
             {
                 int finalLayerMask = visionBlockingLayerMask | targetLayerMask;
 
-                RaycastHit2D hit = Physics2D.Linecast(eyePoint.position, collider.offset, finalLayerMask);
+                float distance;
+
+                if (Collider.bounds.size.x > Collider.bounds.size.y)
+                {
+                    distance = Collider.bounds.size.x;
+                }
+                else
+                {
+                    distance = Collider.bounds.size.y;
+                }
+
+                RaycastHit2D hit = Physics2D.Raycast(eyePoint.position, eyePoint.up, distance, finalLayerMask);
 
                 if (hit && Collider.OverlapPoint(hit.point))
                 {
@@ -282,7 +289,18 @@ public class Eyes : SJMonoBehaviour
             {
                 int finalLayerMask = visionBlockingLayerMask | targetLayerMask;
 
-                hitInfo = Physics2D.Linecast(eyePoint.position, collider.offset, finalLayerMask);
+                float distance;
+
+                if (Collider.bounds.size.x > Collider.bounds.size.y)
+                {
+                    distance = Collider.bounds.size.x;
+                }
+                else
+                {
+                    distance = Collider.bounds.size.y;
+                }
+
+                hitInfo = Physics2D.Raycast(eyePoint.position, eyePoint.up, distance, finalLayerMask);
 
                 if (hitInfo && Collider.OverlapPoint(hitInfo.point))
                 {

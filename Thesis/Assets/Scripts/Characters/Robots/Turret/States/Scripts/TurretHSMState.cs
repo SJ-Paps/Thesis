@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurretHSMState : RobotHSMState
 {
-    protected new Turret character;
+    protected new Turret Owner { get; set; }
 
     public TurretHSMState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
@@ -15,6 +15,6 @@ public class TurretHSMState : RobotHSMState
     {
         base.OnOwnerReferencePropagated();
 
-        character = (Turret)base.character;
+        Owner = (Turret)base.Owner;
     }
 }

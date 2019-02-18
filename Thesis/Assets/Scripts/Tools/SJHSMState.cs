@@ -76,6 +76,43 @@
 
         Blackboard = blackboard;
     }
+
+
+    protected override void OnEnter()
+    {
+#if UNITY_EDITOR
+        if (activeDebug)
+        {
+            EditorDebug.Log(DebugName + " ENTER " + Owner);
+        }
+#endif
+    }
+
+    protected void Log(object obj)
+    {
+#if UNITY_EDITOR
+        if (activeDebug)
+        {
+            UnityEngine.Debug.Log(obj);
+        }
+#endif
+    }
+
+
+    protected override void OnUpdate()
+    {
+
+    }
+
+    protected override void OnExit()
+    {
+#if UNITY_EDITOR
+        if (activeDebug)
+        {
+            EditorDebug.Log(DebugName + " EXIT " + Owner);
+        }
+#endif
+    }
 }
 
 public abstract class SJGuardCondition<TOwner, TBlackboard> : GuardCondition, IOwnable<TOwner>, IBlackboardOwner<TBlackboard> where TOwner : class

@@ -1,21 +1,20 @@
 ﻿using System;
+using UnityEngine;
 
 public class TurretIAController : IAController<Turret>
 {
     public enum State
     {
+        Base,
         Alertless,
         Alertful,
-        WithTarget,
-        WithoutTarget
+        Searching
     }
 
     public enum Trigger
     {
         CalmDown,
         SetFullAlert,
-        TargetFound,
-        TargetLost
     }
 
     public class Blackboard
@@ -23,6 +22,7 @@ public class TurretIAController : IAController<Turret>
 
     }
 
+    [SerializeField]
     private TurretIAControllerHSMStateAsset baseHSMAsset;
 
     protected TurretIAControllerHSMState hsm;

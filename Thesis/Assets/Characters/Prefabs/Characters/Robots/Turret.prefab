@@ -106,6 +106,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabName: 
+  eyes:
+    eyes:
+    - {fileID: 114734916684269814}
   blockFacing: 0
   hsmAsset: {fileID: 11400000, guid: f0053f4fe490f3a42926f12ad0362fe4, type: 2}
   head: {fileID: 288349724793856175}
@@ -116,10 +119,7 @@ MonoBehaviour:
   gunPoint: {fileID: 4773946996799100}
   bulletPrefab: {fileID: 1667125946478642, guid: 815cc48826883124283b96cab2949f8e,
     type: 3}
-  eyes:
-    eyes:
-    - {fileID: 114734916684269814}
-  acceleration: 0.5
+  accelerationBase: 0.5
 --- !u!1 &1786290637926894
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +267,7 @@ HingeJoint2D:
   m_BreakTorque: Infinity
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.010000229, y: -0.554994}
-  m_ConnectedAnchor: {x: 0, y: 0.34999996}
+  m_ConnectedAnchor: {x: -0.000000230968, y: 0.3499999}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0

@@ -1,6 +1,6 @@
 ﻿public class RobotHSMState : CharacterHSMState
 {
-    protected new Robot character;
+    protected new Robot Owner { get; set; }
 
     public RobotHSMState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
@@ -11,6 +11,6 @@
     {
         base.OnOwnerReferencePropagated();
 
-        character = (Robot)base.Owner;
+        Owner = (Robot)base.Owner;
     }
 }

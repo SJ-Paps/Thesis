@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SAM.Timers;
 
 public class TurretShootingState : TurretHSMState
 {
@@ -8,10 +9,22 @@ public class TurretShootingState : TurretHSMState
 
     private GameObject nextBullet;
 
+    private SyncTimer timerToFinish;
+
+    private bool isFirstUpdate;
+
+    //utilizo un bool para saber cuando es el segundo para dar tiempo a posicionar la bala en la punta del cañon en el OnEnter
+    //y luego la posiciono en el punto final del LineCast en el segundo update (en el Shoot)
+    private bool isSecondUpdate; 
+
     public TurretShootingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
         int poolSize = 5;
         bulletPool = new GameObject[poolSize];
+
+        timerToFinish = new SyncTimer();
+        timerToFinish.Interval = 0.5f;
+        timerToFinish.onTick += OnTimerTick;
 
         activeDebug = true;
     }
@@ -27,7 +40,7 @@ public class TurretShootingState : TurretHSMState
     {
         for(int i = 0; i < bulletPool.Length; i++)
         {
-            GameObject bullet = GameObject.Instantiate(character.BulletPrefab);
+            GameObject bullet = GameObject.Instantiate(Owner.BulletPrefab);
 
             bulletPool[i] = bullet;
             bullet.SetActive(false);
@@ -37,37 +50,60 @@ public class TurretShootingState : TurretHSMState
     protected override void OnEnter()
     {
         base.OnEnter();
-
-        if(nextBullet != null)
-        {
-            nextBullet.SetActive(false);
-        }
         
         nextBullet = GetNext();
         nextBullet.SetActive(true);
-        nextBullet.transform.position = character.GunPoint.position;
+        nextBullet.transform.position = Owner.GunPoint.position;
+
+        isFirstUpdate = true;
+
+        timerToFinish.Start();
     }
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
 
-        Shoot();
-        SendEvent(Character.Trigger.StopAttacking);
+        if(isFirstUpdate)
+        {
+            isFirstUpdate = false;
+            isSecondUpdate = true;
+        }
+        else if(isSecondUpdate)
+        {
+            Shoot();
+            isSecondUpdate = false;
+        }
+
+        timerToFinish.Update(Time.deltaTime);
     }
 
     protected override void OnExit()
     {
         base.OnExit();
+
+        if (nextBullet != null)
+        {
+            nextBullet.SetActive(false);
+        }
+
+        nextBullet = null;
+
+        timerToFinish.Stop();
+    }
+
+    private void OnTimerTick(SyncTimer timer)
+    {
+        SendEvent(Character.Trigger.StopAttacking);
     }
 
     private void Shoot()
     {
         if(nextBullet != null)
         {
-            Vector2 gunPointPosition = character.GunPoint.position;
+            Vector2 gunPointPosition = Owner.GunPoint.position;
 
-            Vector2 endPoint = gunPointPosition + (Vector2)(character.GunPoint.up * character.ShootDistance);
+            Vector2 endPoint = gunPointPosition + (Vector2)(Owner.GunPoint.up * Owner.ShootDistance);
 
             RaycastHit2D hit = Physics2D.Linecast(gunPointPosition, endPoint, Physics2D.GetLayerCollisionMask(nextBullet.layer));
 
@@ -79,12 +115,12 @@ public class TurretShootingState : TurretHSMState
 
                 if (damagable != null)
                 {
-                    damagable.TakeDamage(character.ShootDamage.CurrentValueFloat, DamageType.Bullet);
+                    damagable.TakeDamage(Owner.ShootDamage.CurrentValueFloat, DamageType.Bullet);
                 }
 
                 if (hit.rigidbody != null)
                 {
-                    hit.rigidbody.AddForceAtPosition(character.GunPoint.up * 3, hit.point, ForceMode2D.Impulse);
+                    hit.rigidbody.AddForceAtPosition(Owner.GunPoint.up * 3, hit.point, ForceMode2D.Impulse);
                 }
             }
             else

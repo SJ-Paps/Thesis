@@ -6,7 +6,7 @@ public class TribalHiddenState : TribalHSMState
 
     public TribalHiddenState(Character.State state, string debugName) : base(state, debugName)
     {
-
+        activeDebug = true;
     }
 
     protected override void OnEnter() 
@@ -19,7 +19,7 @@ public class TribalHiddenState : TribalHSMState
         {
             Vector2 detectionSize = new Vector2((Owner.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, Owner.Collider.bounds.extents.y * 2);
 
-            currentHide = SJUtil.FindActivable<Hide, Character>(Owner.Collider.bounds.center, detectionSize, Owner.transform.eulerAngles.z);
+            currentHide = SJUtil.FindActivable<Hide, Tribal>(Owner.Collider.bounds.center, detectionSize, Owner.transform.eulerAngles.z);
         }
 
         if(currentHide == null)

@@ -9,18 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: TurretAlertlessState
-  m_EditorClassIdentifier: Assembly-CSharp::TurretIAControllerHSMStateAsset
-  script: {fileID: 0}
-  stateClassFullName: 
-  debugName: 
-  stateId: 0
+  m_Script: {fileID: 11500000, guid: 75681c926ce5de34c9e4cb8b6c0883d5, type: 3}
+  m_Name: TurretIASearchingState
+  m_EditorClassIdentifier: 
+  script: {fileID: 11500000, guid: b41abe1c53269cc4ab474f4e36d80a71, type: 3}
+  stateClassFullName: TurretIASearchingState
+  debugName: Searching
+  stateId: 3
   startStateIndex: 0
   childs: []
   parallelChilds: []
-  transitions:
-  - stateFrom: 0
-    trigger: 0
-    stateTo: 0
-    guardConditions: []
+  transitions: []

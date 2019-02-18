@@ -9,7 +9,7 @@ public class TribalPushingObjectState : TribalHSMState
 
     public TribalPushingObjectState(Character.State state, string debugName) : base(state, debugName)
     {
-
+        activeDebug = true;
     }
 
     protected override void OnEnter() {

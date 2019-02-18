@@ -44,15 +44,9 @@ public class Turret : Robot
     protected GameObject bulletPrefab;
 
     [SerializeField]
-    private float acceleration;
+    private float accelerationBase;
 
-    public float Acceleration
-    {
-        get
-        {
-            return acceleration;
-        }
-    }
+    public PercentageReversibleNumber Acceleration { get; protected set; }
 
     public float ShootDistance
     {
@@ -87,6 +81,7 @@ public class Turret : Robot
 
         ChargeTime = new PercentageReversibleNumber(chargeTimeBase);
         ShootDamage = new PercentageReversibleNumber(shootDamageBase);
+        Acceleration = new PercentageReversibleNumber(accelerationBase);
     }
 
 

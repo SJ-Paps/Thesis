@@ -90,7 +90,9 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     public bool IsFacingLeft { get; private set; }
 
     [SerializeField]
-    protected EyeCollection eyes;
+    protected Eyes[] serializedEyes;
+
+    private EyeCollection eyes;
     
     [HideInInspector]
     public bool blockFacing;
@@ -117,13 +119,17 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     protected override void Awake()
     {
         base.Awake();
-
         
-
         blackboard = new Blackboard();
 
         orders = new Queue<Trigger>();
-        
+
+        eyes = new EyeCollection();
+
+        for(int i = 0; i < serializedEyes.Length; i++)
+        {
+            eyes.Add(serializedEyes[i]);
+        }
 
         hsm = CharacterHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
 

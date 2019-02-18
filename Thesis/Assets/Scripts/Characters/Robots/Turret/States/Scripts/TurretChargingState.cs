@@ -15,8 +15,10 @@ public class TurretChargingState : TurretHSMState
     {
         base.OnEnter();
 
-        timer.Interval = character.ChargeTime.CurrentValueFloat;
+        timer.Interval = Owner.ChargeTime.CurrentValueFloat;
         timer.Start();
+
+        Owner.HeadRigidBody.angularVelocity = 0;
     }
 
     protected override void OnUpdate()
@@ -29,5 +31,15 @@ public class TurretChargingState : TurretHSMState
     private void OnTimerTick(SyncTimer timer)
     {
         SendEvent(Character.Trigger.Attack);
+    }
+
+    protected override bool HandleEvent(Character.Trigger trigger)
+    {
+        if(trigger == Character.Trigger.Attack && timer.Active)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
