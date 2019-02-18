@@ -27,7 +27,7 @@ public struct CharacterHSMTransition : IHSMTransitionSerializationWrapper<Charac
     }
 }
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "HSM/Character HSM State Assets/Character HSM State Asset")]
 public class CharacterHSMStateAsset : SJHSMStateAsset<CharacterHSMStateAsset, CharacterHSMTransition, Character.State, Character.Trigger, Character, Character.Blackboard>
 {
     

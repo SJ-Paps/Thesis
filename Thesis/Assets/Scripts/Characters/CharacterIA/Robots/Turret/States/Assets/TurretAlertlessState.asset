@@ -19,4 +19,8 @@ MonoBehaviour:
   startStateIndex: 0
   childs: []
   parallelChilds: []
-  transitions: []
+  transitions:
+  - stateFrom: 0
+    trigger: 0
+    stateTo: 0
+    guardConditions: []
