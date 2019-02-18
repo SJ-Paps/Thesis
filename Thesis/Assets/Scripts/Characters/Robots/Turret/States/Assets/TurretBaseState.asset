@@ -21,4 +21,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 523a2342de646684485c96ea97248907, type: 2}
   - {fileID: 11400000, guid: 6464d1eb60f32b742931045221635fc2, type: 2}
   parallelChilds: []
-  transitions: []
+  transitions:
+  - stateFrom: 1
+    trigger: 0
+    stateTo: 2
+    guardConditions: []

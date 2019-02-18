@@ -28,16 +28,7 @@ public struct CharacterHSMTransition : IHSMTransitionSerializationWrapper<Charac
 }
 
 [CreateAssetMenu]
-public class CharacterHSMStateAsset : HSMStateAsset<CharacterHSMStateAsset, CharacterHSMTransition, Character.State, Character.Trigger>
+public class CharacterHSMStateAsset : SJHSMStateAsset<CharacterHSMStateAsset, CharacterHSMTransition, Character.State, Character.Trigger, Character, Character.Blackboard>
 {
-    public static CharacterHSMState BuildFromAsset(CharacterHSMStateAsset baseAsset, Character characterReference, Character.Blackboard blackboardReference)
-    {
-        CharacterHSMState baseState = (CharacterHSMState)BuildFromAsset(baseAsset);
-
-        baseState.PropagateOwnerReference(characterReference);
-
-        baseState.PropagateBlackboardReference(blackboardReference);
-
-        return baseState;
-    }
+    
 }

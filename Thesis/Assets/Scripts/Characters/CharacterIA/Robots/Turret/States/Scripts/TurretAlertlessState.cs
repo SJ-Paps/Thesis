@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class TurretAlertlessState : TurretIAState
+public class TurretAlertlessState : TurretIAControllerHSMState
 {
     private float movementVelocity;
 

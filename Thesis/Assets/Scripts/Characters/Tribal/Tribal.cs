@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class Tribal : Character, ISeer
+public abstract class Tribal : Character
 {
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
@@ -40,9 +40,6 @@ public abstract class Tribal : Character, ISeer
     {
         get { return handPoint; }
     }
-
-    [SerializeField]
-    protected EyeCollection eyes;
 
     [SerializeField]
     protected Transform handPoint;
@@ -146,11 +143,6 @@ public abstract class Tribal : Character, ISeer
         }
 
         MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
-    }
-
-    public EyeCollection GetEyes()
-    {
-        return eyes;
     }
 
     public override bool ShouldBeSaved()

@@ -1,4 +1,4 @@
-﻿public class TurretWithTargetState : TurretIAState
+﻿public class TurretWithTargetState : TurretIAControllerHSMState
 {
     public TurretWithTargetState(TurretIAController.State state, string debugName) : base(state, debugName)
     {

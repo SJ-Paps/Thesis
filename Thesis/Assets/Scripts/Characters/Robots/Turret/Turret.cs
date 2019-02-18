@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Turret : Robot, ISeer
+public class Turret : Robot
 {
     [SerializeField]
     protected Rigidbody2D head, body;
@@ -42,9 +42,6 @@ public class Turret : Robot, ISeer
 
     [SerializeField]
     protected GameObject bulletPrefab;
-
-    [SerializeField]
-    protected EyeCollection eyes;
 
     [SerializeField]
     private float acceleration;
@@ -101,11 +98,6 @@ public class Turret : Robot, ISeer
     public override bool ShouldBeSaved()
     {
         return true;
-    }
-
-    public EyeCollection GetEyes()
-    {
-        return eyes;
     }
 
     protected override void OnSave(SaveData data)

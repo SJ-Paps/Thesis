@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>, IDamagable
+public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>, IDamagable, ISeer
 {
     public enum State : byte
     {
@@ -89,7 +89,8 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     
     public bool IsFacingLeft { get; private set; }
 
-    
+    [SerializeField]
+    protected EyeCollection eyes;
     
     [HideInInspector]
     public bool blockFacing;
@@ -124,7 +125,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         orders = new Queue<Trigger>();
         
 
-        hsm = CharacterHSMStateAsset.BuildFromAsset(hsmAsset, this, blackboard);
+        hsm = CharacterHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
 
         hsm.Enter();
     }
@@ -142,6 +143,11 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         {
             onFixedUpdate();
         }
+    }
+
+    public EyeCollection GetEyes()
+    {
+        return eyes;
     }
 
     public bool IsOnState(State state)

@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class TurretIAController : UnityController<Turret, Character.Trigger>
+public class TurretIAController : IAController<Turret, TurretIAController.State, TurretIAController.Trigger, TurretIAController.Blackboard>
 {
     public enum State
     {
@@ -16,6 +16,11 @@ public class TurretIAController : UnityController<Turret, Character.Trigger>
         SetFullAlert,
         TargetFound,
         TargetLost
+    }
+
+    public class Blackboard
+    {
+
     }
 /*
     public class Blackboard

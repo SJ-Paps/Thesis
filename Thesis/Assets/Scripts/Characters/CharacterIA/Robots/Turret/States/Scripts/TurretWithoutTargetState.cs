@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-public class TurretWithoutTargetState : TurretIAState
+public class TurretWithoutTargetState : TurretIAControllerHSMState
 {
     private int targetLayers;
     private Eyes turretEyes;
