@@ -6,7 +6,7 @@ using System;
 
 public class TribalGroundedState : TribalHSMState
 {
-    private float velocityDeadZone = -0.002f;
+    private float velocityDeadZone = -2f;
 
     private SyncTimer groundingTimer;
 

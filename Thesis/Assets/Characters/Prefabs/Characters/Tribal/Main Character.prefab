@@ -803,9 +803,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4974510637164506}
   - component: {fileID: 95729428891886690}
+  - component: {fileID: 2716931953494848961}
   - component: {fileID: 50339217002041110}
   - component: {fileID: 114061772566888022}
-  - component: {fileID: 2716931953494848961}
   - component: {fileID: 1226569705297211115}
   m_Layer: 0
   m_Name: Main Character
@@ -848,6 +848,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!70 &2716931953494848961
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989682149116770}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.042404175}
+  m_Size: {x: 0.779864, y: 1.228981}
+  m_Direction: 0
 --- !u!50 &50339217002041110
 Rigidbody2D:
   serializedVersion: 4
@@ -882,31 +898,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabName: Main Character
-  maxMovementVelocity: 3
-  acceleration: 0.5
-  eyes: {fileID: 0}
-  handPoint: {fileID: 0}
   blockFacing: 0
   hsmAsset: {fileID: 11400000, guid: 94da28a8edfc32b45b08148c5a2adaed, type: 2}
   currentCollectableObject: {fileID: 0}
+  handPoint: {fileID: 0}
+  maxMovementVelocity: 3
+  acceleration: 0.5
   jumpMaxHeight: 0.5
   jumpAcceleration: 0.5
---- !u!70 &2716931953494848961
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1989682149116770}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.042404175}
-  m_Size: {x: 0.779864, y: 1.228981}
-  m_Direction: 0
 --- !u!114 &1226569705297211115
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class TribalDuckingState : TribalHSMState
 {
-    private float colliderSizeY;
-
-    private float previousSizeX;
-    private float previousSizeY;
-    private float previousOffsetX;
-    private float previousOffsetY;
+    private Vector2 previousOffset;
+    private Vector2 previousSize;
 
     private float velocityConstraintPercentage = 60;
 
@@ -26,23 +22,23 @@ public class TribalDuckingState : TribalHSMState
     {
         base.OnEnter();
 
-        float yFloor = Owner.Collider.bounds.center.y - Owner.Collider.bounds.extents.y;
-        
-        previousSizeX = Owner.Collider.GetSize().x;
-        previousSizeY = Owner.Collider.GetSize().y;
+        float yFloor = Owner.Collider.bounds.min.y;
 
-        previousOffsetX = Owner.Collider.offset.x;
-        previousOffsetY = Owner.Collider.offset.y;
+        previousOffset = Owner.Collider.offset;
+        previousSize = Owner.Collider.GetSize();
         
-        colliderSizeY = previousSizeY / 2;
+        float colliderSizeY = previousSize.y / 2;
 
-        if(colliderSizeY < previousSizeX)
+        if(colliderSizeY < previousSize.x)
         {
-            colliderSizeY = previousSizeX;
+            colliderSizeY = previousSize.x;
         }
-        
-        Owner.Collider.ChangeSize(new Vector2(previousSizeX, colliderSizeY));
-        Owner.Collider.offset = new Vector2(previousOffsetX, yFloor + colliderSizeY);
+
+        Owner.Collider.ChangeSize(new Vector2(previousSize.x, colliderSizeY));
+
+        float distanceFromZeroOffsetToFloor = Mathf.Abs((Owner.transform.position.y) - yFloor);
+
+        Owner.Collider.offset = new Vector2(previousOffset.x, (previousOffset.y - distanceFromZeroOffsetToFloor / 2));
 
         velocityContraintId = Owner.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
 
@@ -65,8 +61,11 @@ public class TribalDuckingState : TribalHSMState
     {
         base.OnExit();
 
-        Owner.Collider.ChangeSize(new Vector2(previousSizeX, previousSizeY));
-        Owner.Collider.offset = new Vector2(previousOffsetX, previousOffsetY);
+        /*Owner.Collider.ChangeSize(new Vector2(previousSizeX, previousSizeY));
+        Owner.Collider.offset = new Vector2(previousOffsetX, previousOffsetY);*/
+
+        Owner.Collider.ChangeSize(previousSize);
+        Owner.Collider.offset = previousOffset;
 
         Owner.MaxVelocity.RemovePercentageConstraint(velocityContraintId);
     }
