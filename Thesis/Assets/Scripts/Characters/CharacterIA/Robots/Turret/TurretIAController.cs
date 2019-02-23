@@ -34,6 +34,11 @@ public class TurretIAController : IAController<Turret>
         base.Awake();
 
         hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this, blackboard);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
 
         hsm.Enter();
     }

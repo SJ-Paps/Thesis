@@ -89,9 +89,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     
     public bool IsFacingLeft { get; private set; }
 
-    [SerializeField]
-    protected Eyes[] serializedEyes;
-
     private EyeCollection eyes;
     
     [HideInInspector]
@@ -124,14 +121,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         orders = new Queue<Trigger>();
 
-        eyes = new EyeCollection();
-
-        for(int i = 0; i < serializedEyes.Length; i++)
-        {
-            eyes.Add(serializedEyes[i]);
-        }
+        eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
 
         hsm = CharacterHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
 
         hsm.Enter();
     }

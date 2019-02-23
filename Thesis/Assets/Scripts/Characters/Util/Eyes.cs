@@ -41,6 +41,11 @@ public class EyeCollection : ICollection<Eyes>
         eyes = new List<Eyes>();
     }
 
+    public EyeCollection(IEnumerable<Eyes> collection) : this()
+    {
+        eyes.AddRange(collection);
+    }
+
     private void OnEnteredTrigger(Collider2D collider, Eyes eye)
     {
         if(onAnyEntered != null)
