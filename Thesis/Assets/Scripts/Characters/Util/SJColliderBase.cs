@@ -10,7 +10,20 @@ public abstract class SJColliderBase : MonoBehaviour
 
 public abstract class SJCollider2DBase : SJColliderBase
 {
-    public Collider2D InnerCollider { get; private set; }
+    private Collider2D internalInnerCollider;
+
+    public Collider2D InnerCollider
+    {
+        get
+        {
+            if(internalInnerCollider == null)
+            {
+                internalInnerCollider = GetComponent<Collider2D>();
+            }
+
+            return internalInnerCollider;
+        }
+    }
 
     public Bounds bounds
     {
@@ -37,8 +50,6 @@ public abstract class SJCollider2DBase : SJColliderBase
 
     protected void Awake()
     {
-        InnerCollider = GetComponent<Collider2D>();
-
         OnAwake();
     }
 
