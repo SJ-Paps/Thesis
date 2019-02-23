@@ -13,6 +13,7 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
         grapplingPoint = new GameObject("Character Grappling Ledge Point").AddComponent<SpringJoint2D>();
         grapplingPoint.autoConfigureDistance = false;
         grapplingPoint.distance = 0.2f;
+        grapplingPoint.dampingRatio = 1;
         grapplingPoint.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         grapplingPoint.gameObject.SetActive(false);
     }

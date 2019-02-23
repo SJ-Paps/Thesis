@@ -3,7 +3,7 @@
     public TOwner Owner { get; protected set; }
     protected TBlackboard Blackboard { get; set; }
 
-    protected bool activeDebug;
+    public bool activeDebug;
 
     protected SJHSMState(TState stateId, string debugName = null) : base(stateId, debugName)
     {

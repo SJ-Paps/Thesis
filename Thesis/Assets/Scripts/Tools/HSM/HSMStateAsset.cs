@@ -20,6 +20,8 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
     [ReadOnly]
     protected string stateClassFullName;
 
+    protected Type StateType { get; private set; }
+
     [SerializeField]
     protected string debugName;
 
@@ -140,7 +142,7 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
 
     protected virtual HSMState<TState, TTrigger> CreateConcreteHSMState()
     {
-        HSMState<TState, TTrigger> state = (HSMState<TState, TTrigger>)Activator.CreateInstance(Type.GetType(stateClassFullName), stateId, debugName);
+        HSMState<TState, TTrigger> state = (HSMState<TState, TTrigger>)Activator.CreateInstance(StateType, stateId, debugName);
 
         return state;
     }
@@ -150,21 +152,21 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
 #if UNITY_EDITOR
         if (script != null)
         {
-            MonoScript monoscript = (MonoScript)script;
+            MonoScript monoscript = script as MonoScript;
 
             if (monoscript == null)
             {
                 throw new InvalidOperationException("Text asset is not a valid Monoscript");
             }
 
-            Type classType = monoscript.GetClass();
+            StateType = monoscript.GetClass();
 
-            if(classType == null)
+            if(StateType == null)
             {
                 throw new NullReferenceException("The name of the class on the script " + script.name.ToUpper() + " doesn't match the script's name");
             }
 
-            stateClassFullName = classType.FullName;
+            stateClassFullName = StateType.FullName;
         }
 #endif
     }

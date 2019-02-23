@@ -9,6 +9,9 @@ public class SJHSMStateAsset<TConcreteClass, THSMTransitionWrapper, TState, TTri
                                                                                                             where TConcreteClass : SJHSMStateAsset<TConcreteClass, THSMTransitionWrapper, TState, TTrigger, TOwner, TBlackboard>
                                                                                                             where THSMTransitionWrapper : IHSMTransitionSerializationWrapper<TState, TTrigger>
 {
+
+    public bool activeDebug;
+
     public static T BuildFromAsset<T>(TConcreteClass baseAsset, TOwner ownerReference, TBlackboard blackboardReference) where T : SJHSMState<TState, TTrigger, TOwner, TBlackboard>
     {
         T baseState = (T)BuildFromAsset(baseAsset);
@@ -18,5 +21,14 @@ public class SJHSMStateAsset<TConcreteClass, THSMTransitionWrapper, TState, TTri
         baseState.PropagateBlackboardReference(blackboardReference);
 
         return baseState;
+    }
+
+    protected override HSMState<TState, TTrigger> CreateConcreteHSMState()
+    {
+        SJHSMState<TState, TTrigger, TOwner, TBlackboard> state = (SJHSMState<TState, TTrigger, TOwner, TBlackboard>)base.CreateConcreteHSMState();
+
+        state.activeDebug = activeDebug;
+
+        return state;
     }
 }
