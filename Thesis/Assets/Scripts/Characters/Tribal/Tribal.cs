@@ -235,4 +235,35 @@ public abstract class Tribal : Character
                                                                   Collider.bounds.center.y - Collider.bounds.extents.y / 3),
                                                      new Vector2(checkMovableObjectDistanceX, Collider.bounds.extents.y));
     }
+
+    public virtual bool CheckWall()
+    {
+        Bounds bounds = Collider.bounds;
+
+        float separation = 0.15f;
+        float xDir = transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
+        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), bounds.center.y + bounds.extents.y);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
+    }
+
+    public virtual bool CheckFloorAhead()
+    {
+        Bounds bounds = Collider.bounds;
+
+        float separation = 1f;
+        float yDistance = 0.5f;
+        float xDir = transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));
+        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), beginPoint.y - yDistance);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
+    }
 }

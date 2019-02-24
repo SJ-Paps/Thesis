@@ -17,7 +17,8 @@ MonoBehaviour:
   debugName: Alertless
   stateId: 2
   startStateIndex: 0
-  childs: []
+  childs:
+  - {fileID: 11400000, guid: 33b12ae38f6c3c349ba4b2811ad01295, type: 2}
   parallelChilds: []
   transitions: []
   activeDebug: 1

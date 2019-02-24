@@ -87,7 +87,13 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     protected Blackboard blackboard;
     
-    public bool IsFacingLeft { get; private set; }
+    public bool IsFacingLeft
+    {
+        get
+        {
+            return transform.right.x < 0;
+        }
+    }
 
     private EyeCollection eyes;
     
@@ -195,8 +201,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         if(!blockFacing && IsFacingLeft != left)
         {
             transform.Rotate(Vector3.up, 180);
-
-            IsFacingLeft = left;
 
             OnFacingChanged(IsFacingLeft);
         }
