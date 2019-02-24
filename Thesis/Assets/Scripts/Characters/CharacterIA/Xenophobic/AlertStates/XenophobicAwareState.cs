@@ -20,15 +20,15 @@ public class XenophobicAwareState : XenophobicIAState
 
     public XenophobicAwareState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        characterEyes = controller.SlaveEyes;
+        /*characterEyes = controller.SlaveEyes;
 
         awareTimer = new SyncTimer();
         awareTimer.Interval = awareTime;
-        /*awareTimer.onTick += CalmDown;
+        awareTimer.onTick += CalmDown;
 
         onSomethingDetectedStayDelegate += AnalyzeDetection;*/
 
-        targetLayers = (1 << Reg.playerLayer);
+        /*targetLayers = (1 << Reg.playerLayer);*/
     }
 
     /*protected override void OnEnter()

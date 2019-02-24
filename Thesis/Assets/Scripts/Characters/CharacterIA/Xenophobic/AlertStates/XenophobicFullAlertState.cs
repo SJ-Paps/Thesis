@@ -27,7 +27,7 @@ public class XenophobicAlertfulState : XenophobicIAState
 
     public XenophobicAlertfulState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        characterEyes = controller.SlaveEyes;
+        /*characterEyes = controller.SlaveEyes;
 
         fullAlertTimer = new SyncTimer();
         fullAlertTimer.Interval = fullAlertTime;
@@ -41,7 +41,7 @@ public class XenophobicAlertfulState : XenophobicIAState
 
         findProbability = baseFindProbability;
 
-        targetLayers = (1 << Reg.playerLayer);
+        targetLayers = (1 << Reg.playerLayer);*/
     }
 
     /*protected override void OnEnter()

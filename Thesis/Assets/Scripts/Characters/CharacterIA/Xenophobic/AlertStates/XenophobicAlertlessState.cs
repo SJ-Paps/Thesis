@@ -16,9 +16,9 @@ public class XenophobicAlertlessState : XenophobicIAState {
     {
         //onSomethingDetectedDelegate += AnalyzeDetection;
 
-        characterEyes = controller.SlaveEyes;
+        /*characterEyes = controller.SlaveEyes;
 
-        targetLayers = (1 << Reg.playerLayer);
+        targetLayers = (1 << Reg.playerLayer);*/
     }
 
     /*protected override void OnEnter()
