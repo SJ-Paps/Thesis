@@ -3,6 +3,15 @@ using UnityEngine;
 
 public class XenophobicIAController : IAController<Xenophobic>
 {
+    [Serializable]
+    public sealed class ConfigurationData
+    {
+        [SerializeField]
+        private float hiddenFindProbabilityAlertless, hiddenFindProbabilityAware, hiddenFindProbabilityAlertful;
+
+        [SerializeField]
+        private float hiddenDetectionDistanceAlertless, hiddenDetectionDistanceAware, hiddenDetectionDistanceAlertful;
+    }
 
     public enum State
     {
@@ -45,6 +54,17 @@ public class XenophobicIAController : IAController<Xenophobic>
                     onLastDetectedPositionUpdated(lastDetectedPosition);
                 }
             }
+        }
+    }
+
+    [SerializeField]
+    private ConfigurationData configuration;
+
+    public ConfigurationData Configuration
+    {
+        get
+        {
+            return configuration;
         }
     }
 
