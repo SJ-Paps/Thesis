@@ -17,6 +17,18 @@ public class XenophobicIAPatrollingState : XenophobicIAState
     protected override void OnEnter()
     {
         base.OnEnter();
+
+        if(Owner.Slave.IsFacingLeft)
+        {
+            currentOrder = Character.Trigger.MoveLeft;
+        }
+        else
+        {
+            currentOrder = Character.Trigger.MoveRight;
+        }
+
+        turnTimer.Start();
+
     }
 
     protected override void OnUpdate()
