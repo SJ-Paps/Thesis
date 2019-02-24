@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TribalChoiceWalkingOrTrottingOrRunningState : TribalHSMState
+﻿public class TribalChoiceWalkingOrTrottingOrRunningState : TribalHSMState
 {
     public TribalChoiceWalkingOrTrottingOrRunningState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {

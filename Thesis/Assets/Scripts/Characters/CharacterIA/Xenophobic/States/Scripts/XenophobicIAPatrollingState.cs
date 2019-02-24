@@ -14,6 +14,11 @@ public class XenophobicIAPatrollingState : XenophobicIAState
         turnTimer = new SyncTimer();
     }
 
+    protected override void OnEnter()
+    {
+        base.OnEnter();
+    }
+
     protected override void OnUpdate()
     {
         base.OnUpdate();
@@ -23,6 +28,7 @@ public class XenophobicIAPatrollingState : XenophobicIAState
             Turn();
         }
 
+        Owner.Slave.SetOrder(Character.Trigger.Walk);
         Owner.Slave.SetOrder(currentOrder);
     }
 
@@ -31,6 +37,8 @@ public class XenophobicIAPatrollingState : XenophobicIAState
         base.OnExit();
 
         turnTimer.Stop();
+
+        Owner.Slave.SetOrder(Character.Trigger.Trot);
     }
 
     private bool ShouldTurn()
