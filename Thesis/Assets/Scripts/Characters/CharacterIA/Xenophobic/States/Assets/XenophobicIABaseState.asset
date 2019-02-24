@@ -20,6 +20,7 @@ MonoBehaviour:
   childs:
   - {fileID: 11400000, guid: bfb4ab1c657b73f40b4460c72ec791c5, type: 2}
   - {fileID: 11400000, guid: 4787e9256dbdbff4e8f9a8acfa7956ba, type: 2}
+  - {fileID: 11400000, guid: a7518f17e7762b943a52d39a58ef01df, type: 2}
   parallelChilds: []
   transitions:
   - stateFrom: 1
@@ -29,5 +30,13 @@ MonoBehaviour:
   - stateFrom: 2
     trigger: 0
     stateTo: 1
+    guardConditions: []
+  - stateFrom: 2
+    trigger: 2
+    stateTo: 3
+    guardConditions: []
+  - stateFrom: 3
+    trigger: 0
+    stateTo: 2
     guardConditions: []
   activeDebug: 0

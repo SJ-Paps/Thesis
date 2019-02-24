@@ -40,7 +40,7 @@ public class XenophobicIAController : IAController<Xenophobic>
             {
                 lastDetectedPosition = value;
 
-                if(onLastDetectedPositionUpdated != null)
+                if (onLastDetectedPositionUpdated != null)
                 {
                     onLastDetectedPositionUpdated(lastDetectedPosition);
                 }

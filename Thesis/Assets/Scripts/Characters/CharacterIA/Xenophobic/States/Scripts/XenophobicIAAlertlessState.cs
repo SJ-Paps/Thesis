@@ -6,6 +6,8 @@ using System;
 public class XenophobicIAAlertlessState : XenophobicIAState
 {
     private Action<Collider2D, Eyes> onSomethingDetectedDelegate;
+    
+    private float previousHiddenFindProbability;
 
     public XenophobicIAAlertlessState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {

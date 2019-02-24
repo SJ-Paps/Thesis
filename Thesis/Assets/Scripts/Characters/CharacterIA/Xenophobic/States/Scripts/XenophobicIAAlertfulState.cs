@@ -3,32 +3,32 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class XenophobicIAAwareState : XenophobicIAState
+public class XenophobicIAAlertfulState : XenophobicIAState
 {
-    private SyncTimer awareTimer;
+    private SyncTimer fullAlertTimer;
 
-    private Action<Collider2D, Eyes> onSomethingDetectedStayDelegate;
+    private float hiddenDetectionDistance = 1.5f;
 
-    private float hiddenFindProbability = 30f;
-    private float hiddenDetectionDistance = 1f;
+    private float hiddenFindProbability = 80f;
 
-    public XenophobicIAAwareState(XenophobicIAController.State state, string debugName) : base(state, debugName)
+    private Action<Collider2D, Eyes> onSomethingDetectedDelegate;
+
+    public XenophobicIAAlertfulState(XenophobicIAController.State state, string debugName) : base(state, debugName)
     {
-        awareTimer = new SyncTimer();
+        float fullAlertTime = 10f;
 
-        float awareTime = 6f;
+        fullAlertTimer = new SyncTimer();
+        fullAlertTimer.Interval = fullAlertTime;
+        fullAlertTimer.onTick += OnTimerTick;
 
-        awareTimer.Interval = awareTime;
-        awareTimer.onTick += OnTimerTick;
-
-        onSomethingDetectedStayDelegate = AnalyzeDetection;
+        onSomethingDetectedDelegate = AnalyzeDetection;
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
 
-        awareTimer.Start();
+        fullAlertTimer.Start();
 
         EyeCollection eyes = Owner.Slave.GetEyes();
 
@@ -40,27 +40,16 @@ public class XenophobicIAAwareState : XenophobicIAState
             Physics2D.SetLayerCollisionMask(current.Collider.gameObject.layer, newLayerMask);
         }
 
-        eyes.onAnyStay += onSomethingDetectedStayDelegate;
-
-
-    }
-
-    protected override void OnUpdate()
-    {
-        base.OnUpdate();
-
-        awareTimer.Update(Time.deltaTime);
+        eyes.onAnyStay += onSomethingDetectedDelegate;
     }
 
     protected override void OnExit()
     {
         base.OnExit();
 
+        fullAlertTimer.Stop();
+
         EyeCollection eyes = Owner.Slave.GetEyes();
-
-        eyes.onAnyStay -= onSomethingDetectedStayDelegate;
-
-        awareTimer.Stop();
 
         for (int i = 0; i < eyes.Count; i++)
         {
@@ -69,6 +58,8 @@ public class XenophobicIAAwareState : XenophobicIAState
             int newLayerMask = Physics2D.GetLayerCollisionMask(current.Collider.gameObject.layer) ^ Reg.hiddenLayer;
             Physics2D.SetLayerCollisionMask(current.Collider.gameObject.layer, newLayerMask);
         }
+
+        eyes.onAnyStay -= onSomethingDetectedDelegate;
     }
 
     private void OnTimerTick(SyncTimer timer)
@@ -80,29 +71,18 @@ public class XenophobicIAAwareState : XenophobicIAState
     {
         if (eyes.IsVisible(collider, Reg.walkableLayerMask, (1 << collider.gameObject.layer)))
         {
-            if(collider.gameObject.layer == Reg.hiddenLayer)
+            if (collider.gameObject.layer == Reg.hiddenLayer)
             {
                 if (Vector2.Distance(eyes.EyePoint.position, collider.transform.position) <= hiddenDetectionDistance && Random.Range(1, 100) <= hiddenFindProbability)
                 {
                     UpdatePosition(collider.transform.position);
-
-                    SetFullAlert();
                 }
             }
             else
             {
                 UpdatePosition(collider.transform.position);
-
-                SetFullAlert();
             }
-            
         }
-    }
-
-    private void UpdatePosition(Vector2 position)
-    {
-        Blackboard.LastDetectedPosition = position;
-        awareTimer.Start();
     }
 
     private void CalmDown()
@@ -110,8 +90,10 @@ public class XenophobicIAAwareState : XenophobicIAState
         SendEvent(XenophobicIAController.Trigger.CalmDown);
     }
 
-    private void SetFullAlert()
+    private void UpdatePosition(Vector2 position)
     {
-        SendEvent(XenophobicIAController.Trigger.SetFullAlert);
+        Blackboard.LastDetectedPosition = position;
+        fullAlertTimer.Start();
     }
+
 }
