@@ -25,7 +25,27 @@ public class XenophobicIAController : IAController<Xenophobic>
 
     public class Blackboard
     {
+        public event Action<Vector2> onLastDetectedPositionUpdated;
 
+        private Vector2 lastDetectedPosition;
+
+        public Vector2 LastDetectedPosition
+        {
+            get
+            {
+                return lastDetectedPosition;
+            }
+
+            set
+            {
+                lastDetectedPosition = value;
+
+                if(onLastDetectedPositionUpdated != null)
+                {
+                    onLastDetectedPositionUpdated(lastDetectedPosition);
+                }
+            }
+        }
     }
 
     [SerializeField]

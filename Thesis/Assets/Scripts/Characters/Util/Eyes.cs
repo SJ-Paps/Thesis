@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-public class EyeCollection : ICollection<Eyes>
+public class EyeCollection : IList<Eyes>
 {
     public event Action<Collider2D, Eyes> onAnyEntered;
     public event Action<Collider2D, Eyes> onAnyStay;
@@ -32,6 +32,19 @@ public class EyeCollection : ICollection<Eyes>
         }
     }
 
+    public Eyes this[int index]
+    {
+        get
+        {
+            return eyes[index];
+        }
+
+        set
+        {
+            eyes[index] = value;
+        }
+    }
+
     public EyeCollection()
     {
         onEnteredTriggerDelegate = OnEnteredTrigger;
@@ -43,7 +56,7 @@ public class EyeCollection : ICollection<Eyes>
 
     public EyeCollection(IEnumerable<Eyes> collection) : this()
     {
-        eyes.AddRange(collection);
+        AddRange(collection);
     }
 
     private void OnEnteredTrigger(Collider2D collider, Eyes eye)
@@ -111,6 +124,16 @@ public class EyeCollection : ICollection<Eyes>
         eyes.Add(item);
     }
 
+    public void AddRange(IEnumerable<Eyes> collection)
+    {
+        foreach(Eyes eye in collection)
+        {
+            Bind(eye);
+        }
+
+        eyes.AddRange(collection);
+    }
+
     public void Clear()
     {
         for(int i = 0; i < eyes.Count; i++)
@@ -141,11 +164,27 @@ public class EyeCollection : ICollection<Eyes>
 
         return false;
     }
+
+    public int IndexOf(Eyes item)
+    {
+        return eyes.IndexOf(item);
+    }
+
+    public void Insert(int index, Eyes item)
+    {
+        Bind(item);
+
+        eyes.Insert(index, item);
+    }
+
+    public void RemoveAt(int index)
+    {
+        Remove(eyes[index]);
+    }
 }
 
 public class Eyes : SJMonoBehaviour
 {
-    [SerializeField]
     protected new SJCollider2D collider;
 
     [SerializeField]
@@ -196,9 +235,17 @@ public class Eyes : SJMonoBehaviour
     {
         base.Awake();
 
+        collider = GetComponent<SJCollider2D>();
+
         onEnteredTriggerDelegate = OnEnteredTrigger;
         onStayTriggerDelegate = OnStayTrigger;
         onExitedTriggerDelegate = OnExitedTrigger;
+        
+    }
+
+    protected override void Start()
+    {
+        base.Start();
 
         Bind(Collider);
     }
