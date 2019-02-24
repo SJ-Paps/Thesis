@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa02dca648e721c479f07f3a1ddb735c, type: 3}
-  m_Name: XenophobicIAAlertfulState
+  m_Name: XenophobicIASeekingState
   m_EditorClassIdentifier: 
-  script: {fileID: 11500000, guid: f99d5822278e53946ae7ff7ecd391748, type: 3}
-  stateClassFullName: XenophobicIAAlertfulState
-  debugName: Alertful
-  stateId: 4
+  script: {fileID: 11500000, guid: c7dc37f1f9a7c4b4994236823bef3e5c, type: 3}
+  stateClassFullName: XenophobicIASeekingState
+  debugName: Seeking
+  stateId: 6
   startStateIndex: 0
-  childs:
-  - {fileID: 11400000, guid: 92ff71bf792b6954abe565833fb88907, type: 2}
+  childs: []
   parallelChilds: []
   transitions: []
-  activeDebug: 1
+  activeDebug: 0

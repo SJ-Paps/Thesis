@@ -19,6 +19,7 @@ public class XenophobicIAAlertState : XenophobicIAState
     {
         unnerveTimer = new SyncTimer();
         unnerveTimer.onTick += OnUnnerveTimerTick;
+        unnerveTimer.Loop = true;
 
         analyzeDetectionTimer = new SyncTimer();
         analyzeDetectionTimer.Interval = analyzeDetectionTime;

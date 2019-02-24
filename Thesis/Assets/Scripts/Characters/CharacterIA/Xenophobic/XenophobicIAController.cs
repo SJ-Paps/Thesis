@@ -16,6 +16,9 @@ public class XenophobicIAController : IAController<Xenophobic>
         [SerializeField]
         private float awareTime, alertfulTime;
 
+        [SerializeField]
+        private float shortRangeAttackDetectionDistance = 0.8f, longRangeAttackDetectionDistance;
+
         public float HiddenDetectionDistanceAlertless { get => hiddenDetectionDistanceAlertless; }
         public float HiddenDetectionDistanceAware { get => hiddenDetectionDistanceAware; }
         public float HiddenDetectionDistanceAlertful { get => hiddenDetectionDistanceAlertful; }
@@ -26,6 +29,9 @@ public class XenophobicIAController : IAController<Xenophobic>
 
         public float AwareTime { get => awareTime; }
         public float AlertfulTime { get => alertfulTime; }
+
+        public float ShortRangeAttackDetectionDistance { get => shortRangeAttackDetectionDistance; }
+        public float LongRangeAttackDetectionDistance { get => longRangeAttackDetectionDistance; }
     }
 
     public enum State

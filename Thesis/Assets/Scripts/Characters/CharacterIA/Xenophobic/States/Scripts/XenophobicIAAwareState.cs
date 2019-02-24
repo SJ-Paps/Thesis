@@ -1,7 +1,4 @@
-﻿using SAM.Timers;
-using System;
-using UnityEngine;
-using Random = UnityEngine.Random;
+﻿using UnityEngine;
 
 public class XenophobicIAAwareState : XenophobicIAState
 {

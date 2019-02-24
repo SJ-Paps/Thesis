@@ -18,6 +18,7 @@ MonoBehaviour:
   stateId: 3
   startStateIndex: 0
   childs:
+  - {fileID: 11400000, guid: 92ff71bf792b6954abe565833fb88907, type: 2}
   - {fileID: 11400000, guid: 33b12ae38f6c3c349ba4b2811ad01295, type: 2}
   parallelChilds: []
   transitions: []
