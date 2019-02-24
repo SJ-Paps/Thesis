@@ -45,7 +45,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabName: XenophobicIAController
   slave: {fileID: 0}
+  configuration:
+    hiddenDetectionProbabilityAlertless: 2
+    hiddenDetectionProbabilityAware: 20
+    hiddenDetectionProbabilityAlertful: 80
+    hiddenDetectionDistanceAlertless: 1
+    hiddenDetectionDistanceAware: 1
+    hiddenDetectionDistanceAlertful: 1.5
+    awareTime: 6
+    alertfulTime: 10
   baseHSMAsset: {fileID: 11400000, guid: 4bfb9c537a4d86c4c8c5977537ceca69, type: 2}
-  findHiddenLayerProbability: 50
-  findHiddenLayerProbabilityMax: 100
-  findHiddenLayerProbabilityMin: 0

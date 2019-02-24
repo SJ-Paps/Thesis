@@ -15,7 +15,7 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 01796ec55b66e5842a689383d7851c34, type: 3}
   stateClassFullName: XenophobicIAAwareState
   debugName: Aware
-  stateId: 2
+  stateId: 3
   startStateIndex: 0
   childs: []
   parallelChilds: []
