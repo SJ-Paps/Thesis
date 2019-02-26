@@ -7,12 +7,16 @@
         base.Awake();
     }
 
-    public override void Activate(IHandOwner user)
+    public override bool Activate(IHandOwner user)
     {
         if(Owner != null && !BeingUsed)
         {
             OnUseWeapon();
+
+            return true;
         }
+
+        return false;
     }
 
     public override bool Drop()

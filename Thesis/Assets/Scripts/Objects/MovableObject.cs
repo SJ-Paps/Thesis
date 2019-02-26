@@ -21,7 +21,7 @@ public class MovableObject : ActivableObject<Tribal> {
         return joint;
     }
 
-    public override void Activate(Tribal user)
+    public override bool Activate(Tribal user)
     {
         if(joint.enabled == false)
         {
@@ -33,6 +33,8 @@ public class MovableObject : ActivableObject<Tribal> {
             joint.enabled = false;
             joint.connectedBody = null;
         }
+
+        return true;
     }
 
     public override bool ShouldBeSaved()

@@ -12,6 +12,8 @@ public class TribalUsingWeaponState : TribalHSMState
     protected override void OnEnter()
     {
         base.OnEnter();
+
+        
     }
 
     protected override void OnUpdate()

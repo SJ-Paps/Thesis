@@ -1,8 +1,10 @@
 ﻿public class Hide : ActivableObject<Tribal> {
 
-    public override void Activate(Tribal user)
+    public override bool Activate(Tribal user)
     {
         base.Activate(user);
+
+        return true;
     }
 
     public override bool ShouldBeSaved()

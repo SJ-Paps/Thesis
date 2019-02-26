@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hand : MonoBehaviour, IOwnable<IHandOwner>
+public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 {
     public CollectableObject Collectable { get; private set; }
 
@@ -38,6 +38,16 @@ public class Hand : MonoBehaviour, IOwnable<IHandOwner>
         {
             Collectable = null;
 
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool ActivateObject()
+    {
+        if(Collectable != null && Collectable.Activate(Owner))
+        {
             return true;
         }
 
