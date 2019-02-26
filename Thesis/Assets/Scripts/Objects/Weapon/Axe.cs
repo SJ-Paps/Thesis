@@ -16,11 +16,9 @@ public class Axe : Weapon
 
     private Action<SyncTimer> onAttack;
     private Action<SyncTimer> onTerminate;
-
-    [SerializeField]
+    
     new private Rigidbody2D rigidbody2D;
-
-    [SerializeField]
+    
     private ParentConstraint parentConstraint;
 
     protected override void Awake()
@@ -28,6 +26,8 @@ public class Axe : Weapon
         base.Awake();
 
         type = DamageType.Sharp;
+        rigidbody2D = GetComponentInChildren<Rigidbody2D>();
+        parentConstraint = GetComponentInChildren<ParentConstraint>();
 
         timer = new SyncTimer();
 
@@ -35,55 +35,23 @@ public class Axe : Weapon
         onTerminate = OnTerminate;
     }
 
-    public override bool Collect(IHandOwner user)
-    {
-        if(base.Collect(user))
-        {
-            rigidbody2D.isKinematic = true;
-
-            ConstraintSource source = new ConstraintSource();
-            //source.sourceTransform = Owner.HandPoint;
-            source.weight = 1;
-
-            parentConstraint.AddSource(source);
-
-            parentConstraint.constraintActive = true;
-
-            parentConstraint.SetRotationOffset(0, new Vector3(0, 180, 0));
-
-            return true;
-        }
-
-        return false;
-    }
-
     protected void Update()
     {
         timer.Update(Time.deltaTime);
     }
 
-    public override bool Drop()
+    protected override void OnDrop()
     {
-        if(base.Drop())
-        {
-            rigidbody2D.isKinematic = false;
+        base.OnDrop();
 
-            parentConstraint.RemoveSource(0);
+        rigidbody2D.isKinematic = false;
 
-            parentConstraint.constraintActive = false;
+        parentConstraint.RemoveSource(0);
 
-            return true;
-        }
-
-        return false;
+        parentConstraint.constraintActive = false;
     }
 
-    public override bool Throw()
-    {
-        return Drop();
-    }
-
-    protected override void OnUseWeapon()
+    protected override void OnActivate()
     {
         BeingUsed = true;
 
@@ -117,5 +85,20 @@ public class Axe : Weapon
         {
             mortal.TakeDamage(1, type);
         }
+    }
+
+    protected override void OnCollect(IHandOwner user)
+    {
+        rigidbody2D.isKinematic = true;
+
+        ConstraintSource source = new ConstraintSource();
+        source.sourceTransform = user.GetHand().transform;
+        source.weight = 1;
+
+        parentConstraint.AddSource(source);
+
+        parentConstraint.constraintActive = true;
+
+        parentConstraint.SetRotationOffset(0, new Vector3(0, 180, 0));
     }
 }

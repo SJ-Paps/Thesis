@@ -565,6 +565,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4047937221011588}
   - component: {fileID: 212387829273391430}
+  - component: {fileID: 1386687661798456634}
   m_Layer: 0
   m_Name: arm_right
   m_TagString: Untagged
@@ -634,6 +635,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1386687661798456634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1637367370610820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db745411b5ebb7f4f8e01e3ba748194a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabName: 
 --- !u!1 &1644154218740262
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,8 +914,7 @@ MonoBehaviour:
   prefabName: Main Character
   blockFacing: 0
   hsmAsset: {fileID: 11400000, guid: 94da28a8edfc32b45b08148c5a2adaed, type: 2}
-  currentCollectableObject: {fileID: 0}
-  handPoint: {fileID: 0}
+  hand: {fileID: 1386687661798456634}
   maxMovementVelocity: 3
   acceleration: 0.5
   jumpMaxHeight: 0.5

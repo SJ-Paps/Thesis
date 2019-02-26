@@ -1,4 +1,4 @@
-﻿public abstract class Weapon : CollectableObject, IThrowable {
+﻿public abstract class Weapon : CollectableObject {
     
     public virtual bool BeingUsed { get; protected set; }
     
@@ -7,30 +7,10 @@
         base.Awake();
     }
 
-    public override bool Activate(IHandOwner user)
+    protected override bool ValidateDrop()
     {
-        if(Owner != null && !BeingUsed)
-        {
-            OnUseWeapon();
-
-            return true;
-        }
-
-        return false;
+        return !BeingUsed;
     }
-
-    public override bool Drop()
-    {
-        if(!BeingUsed)
-        {
-            return base.Drop();
-        }
-
-        return false;
-    }
-
-    protected abstract void OnUseWeapon();
-    public abstract bool Throw();
 
     public override bool ShouldBeSaved()
     {

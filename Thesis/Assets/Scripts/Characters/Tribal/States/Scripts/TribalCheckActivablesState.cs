@@ -22,7 +22,7 @@ public class TribalCheckActivablesState : TribalHSMState
                 return true;
             }
 
-            IActivable<Tribal> activable = Owner.CheckForActivableObject<IActivable<Tribal>>();
+            IActivable<IHandOwner> activable = Owner.CheckForActivableObject<IActivable<IHandOwner>>();
 
             if(activable != null)
             {
@@ -30,10 +30,12 @@ public class TribalCheckActivablesState : TribalHSMState
                 {
                     Blackboard.toHidePlace = hide;
                     SendEvent(Character.Trigger.Hide);
+                    return true;
                 }
-                else
+                else if(activable is CollectableObject collectable)
                 {
-                    activable.Activate(Owner);
+                    Debug.Log("AAA");
+                    Owner.GetHand().CollectObject(collectable);
                 }
             }
         }

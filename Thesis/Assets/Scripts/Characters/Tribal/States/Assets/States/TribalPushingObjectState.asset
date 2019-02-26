@@ -47,3 +47,4 @@ MonoBehaviour:
     trigger: 9
     stateTo: 3
     guardConditions: []
+  activeDebug: 1

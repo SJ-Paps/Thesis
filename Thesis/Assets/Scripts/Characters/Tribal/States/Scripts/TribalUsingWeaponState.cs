@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TribalUsingWeaponState : TribalHSMState
+﻿public class TribalUsingWeaponState : TribalHSMState
 {
+    private Weapon currentWeapon;
+
     public TribalUsingWeaponState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
@@ -13,16 +11,28 @@ public class TribalUsingWeaponState : TribalHSMState
     {
         base.OnEnter();
 
-        
+        if(Owner.GetHand().CurrentActivable is Weapon cached)
+        {
+            currentWeapon = cached;
+
+            Owner.GetHand().ActivateCurrentObject();
+        }
     }
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
+
+        if(currentWeapon.BeingUsed == false)
+        {
+            SendEvent(Character.Trigger.StopAttacking);
+        }
     }
 
     protected override void OnExit()
     {
         base.OnExit();
+
+        currentWeapon = null;
     }
 }

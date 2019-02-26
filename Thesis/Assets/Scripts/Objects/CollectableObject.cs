@@ -1,23 +1,27 @@
-﻿public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollectable<IHandOwner> {
+﻿using UnityEngine;
+
+public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollectable<IHandOwner> {
 
     public IHandOwner Owner { get; protected set; }
 
-    public virtual bool Collect(IHandOwner user)
+    public bool Collect(IHandOwner user)
     {
-        if(ValidateCollect())
+        if(Owner == null && ValidateCollect(user))
         {
             PropagateOwnerReference(user);
-
+            OnCollect(user);
+            
             return true;
         }
 
         return false;
     }
 
-    public virtual bool Drop()
+    public bool Drop()
     {
-        if(ValidateDrop())
+        if(Owner != null && ValidateDrop())
         {
+            OnDrop();
             ClearOwnerReference();
 
             return true;
@@ -26,7 +30,30 @@
         return false;
     }
 
-    protected virtual bool ValidateCollect()
+    public sealed override bool Activate(IHandOwner user)
+    {
+        if(Owner == null)
+        {
+            return Collect(user);
+        }
+        else
+        {
+            if(ValidateActivate(user))
+            {
+                OnActivate();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected virtual bool ValidateActivate(IHandOwner user)
+    {
+        return true;
+    }
+
+    protected virtual bool ValidateCollect(IHandOwner user)
     {
         return true;
     }
@@ -35,6 +62,18 @@
     {
         return true;
     }
+
+    protected virtual void OnCollect(IHandOwner user)
+    {
+
+    }
+
+    protected virtual void OnDrop()
+    {
+
+    }
+
+    protected abstract void OnActivate();
 
     public void PropagateOwnerReference(IHandOwner ownerReference)
     {

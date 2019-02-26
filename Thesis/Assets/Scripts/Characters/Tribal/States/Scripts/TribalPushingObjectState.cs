@@ -9,7 +9,7 @@ public class TribalPushingObjectState : TribalHSMState
 
     public TribalPushingObjectState(Character.State state, string debugName) : base(state, debugName)
     {
-        activeDebug = true;
+
     }
 
     protected override void OnEnter() {
@@ -24,7 +24,7 @@ public class TribalPushingObjectState : TribalHSMState
 
         if(targetMovableObject != null)
         {
-            targetMovableObject.Activate(Owner);
+            Owner.GetHand().PushOrPullObject(targetMovableObject);
 
             Owner.blockFacing = true;
 
@@ -55,7 +55,8 @@ public class TribalPushingObjectState : TribalHSMState
 
         if(targetMovableObject != null)
         {
-            targetMovableObject.Activate(Owner);
+            Owner.GetHand().ReleaseMovableObject();
+
             targetMovableObject = null;
         }
 

@@ -1,8 +1,8 @@
-﻿public class Hide : ActivableObject<Tribal> {
+﻿public class Hide : ActivableObject<Character> {
 
-    public override bool Activate(Tribal user)
+    public override bool Activate(Character user)
     {
-        base.Activate(user);
+        EditorDebug.Log("OBJETO HIDE " + name + " FUE ACTIVADO");
 
         return true;
     }

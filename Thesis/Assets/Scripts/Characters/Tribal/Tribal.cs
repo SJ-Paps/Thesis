@@ -161,7 +161,7 @@ public abstract class Tribal : Character, IHandOwner
     }
 
 
-    public T CheckForActivableObject<T>() where T : class, IActivable<Tribal>
+    public T CheckForActivableObject<T>() where T : class, IActivable<IHandOwner>
     {
         float xDirection;
 
@@ -174,13 +174,13 @@ public abstract class Tribal : Character, IHandOwner
             xDirection = -1;
         }
 
-        return SJUtil.FindActivable<T, Tribal>(new Vector2(Collider.bounds.center.x + (Collider.bounds.extents.x * xDirection), 0),
+        return SJUtil.FindActivable<T, IHandOwner>(new Vector2(Collider.bounds.center.x + (Collider.bounds.extents.x * xDirection), 0),
                                         new Vector2(Collider.bounds.extents.x / 2, Collider.bounds.extents.y / 2), transform.eulerAngles.z);
     }
 
-    public T CheckForActivableObject<T>(Vector2 center, Vector2 detectionBoxSize) where T : class, IActivable<Tribal>
+    public T CheckForActivableObject<T>(Vector2 center, Vector2 detectionBoxSize) where T : class, IActivable<IHandOwner>
     {
-        T activable = SJUtil.FindActivable<T, Tribal>(center, detectionBoxSize, transform.eulerAngles.z);
+        T activable = SJUtil.FindActivable<T, IHandOwner>(center, detectionBoxSize, transform.eulerAngles.z);
 
         return activable;
     }

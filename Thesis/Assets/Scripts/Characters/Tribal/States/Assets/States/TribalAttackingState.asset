@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
   m_Name: TribalAttackingState
   m_EditorClassIdentifier: 
-  script: {fileID: 0}
-  stateClassFullName: 
-  debugName: 
-  stateId: 0
+  script: {fileID: 11500000, guid: dbda95f691a3df44faea54979236a17f, type: 3}
+  stateClassFullName: TribalAttackingState
+  debugName: Attacking
+  stateId: 11
   startStateIndex: 0
-  childs: []
+  childs:
+  - {fileID: 11400000, guid: 948f7eaf9ba4e7e46992dac39dd67bf1, type: 2}
   parallelChilds: []
   transitions: []
   activeDebug: 0

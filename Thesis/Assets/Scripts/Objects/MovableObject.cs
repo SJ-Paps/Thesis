@@ -1,39 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 
-public class MovableObject : ActivableObject<Tribal> {
+public class MovableObject : ActivableObject<IHandOwner> {
+    
+    private new Rigidbody2D rigidbody2D;
 
-    protected Joint2D joint;
-    protected new Rigidbody2D rigidbody2D;
-
-    protected override void Awake()
+    public Rigidbody2D Rigidbody2D
     {
-        base.Awake();
+        get
+        {
+            if(rigidbody2D == null)
+            {
+                rigidbody2D = GetComponent<Rigidbody2D>();
+            }
 
-        joint = GetComponent<Joint2D>();
-        rigidbody2D = GetComponent<Rigidbody2D>();
+            return rigidbody2D;
+        }
     }
 
-    public Joint2D GetJoint()
+    public override bool Activate(IHandOwner user)
     {
-        return joint;
-    }
-
-    public override bool Activate(Tribal user)
-    {
-        if(joint.enabled == false)
-        {
-            joint.enabled = true;
-            joint.connectedBody = user.RigidBody2D;
-        }
-        else
-        {
-            joint.enabled = false;
-            joint.connectedBody = null;
-        }
-
         return true;
     }
 

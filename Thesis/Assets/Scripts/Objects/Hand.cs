@@ -1,18 +1,40 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 {
-    public CollectableObject Collectable { get; private set; }
+    public IActivable<IHandOwner> CurrentActivable { get; private set; }
 
     public IHandOwner Owner { get; private set; }
 
+    private SpringJoint2D springJoint2d;
+
+    public bool IsFree
+    {
+        get
+        {
+            return CurrentActivable == null;
+        }
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Rigidbody2D rigidbody2D = transform.root.GetComponentInChildren<Rigidbody2D>();
+
+        springJoint2d = rigidbody2D.gameObject.AddComponent<SpringJoint2D>();
+        springJoint2d.enabled = false;
+        springJoint2d.autoConfigureDistance = false;
+        springJoint2d.distance = 0.2f;
+        springJoint2d.dampingRatio = 1;
+        springJoint2d.enableCollision = true;
+    }
+
     public bool CollectObject(CollectableObject collectable)
     {
-        if(collectable.Collect(Owner))
+        if (IsFree && collectable.Collect(Owner))
         {
-            Collectable = collectable;
+            CurrentActivable = collectable;
 
             return true;
         }
@@ -22,9 +44,9 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 
     public bool DropObject()
     {
-        if(Collectable != null && Collectable.Drop())
+        if (!IsFree && CurrentActivable is ICollectable<IHandOwner> cached && cached.Drop())
         {
-            Collectable = null;
+            CurrentActivable = null;
 
             return true;
         }
@@ -34,9 +56,9 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 
     public bool ThrowObject()
     {
-        if(Collectable != null && Collectable is IThrowable cached && cached.Throw())
+        if (!IsFree && CurrentActivable is IThrowable cached && cached.Throw())
         {
-            Collectable = null;
+            CurrentActivable = null;
 
             return true;
         }
@@ -44,14 +66,46 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
         return false;
     }
 
-    public bool ActivateObject()
+    public bool ActivateCurrentObject()
     {
-        if(Collectable != null && Collectable.Activate(Owner))
+        if (!IsFree)
         {
-            return true;
+            return CurrentActivable.Activate(Owner);
         }
 
         return false;
+    }
+
+    public bool PushOrPullObject(MovableObject movable)
+    {
+        if (IsFree)
+        {
+            if(movable.Activate(Owner))
+            {
+                springJoint2d.enabled = true;
+                springJoint2d.connectedBody = movable.Rigidbody2D;
+                CurrentActivable = movable;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void ReleaseMovableObject()
+    {
+        if(!IsFree && CurrentActivable is MovableObject)
+        {
+            springJoint2d.enabled = false;
+            springJoint2d.connectedBody = null;
+            CurrentActivable = null;
+        }
+    }
+
+    public bool ActivateObject(IActivable<IHandOwner> activable)
+    {
+        return activable.Activate(Owner);
     }
 
     public void PropagateOwnerReference(IHandOwner ownerReference)
