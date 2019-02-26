@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class Tribal : Character
+public abstract class Tribal : Character, IHandOwner
 {
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
@@ -15,34 +15,13 @@ public abstract class Tribal : Character
 
     public const float activableDetectionOffset = 0.2f;
 
-    [SerializeField]
-    protected CollectableObject currentCollectableObject;
-
-    public CollectableObject CurrentCollectableObject
-    {
-        get
-        {
-            return currentCollectableObject;
-        }
-
-        protected set
-        {
-            currentCollectableObject = value;
-        }
-    }
-
     public Animator Animator { get; protected set; }
     public Rigidbody2D RigidBody2D { get; protected set; }
 
     public SJCollider2D Collider { get; protected set; }
 
-    public Transform HandPoint
-    {
-        get { return handPoint; }
-    }
-
     [SerializeField]
-    protected Transform handPoint;
+    protected Hand hand;
 
     [SerializeField]
     private float maxMovementVelocity, acceleration;
@@ -137,12 +116,12 @@ public abstract class Tribal : Character
 
         base.Awake();
 
-        if(CurrentCollectableObject != null)
-        {
-            CurrentCollectableObject.Collect(this);
-        }
-
         MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
+    }
+
+    public Hand GetHand()
+    {
+        return hand;
     }
 
     public override bool ShouldBeSaved()
@@ -154,12 +133,6 @@ public abstract class Tribal : Character
     {
         data.AddValue("x", transform.position.x);
         data.AddValue("y", transform.position.y);
-        
-
-        if(CurrentCollectableObject != null)
-        {
-            data.AddValue("collectableGUID", CurrentCollectableObject.saveGUID);
-        }
         
     }
 
@@ -184,10 +157,6 @@ public abstract class Tribal : Character
         if(data.ContainsValue("collectableGUID"))
         {
             Guid objGuid = new Guid(data.GetAs<string>("collectableGUID"));
-
-            CurrentCollectableObject = GetSJMonobehaviourSaveableBySaveGUID<CollectableObject>(objGuid);
-
-            CurrentCollectableObject.Collect(this);
         }
     }
 

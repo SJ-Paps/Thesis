@@ -1,23 +1,48 @@
-﻿public abstract class CollectableObject : ActivableObject<Tribal>, ICollectable<Character> {
+﻿public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollectable<IHandOwner> {
 
-    public Character Owner { get; protected set; }
+    public IHandOwner Owner { get; protected set; }
 
-    public virtual bool Collect(Character user)
+    public virtual bool Collect(IHandOwner user)
     {
-        Owner = user;
+        if(ValidateCollect())
+        {
+            PropagateOwnerReference(user);
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     public virtual bool Drop()
     {
-        Owner = null;
+        if(ValidateDrop())
+        {
+            ClearOwnerReference();
 
+            return true;
+        }
+
+        return false;
+    }
+
+    protected virtual bool ValidateCollect()
+    {
         return true;
     }
 
-    public void PropagateOwnerReference(Character ownerReference)
+    protected virtual bool ValidateDrop()
     {
-        
+        return true;
+    }
+
+    public void PropagateOwnerReference(IHandOwner ownerReference)
+    {
+        Owner = ownerReference;
+    }
+
+    private void ClearOwnerReference()
+    {
+        Owner = null;
     }
 }

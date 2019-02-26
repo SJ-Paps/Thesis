@@ -35,7 +35,7 @@ public class Axe : Weapon
         onTerminate = OnTerminate;
     }
 
-    public override bool Collect(Character user)
+    public override bool Collect(IHandOwner user)
     {
         if(base.Collect(user))
         {

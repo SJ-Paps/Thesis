@@ -9,7 +9,7 @@ public abstract class Weapon : CollectableObject, IThrowable {
         base.Awake();
     }
 
-    public override void Activate(Tribal user)
+    public override void Activate(IHandOwner user)
     {
         if(Owner != null && !BeingUsed)
         {
