@@ -7,9 +7,25 @@ public class TribalPushingObjectState : TribalHSMState
     private bool shouldKeepPushing;
     private bool definitelyShouldStopPushing;
 
+    private SpringJoint2D springJoint2d;
+
     public TribalPushingObjectState(Character.State state, string debugName) : base(state, debugName)
     {
 
+    }
+
+    protected override void OnOwnerReferencePropagated()
+    {
+        base.OnOwnerReferencePropagated();
+
+        Rigidbody2D rigidbody2D = Owner.RigidBody2D;
+
+        springJoint2d = rigidbody2D.gameObject.AddComponent<SpringJoint2D>();
+        springJoint2d.enabled = false;
+        springJoint2d.autoConfigureDistance = false;
+        springJoint2d.distance = 0.2f;
+        springJoint2d.dampingRatio = 1;
+        springJoint2d.enableCollision = true;
     }
 
     protected override void OnEnter() {
@@ -24,7 +40,8 @@ public class TribalPushingObjectState : TribalHSMState
 
         if(targetMovableObject != null)
         {
-            Owner.GetHand().PushOrPullObject(targetMovableObject);
+            springJoint2d.enabled = true;
+            springJoint2d.connectedBody = targetMovableObject.Rigidbody2D;
 
             Owner.blockFacing = true;
 
@@ -55,7 +72,8 @@ public class TribalPushingObjectState : TribalHSMState
 
         if(targetMovableObject != null)
         {
-            Owner.GetHand().ReleaseMovableObject();
+            springJoint2d.enabled = false;
+            springJoint2d.connectedBody = null;
 
             targetMovableObject = null;
         }

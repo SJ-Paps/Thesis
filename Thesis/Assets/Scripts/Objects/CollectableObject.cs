@@ -32,13 +32,9 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
 
     public sealed override bool Activate(IHandOwner user)
     {
-        if(Owner == null)
+        if(Owner != null)
         {
-            return Collect(user);
-        }
-        else
-        {
-            if(ValidateActivate(user))
+            if (ValidateActivate(user))
             {
                 OnActivate();
                 return true;

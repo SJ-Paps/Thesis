@@ -19,8 +19,7 @@ public abstract class Tribal : Character, IHandOwner
     public Rigidbody2D RigidBody2D { get; protected set; }
 
     public SJCollider2D Collider { get; protected set; }
-
-    [SerializeField]
+    
     protected Hand hand;
 
     [SerializeField]
@@ -114,6 +113,9 @@ public abstract class Tribal : Character, IHandOwner
         RigidBody2D = GetComponent<Rigidbody2D>();
         Collider = GetComponent<SJCollider2D>();
 
+        hand = GetComponentInChildren<Hand>();
+        hand.PropagateOwnerReference(this);
+
         base.Awake();
 
         MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
@@ -160,38 +162,18 @@ public abstract class Tribal : Character, IHandOwner
         }
     }
 
+    
+}
 
-    public T CheckForActivableObject<T>() where T : class, IActivable<IHandOwner>
-    {
-        float xDirection;
-
-        if (transform.right.x >= 0)
-        {
-            xDirection = 1;
-        }
-        else
-        {
-            xDirection = -1;
-        }
-
-        return SJUtil.FindActivable<T, IHandOwner>(new Vector2(Collider.bounds.center.x + (Collider.bounds.extents.x * xDirection), 0),
-                                        new Vector2(Collider.bounds.extents.x / 2, Collider.bounds.extents.y / 2), transform.eulerAngles.z);
-    }
-
-    public T CheckForActivableObject<T>(Vector2 center, Vector2 detectionBoxSize) where T : class, IActivable<IHandOwner>
-    {
-        T activable = SJUtil.FindActivable<T, IHandOwner>(center, detectionBoxSize, transform.eulerAngles.z);
-
-        return activable;
-    }
-
-    public MovableObject CheckForMovableObject()
+public static class TribalExtensions
+{
+    public static MovableObject CheckForMovableObject(this Tribal tribal)
     {
         float checkMovableObjectDistanceX = 0.2f;
 
         float xDirection;
 
-        if (transform.right.x >= 0)
+        if (tribal.transform.right.x >= 0)
         {
             xDirection = 1;
         }
@@ -200,17 +182,19 @@ public abstract class Tribal : Character, IHandOwner
             xDirection = -1;
         }
 
-        return CheckForActivableObject<MovableObject>(new Vector2(Collider.bounds.center.x + (Collider.bounds.extents.x * xDirection),
-                                                                  Collider.bounds.center.y - Collider.bounds.extents.y / 3),
-                                                     new Vector2(checkMovableObjectDistanceX, Collider.bounds.extents.y));
+        Bounds tribalBounds = tribal.Collider.bounds;
+
+        return SJUtil.FindActivable<MovableObject, Tribal>(new Vector2(tribalBounds.center.x + (tribalBounds.extents.x * xDirection),
+                                                                  tribalBounds.center.y - tribalBounds.extents.y / 3),
+                                                     new Vector2(checkMovableObjectDistanceX, tribalBounds.extents.y), tribal.transform.eulerAngles.z);
     }
 
-    public virtual bool CheckWall()
+    public static bool CheckWall(this Tribal tribal)
     {
-        Bounds bounds = Collider.bounds;
+        Bounds bounds = tribal.Collider.bounds;
 
         float separation = 0.15f;
-        float xDir = transform.right.x;
+        float xDir = tribal.transform.right.x;
 
         Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
         Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), bounds.center.y + bounds.extents.y);
@@ -220,13 +204,13 @@ public abstract class Tribal : Character, IHandOwner
         return Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
     }
 
-    public virtual bool CheckFloorAhead()
+    public static bool CheckFloorAhead(this Tribal tribal)
     {
-        Bounds bounds = Collider.bounds;
+        Bounds bounds = tribal.Collider.bounds;
 
         float separation = 1f;
         float yDistance = 0.5f;
-        float xDir = transform.right.x;
+        float xDir = tribal.transform.right.x;
 
         Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));
         Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), beginPoint.y - yDistance);

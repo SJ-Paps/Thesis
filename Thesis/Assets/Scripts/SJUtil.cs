@@ -1,37 +1,56 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public static class SJUtil
 {
-    public static T FindActivable<T, TActivator>(Vector2 center, Vector2 size, float angle) where T : class, IActivable<TActivator> where TActivator : class
+    public static T FindActivable<T, TActivator>(Vector2 center, Vector2 size, float angle) where T : class where TActivator : class
     {
         Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, Reg.activableLayerMask);
 
         for (int i = 0; i < nearObjects.Length; i++)
         {
-            T activable = nearObjects[i].GetComponent<T>();
+            MonoBehaviour[] monoBehaviours = nearObjects[i].transform.root.GetComponentsInChildren<MonoBehaviour>();
 
-            if (activable != null)
+            for(int j = 0; j < monoBehaviours.Length; j++)
             {
-                return activable;
+                T activable = monoBehaviours[j] as T;
+                
+                if (activable != null)
+                {
+                    IActivable<TActivator> asSpecificActivable = activable as IActivable<TActivator>;
+
+                    if(asSpecificActivable != null)
+                    {
+                        return activable;
+                    }
+                }
             }
         }
 
-        return default(T);
+        return default;
     }
 
-    public static void FindActivables<T, TActivator>(Vector2 center, Vector2 size, float angle, List<T> activablesStorage) where T : IActivable<TActivator> where TActivator : class
+    public static void FindActivables<T, TActivator>(Vector2 center, Vector2 size, float angle, List<T> activablesStorage) where T : class where TActivator : class
     {
         Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, Reg.activableLayerMask);
 
         for (int i = 0; i < nearObjects.Length; i++)
         {
-            T activable = nearObjects[i].GetComponent<T>();
+            MonoBehaviour[] monoBehaviours = nearObjects[i].transform.root.GetComponentsInChildren<MonoBehaviour>();
 
-            if (activable != null)
+            for(int j = 0; j < monoBehaviours.Length; j++)
             {
-                activablesStorage.Add(activable);
+                T activable = monoBehaviours[i] as T;
+
+                if (activable != null)
+                {
+                    IActivable<TActivator> asSpecificActivable = activable as IActivable<TActivator>;
+
+                    if (asSpecificActivable != null)
+                    {
+                        activablesStorage.Add(activable);
+                    }
+                }
             }
         }
     }
