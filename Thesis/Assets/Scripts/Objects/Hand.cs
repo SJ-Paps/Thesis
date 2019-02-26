@@ -8,28 +8,40 @@ public class Hand : MonoBehaviour, IOwnable<IHandOwner>
 
     public IHandOwner Owner { get; private set; }
 
-    public void CollectObject(CollectableObject collectable)
+    public bool CollectObject(CollectableObject collectable)
     {
         if(collectable.Collect(Owner))
         {
             Collectable = collectable;
+
+            return true;
         }
+
+        return false;
     }
 
-    public void DropObject()
+    public bool DropObject()
     {
-        if(Collectable != null)
+        if(Collectable != null && Collectable.Drop())
         {
-            Collectable.Drop();
+            Collectable = null;
+
+            return true;
         }
+
+        return false;
     }
 
-    public void ThrowObject()
+    public bool ThrowObject()
     {
-        if(Collectable != null && Collectable is IThrowable cached)
+        if(Collectable != null && Collectable is IThrowable cached && cached.Throw())
         {
-            cached.Throw();
+            Collectable = null;
+
+            return true;
         }
+
+        return false;
     }
 
     public void PropagateOwnerReference(IHandOwner ownerReference)

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public abstract class Weapon : CollectableObject, IThrowable {
+﻿public abstract class Weapon : CollectableObject, IThrowable {
     
     public virtual bool BeingUsed { get; protected set; }
     
