@@ -9,11 +9,11 @@ public static class SJUtil
 
         for (int i = 0; i < nearObjects.Length; i++)
         {
-            MonoBehaviour[] monoBehaviours = nearObjects[i].transform.root.GetComponentsInChildren<MonoBehaviour>();
+            IActivable[] activables = nearObjects[i].transform.root.GetComponentsInChildren<IActivable>();
 
-            for(int j = 0; j < monoBehaviours.Length; j++)
+            for(int j = 0; j < activables.Length; j++)
             {
-                T activable = monoBehaviours[j] as T;
+                T activable = activables[j] as T;
                 
                 if (activable != null)
                 {
@@ -23,6 +23,28 @@ public static class SJUtil
                     {
                         return activable;
                     }
+                }
+            }
+        }
+
+        return default;
+    }
+
+    public static T FindActivable<T>(Vector2 center, Vector2 size, float angle) where T : class
+    {
+        Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, Reg.activableLayerMask);
+
+        for (int i = 0; i < nearObjects.Length; i++)
+        {
+            IActivable[] activables = nearObjects[i].transform.root.GetComponentsInChildren<IActivable>();
+
+            for(int j = 0; j < activables.Length; j++)
+            {
+                T activable = activables[j] as T;
+
+                if(activable != null)
+                {
+                    return activable;
                 }
             }
         }
@@ -52,6 +74,16 @@ public static class SJUtil
                     }
                 }
             }
+        }
+    }
+
+    public static void FindActivables(Vector2 center, Vector2 size, float angle, List<IActivable> activablesStorage)
+    {
+        Collider2D[] nearObjects = Physics2D.OverlapBoxAll(center, size, angle, Reg.activableLayerMask);
+
+        for (int i = 0; i < nearObjects.Length; i++)
+        {
+            activablesStorage.AddRange(nearObjects[i].transform.root.GetComponentsInChildren<IActivable>());
         }
     }
 }

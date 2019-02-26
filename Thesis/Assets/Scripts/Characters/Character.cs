@@ -75,6 +75,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         Activate,
         Throw,
         Shock,
+        Drop,
     }
 
     public class Blackboard

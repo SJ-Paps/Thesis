@@ -76,7 +76,7 @@ MonoBehaviour:
       isKeyDown: 1
       isKeyReleased: 0
       name: Activate
-      keys: 710000006201000065000000
+      keys: 6500000062010000
     orders: 1a
   - key:
       isAxis: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
       isKeyDown: 0
       isKeyReleased: 0
       name: Push
-      keys: 7100000065000000
+      keys: 
     orders: 0c
   - key:
       isAxis: 0
@@ -142,3 +142,11 @@ MonoBehaviour:
       name: Run
       keys: 30010000
     orders: 12
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 1
+      isKeyReleased: 0
+      name: Drop
+      keys: 71000000
+    orders: 1d

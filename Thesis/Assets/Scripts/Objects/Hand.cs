@@ -2,7 +2,7 @@
 
 public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 {
-    public IActivable<IHandOwner> CurrentActivable { get; private set; }
+    public CollectableObject CurrentCollectable { get; private set; }
 
     public IHandOwner Owner { get; private set; }
 
@@ -10,7 +10,7 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
     {
         get
         {
-            return CurrentActivable == null;
+            return CurrentCollectable == null;
         }
     }
 
@@ -18,7 +18,7 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
     {
         if (IsFree && collectable.Collect(Owner))
         {
-            CurrentActivable = collectable;
+            CurrentCollectable = collectable;
 
             return true;
         }
@@ -28,9 +28,9 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 
     public bool DropObject()
     {
-        if (!IsFree && CurrentActivable is ICollectable<IHandOwner> cached && cached.Drop())
+        if (!IsFree && CurrentCollectable.Drop())
         {
-            CurrentActivable = null;
+            CurrentCollectable = null;
 
             return true;
         }
@@ -40,9 +40,9 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 
     public bool ThrowObject()
     {
-        if (!IsFree && CurrentActivable is IThrowable cached && cached.Throw())
+        if (!IsFree && CurrentCollectable is IThrowable throwable && throwable.Throw())
         {
-            CurrentActivable = null;
+            CurrentCollectable = null;
 
             return true;
         }
@@ -54,13 +54,13 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
     {
         if (!IsFree)
         {
-            return CurrentActivable.Activate(Owner);
+            return CurrentCollectable.Activate(Owner);
         }
 
         return false;
     }
 
-    public bool ActivateObject(IActivable<IHandOwner> activable)
+    public bool ActivateObject(ActivableObject<IHandOwner> activable)
     {
         return activable.Activate(Owner);
     }

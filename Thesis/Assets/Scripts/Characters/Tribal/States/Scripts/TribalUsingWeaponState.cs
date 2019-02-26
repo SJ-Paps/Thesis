@@ -11,11 +11,15 @@
     {
         base.OnEnter();
 
-        if(Owner.GetHand().CurrentActivable is Weapon cached)
+        if(Owner.GetHand().CurrentCollectable is Weapon cached)
         {
             currentWeapon = cached;
 
             Owner.GetHand().ActivateCurrentObject();
+        }
+        else
+        {
+            SendEvent(Character.Trigger.StopAttacking);
         }
     }
 

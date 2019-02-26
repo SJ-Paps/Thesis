@@ -1,10 +1,24 @@
 ﻿public abstract class Weapon : CollectableObject {
     
-    public virtual bool BeingUsed { get; protected set; }
+    public bool BeingUsed { get; private set; }
     
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    private void Use()
+    {
+        BeingUsed = true;
+
+        OnUse();
+    }
+
+    protected abstract void OnUse();
+
+    protected void FinishUse()
+    {
+        BeingUsed = false;
     }
 
     protected override bool ValidateDrop()
@@ -12,8 +26,10 @@
         return !BeingUsed;
     }
 
-    public override bool ShouldBeSaved()
+    public override bool Activate(IHandOwner user)
     {
+        Use();
+
         return true;
     }
 }

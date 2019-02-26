@@ -51,10 +51,8 @@ public class Axe : Weapon
         parentConstraint.constraintActive = false;
     }
 
-    protected override void OnActivate()
+    protected override void OnUse()
     {
-        BeingUsed = true;
-
         timer.Interval = attackInterval;
         timer.onTick += onAttack;
         timer.Start();
@@ -74,7 +72,7 @@ public class Axe : Weapon
     {
         timer.onTick -= onTerminate;
         sharpEdge.enabled = false;
-        BeingUsed = false;
+        FinishUse();
     }
 
     void OnTriggerEnter2D(Collider2D collision)

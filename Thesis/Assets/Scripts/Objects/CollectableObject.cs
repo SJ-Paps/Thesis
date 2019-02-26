@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollectable<IHandOwner> {
+﻿public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollectable<IHandOwner> {
 
     public IHandOwner Owner { get; protected set; }
 
@@ -30,25 +28,6 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
         return false;
     }
 
-    public sealed override bool Activate(IHandOwner user)
-    {
-        if(Owner != null)
-        {
-            if (ValidateActivate(user))
-            {
-                OnActivate();
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    protected virtual bool ValidateActivate(IHandOwner user)
-    {
-        return true;
-    }
-
     protected virtual bool ValidateCollect(IHandOwner user)
     {
         return true;
@@ -68,8 +47,6 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
     {
 
     }
-
-    protected abstract void OnActivate();
 
     public void PropagateOwnerReference(IHandOwner ownerReference)
     {

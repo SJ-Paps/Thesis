@@ -1,12 +1,8 @@
-﻿public class ContextualActivable : ActivableObject<Tribal>
+﻿public class ContextualActivable : ActivableObject<Character>
 {
-    public override bool Activate(Tribal user)
+    public override bool Activate(Character user)
     {
         return true;
     }
-
-    public override bool ShouldBeSaved()
-    {
-        return false;
-    }
+    
 }

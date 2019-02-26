@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class TribalCheckActivablesState : TribalHSMState
 {
-    private List<IActivable<Tribal>> activablesStorage;
+    private List<IActivable> activablesStorage;
 
     public TribalCheckActivablesState(Character.State stateId, string debugName = null) : base(stateId, debugName)
     {
-        activablesStorage = new List<IActivable<Tribal>>();
+        activablesStorage = new List<IActivable>();
     }
 
     protected override bool HandleEvent(Character.Trigger trigger)
@@ -16,7 +16,15 @@ public class TribalCheckActivablesState : TribalHSMState
         {
             FindActivables();
 
-            return WillUseActivable();
+            return WillActivateObject();
+        }
+        else if(trigger == Character.Trigger.Drop)
+        {
+            return Owner.GetHand().DropObject();
+        }
+        else if(trigger == Character.Trigger.Throw)
+        {
+            return Owner.GetHand().ThrowObject();
         }
 
         return false;
@@ -37,32 +45,48 @@ public class TribalCheckActivablesState : TribalHSMState
             xDirection = 1;
         }
 
-        SJUtil.FindActivables<IActivable<Tribal>, Tribal>(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
-                                    new Vector2(ownerBounds.extents.x / 2, ownerBounds.size.y), Owner.transform.eulerAngles.z, activablesStorage);
+        SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
+                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), Owner.transform.eulerAngles.z, activablesStorage);
     }
 
-    private bool WillUseActivable()
+    private bool WillActivateObject()
     {
-        for (int i = 0; i < activablesStorage.Count; i++)
+        for(int i = 0; i < activablesStorage.Count; i++)
         {
-            IActivable<Tribal> activable = activablesStorage[i];
-            
-            if (activable is CollectableObject collectable)
+            IActivable activable = activablesStorage[i];
+
+            if(activable is CollectableObject collectable)
             {
-                Owner.GetHand().CollectObject(collectable);
-                return true;
+                if(Owner.GetHand().CollectObject(collectable))
+                {
+                    return true;
+                }
             }
-            else if (activable is MovableObject movable)
+            else if(activable is MovableObject movable)
             {
                 Blackboard.toPushMovableObject = movable;
                 SendEvent(Character.Trigger.Push);
                 return true;
             }
-            else if (activable is Hide hide)
+            else if(activable is Hide hide)
             {
                 Blackboard.toHidePlace = hide;
                 SendEvent(Character.Trigger.Hide);
                 return true;
+            }
+        }
+
+        if(Owner.GetHand().IsFree == false)
+        {
+            CollectableObject objectInHand = Owner.GetHand().CurrentCollectable;
+
+            if(objectInHand is Weapon)
+            {
+                SendEvent(Character.Trigger.Attack);
+            }
+            else
+            {
+                Owner.GetHand().ActivateCurrentObject();
             }
         }
 

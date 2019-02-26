@@ -22,9 +22,4 @@ public class MovableObject : ActivableObject<IHandOwner> {
         return true;
     }
 
-    public override bool ShouldBeSaved()
-    {
-        return true;
-    }
-
 }
