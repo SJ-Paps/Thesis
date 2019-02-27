@@ -683,11 +683,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterInputController
       objectReference: {fileID: 0}
-    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
-        type: 3}
-      propertyPath: slave
-      value: 
-      objectReference: {fileID: 196212823}
     - target: {fileID: 4051299886331970, guid: a77ffe7ced49f394a9cef0a121018932, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.06378
@@ -732,6 +727,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114557180738793116, guid: a77ffe7ced49f394a9cef0a121018932,
+        type: 3}
+      propertyPath: slave
+      value: 
+      objectReference: {fileID: 196212823}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a77ffe7ced49f394a9cef0a121018932, type: 3}
 --- !u!1001 &997299384

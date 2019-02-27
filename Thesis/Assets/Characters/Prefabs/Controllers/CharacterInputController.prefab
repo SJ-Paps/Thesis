@@ -124,7 +124,7 @@ MonoBehaviour:
       isKeyDown: 0
       isKeyReleased: 0
       name: Push
-      keys: 
+      keys: 65000000
     orders: 0c
   - key:
       isAxis: 0

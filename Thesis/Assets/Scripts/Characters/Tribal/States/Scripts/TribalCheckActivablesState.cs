@@ -16,7 +16,11 @@ public class TribalCheckActivablesState : TribalHSMState
         {
             FindActivables();
 
-            return WillActivateObject();
+            bool aux = WillActivateObject();
+
+            activablesStorage.Clear();
+
+            return aux;
         }
         else if(trigger == Character.Trigger.Drop)
         {
