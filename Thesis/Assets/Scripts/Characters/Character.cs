@@ -37,11 +37,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         HangingLedge,
         HangingRope,
         HangingStair,
-        CheckActivables,
+        SwitchingActivables,
         Waiting,
         UsingWeapon,
         Throwing,
-        Shocking
+        Shocking,
+        Collecting,
+        Droping,
+        Activating,
     }
 
     public enum Trigger : byte

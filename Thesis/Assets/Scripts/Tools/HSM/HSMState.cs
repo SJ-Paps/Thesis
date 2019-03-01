@@ -217,6 +217,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
             childs[i].AddOnAnyStateChangedListener(listener);
         }
 
+        onStateChanged -= listener; //avoids repetition
         onStateChanged += listener;
     }
 
@@ -247,6 +248,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
             childs[i].AddOnBeforeAnyTransitionateListener(listener);
         }
 
+        onBeforeTransitionate -= listener; //avoids repetition
         onBeforeTransitionate += listener;
     }
 
@@ -263,6 +265,22 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         }
 
         onBeforeTransitionate -= listener;
+    }
+
+    public void AddChildToState<T>(HSMState<TState, TTrigger> child) where T : class
+    {
+        if(GetState<T>() is HSMState<TState, TTrigger> state)
+        {
+            state.AddChild(child);
+        }
+    }
+
+    public void AddParallelChildToState<T>(HSMState<TState, TTrigger> child) where T : class
+    {
+        if(GetState<T>() is HSMState<TState, TTrigger> state)
+        {
+            state.AddParallelChild(child);
+        }
     }
 
     public void AddChild(HSMState<TState, TTrigger> child)
@@ -288,25 +306,65 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         parents.Add(parent);
     }
 
-    public void RemoveChild(TState stateId)
+    public HSMState<TState, TTrigger> RemoveChildFromState<T>(TState stateId) where T : class
+    {
+        if(GetState<T>() is HSMState<TState, TTrigger> state)
+        {
+            return state.RemoveChild(stateId);
+        }
+
+        return null;
+    }
+
+    public HSMState<TState, TTrigger> RemoveChild(TState stateId)
+    {
+        var state = RemoveNonParallelChild(stateId);
+
+        if(state == null)
+        {
+            state = RemoveParallelChild(stateId);
+        }
+
+        return state;
+    }
+
+    public HSMState<TState, TTrigger> RemoveNonParallelChild(TState stateId)
     {
         HSMState<TState, TTrigger> toRemove = GetImmediateChildState(stateId);
 
         if (childs.Remove(toRemove))
         {
-            BreakAllTransitionFrom(stateId);
             toRemove.RemoveParent(this);
+
+            return toRemove;
         }
+
+        return null;
     }
 
-    public void RemoveParallelChild(TState stateId)
+    public HSMState<TState, TTrigger> RemoveNonParallelChild(TState stateId, bool breakAllRelatedTransitions)
+    {
+        var removed = RemoveNonParallelChild(stateId);
+
+        if(removed != null && breakAllRelatedTransitions)
+        {
+            BreakAllTransitionRelatedTo(stateId);
+        }
+
+        return removed;
+    }
+
+    public HSMState<TState, TTrigger> RemoveParallelChild(TState stateId)
     {
         HSMState<TState, TTrigger> toRemove = GetImmediateChildState(stateId);
 
         if (parallelChilds.Remove(toRemove))
         {
             toRemove.RemoveParent(this);
+            return toRemove;
         }
+
+        return null;
     }
 
     private void RemoveParent(HSMState<TState, TTrigger> parent)
@@ -413,9 +471,49 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return default;
     }
 
+    public HSMState<TState, TTrigger> GetImmediateNonParallelChildState(TState state)
+    {
+        for (int i = 0; i < childs.Count; i++)
+        {
+            var current = childs[i];
+
+            if (stateIdComparer(current.StateId, state))
+            {
+                return current;
+            }
+        }
+
+        return null;
+    }
+
+    public HSMState<TState, TTrigger> GetImmediateParallelChildState(TState state)
+    {
+        for (int i = 0; i < parallelChilds.Count; i++)
+        {
+            var current = parallelChilds[i];
+
+            if (stateIdComparer(current.StateId, state))
+            {
+                return current;
+            }
+        }
+
+        return null;
+    }
+
     public bool ContainsImmediateChildState(TState state)
     {
         return GetImmediateChildState(state) != null;
+    }
+
+    public bool ContainsImmediateNonParallelChildState(TState state)
+    {
+        return GetImmediateNonParallelChildState(state) != null;
+    }
+
+    public bool ContainsImmediateParallelChildState(TState state)
+    {
+        return GetImmediateParallelChildState(state) != null;
     }
 
     public bool IsOnState(TState state)
@@ -463,15 +561,12 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     public bool MakeChildTransition(TState childStateFrom, TTrigger trigger, TState childStateTo)
     {
-        if(ContainsImmediateChildState(childStateFrom) && ContainsImmediateChildState(childStateTo))
-        {
-            HSMTransition<TState, TTrigger> transition = new HSMTransition<TState, TTrigger>(childStateFrom, trigger, childStateTo);
+        HSMTransition<TState, TTrigger> transition = new HSMTransition<TState, TTrigger>(childStateFrom, trigger, childStateTo);
 
-            if (!transitions.Contains(transition, stateIdComparer, triggerComparer))
-            {
-                transitions.Add(transition);
-                return true;
-            }
+        if (!transitions.Contains(transition, stateIdComparer, triggerComparer))
+        {
+            transitions.Add(transition);
+            return true;
         }
 
         return false;
@@ -526,17 +621,15 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return false;
     }
 
-    public bool IsParallelOfParent()
+    public bool IsParallelOf(HSMState<TState, TTrigger> state)
     {
-        if(ActiveParent != null)
+        int parentIndex = parents.IndexOf(state);
+
+        if(parentIndex != -1)
         {
-            for (int i = 0; i < ActiveParent.parallelChilds.Count; i++)
-            {
-                if (stateIdComparer(ActiveParent.parallelChilds[i].StateId, StateId))
-                {
-                    return true;
-                }
-            }
+            var parent = parents[parentIndex];
+
+            return parent.parallelChilds.Contains(this);
         }
 
         return false;
@@ -556,7 +649,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         }
     }
 
-    public void BreakAllTransitionFrom(TState state)
+    public void BreakAllTransitionRelatedTo(TState state)
     {
         for (int i = 0; i < transitions.Count; i++)
         {
@@ -585,6 +678,20 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return default;
     }
 
+    public T GetNonParallelState<T>() where T : class
+    {
+        var root = GetRoot();
+
+        return root.InternalGetNonParallelState<T>();
+    }
+
+    public T GetParallelState<T>() where T : class
+    {
+        var root = GetRoot();
+
+        return root.InternalGetParallelState<T>();
+    }
+
     public T GetState<T>() where T : class
     {
         var root = GetRoot();
@@ -594,14 +701,33 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     private T InternalGetState<T>() where T : class
     {
-        if(this is T cached)
+        var parallel = InternalGetParallelState<T>();
+
+        if (parallel != null)
+        {
+            return parallel;
+        }
+
+        var nonParallel = InternalGetNonParallelState<T>();
+
+        if(nonParallel != null)
+        {
+            return nonParallel;
+        }
+
+        return null;
+    }
+
+    private T InternalGetNonParallelState<T>() where T : class
+    {
+        if (this is T cached)
         {
             return cached;
         }
 
-        for(int i = 0; i < parallelChilds.Count; i++)
+        for (int i = 0; i < childs.Count; i++)
         {
-            var current = parallelChilds[i];
+            var current = childs[i];
 
             var state = current.InternalGetState<T>();
 
@@ -611,13 +737,24 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
             }
         }
 
-        for(int i = 0; i < childs.Count; i++)
+        return null;
+
+    }
+
+    private T InternalGetParallelState<T>() where T : class
+    {
+        if(this is T cached)
         {
-            var current = childs[i];
+            return cached;
+        }
+
+        for (int i = 0; i < parallelChilds.Count; i++)
+        {
+            var current = parallelChilds[i];
 
             var state = current.InternalGetState<T>();
 
-            if(state != null)
+            if (state != null)
             {
                 return state;
             }
@@ -653,7 +790,10 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
                 {
                     HSMTransition<TState, TTrigger> transition = current.GetTransition(current.ActiveNonParallelChild.StateId, trigger);
 
-                    if (transition != null && transition.IsValidTransition())
+                    if (transition != null 
+                        && current.ContainsImmediateNonParallelChildState(transition.stateFrom) 
+                        && current.ContainsImmediateNonParallelChildState(transition.stateTo) 
+                        && transition.IsValidTransition())
                     {
                         current.Transitionate(transition);
 
@@ -666,7 +806,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
                 return true;
             }
 
-            if (current.IsParallelOfParent())
+            if (current.IsParallelOf(current.ActiveParent))
             {
                 return false;
             }
