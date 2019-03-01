@@ -24,6 +24,9 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
     protected string debugName;
 
     [SerializeField]
+    protected bool copy;
+
+    [SerializeField]
     protected TState stateId;
 
     [SerializeField]
@@ -45,21 +48,19 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
 
         GetUniqueStates(relationDictionary, rootAsset);
 
-        BuildHierarchy(relationDictionary, rootAsset);
+        HSMState<TState, TTrigger> rootState = BuildHierarchy(relationDictionary, rootAsset);
+
+        ReplaceCopiables(rootState, rootAsset);
 
         BuildTransitions(relationDictionary, rootAsset);
 
         SetInitialStates(relationDictionary, rootAsset);
-
-        HSMState<TState, TTrigger> rootState = relationDictionary[rootAsset];
 
         return rootState;
     }
 
     private static void GetUniqueStates(Dictionary<HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger> baseAsset)
     {
-        
-
         if(relationDictionary.ContainsKey(baseAsset) == false)
         {
             relationDictionary.Add(baseAsset, baseAsset.CreateConcreteHSMState());
@@ -76,7 +77,7 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
         }
     }
 
-    private static void BuildHierarchy(Dictionary<HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger> baseAsset)
+    private static HSMState<TState, TTrigger> BuildHierarchy(Dictionary<HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger> baseAsset)
     {
         HSMState<TState, TTrigger> currentState = relationDictionary[baseAsset];
 
@@ -95,6 +96,8 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
             currentState.AddChild(relationDictionary[currentAssetChild]);
             BuildHierarchy(relationDictionary, currentAssetChild);
         }
+
+        return currentState;
     }
 
     private static void BuildTransitions(Dictionary<HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger> baseAsset)
@@ -134,6 +137,35 @@ public abstract class HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, 
             for (int i = 0; i < baseAsset.childs.Length; i++)
             {
                 SetInitialStates(relationDictionary, baseAsset.childs[i]);
+            }
+        }
+    }
+
+    private static void ReplaceCopiables(HSMState<TState, TTrigger> baseState, HSMStateAsset<TConcreteAssetClass, THSMTransitionWrapper, TState, TTrigger> baseAsset)
+    { 
+        for(int i = 0; i < baseAsset.parallelChilds.Length; i++)
+        {
+            var currentAsset = baseAsset.parallelChilds[i];
+            var currentState = baseState.GetImmediateChildState(currentAsset.stateId);
+
+            ReplaceCopiables(currentState, currentAsset);
+
+            if (currentAsset.copy)
+            {
+                baseState.ReplaceChild(currentAsset.CreateConcreteHSMState());
+            }
+        }
+
+        for(int i = 0; i < baseAsset.childs.Length; i++)
+        {
+            var currentAsset = baseAsset.childs[i];
+            var currentState = baseState.GetImmediateChildState(currentAsset.stateId);
+
+            ReplaceCopiables(currentState, currentAsset);
+
+            if(currentAsset.copy)
+            {
+                baseState.ReplaceChild(currentAsset.CreateConcreteHSMState());
             }
         }
     }

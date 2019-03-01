@@ -7,7 +7,9 @@
 
     protected SJHSMState(TState stateId, string debugName = null) : base(stateId, debugName)
     {
-
+#if UNITY_EDITOR
+        EditorDebug.Log(GetType().Name + " HAS BEEN CREATED");
+#endif
     }
 
     public void PropagateOwnerReference(TOwner reference)

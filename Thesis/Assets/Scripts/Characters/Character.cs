@@ -136,6 +136,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
 
         hsm = CharacterHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
+        
     }
 
     protected override void Start()

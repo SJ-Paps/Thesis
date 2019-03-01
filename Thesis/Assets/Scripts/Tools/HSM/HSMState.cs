@@ -25,7 +25,7 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
     protected Func<TState, TState, bool> stateIdComparer;
     protected Func<TTrigger, TTrigger, bool> triggerComparer;
 
-    public virtual int ChildCount
+    public int ChildCount
     {
         get
         {
@@ -363,7 +363,32 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return current;
     }
 
-    public virtual HSMState<TState, TTrigger> GetImmediateChildState(TState state)
+    public void ReplaceChild(HSMState<TState, TTrigger> newState)
+    {
+        HSMState<TState, TTrigger> state = GetImmediateChildState(newState.StateId);
+
+        if(state == null)
+        {
+            throw new InvalidOperationException("state " + newState.StateId + " was not added to state machine");
+        }
+        else
+        {
+            int nonParallelIndex = childs.IndexOf(state);
+
+            if (nonParallelIndex != -1)
+            {
+                childs[nonParallelIndex] = newState;
+            }
+            else
+            {
+                int parallelIndex = parallelChilds.IndexOf(state);
+
+                parallelChilds[parallelIndex] = newState;
+            }
+        }
+    }
+
+    public HSMState<TState, TTrigger> GetImmediateChildState(TState state)
     {
         for(int i = 0; i < parallelChilds.Count; i++)
         {

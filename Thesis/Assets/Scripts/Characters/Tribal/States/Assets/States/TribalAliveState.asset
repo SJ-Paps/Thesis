@@ -15,6 +15,7 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 64c9c102ca0b80e4c9394cff4552af56, type: 3}
   stateClassFullName: TribalAliveState
   debugName: Alive
+  copy: 0
   stateId: 1
   startStateIndex: 0
   childs:
@@ -68,3 +69,4 @@ MonoBehaviour:
     trigger: 5
     stateTo: 7
     guardConditions: []
+  activeDebug: 0
