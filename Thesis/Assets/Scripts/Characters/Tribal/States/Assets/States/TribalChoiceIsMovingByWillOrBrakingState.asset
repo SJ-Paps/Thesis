@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 880411b855eeb024c9c0006570129317, type: 3}
   stateClassFullName: TribalChoiceIsMovingByWillOrBrakingState
   debugName: Choice Is Moving By Will Or Braking
+  copy: 0
   stateId: 23
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 1

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalDropingState : TribalHSMState
 {
-    public TribalDropingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalDropingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
     }
 }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TribalChoiceIsMovingByWillOrBrakingState : CharacterHSMState
+public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
 {
-    public TribalChoiceIsMovingByWillOrBrakingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalChoiceIsMovingByWillOrBrakingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }
@@ -18,6 +18,8 @@ public class TribalChoiceIsMovingByWillOrBrakingState : CharacterHSMState
 
     private void Redirect()
     {
+        Debug.Log(LastEnteringTrigger);
+
         if(LastEnteringTrigger == Character.Trigger.MoveLeft || LastEnteringTrigger == Character.Trigger.MoveRight)
         {
             SendEvent(Character.Trigger.Move);

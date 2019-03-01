@@ -8,8 +8,6 @@ public class MainCharacter : Tribal
         base.Awake();
 
         gameObject.layer = Reg.playerLayer;
-
-        GameManager.GetInstance().GetPlayer();
     }
 
     public override void GetEnslaved()

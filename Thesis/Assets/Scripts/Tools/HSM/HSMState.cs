@@ -788,11 +788,12 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
             {
                 if (current.childs.Count > 0)
                 {
+
                     HSMTransition<TState, TTrigger> transition = current.GetTransition(current.ActiveNonParallelChild.StateId, trigger);
 
-                    if (transition != null 
-                        && current.ContainsImmediateNonParallelChildState(transition.stateFrom) 
-                        && current.ContainsImmediateNonParallelChildState(transition.stateTo) 
+                    if (transition != null
+                        && current.ContainsImmediateNonParallelChildState(transition.stateFrom)
+                        && current.ContainsImmediateNonParallelChildState(transition.stateTo)
                         && transition.IsValidTransition())
                     {
                         current.Transitionate(transition);
@@ -832,6 +833,11 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         ExitActiveNonParallelChild();
 
         ActiveNonParallelChild = GetImmediateChildState(transition.stateTo);
+
+        if(ActiveNonParallelChild == null)
+        {
+            throw new NullReferenceException("Active Child State is null");
+        }
 
         EnterNonParallelActiveChild();
 

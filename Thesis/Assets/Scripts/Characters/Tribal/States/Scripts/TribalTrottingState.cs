@@ -13,7 +13,7 @@
 
     private Action onFixedUpdateDelegate;*/
 
-    public TribalTrottingState(Character.State state, string debugName) : base(state, debugName)
+    public TribalTrottingState(Tribal.State state, string debugName) : base(state, debugName)
     {
 
     }

@@ -10,7 +10,7 @@ public class TribalGroundedState : TribalHSMState
 
     private SyncTimer groundingTimer;
 
-    public TribalGroundedState(Character.State state, string debugName) : base(state, debugName)
+    public TribalGroundedState(Tribal.State state, string debugName) : base(state, debugName)
     {
         groundingTimer = new SyncTimer();
 

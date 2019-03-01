@@ -1,6 +1,6 @@
 ﻿public class TribalChoiceWalkingOrTrottingOrRunningState : TribalHSMState
 {
-    public TribalChoiceWalkingOrTrottingOrRunningState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalChoiceWalkingOrTrottingOrRunningState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

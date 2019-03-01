@@ -5,7 +5,7 @@ public class TribalCheckActivablesState : TribalHSMState
 {
     private List<IActivable> activablesStorage;
 
-    public TribalCheckActivablesState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalCheckActivablesState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
         activablesStorage = new List<IActivable>();
     }

@@ -6,7 +6,7 @@ public class TribalBrakingState : TribalHSMState
 {
     private bool isMovingByWill;
 
-    public TribalBrakingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalBrakingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

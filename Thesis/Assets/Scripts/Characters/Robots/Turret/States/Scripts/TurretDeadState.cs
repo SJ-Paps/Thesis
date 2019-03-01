@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretDeadState : CharacterHSMState
+public class TurretDeadState : TurretHSMState
 {
-    public TurretDeadState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TurretDeadState(Turret.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

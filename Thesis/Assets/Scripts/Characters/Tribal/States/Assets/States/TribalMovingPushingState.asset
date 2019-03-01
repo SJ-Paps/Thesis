@@ -15,6 +15,7 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: e812ff888dbc63d459ade40ae8bc27e9, type: 3}
   stateClassFullName: TribalMovingPushingState
   debugName: Moving Pushing
+  copy: 0
   stateId: 20
   startStateIndex: 0
   childs:
@@ -39,3 +40,4 @@ MonoBehaviour:
     trigger: 17
     stateTo: 18
     guardConditions: []
+  activeDebug: 0

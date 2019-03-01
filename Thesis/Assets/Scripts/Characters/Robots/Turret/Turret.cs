@@ -1,7 +1,26 @@
 ﻿using UnityEngine;
+using System;
 
-public class Turret : Robot
+public class Turret : Robot, ISeer, IDamagable
 {
+    public enum State
+    {
+        Base,
+        Alive,
+        Dead,
+        Moving,
+        Idle,
+        Charging,
+        Attacking
+    }
+
+    public class Blackboard
+    {
+
+    }
+
+    public event Action onDead;
+
     [SerializeField]
     protected Rigidbody2D head, body;
 
@@ -72,6 +91,15 @@ public class Turret : Robot
         }
     }
 
+    [SerializeField]
+    private TurretHSMStateAsset hsmAsset;
+
+    private TurretHSMState hsm;
+
+    protected Blackboard blackboard;
+
+    private EyeCollection eyes;
+
     protected override void Awake()
     {
         base.Awake();
@@ -82,6 +110,41 @@ public class Turret : Robot
         ChargeTime = new PercentageReversibleNumber(chargeTimeBase);
         ShootDamage = new PercentageReversibleNumber(shootDamageBase);
         Acceleration = new PercentageReversibleNumber(accelerationBase);
+
+        blackboard = new Blackboard();
+
+        hsm = TurretHSMStateAsset.BuildFromAsset<TurretHSMState>(hsmAsset, this, blackboard);
+
+        eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        hsm.Enter();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        hsm.Update();
+    }
+
+    protected override void ProcessOrder(Trigger order)
+    {
+        hsm.SendEvent(order);
+    }
+
+    public virtual void TakeDamage(float damage, DamageType type)
+    {
+        
+    }
+
+    public EyeCollection GetEyes()
+    {
+        return eyes;
     }
 
 

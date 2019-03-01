@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4164c0faedf3e54408226f0738e20639, type: 3}
   m_Name: TurretIdleState
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: ef8937418ac818940af87747343f1646, type: 3}
   stateClassFullName: TurretIdleState
   debugName: Idle
-  stateId: 3
+  copy: 0
+  stateId: 4
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0

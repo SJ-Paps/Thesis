@@ -1,4 +1,6 @@
-﻿public abstract class SJHSMState<TState, TTrigger, TOwner, TBlackboard> : HSMState<TState, TTrigger>, IOwnable<TOwner>, IBlackboardOwner<TBlackboard> where TState : unmanaged where TTrigger : unmanaged where TOwner : class
+﻿using UnityEngine;
+
+public abstract class SJHSMState<TState, TTrigger, TOwner, TBlackboard> : HSMState<TState, TTrigger>, IOwnable<TOwner>, IBlackboardOwner<TBlackboard> where TState : unmanaged where TTrigger : unmanaged where TOwner : class
 {
     public TOwner Owner { get; protected set; }
     protected TBlackboard Blackboard { get; set; }
@@ -7,7 +9,7 @@
 
     protected SJHSMState(TState stateId, string debugName = null) : base(stateId, debugName)
     {
-
+        Debug.Log(stateId);
     }
 
     public void PropagateOwnerReference(TOwner reference)

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>, IDamagable, ISeer
+public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>
 {
-    public enum State : byte
+    /*public enum State : byte
     {
         Base,
         Alive,
@@ -45,7 +45,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         Collecting,
         Droping,
         Activating,
-    }
+    }*/
 
     public enum Trigger : byte
     {
@@ -81,20 +81,11 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         Drop,
     }
 
-    public class Blackboard
-    {
-        public MovableObject toPushMovableObject;
-        public Hide toHidePlace;
-        public RaycastHit2D ledgeCheckHit;
-    }
-
     public event Action onFixedUpdate;
 
 	public event Action<Trigger> onOrderReceived;
     public event Action onDetected;
-    public event Action onDead;
-
-    protected Blackboard blackboard;
+    
     
     public bool IsFacingLeft
     {
@@ -104,7 +95,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    private EyeCollection eyes;
+    
     
     [HideInInspector]
     public bool blockFacing;
@@ -121,39 +112,24 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     }
 
     protected Queue<Trigger> orders;
-
-
-    [SerializeField]
-    private CharacterHSMStateAsset hsmAsset;
-
-    protected CharacterHSMState hsm;
+    
 
     protected override void Awake()
     {
         base.Awake();
-        
-        blackboard = new Blackboard();
 
         orders = new Queue<Trigger>();
 
-        eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
-
-        hsm = CharacterHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
         
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        hsm.Enter();
+        
     }
 
     protected virtual void Update()
     {
-        SendOrdersToStates();
-
-        hsm.Update();
+        while(orders.Count > 0)
+        {
+            ProcessOrder(orders.Dequeue());
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -164,36 +140,8 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    public EyeCollection GetEyes()
-    {
-        return eyes;
-    }
-
-    public bool IsOnState(State state)
-    {
-        return hsm.IsOnState(state);
-    }
-
-    private void SendOrdersToStates()
-    {
-        while(orders.Count > 0)
-        {
-            hsm.SendEvent(orders.Dequeue());
-        }
-    }
-
-
-
-    public virtual void TakeDamage(float damage, DamageType damageType)
-    {
-        hsm.SendEvent(Trigger.Die);
-
-        if(onDead != null)
-        {
-            onDead();
-        }
-    }
-
+    protected abstract void ProcessOrder(Character.Trigger order);
+    
     public abstract void GetEnslaved();
 
     public virtual void SetOrder(Trigger order)
@@ -234,59 +182,5 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     {
         
     }
-
-    /*private void CheckDeadly(Collision2D collision)
-    {
-        if(collision.gameObject.layer == Reg.hostileDeadlyLayer || collision.gameObject.layer == Reg.generalDeadlyLayer)
-        {
-            Deadly deadly = collision.gameObject.GetComponent<Deadly>();
-
-            Die(deadly.Type);
-        }
-    }
-
-    private void CheckDeadly(Collider2D collider)
-    {
-        if (collider.gameObject.layer == Reg.hostileDeadlyLayer || collider.gameObject.layer == Reg.generalDeadlyLayer)
-        {
-            Deadly deadly = collider.GetComponent<Deadly>();
-
-            if(deadly != null)
-            {
-                Die(deadly.Type);
-            }
-        }
-    }
-
-    public virtual bool CheckWall(int layers)
-    {
-        Bounds bounds = Collider.bounds;
-
-        float separation = 0.15f;
-        float xDir = transform.right.x;
-
-        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
-        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), bounds.center.y + bounds.extents.y);
-
-        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
-
-        return Physics2D.Linecast(beginPoint, endPoint, layers);
-    }
-
-    public virtual bool CheckFloorAhead(int layers)
-    {
-        Bounds bounds = Collider.bounds;
-
-        float separation = 1f;
-        float yDistance = 0.5f;
-        float xDir = transform.right.x;
-
-        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));
-        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), beginPoint.y - yDistance);
-
-        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
-
-        return Physics2D.Linecast(beginPoint, endPoint, layers);
-    }*/
 
 }

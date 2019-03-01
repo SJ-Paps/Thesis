@@ -16,7 +16,7 @@ public class TribalMovingState : TribalHSMState
 
     private bool isFirstUpdate;
 
-    public TribalMovingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalMovingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
         onFixedUpdateDelegate = OnFixedUpdate;
     }
@@ -24,7 +24,7 @@ public class TribalMovingState : TribalHSMState
     protected override void OnEnter()
     {
         base.OnEnter();
-
+        
         isFirstUpdate = true;
     }
 

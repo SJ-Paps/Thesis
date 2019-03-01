@@ -2,7 +2,7 @@
 {
     private Weapon currentWeapon;
 
-    public TribalUsingWeaponState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalUsingWeaponState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

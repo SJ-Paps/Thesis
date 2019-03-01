@@ -5,7 +5,7 @@ public class TribalClimbingLedgeState : TribalClimbingState
 {
     private IEnumerator climbCoroutine;
 
-    public TribalClimbingLedgeState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalClimbingLedgeState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
         climbCoroutine = ClimbCoroutine();
     }

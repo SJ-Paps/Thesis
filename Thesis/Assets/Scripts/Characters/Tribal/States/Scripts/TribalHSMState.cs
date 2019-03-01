@@ -1,19 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TribalHSMState : CharacterHSMState
+﻿public class TribalHSMState : CharacterHSMState<Tribal.State, Tribal, Tribal.Blackboard>
 {
-    public new Tribal Owner { get; set; }
-
-    public TribalHSMState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalHSMState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
-    }
-
-    protected override void OnOwnerReferencePropagated()
-    {
-        base.OnOwnerReferencePropagated();
-        Owner = (Tribal)base.Owner;
     }
 }

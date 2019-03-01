@@ -4,7 +4,7 @@
 
     private int velocityConstraintId;
 
-    public TribalWalkingState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalWalkingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

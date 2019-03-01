@@ -1,8 +1,58 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class Tribal : Character, IHandOwner
+public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 {
+    public enum State
+    {
+        Base,
+        Alive,
+        Dead,
+        Idle,
+        Trotting,
+        SlowingDown,
+        Grounded,
+        OnAir,
+        Jumping,
+        Falling,
+        Hidden,
+        Attacking,
+        Pushing,
+        Grappling,
+        Standing,
+        Ducking,
+        ChoiceIdleOrMoving,
+        ChoiceJumpingOrFalling,
+        Walking,
+        Running,
+        Moving,
+        ChoiceWalkingOrTrottingOrRunning,
+        CheckingForPushables,
+        ChoiceMovingByWillOrBraking,
+        Braking,
+        CheckingForLedges,
+        Hanging,
+        Climbing,
+        HangingLedge,
+        HangingRope,
+        HangingStair,
+        SwitchingActivables,
+        Waiting,
+        UsingWeapon,
+        Throwing,
+        Shocking,
+        Collecting,
+        Droping,
+        Activating,
+    }
+
+    public class Blackboard
+    {
+        public MovableObject toPushMovableObject;
+        public Hide toHidePlace;
+        public RaycastHit2D ledgeCheckHit;
+    }
+
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId WalkAnimatorTrigger = new AnimatorParameterId("Move");
@@ -12,6 +62,8 @@ public abstract class Tribal : Character, IHandOwner
     public static readonly AnimatorParameterId JumpAnimatorTrigger = new AnimatorParameterId("Jump");
     public static readonly AnimatorParameterId HideAnimatorTrigger = new AnimatorParameterId("Idle");
     public static readonly AnimatorParameterId ClimbLedgeAnimatorTrigger = new AnimatorParameterId("ClimbLedge");
+
+    public event Action onDead;
 
     public const float activableDetectionOffset = 0.2f;
 
@@ -106,6 +158,14 @@ public abstract class Tribal : Character, IHandOwner
         }
     }
 
+    [SerializeField]
+    private TribalHSMStateAsset hsmAsset;
+
+    protected TribalHSMState hsm;
+
+    protected Blackboard blackboard;
+
+    private EyeCollection eyes;
 
     protected override void Awake()
     {
@@ -118,12 +178,52 @@ public abstract class Tribal : Character, IHandOwner
 
         base.Awake();
 
+        blackboard = new Blackboard();
+
+        hsm = TribalHSMStateAsset.BuildFromAsset<TribalHSMState>(hsmAsset, this, blackboard);
+
         MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
+
+        eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        hsm.Enter();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        hsm.Update();
     }
 
     public Hand GetHand()
     {
         return hand;
+    }
+
+    public EyeCollection GetEyes()
+    {
+        return eyes;
+    }
+
+    public virtual void TakeDamage(float damage, DamageType damageType)
+    {
+        SetOrder(Trigger.Die);
+
+        if (onDead != null)
+        {
+            onDead();
+        }
+    }
+
+    protected override void ProcessOrder(Character.Trigger order)
+    {
+        hsm.SendEvent(order);
     }
 
     public override bool ShouldBeSaved()

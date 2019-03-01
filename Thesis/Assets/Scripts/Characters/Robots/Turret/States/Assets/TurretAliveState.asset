@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4164c0faedf3e54408226f0738e20639, type: 3}
   m_Name: TurretAliveState
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: 9e127fbeb76ad3841854478bbf957abc, type: 3}
   stateClassFullName: TurretAliveState
   debugName: Alive
+  copy: 0
   stateId: 1
   startStateIndex: 0
   childs:
@@ -24,31 +25,32 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c85500bf2c103be46a7318084aec06bf, type: 2}
   parallelChilds: []
   transitions:
-  - stateFrom: 3
+  - stateFrom: 4
     trigger: 1
-    stateTo: 20
+    stateTo: 3
     guardConditions: []
-  - stateFrom: 3
+  - stateFrom: 4
     trigger: 2
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 20
-    trigger: 9
     stateTo: 3
     guardConditions: []
   - stateFrom: 3
-    trigger: 7
-    stateTo: 32
+    trigger: 9
+    stateTo: 4
     guardConditions: []
-  - stateFrom: 32
+  - stateFrom: 4
     trigger: 7
-    stateTo: 11
+    stateTo: 5
     guardConditions: []
-  - stateFrom: 20
+  - stateFrom: 3
     trigger: 7
-    stateTo: 32
+    stateTo: 5
     guardConditions: []
-  - stateFrom: 11
+  - stateFrom: 5
+    trigger: 7
+    stateTo: 6
+    guardConditions: []
+  - stateFrom: 6
     trigger: 8
-    stateTo: 3
+    stateTo: 4
     guardConditions: []
+  activeDebug: 0

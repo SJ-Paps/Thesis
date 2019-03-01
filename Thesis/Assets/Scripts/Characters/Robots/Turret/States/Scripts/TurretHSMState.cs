@@ -2,19 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretHSMState : RobotHSMState
+public class TurretHSMState : CharacterHSMState<Turret.State, Turret, Turret.Blackboard>
 {
-    protected new Turret Owner { get; set; }
-
-    public TurretHSMState(Character.State stateId, string debugName = null) : base(stateId, debugName)
+    public TurretHSMState(Turret.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
-    }
-
-    protected override void OnOwnerReferencePropagated()
-    {
-        base.OnOwnerReferencePropagated();
-
-        Owner = (Turret)base.Owner;
     }
 }
