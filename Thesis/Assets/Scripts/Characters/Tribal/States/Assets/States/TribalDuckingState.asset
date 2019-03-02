@@ -19,37 +19,7 @@ MonoBehaviour:
   stateId: 15
   startStateIndex: 0
   childs:
-  - {fileID: 11400000, guid: 018b21b3242f61342a2323bfad1478fe, type: 2}
-  - {fileID: 11400000, guid: 31967eac3f0f2ee438cba42e6ee50ab9, type: 2}
-  - {fileID: 11400000, guid: 691c473c71284704092c4ba974f0d387, type: 2}
+  - {fileID: 11400000, guid: 423533880b2487f40972b5b7bd35c8db, type: 2}
   parallelChilds: []
-  transitions:
-  - stateFrom: 16
-    trigger: 9
-    stateTo: 3
-    guardConditions: []
-  - stateFrom: 16
-    trigger: 1
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 16
-    trigger: 2
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 3
-    trigger: 1
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 3
-    trigger: 2
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 20
-    trigger: 9
-    stateTo: 3
-    guardConditions: []
-  - stateFrom: 16
-    trigger: 16
-    stateTo: 20
-    guardConditions: []
+  transitions: []
   activeDebug: 0

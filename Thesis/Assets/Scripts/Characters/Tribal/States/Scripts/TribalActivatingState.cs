@@ -8,4 +8,26 @@ public class TribalActivatingState : TribalHSMState
     {
 
     }
+
+    protected override void OnEnter()
+    {
+        base.OnEnter();
+
+        if(Blackboard.CurrentFrameActivables.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable))
+        {
+            contextualActivable.Activate(Owner);
+        }
+        else if(Owner.GetHand().CurrentCollectable != null)
+        {
+            if(Owner.GetHand().CurrentCollectable is Weapon)
+            {
+                SendEvent(Character.Order.Attack);
+            }
+            else
+            {
+                Owner.GetHand().ActivateCurrentObject();
+                SendEvent(Character.Order.FinishAction);
+            }
+        }
+    }
 }

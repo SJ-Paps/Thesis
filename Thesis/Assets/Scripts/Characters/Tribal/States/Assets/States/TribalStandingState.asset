@@ -19,48 +19,37 @@ MonoBehaviour:
   stateId: 14
   startStateIndex: 0
   childs:
-  - {fileID: 11400000, guid: 018b21b3242f61342a2323bfad1478fe, type: 2}
-  - {fileID: 11400000, guid: 31967eac3f0f2ee438cba42e6ee50ab9, type: 2}
-  - {fileID: 11400000, guid: 691c473c71284704092c4ba974f0d387, type: 2}
+  - {fileID: 11400000, guid: 423533880b2487f40972b5b7bd35c8db, type: 2}
+  - {fileID: 11400000, guid: 0640b0d1dac46f642a9b23fb96389d88, type: 2}
   - {fileID: 11400000, guid: 1fe177b21ab1cf6448d0c0a04ccf7464, type: 2}
   parallelChilds: []
   transitions:
-  - stateFrom: 16
-    trigger: 9
-    stateTo: 3
-    guardConditions: []
-  - stateFrom: 16
-    trigger: 1
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 16
-    trigger: 2
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 3
-    trigger: 1
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 3
-    trigger: 2
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 20
-    trigger: 9
-    stateTo: 3
-    guardConditions: []
-  - stateFrom: 20
+  - stateFrom: 0
     trigger: 12
     stateTo: 12
-    guardConditions:
-    - {fileID: 11400000, guid: d115b43db75ba9c4490d1248ffe50184, type: 2}
-  - stateFrom: 3
-    trigger: 12
-    stateTo: 12
-    guardConditions:
-    - {fileID: 11400000, guid: d115b43db75ba9c4490d1248ffe50184, type: 2}
+    guardConditions: []
   - stateFrom: 12
     trigger: 11
-    stateTo: 16
+    stateTo: 0
+    guardConditions: []
+  - stateFrom: 0
+    trigger: 31
+    stateTo: 38
+    guardConditions: []
+  - stateFrom: 0
+    trigger: 29
+    stateTo: 38
+    guardConditions: []
+  - stateFrom: 0
+    trigger: 26
+    stateTo: 38
+    guardConditions: []
+  - stateFrom: 0
+    trigger: 27
+    stateTo: 38
+    guardConditions: []
+  - stateFrom: 0
+    trigger: 7
+    stateTo: 38
     guardConditions: []
   activeDebug: 0

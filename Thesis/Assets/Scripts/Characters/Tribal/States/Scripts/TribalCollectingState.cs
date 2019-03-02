@@ -13,6 +13,13 @@ public class TribalCollectingState : TribalHSMState
     {
         base.OnEnter();
 
+        Blackboard.CurrentFrameActivables.ContainsType<CollectableObject>(out CollectableObject collectableObject);
 
+        if(collectableObject != null)
+        {
+            Owner.GetHand().CollectObject(collectableObject);
+        }
+
+        SendEvent(Character.Order.FinishAction);
     }
 }

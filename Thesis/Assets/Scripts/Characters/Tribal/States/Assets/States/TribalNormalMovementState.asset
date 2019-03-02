@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
+  m_Name: TribalNormalMovementState
+  m_EditorClassIdentifier: 
+  script: {fileID: 11500000, guid: d4d62af60724e8c4b91f79a10f69b80f, type: 3}
+  stateClassFullName: TribalBaseState
+  debugName: Normal Movement State
+  copy: 0
+  stateId: 0
+  startStateIndex: 0
+  childs:
+  - {fileID: 11400000, guid: 018b21b3242f61342a2323bfad1478fe, type: 2}
+  - {fileID: 11400000, guid: 31967eac3f0f2ee438cba42e6ee50ab9, type: 2}
+  - {fileID: 11400000, guid: 691c473c71284704092c4ba974f0d387, type: 2}
+  parallelChilds: []
+  transitions:
+  - stateFrom: 16
+    trigger: 9
+    stateTo: 3
+    guardConditions: []
+  - stateFrom: 16
+    trigger: 1
+    stateTo: 20
+    guardConditions: []
+  - stateFrom: 16
+    trigger: 2
+    stateTo: 20
+    guardConditions: []
+  - stateFrom: 3
+    trigger: 1
+    stateTo: 20
+    guardConditions: []
+  - stateFrom: 3
+    trigger: 2
+    stateTo: 20
+    guardConditions: []
+  - stateFrom: 20
+    trigger: 9
+    stateTo: 3
+    guardConditions: []
+  - stateFrom: 16
+    trigger: 16
+    stateTo: 20
+    guardConditions: []
+  activeDebug: 0

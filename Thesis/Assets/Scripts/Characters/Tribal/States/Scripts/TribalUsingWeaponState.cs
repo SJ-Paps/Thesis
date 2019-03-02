@@ -19,7 +19,7 @@
         }
         else
         {
-            SendEvent(Character.Order.StopAttacking);
+            SendEvent(Character.Order.FinishAction);
         }
     }
 
@@ -29,7 +29,7 @@
 
         if(currentWeapon.BeingUsed == false)
         {
-            SendEvent(Character.Order.StopAttacking);
+            SendEvent(Character.Order.FinishAction);
         }
     }
 

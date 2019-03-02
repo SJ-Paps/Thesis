@@ -45,6 +45,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Collecting,
         Droping,
         Activating,
+        ChoiceCollectingOrDropingOrThrowingOrActivating
     }
 
     public class Blackboard

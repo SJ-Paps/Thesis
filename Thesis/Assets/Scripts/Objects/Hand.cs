@@ -60,11 +60,6 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
         return false;
     }
 
-    public bool ActivateObject(ActivableObject<IHandOwner> activable)
-    {
-        return activable.Activate(Owner);
-    }
-
     public void PropagateOwnerReference(IHandOwner ownerReference)
     {
         Owner = ownerReference;

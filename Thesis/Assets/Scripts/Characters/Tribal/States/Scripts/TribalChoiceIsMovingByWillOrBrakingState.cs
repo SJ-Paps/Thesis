@@ -1,4 +1,8 @@
-﻿public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
 {
     public TribalChoiceIsMovingByWillOrBrakingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {

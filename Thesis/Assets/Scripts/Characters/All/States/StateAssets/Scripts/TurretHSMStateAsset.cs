@@ -27,7 +27,7 @@ public struct TurretHSMTransition : IHSMTransitionSerializationWrapper<Turret.St
     }
 }
 
-[CreateAssetMenu(menuName = "HSM/Character HSM State Assets/Tribal HSM State Asset")]
+[CreateAssetMenu(menuName = "HSM/Character HSM State Assets/Turret HSM State Asset")]
 public class TurretHSMStateAsset : SJHSMStateAsset<TurretHSMStateAsset, TurretHSMTransition, Turret.State, Character.Order, Turret, Turret.Blackboard>
 {
 

@@ -6,5 +6,15 @@ public class TribalDropingState : TribalHSMState
 {
     public TribalDropingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
+
+    }
+
+    protected override void OnEnter()
+    {
+        base.OnEnter();
+
+        Owner.GetHand().DropObject();
+
+        SendEvent(Character.Order.FinishAction);
     }
 }

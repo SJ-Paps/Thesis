@@ -38,6 +38,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         Drop,
         SwitchActivables,
         Collect,
+        FinishAction,
     }
 
     public event Action onFixedUpdate;
