@@ -9,7 +9,7 @@ public abstract class SJHSMState<TState, TTrigger, TOwner, TBlackboard> : HSMSta
 
     protected SJHSMState(TState stateId, string debugName = null) : base(stateId, debugName)
     {
-        Debug.Log(stateId);
+
     }
 
     public void PropagateOwnerReference(TOwner reference)

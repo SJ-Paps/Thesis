@@ -15,6 +15,7 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 31d4c0314a38da842ad0febc13af1dcf, type: 3}
   stateClassFullName: TribalOnAirState
   debugName: OnAir
+  copy: 0
   stateId: 7
   startStateIndex: 0
   childs:

@@ -15,6 +15,7 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 88a644ac4f34b624893b44c911307f73, type: 3}
   stateClassFullName: TribalGroundedState
   debugName: Grounded
+  copy: 0
   stateId: 6
   startStateIndex: 0
   childs:
@@ -54,3 +55,4 @@ MonoBehaviour:
     trigger: 26
     stateTo: 14
     guardConditions: []
+  activeDebug: 0

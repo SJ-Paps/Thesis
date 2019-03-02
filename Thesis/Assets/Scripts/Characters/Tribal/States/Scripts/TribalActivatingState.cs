@@ -6,5 +6,6 @@ public class TribalActivatingState : TribalHSMState
 {
     public TribalActivatingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
+
     }
 }

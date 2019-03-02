@@ -8,11 +8,11 @@ public class TurretIASearchingState : TurretIAControllerHSMState
 
     private float angleLimitDeadZone = 5f;
 
-    private Character.Trigger currentOrder;
+    private Character.Order currentOrder;
 
     public TurretIASearchingState(TurretIAController.State stateId, string debugName) : base(stateId, debugName)
     {
-        currentOrder = Character.Trigger.MoveRight;
+        currentOrder = Character.Order.MoveRight;
     }
 
     protected override void OnUpdate()
@@ -23,14 +23,14 @@ public class TurretIASearchingState : TurretIAControllerHSMState
 
         if(currentRotation < joint.limits.max + angleLimitDeadZone)
         {
-            currentOrder = Character.Trigger.MoveRight;
+            currentOrder = Character.Order.MoveRight;
         }
         else if(currentRotation > joint.limits.min - angleLimitDeadZone)
         {
-            currentOrder = Character.Trigger.MoveLeft;
+            currentOrder = Character.Order.MoveLeft;
         }
 
-        Owner.Slave.SetOrder(currentOrder);
+        Owner.Slave.SendOrder(currentOrder);
     }
 
     protected override void OnOwnerReferencePropagated()

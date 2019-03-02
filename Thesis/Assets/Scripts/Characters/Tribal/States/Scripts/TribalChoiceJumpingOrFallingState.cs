@@ -20,15 +20,15 @@ public class TribalChoiceJumpingOrFallingState : TribalHSMState
     {
         switch(LastEnteringTrigger)
         {
-            case Character.Trigger.Jump:
+            case Character.Order.Jump:
 
-                SendEvent(Character.Trigger.Jump);
+                SendEvent(Character.Order.Jump);
 
                 break;
 
             default:
 
-                SendEvent(Character.Trigger.Fall);
+                SendEvent(Character.Order.Fall);
 
                 break;
         }

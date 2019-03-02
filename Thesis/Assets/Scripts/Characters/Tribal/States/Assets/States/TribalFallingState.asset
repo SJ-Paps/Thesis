@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: e739226f9aa2ad24598a11d6c638d6ca, type: 3}
   stateClassFullName: TribalFallingState
   debugName: Falling
+  copy: 0
   stateId: 9
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0

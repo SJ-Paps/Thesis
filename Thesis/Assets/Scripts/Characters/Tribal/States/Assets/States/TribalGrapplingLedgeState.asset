@@ -15,6 +15,7 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 7d32b1e1d384eeb4a8a29174eb9b8514, type: 3}
   stateClassFullName: TribalGrapplingLedgeState
   debugName: Grappling Ledge
+  copy: 0
   stateId: 13
   startStateIndex: 0
   childs: []

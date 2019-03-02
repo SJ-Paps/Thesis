@@ -66,7 +66,7 @@ public class TurretIAAlertFulState : TurretIAControllerHSMState
     {
         if(eyes.IsVisible(collider, Reg.walkableLayerMask, (1 << collider.gameObject.layer)))
         {
-            Owner.Slave.SetOrder(Character.Trigger.Attack);
+            Owner.Slave.SendOrder(Character.Order.Attack);
             calmdownTimer.Start();
         }
     }

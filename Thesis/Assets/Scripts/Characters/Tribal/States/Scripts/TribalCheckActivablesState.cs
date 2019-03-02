@@ -3,38 +3,39 @@ using UnityEngine;
 
 public class TribalCheckActivablesState : TribalHSMState
 {
-    private List<IActivable> activablesStorage;
-
     public TribalCheckActivablesState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
-        activablesStorage = new List<IActivable>();
+
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.Activate)
+        if(trigger == Character.Order.SwitchActivables)
         {
-            FindActivables();
-
-            bool aux = WillActivateObject();
-
-            activablesStorage.Clear();
-
-            return aux;
-        }
-        else if(trigger == Character.Trigger.Drop)
-        {
-            return Owner.GetHand().DropObject();
-        }
-        else if(trigger == Character.Trigger.Throw)
-        {
-            return Owner.GetHand().ThrowObject();
+            return SwitchActivables();
         }
 
         return false;
     }
 
-    private void FindActivables()
+    private bool SwitchActivables()
+    {
+        if(CacheActivablesAndGetCount() > 0)
+        {
+            bool activableHasBeenAccepted = SendEvent(Character.Order.Collect)
+                                        || SendEvent(Character.Order.Push)
+                                        || SendEvent(Character.Order.Hide)
+                                        || SendEvent(Character.Order.Activate);
+            
+            return activableHasBeenAccepted;
+        }
+
+        EditorDebug.Log("NO ACTIVABLES WERE FOUND");
+
+        return false;
+    }
+
+    private int CacheActivablesAndGetCount()
     {
         Bounds ownerBounds = Owner.Collider.bounds;
 
@@ -49,51 +50,10 @@ public class TribalCheckActivablesState : TribalHSMState
             xDirection = 1;
         }
 
+        //guardo los activables en la lista del blackboard
         SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
-                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), Owner.transform.eulerAngles.z, activablesStorage);
-    }
+                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), Owner.transform.eulerAngles.z, Blackboard.CurrentFrameActivables);
 
-    private bool WillActivateObject()
-    {
-        for(int i = 0; i < activablesStorage.Count; i++)
-        {
-            IActivable activable = activablesStorage[i];
-
-            if(activable is CollectableObject collectable)
-            {
-                if(Owner.GetHand().CollectObject(collectable))
-                {
-                    return true;
-                }
-            }
-            else if(activable is MovableObject movable)
-            {
-                Blackboard.toPushMovableObject = movable;
-                SendEvent(Character.Trigger.Push);
-                return true;
-            }
-            else if(activable is Hide hide)
-            {
-                Blackboard.toHidePlace = hide;
-                SendEvent(Character.Trigger.Hide);
-                return true;
-            }
-        }
-
-        if(Owner.GetHand().IsFree == false)
-        {
-            CollectableObject objectInHand = Owner.GetHand().CurrentCollectable;
-
-            if(objectInHand is Weapon)
-            {
-                SendEvent(Character.Trigger.Attack);
-            }
-            else
-            {
-                Owner.GetHand().ActivateCurrentObject();
-            }
-        }
-
-        return false;
+        return Blackboard.CurrentFrameActivables.Count;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 {
@@ -48,9 +49,14 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 
     public class Blackboard
     {
-        public MovableObject toPushMovableObject;
-        public Hide toHidePlace;
+        public List<IActivable> CurrentFrameActivables { get; private set; }
+
         public RaycastHit2D ledgeCheckHit;
+
+        public Blackboard()
+        {
+            CurrentFrameActivables = new List<IActivable>();
+        }
     }
 
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
@@ -177,7 +183,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         hand.PropagateOwnerReference(this);
 
         base.Awake();
-
+        
         blackboard = new Blackboard();
 
         hsm = TribalHSMStateAsset.BuildFromAsset<TribalHSMState>(hsmAsset, this, blackboard);
@@ -198,6 +204,8 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
     {
         base.Update();
 
+        blackboard.CurrentFrameActivables.Clear();
+
         hsm.Update();
     }
 
@@ -213,7 +221,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 
     public virtual void TakeDamage(float damage, DamageType damageType)
     {
-        SetOrder(Trigger.Die);
+        SendOrder(Order.Die);
 
         if (onDead != null)
         {
@@ -221,7 +229,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         }
     }
 
-    protected override void ProcessOrder(Character.Trigger order)
+    protected override void ProcessOrder(Character.Order order)
     {
         hsm.SendEvent(order);
     }

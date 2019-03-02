@@ -61,7 +61,7 @@ public class TribalClimbingLedgeState : TribalClimbingState
 
             Owner.transform.position = endPointForX;
 
-            SendEvent(Character.Trigger.StopHanging);
+            SendEvent(Character.Order.StopHanging);
 
             CoroutineManager.GetInstance().StopCoroutine(climbCoroutine);
 

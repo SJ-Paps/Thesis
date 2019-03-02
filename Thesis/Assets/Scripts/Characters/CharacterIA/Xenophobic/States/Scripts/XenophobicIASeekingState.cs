@@ -15,7 +15,7 @@ public class XenophobicIASeekingState : XenophobicIAState
 
         if(ShouldStop())
         {
-            Owner.Slave.SetOrder(Character.Trigger.StopMoving);
+            Owner.Slave.SendOrder(Character.Order.StopMoving);
         }
         else if(HasReachedTarget(Blackboard.LastDetectedPosition) == false)
         {
@@ -27,11 +27,11 @@ public class XenophobicIASeekingState : XenophobicIAState
     {
         if (position.x < Owner.Slave.transform.position.x)
         {
-            Owner.Slave.SetOrder(Character.Trigger.MoveLeft);
+            Owner.Slave.SendOrder(Character.Order.MoveLeft);
         }
         else
         {
-            Owner.Slave.SetOrder(Character.Trigger.MoveRight);
+            Owner.Slave.SendOrder(Character.Order.MoveRight);
         }
     }
 

@@ -40,7 +40,7 @@ public class TribalMovingState : TribalHSMState
         }
         else if(Owner.RigidBody2D.velocity.x > (velocityDeadZone * -1) && Owner.RigidBody2D.velocity.x < velocityDeadZone)
         {
-            SendEvent(Character.Trigger.StopMoving);
+            SendEvent(Character.Order.StopMoving);
         }
         
     }
@@ -52,11 +52,11 @@ public class TribalMovingState : TribalHSMState
         Owner.onFixedUpdate -= onFixedUpdateDelegate;
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
         switch(trigger)
         {
-            case Character.Trigger.MoveLeft:
+            case Character.Order.MoveLeft:
 
                 currentMoveDirection = (int)Vector2.left.x;
                 
@@ -64,7 +64,7 @@ public class TribalMovingState : TribalHSMState
 
                 return true;
 
-            case Character.Trigger.MoveRight:
+            case Character.Order.MoveRight:
 
                 currentMoveDirection = (int)Vector2.right.x;
                 
@@ -102,11 +102,11 @@ public class TribalMovingState : TribalHSMState
     {
         float currentVelocity = Owner.RigidBody2D.velocity.x;
 
-        if (LastEnteringTrigger == Character.Trigger.MoveRight || currentVelocity > 0)
+        if (LastEnteringTrigger == Character.Order.MoveRight || currentVelocity > 0)
         {
             MoveOnDirection((int)Vector2.right.x);
         }
-        else if (LastEnteringTrigger == Character.Trigger.MoveLeft || currentVelocity < 0)
+        else if (LastEnteringTrigger == Character.Order.MoveLeft || currentVelocity < 0)
         {
             MoveOnDirection((int)Vector2.left.x);
         }

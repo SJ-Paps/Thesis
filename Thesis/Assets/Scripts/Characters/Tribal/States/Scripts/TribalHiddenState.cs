@@ -13,22 +13,18 @@ public class TribalHiddenState : TribalHSMState
     {
         base.OnEnter();
 
-        currentHide = Blackboard.toHidePlace;
+        Blackboard.CurrentFrameActivables.ContainsType<Hide>(out currentHide);
 
         if(currentHide == null)
         {
-            Vector2 detectionSize = new Vector2((Owner.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, Owner.Collider.bounds.extents.y * 2);
-
-            currentHide = SJUtil.FindActivable<Hide, Character>(Owner.Collider.bounds.center, detectionSize, Owner.transform.eulerAngles.z);
-        }
-
-        if(currentHide == null)
-        {
-            SendEvent(Character.Trigger.StopHiding);
+            SendEvent(Character.Order.StopHiding);
         }
         else
         {
             currentHide.Activate(Owner);
+
+            Owner.RigidBody2D.velocity = new Vector2(0, 0);
+            Owner.transform.position = new Vector2(currentHide.transform.position.x, Owner.transform.position.y);
 
             Owner.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
         }
@@ -53,9 +49,9 @@ public class TribalHiddenState : TribalHSMState
         base.OnUpdate();
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.Jump)
+        if(trigger == Character.Order.Jump)
         {
             return true;
         }

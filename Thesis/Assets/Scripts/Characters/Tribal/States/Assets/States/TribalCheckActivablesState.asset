@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 38a31546be1ce4240bf5e948975e2872, type: 3}
   stateClassFullName: TribalCheckActivablesState
   debugName: Check Activables
+  copy: 0
   stateId: 31
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0

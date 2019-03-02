@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public static class HSMExtensions
+public static class Extensions
 {
     public static string FirstLetterToUpper(this string str)
     {
@@ -26,14 +26,43 @@ public static class HSMExtensions
         return str;
     }
 
-    public static bool Contains<TState, TTrigger>(this List<HSMTransition<TState, TTrigger>> list, in HSMTransition<TState, TTrigger> transition, Func<TState, TState, bool> stateComparer, Func<TTrigger, TTrigger, bool> triggerComparer) where TState : unmanaged where TTrigger : unmanaged
-    {
-        for (int i = 0; i < list.Count; i++)
-        {
-            HSMTransition<TState, TTrigger> current = list[i];
+    
 
-            if (current.Equals(transition, stateComparer, triggerComparer))
+    public static bool ContainsType<T>(this IEnumerable<object> enumerable)
+    {
+        return ContainsType<T>(enumerable, out T temp);
+    }
+
+    public static bool ContainsType<T>(this IEnumerable<object> enumerable, out T value)
+    {
+        value = default;
+
+        foreach (object obj in enumerable)
+        {
+            if(obj is T TValue)
             {
+                value = TValue;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool ContainsType<T, TEnumerableType>(this IEnumerable<TEnumerableType> enumerable)
+    {
+        return ContainsType<T, TEnumerableType>(enumerable, out T temp);
+    }
+
+    public static bool ContainsType<T, TEnumerableType>(this IEnumerable<TEnumerableType> enumerable, out T value)
+    {
+        value = default;
+
+        foreach(TEnumerableType obj in enumerable)
+        {
+            if(obj is T TValue)
+            {
+                value = TValue;
                 return true;
             }
         }

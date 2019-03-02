@@ -15,9 +15,11 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 99553547aa7624544893a2147814b397, type: 3}
   stateClassFullName: TribalHangingState
   debugName: Hanging
+  copy: 0
   stateId: 26
   startStateIndex: 0
   childs:
   - {fileID: 11400000, guid: cc96b46a09840ac44aaf28fce14e96ec, type: 2}
   parallelChilds: []
   transitions: []
+  activeDebug: 0

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public class CharacterInputController : UnityInputController<Character, Character.Trigger> {
+public class CharacterInputController : UnityInputController<Character, Character.Order> {
 
     [Serializable]
     protected struct KeyOrder
@@ -9,7 +9,7 @@ public class CharacterInputController : UnityInputController<Character, Characte
         [SerializeField]
         public MultiKey key;
         [SerializeField]
-        public Character.Trigger[] orders;
+        public Character.Order[] orders;
     }
 
     [SerializeField]
@@ -28,9 +28,9 @@ public class CharacterInputController : UnityInputController<Character, Characte
         {
             if (keyOrders[i].key.WasTriggered())
             {
-                foreach(Character.Trigger order in keyOrders[i].orders)
+                foreach(Character.Order order in keyOrders[i].orders)
                 {
-                    slave.SetOrder(order);
+                    slave.SendOrder(order);
                 }
             }
         }

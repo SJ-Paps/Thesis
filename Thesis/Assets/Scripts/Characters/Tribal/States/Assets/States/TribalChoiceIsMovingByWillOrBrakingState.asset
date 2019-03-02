@@ -21,4 +21,4 @@ MonoBehaviour:
   childs: []
   parallelChilds: []
   transitions: []
-  activeDebug: 1
+  activeDebug: 0

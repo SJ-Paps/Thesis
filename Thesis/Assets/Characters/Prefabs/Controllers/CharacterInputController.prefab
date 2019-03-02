@@ -75,9 +75,9 @@ MonoBehaviour:
       lessThanZero: 0
       isKeyDown: 1
       isKeyReleased: 0
-      name: Activate
+      name: SwitchActivables
       keys: 6500000062010000
-    orders: 1a
+    orders: 1e
   - key:
       isAxis: 0
       lessThanZero: 0

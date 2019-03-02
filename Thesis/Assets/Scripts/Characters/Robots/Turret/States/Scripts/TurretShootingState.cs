@@ -94,7 +94,7 @@ public class TurretShootingState : TurretHSMState
 
     private void OnTimerTick(SyncTimer timer)
     {
-        SendEvent(Character.Trigger.StopAttacking);
+        SendEvent(Character.Order.StopAttacking);
     }
 
     private void Shoot()

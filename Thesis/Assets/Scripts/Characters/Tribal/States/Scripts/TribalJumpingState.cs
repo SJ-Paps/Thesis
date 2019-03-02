@@ -32,7 +32,7 @@ public class TribalJumpingState : TribalHSMState
     {
         if(ShouldContinueJumping() == false)
         {
-            SendEvent(Character.Trigger.Fall);
+            SendEvent(Character.Order.Fall);
         }
 
         base.OnUpdate();
@@ -47,9 +47,9 @@ public class TribalJumpingState : TribalHSMState
         Owner.Animator.ResetTrigger(Tribal.JumpAnimatorTrigger);
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.Jump)
+        if(trigger == Character.Order.Jump)
         {
             isOrderingJump = true;
             return true;

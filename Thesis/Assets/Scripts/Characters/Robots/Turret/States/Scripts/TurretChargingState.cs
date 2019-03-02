@@ -30,12 +30,12 @@ public class TurretChargingState : TurretHSMState
 
     private void OnTimerTick(SyncTimer timer)
     {
-        SendEvent(Character.Trigger.Attack);
+        SendEvent(Character.Order.Attack);
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.Attack && timer.Active)
+        if(trigger == Character.Order.Attack && timer.Active)
         {
             return true;
         }

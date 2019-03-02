@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 75925a047e6e64640bcc67dd70e65b4c, type: 3}
   stateClassFullName: TribalChoiceWalkingOrTrottingOrRunningState
   debugName: Choice Walking Or Trotting Or Running
+  copy: 0
   stateId: 21
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0

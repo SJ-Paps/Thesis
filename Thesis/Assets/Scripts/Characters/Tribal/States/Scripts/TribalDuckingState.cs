@@ -51,7 +51,7 @@ public class TribalDuckingState : TribalHSMState
 
         if (shouldStandUp)
         {
-            SendEvent(Character.Trigger.StandUp);
+            SendEvent(Character.Order.StandUp);
         }
 
         shouldStandUp = true;
@@ -70,9 +70,9 @@ public class TribalDuckingState : TribalHSMState
         Owner.MaxVelocity.RemovePercentageConstraint(velocityContraintId);
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.Duck)
+        if(trigger == Character.Order.Duck)
         {
             shouldStandUp = false;
             return true;

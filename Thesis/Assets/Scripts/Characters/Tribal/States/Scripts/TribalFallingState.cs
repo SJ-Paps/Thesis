@@ -24,7 +24,7 @@ public class TribalFallingState : TribalHSMState
         {
             if (IsOnFloor(Reg.walkableLayerMask))
             {
-                SendEvent(Character.Trigger.Ground);
+                SendEvent(Character.Order.Ground);
             }
             
         }

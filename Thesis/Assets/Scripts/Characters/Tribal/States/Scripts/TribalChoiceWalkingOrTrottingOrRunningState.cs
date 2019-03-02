@@ -14,6 +14,6 @@
 
     private void Redirect()
     {
-        SendEvent(Character.Trigger.Trot);
+        SendEvent(Character.Order.Trot);
     }
 }

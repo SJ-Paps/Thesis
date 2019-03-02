@@ -5,7 +5,7 @@ public class XenophobicIAPatrollingState : XenophobicIAState
 {
     private SyncTimer turnTimer;
 
-    private Character.Trigger currentOrder;
+    private Character.Order currentOrder;
 
     private float minTime = 4f, maxTime = 6f;
 
@@ -20,11 +20,11 @@ public class XenophobicIAPatrollingState : XenophobicIAState
 
         if(Owner.Slave.IsFacingLeft)
         {
-            currentOrder = Character.Trigger.MoveLeft;
+            currentOrder = Character.Order.MoveLeft;
         }
         else
         {
-            currentOrder = Character.Trigger.MoveRight;
+            currentOrder = Character.Order.MoveRight;
         }
 
         turnTimer.Start();
@@ -40,8 +40,8 @@ public class XenophobicIAPatrollingState : XenophobicIAState
             Turn();
         }
 
-        Owner.Slave.SetOrder(Character.Trigger.Walk);
-        Owner.Slave.SetOrder(currentOrder);
+        Owner.Slave.SendOrder(Character.Order.Walk);
+        Owner.Slave.SendOrder(currentOrder);
     }
 
     protected override void OnExit()
@@ -50,7 +50,7 @@ public class XenophobicIAPatrollingState : XenophobicIAState
 
         turnTimer.Stop();
 
-        Owner.Slave.SetOrder(Character.Trigger.Trot);
+        Owner.Slave.SendOrder(Character.Order.Trot);
     }
 
     private bool ShouldTurn()
@@ -64,11 +64,11 @@ public class XenophobicIAPatrollingState : XenophobicIAState
 
         if (xDir < 0)
         {
-            currentOrder = Character.Trigger.MoveRight;
+            currentOrder = Character.Order.MoveRight;
         }
         else
         {
-            currentOrder = Character.Trigger.MoveLeft;
+            currentOrder = Character.Order.MoveLeft;
         }
 
         turnTimer.Interval = CalculatePatrolTime();

@@ -11,5 +11,5 @@ public interface IControllable<TOrder> where TOrder : struct
 
     void GetEnslaved();
 
-    void SetOrder(TOrder order);
+    void SendOrder(TOrder order);
 }

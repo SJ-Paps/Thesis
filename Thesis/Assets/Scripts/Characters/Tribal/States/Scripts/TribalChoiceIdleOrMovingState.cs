@@ -20,15 +20,15 @@ public class TribalChoiceIdleOrMovingState : TribalHSMState
     {
         if(Owner.RigidBody2D.velocity.x > 0)
         {
-            SendEvent(Character.Trigger.MoveRight);
+            SendEvent(Character.Order.MoveRight);
         }
         else if(Owner.RigidBody2D.velocity.x < 0)
         {
-            SendEvent(Character.Trigger.MoveLeft);
+            SendEvent(Character.Order.MoveLeft);
         }
         else
         {
-            SendEvent(Character.Trigger.StopMoving);
+            SendEvent(Character.Order.StopMoving);
         }
     }
 }

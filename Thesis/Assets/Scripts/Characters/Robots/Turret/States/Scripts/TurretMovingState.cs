@@ -29,7 +29,7 @@ public class TurretMovingState : TurretHSMState
         }
         else
         {
-            SendEvent(Character.Trigger.StopMoving);
+            SendEvent(Character.Order.StopMoving);
         }
 
         currentDirectionX = 0;
@@ -44,15 +44,15 @@ public class TurretMovingState : TurretHSMState
         Owner.onFixedUpdate -= onFixedUpdateDelegate;
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.MoveLeft)
+        if(trigger == Character.Order.MoveLeft)
         {
             currentDirectionX = (int)Vector2.left.x * -1;
             isOrderingMove = true;
             return true;
         }
-        else if(trigger == Character.Trigger.MoveRight)
+        else if(trigger == Character.Order.MoveRight)
         {
             currentDirectionX = (int)Vector2.right.x * -1;
             isOrderingMove = true;

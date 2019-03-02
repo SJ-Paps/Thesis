@@ -132,7 +132,7 @@ public class Turret : Robot, ISeer, IDamagable
         hsm.Update();
     }
 
-    protected override void ProcessOrder(Trigger order)
+    protected override void ProcessOrder(Order order)
     {
         hsm.SendEvent(order);
     }

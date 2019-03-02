@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 0111c68bd72a1e14eae1a13dc86cc17f, type: 3}
   stateClassFullName: TribalCheckingForPushablesState
   debugName: CheckingForPushables
+  copy: 0
   stateId: 22
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0

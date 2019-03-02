@@ -30,13 +30,8 @@ public class TribalPushingObjectState : TribalHSMState
 
     protected override void OnEnter() {
         base.OnEnter();
-        
-        targetMovableObject = Blackboard.toPushMovableObject;
 
-        if(targetMovableObject == null)
-        {
-            targetMovableObject = Owner.CheckForMovableObject();
-        }
+        Blackboard.CurrentFrameActivables.ContainsType<MovableObject>(out targetMovableObject);
 
         if(targetMovableObject != null)
         {
@@ -47,6 +42,11 @@ public class TribalPushingObjectState : TribalHSMState
 
             shouldKeepPushing = true;
         }
+        else
+        {
+            definitelyShouldStopPushing = true;
+            SendEvent(Character.Order.StopPushing);
+        }
     }
 
     protected override void OnUpdate()
@@ -56,7 +56,7 @@ public class TribalPushingObjectState : TribalHSMState
         if(shouldKeepPushing == false)
         {
             definitelyShouldStopPushing = true;
-            SendEvent(Character.Trigger.StopPushing);
+            SendEvent(Character.Order.StopPushing);
         }
 
         shouldKeepPushing = false;
@@ -77,17 +77,15 @@ public class TribalPushingObjectState : TribalHSMState
 
             targetMovableObject = null;
         }
-
-        Blackboard.toPushMovableObject = null;
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.Push)
+        if(trigger == Character.Order.Push)
         {
             shouldKeepPushing = true;
         }
-        if(trigger == Character.Trigger.StopPushing)
+        if(trigger == Character.Order.StopPushing)
         {
             if(definitelyShouldStopPushing)
             {

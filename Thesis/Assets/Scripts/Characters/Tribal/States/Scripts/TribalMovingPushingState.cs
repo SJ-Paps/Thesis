@@ -23,11 +23,11 @@ public class TribalMovingPushingState : TribalMovingState
         if (Owner.RigidBody2D.velocity.x < 0 && facingDirection > 0
             || Owner.RigidBody2D.velocity.x > 0 && facingDirection < 0)
         {
-            SendEvent(Character.Trigger.StopPushing);
+            SendEvent(Character.Order.StopPushing);
         }
         else
         {
-            SendEvent(Character.Trigger.Push);
+            SendEvent(Character.Order.Push);
         }
 
         base.OnUpdate();

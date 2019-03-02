@@ -17,15 +17,15 @@ public class TribalBrakingState : TribalHSMState
 
         if (isMovingByWill)
         {
-            SendEvent(Character.Trigger.Move);
+            SendEvent(Character.Order.Move);
         }
 
         isMovingByWill = false;
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if (trigger == Character.Trigger.MoveLeft || trigger == Character.Trigger.MoveRight)
+        if (trigger == Character.Order.MoveLeft || trigger == Character.Order.MoveRight)
         {
             isMovingByWill = true;
         }

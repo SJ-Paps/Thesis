@@ -2,52 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Trigger>
+public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>
 {
-    /*public enum State : byte
-    {
-        Base,
-        Alive,
-        Dead,
-        Idle,
-        Trotting,
-        SlowingDown,
-        Grounded,
-        OnAir,
-        Jumping,
-        Falling,
-        Hidden,
-        Attacking,
-        Pushing,
-        Grappling,
-        Standing,
-        Ducking,
-        ChoiceIdleOrMoving,
-        ChoiceJumpingOrFalling,
-        Walking,
-        Running,
-        Moving,
-        ChoiceWalkingOrTrottingOrRunning,
-        CheckingForPushables,
-        ChoiceMovingByWillOrBraking,
-        Braking,
-        CheckingForLedges,
-        Hanging,
-        Climbing,
-        HangingLedge,
-        HangingRope,
-        HangingStair,
-        SwitchingActivables,
-        Waiting,
-        UsingWeapon,
-        Throwing,
-        Shocking,
-        Collecting,
-        Droping,
-        Activating,
-    }*/
-
-    public enum Trigger : byte
+    public enum Order : byte
     {
         Die,
         MoveLeft,
@@ -79,11 +36,13 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         Throw,
         Shock,
         Drop,
+        SwitchActivables,
+        Collect,
     }
 
     public event Action onFixedUpdate;
 
-	public event Action<Trigger> onOrderReceived;
+	public event Action<Order> onOrderReceived;
     public event Action onDetected;
     
     
@@ -111,14 +70,14 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    protected Queue<Trigger> orders;
+    protected Queue<Order> orders;
     
 
     protected override void Awake()
     {
         base.Awake();
 
-        orders = new Queue<Trigger>();
+        orders = new Queue<Order>();
 
         
         
@@ -140,11 +99,11 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    protected abstract void ProcessOrder(Character.Trigger order);
+    protected abstract void ProcessOrder(Character.Order order);
     
     public abstract void GetEnslaved();
 
-    public virtual void SetOrder(Trigger order)
+    public virtual void SendOrder(Order order)
     {
         orders.Enqueue(order);
 

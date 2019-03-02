@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public delegate void StateChangeEvent<TTrigger>(TTrigger trigger) where TTrigger : unmanaged;
 
@@ -106,11 +107,11 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     public void Enter()
     {
+        ActiveNonParallelChild = GetImmediateChildState(InitialChildState);
+
         OnEnter();
 
         EnterParallelChilds();
-
-        ActiveNonParallelChild = GetImmediateChildState(InitialChildState);
 
         EnterNonParallelActiveChild();
     }
@@ -788,7 +789,6 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
             {
                 if (current.childs.Count > 0)
                 {
-
                     HSMTransition<TState, TTrigger> transition = current.GetTransition(current.ActiveNonParallelChild.StateId, trigger);
 
                     if (transition != null
@@ -916,5 +916,23 @@ public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, 
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+}
+
+public static class HSMExtensions
+{
+    public static bool Contains<TState, TTrigger>(this List<HSMTransition<TState, TTrigger>> list, in HSMTransition<TState, TTrigger> transition, Func<TState, TState, bool> stateComparer, Func<TTrigger, TTrigger, bool> triggerComparer) where TState : unmanaged where TTrigger : unmanaged
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            HSMTransition<TState, TTrigger> current = list[i];
+
+            if (current.Equals(transition, stateComparer, triggerComparer))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

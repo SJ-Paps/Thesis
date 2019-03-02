@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: TribalBaseState
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: d4d62af60724e8c4b91f79a10f69b80f, type: 3}
-  stateClassFullName: CharacterBaseState
+  stateClassFullName: TribalBaseState
   debugName: Base
+  copy: 0
   stateId: 0
   startStateIndex: 0
   childs:
@@ -26,3 +27,4 @@ MonoBehaviour:
     trigger: 0
     stateTo: 2
     guardConditions: []
+  activeDebug: 0

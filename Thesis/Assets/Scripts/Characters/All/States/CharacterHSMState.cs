@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public abstract class CharacterHSMState<TState, TCharacter, TBlackboard> : SJHSMState<TState, Character.Trigger, TCharacter, TBlackboard> where TState : unmanaged where TCharacter : class
+public abstract class CharacterHSMState<TState, TCharacter, TBlackboard> : SJHSMState<TState, Character.Order, TCharacter, TBlackboard> where TState : unmanaged where TCharacter : class
 {
-    protected Character.Trigger LastEnteringTrigger { get; private set; }
+    protected Character.Order LastEnteringTrigger { get; private set; }
 
     protected CharacterHSMState(TState state, string debugName = null) : base(state, debugName)
     {
@@ -14,7 +14,7 @@ public abstract class CharacterHSMState<TState, TCharacter, TBlackboard> : SJHSM
         onAnyStateChanged += CatchEnteringTrigger;
     }
 
-    private void CatchEnteringTrigger(Character.Trigger trigger)
+    private void CatchEnteringTrigger(Character.Order trigger)
     {
         if(IsOnState(StateId))
         {

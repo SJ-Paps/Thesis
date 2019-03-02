@@ -75,7 +75,7 @@ public class TribalCheckingLedgesState : TribalHSMState
             {
                 Log("AND IT'S A VALID LEDGE");
                 Blackboard.ledgeCheckHit = hit;
-                SendEvent(Character.Trigger.HangLedge);
+                SendEvent(Character.Order.HangLedge);
             }
             else
             {

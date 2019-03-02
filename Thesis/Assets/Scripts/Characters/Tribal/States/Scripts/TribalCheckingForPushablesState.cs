@@ -24,9 +24,7 @@ public class TribalCheckingForPushablesState : TribalHSMState
     protected override void OnEnter()
     {
         base.OnEnter();
-
-        Blackboard.toPushMovableObject = null;
-
+        
         checkBoxSize = new Vector2(Owner.Collider.bounds.extents.x / 2, Owner.Collider.bounds.extents.y / 2);
 
         timer.Start();
@@ -52,8 +50,8 @@ public class TribalCheckingForPushablesState : TribalHSMState
 
         if(movableObject != null)
         {
-            Blackboard.toPushMovableObject = movableObject;
-            SendEvent(Character.Trigger.Push);
+            Blackboard.CurrentFrameActivables.Add(movableObject);
+            SendEvent(Character.Order.Push);
         }
     }
 }

@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: aaf225ba66b29334d9ab60cce93b85bd, type: 3}
   stateClassFullName: TribalJumpingState
   debugName: Jumping
+  copy: 0
   stateId: 8
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0

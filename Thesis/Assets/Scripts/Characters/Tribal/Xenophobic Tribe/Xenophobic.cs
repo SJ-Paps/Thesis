@@ -41,9 +41,9 @@ actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
         base.PostSaveCallback();
     }
 
-    public override void SetOrder(Trigger order)
+    public override void SendOrder(Order order)
     {
-        base.SetOrder(order);
+        base.SendOrder(order);
     }
 
     public override bool ShouldBeSaved()

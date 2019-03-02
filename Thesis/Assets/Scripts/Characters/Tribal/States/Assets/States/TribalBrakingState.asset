@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 94adb83a4c2e89d4a852e2e234d0612d, type: 3}
   stateClassFullName: TribalBrakingState
   debugName: Braking
+  copy: 0
   stateId: 24
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0

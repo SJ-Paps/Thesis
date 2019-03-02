@@ -2,21 +2,21 @@
 using UnityEngine;
 
 [Serializable]
-public struct TurretHSMTransition : IHSMTransitionSerializationWrapper<Turret.State, Character.Trigger>
+public struct TurretHSMTransition : IHSMTransitionSerializationWrapper<Turret.State, Character.Order>
 {
     [SerializeField]
     public Turret.State stateFrom;
     [SerializeField]
-    public Character.Trigger trigger;
+    public Character.Order trigger;
     [SerializeField]
     public Turret.State stateTo;
 
     [SerializeField]
     public HSMGuardConditionAsset[] guardConditions;
 
-    public HSMTransition<Turret.State, Character.Trigger> ToHSMTransition()
+    public HSMTransition<Turret.State, Character.Order> ToHSMTransition()
     {
-        HSMTransition<Turret.State, Character.Trigger> transition = new HSMTransition<Turret.State, Character.Trigger>(stateFrom, trigger, stateTo);
+        HSMTransition<Turret.State, Character.Order> transition = new HSMTransition<Turret.State, Character.Order>(stateFrom, trigger, stateTo);
 
         for (int i = 0; i < guardConditions.Length; i++)
         {
@@ -28,7 +28,7 @@ public struct TurretHSMTransition : IHSMTransitionSerializationWrapper<Turret.St
 }
 
 [CreateAssetMenu(menuName = "HSM/Character HSM State Assets/Tribal HSM State Asset")]
-public class TurretHSMStateAsset : SJHSMStateAsset<TurretHSMStateAsset, TurretHSMTransition, Turret.State, Character.Trigger, Turret, Turret.Blackboard>
+public class TurretHSMStateAsset : SJHSMStateAsset<TurretHSMStateAsset, TurretHSMTransition, Turret.State, Character.Order, Turret, Turret.Blackboard>
 {
 
 }

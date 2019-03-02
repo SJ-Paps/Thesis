@@ -75,14 +75,14 @@ public class TribalGrapplingLedgeState : TribalGrapplingState
         
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.ClimbDown)
+        if(trigger == Character.Order.ClimbDown)
         {
-            SendEvent(Character.Trigger.StopHanging);
+            SendEvent(Character.Order.StopHanging);
             return true;
         }
-        else if(trigger == Character.Trigger.ClimbUp || trigger == Character.Trigger.Jump)
+        else if(trigger == Character.Order.ClimbUp || trigger == Character.Order.Jump)
         {
             int xDirection = 0;
 

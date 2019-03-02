@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 2951718bcec71234e94ed7bc0ab286ef, type: 3}
   stateClassFullName: TribalChoiceJumpingOrFallingState
   debugName: Choice Jumping Or Falling State
+  copy: 0
   stateId: 17
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0

@@ -36,7 +36,7 @@ public class TribalGroundedState : TribalHSMState
 
         if (Owner.RigidBody2D.velocity.y < velocityDeadZone && IsOnFloor(Reg.walkableLayerMask) == false)
         {
-            SendEvent(Character.Trigger.Fall);
+            SendEvent(Character.Order.Fall);
         }
     }
 
@@ -49,9 +49,9 @@ public class TribalGroundedState : TribalHSMState
         Owner.Animator.ResetTrigger(Tribal.GroundAnimatorTrigger);
     }
 
-    protected override bool HandleEvent(Character.Trigger trigger)
+    protected override bool HandleEvent(Character.Order trigger)
     {
-        if(trigger == Character.Trigger.Jump && groundingTimer.Active)
+        if(trigger == Character.Order.Jump && groundingTimer.Active)
         {
             return true;
         }

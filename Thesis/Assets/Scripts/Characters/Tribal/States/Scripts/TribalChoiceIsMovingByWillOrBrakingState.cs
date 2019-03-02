@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
+﻿public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
 {
     public TribalChoiceIsMovingByWillOrBrakingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
@@ -18,15 +14,13 @@ public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
 
     private void Redirect()
     {
-        Debug.Log(LastEnteringTrigger);
-
-        if(LastEnteringTrigger == Character.Trigger.MoveLeft || LastEnteringTrigger == Character.Trigger.MoveRight)
+        if(LastEnteringTrigger == Character.Order.MoveLeft || LastEnteringTrigger == Character.Order.MoveRight)
         {
-            SendEvent(Character.Trigger.Move);
+            SendEvent(Character.Order.Move);
         }
         else
         {
-            SendEvent(Character.Trigger.StopMoving);
+            SendEvent(Character.Order.StopMoving);
         }
     }
 }

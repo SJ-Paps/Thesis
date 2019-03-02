@@ -15,6 +15,7 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 320ec2e42782d41448f862c107c7d489, type: 3}
   stateClassFullName: TribalHangingLedgeState
   debugName: Hanging Ledge
+  copy: 0
   stateId: 28
   startStateIndex: 0
   childs:
@@ -30,3 +31,4 @@ MonoBehaviour:
     trigger: 4
     stateTo: 27
     guardConditions: []
+  activeDebug: 0

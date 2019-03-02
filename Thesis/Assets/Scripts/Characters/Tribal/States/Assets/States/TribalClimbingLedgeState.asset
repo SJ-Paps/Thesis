@@ -15,8 +15,10 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 8baf017b19f78cb4394ea8fbec64cf7e, type: 3}
   stateClassFullName: TribalClimbingLedgeState
   debugName: Climbing Ledge
+  copy: 0
   stateId: 27
   startStateIndex: 0
   childs: []
   parallelChilds: []
   transitions: []
+  activeDebug: 0
