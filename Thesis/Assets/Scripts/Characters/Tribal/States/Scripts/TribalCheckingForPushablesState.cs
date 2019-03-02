@@ -50,7 +50,7 @@ public class TribalCheckingForPushablesState : TribalHSMState
 
         if(movableObject != null)
         {
-            Blackboard.CurrentFrameActivables.Add(movableObject);
+            Blackboard.activable = movableObject;
             SendEvent(Character.Order.Push);
         }
     }

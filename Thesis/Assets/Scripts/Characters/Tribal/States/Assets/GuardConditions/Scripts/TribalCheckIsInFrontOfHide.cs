@@ -20,8 +20,7 @@ public class TribalCheckIsInFrontOfHide : TribalGuardCondition
 
         if (hide != null)
         {
-
-            Blackboard.CurrentFrameActivables.Add(hide);
+            Blackboard.activable = hide;
             return true;
         }
 
@@ -30,6 +29,6 @@ public class TribalCheckIsInFrontOfHide : TribalGuardCondition
 
     private bool BlackboardContainsHide()
     {
-        return Blackboard.CurrentFrameActivables.ContainsType<Hide>();
+        return Blackboard.activable is Hide;
     }
 }

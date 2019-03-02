@@ -43,8 +43,8 @@ MonoBehaviour:
     trigger: 26
     stateTo: 38
     guardConditions: []
-  - stateFrom: 38
+  - stateFrom: 39
     trigger: 7
     stateTo: 11
     guardConditions: []
-  activeDebug: 0
+  activeDebug: 1

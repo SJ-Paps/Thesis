@@ -60,6 +60,14 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
         return false;
     }
 
+    public void UseWeapon()
+    {
+        if(!IsFree && CurrentCollectable is Weapon weapon)
+        {
+            weapon.Use();
+        }
+    }
+
     public void PropagateOwnerReference(IHandOwner ownerReference)
     {
         Owner = ownerReference;

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
-  m_Name: TribalChoiceCollectingOrDropingOrThrowingOrActivatingState
+  m_Name: TribalChoiceCollectingOrDropingOrThrowingOrActivatingOrAttackingState
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: 5e859546a635b9240a4f493d9a05dad7, type: 3}
   stateClassFullName: TribalChoiceCollectingOrDropingOrThrowingOrActivatingState
-  debugName: Choice Collecting Or Droping Or Throwing Or Activating
+  debugName: Choice Collecting Or Droping Or Throwing Or Activating Or Attacking
   copy: 0
   stateId: 39
   startStateIndex: 0

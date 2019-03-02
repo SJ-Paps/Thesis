@@ -15,7 +15,7 @@
         {
             currentWeapon = cached;
 
-            Owner.GetHand().ActivateCurrentObject();
+            Owner.GetHand().UseWeapon();
         }
         else
         {

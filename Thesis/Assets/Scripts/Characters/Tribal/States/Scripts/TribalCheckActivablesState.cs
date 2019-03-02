@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class TribalCheckActivablesState : TribalHSMState
 {
+    private List<IActivable> activableStorage;
+
     public TribalCheckActivablesState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
-
+        activableStorage = new List<IActivable>();
     }
 
     protected override bool HandleEvent(Character.Order trigger)
@@ -20,14 +22,42 @@ public class TribalCheckActivablesState : TribalHSMState
 
     private bool SwitchActivables()
     {
-        if(CacheActivablesAndGetCount() > 0)
+        CacheActivables();
+
+        if (activableStorage.Count > 0)
         {
-            bool activableHasBeenAccepted = SendEvent(Character.Order.Collect)
-                                        || SendEvent(Character.Order.Push)
-                                        || SendEvent(Character.Order.Hide)
-                                        || SendEvent(Character.Order.Activate);
-            
-            return activableHasBeenAccepted;
+            if(activableStorage.ContainsType<CollectableObject>(out CollectableObject collectableObject))
+            {
+                Blackboard.activable = collectableObject;
+                if(SendEvent(Character.Order.Collect))
+                {
+                    return true;
+                }
+            }
+            else if(activableStorage.ContainsType<MovableObject>(out MovableObject movableObject))
+            {
+                Blackboard.activable = movableObject;
+                if (SendEvent(Character.Order.Push))
+                {
+                    return true;
+                }
+            }
+            else if(activableStorage.ContainsType<Hide>(out Hide hide))
+            {
+                Blackboard.activable = hide;
+                if(SendEvent(Character.Order.Hide))
+                {
+                    return true;
+                }
+            }
+
+            activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);
+
+            Blackboard.activable = contextualActivable;
+
+            SendEvent(Character.Order.Activate);
+
+            activableStorage.Clear();
         }
 
         EditorDebug.Log("NO ACTIVABLES WERE FOUND");
@@ -35,7 +65,7 @@ public class TribalCheckActivablesState : TribalHSMState
         return false;
     }
 
-    private int CacheActivablesAndGetCount()
+    private void CacheActivables()
     {
         Bounds ownerBounds = Owner.Collider.bounds;
 
@@ -52,8 +82,6 @@ public class TribalCheckActivablesState : TribalHSMState
 
         //guardo los activables en la lista del blackboard
         SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
-                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), Owner.transform.eulerAngles.z, Blackboard.CurrentFrameActivables);
-
-        return Blackboard.CurrentFrameActivables.Count;
+                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), Owner.transform.eulerAngles.z, activableStorage);
     }
 }

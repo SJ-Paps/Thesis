@@ -13,17 +13,9 @@
 
     private void Redirect()
     {
-        EditorDebug.Log(LastEnteringTrigger);
-
-        if(LastEnteringTrigger == Character.Order.Collect
-            || LastEnteringTrigger == Character.Order.Drop
-            || LastEnteringTrigger == Character.Order.Throw)
+        if(SendEvent(LastEnteringTrigger) == false)
         {
-            SendEvent(LastEnteringTrigger);
-        }
-        else
-        {
-            SendEvent(Character.Order.Activate);
+            SendEvent(Character.Order.FinishAction);
         }
     }
 }

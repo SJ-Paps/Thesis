@@ -31,7 +31,7 @@ public class TribalPushingObjectState : TribalHSMState
     protected override void OnEnter() {
         base.OnEnter();
 
-        Blackboard.CurrentFrameActivables.ContainsType<MovableObject>(out targetMovableObject);
+        targetMovableObject = Blackboard.activable as MovableObject;
 
         if(targetMovableObject != null)
         {

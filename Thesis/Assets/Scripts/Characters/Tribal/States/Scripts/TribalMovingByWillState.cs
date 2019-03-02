@@ -26,7 +26,7 @@ public class TribalMovingByWillState : TribalHSMState
         {
             SendEvent(Character.Order.StopMoving);
         }
-
+    
         isMovingByWill = false;
     }
 

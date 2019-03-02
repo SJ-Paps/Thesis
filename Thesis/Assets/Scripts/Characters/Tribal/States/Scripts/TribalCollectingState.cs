@@ -12,10 +12,8 @@ public class TribalCollectingState : TribalHSMState
     protected override void OnEnter()
     {
         base.OnEnter();
-
-        Blackboard.CurrentFrameActivables.ContainsType<CollectableObject>(out CollectableObject collectableObject);
-
-        if(collectableObject != null)
+        
+        if(Blackboard.activable is CollectableObject collectableObject)
         {
             Owner.GetHand().CollectObject(collectableObject);
         }

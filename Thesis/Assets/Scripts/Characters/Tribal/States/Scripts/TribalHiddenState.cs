@@ -13,7 +13,7 @@ public class TribalHiddenState : TribalHSMState
     {
         base.OnEnter();
 
-        Blackboard.CurrentFrameActivables.ContainsType<Hide>(out currentHide);
+        currentHide = Blackboard.activable as Hide;
 
         if(currentHide == null)
         {

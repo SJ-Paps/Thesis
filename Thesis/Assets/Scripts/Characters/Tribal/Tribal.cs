@@ -45,19 +45,13 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Collecting,
         Droping,
         Activating,
-        ChoiceCollectingOrDropingOrThrowingOrActivating
+        ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking
     }
 
     public class Blackboard
     {
-        public List<IActivable> CurrentFrameActivables { get; private set; }
-
+        public IActivable activable;
         public RaycastHit2D ledgeCheckHit;
-
-        public Blackboard()
-        {
-            CurrentFrameActivables = new List<IActivable>();
-        }
     }
 
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
@@ -204,8 +198,6 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
     protected override void Update()
     {
         base.Update();
-
-        blackboard.CurrentFrameActivables.Clear();
 
         hsm.Update();
     }

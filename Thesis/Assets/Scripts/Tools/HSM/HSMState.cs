@@ -107,13 +107,17 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
 
     public void Enter()
     {
+        InternalEnter();
+
+        InternalOnEnter();
+    }
+
+    private void InternalEnter()
+    {
         ActiveNonParallelChild = GetImmediateChildState(InitialChildState);
 
-        OnEnter();
-
         EnterParallelChilds();
-
-        EnterNonParallelActiveChild();
+        EnterActiveNonParallelChild();
     }
 
     private void EnterParallelChilds()
@@ -123,16 +127,31 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
             var current = parallelChilds[i];
 
             current.SetActiveParent(this);
-            current.Enter();
+            current.InternalEnter();
         }
     }
 
-    private void EnterNonParallelActiveChild()
+    private void EnterActiveNonParallelChild()
     {
         if (ActiveNonParallelChild != null)
         {
             ActiveNonParallelChild.SetActiveParent(this);
-            ActiveNonParallelChild.Enter();
+            ActiveNonParallelChild.InternalEnter();
+        }
+    }
+
+    private void InternalOnEnter()
+    {
+        OnEnter();
+
+        for (int i = 0; i < parallelChilds.Count; i++)
+        {
+            parallelChilds[i].InternalOnEnter();
+        }
+
+        if(ActiveNonParallelChild != null)
+        {
+            ActiveNonParallelChild.InternalOnEnter();
         }
     }
 
@@ -839,7 +858,8 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
             throw new NullReferenceException("Active Child State is null");
         }
 
-        EnterNonParallelActiveChild();
+        ActiveNonParallelChild.SetActiveParent(this);
+        ActiveNonParallelChild.Enter();
 
         if (onStateChanged != null)
         {

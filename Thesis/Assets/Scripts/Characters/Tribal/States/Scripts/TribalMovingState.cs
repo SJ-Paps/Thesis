@@ -34,6 +34,8 @@ public class TribalMovingState : TribalHSMState
 
         if(isFirstUpdate)
         {
+            
+
             OnFirstUpdate();
 
             isFirstUpdate = false;

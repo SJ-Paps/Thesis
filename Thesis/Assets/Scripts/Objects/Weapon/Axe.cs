@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class Axe : Weapon
+public class Axe : Weapon, IThrowable
 {
     private DamageType type;
 
@@ -98,5 +98,10 @@ public class Axe : Weapon
         parentConstraint.constraintActive = true;
 
         parentConstraint.SetRotationOffset(0, new Vector3(0, 180, 0));
+    }
+
+    public bool Throw()
+    {
+        return Drop();
     }
 }

@@ -7,7 +7,7 @@
         base.Awake();
     }
 
-    private void Use()
+    public void Use()
     {
         BeingUsed = true;
 
@@ -28,8 +28,6 @@
 
     public override bool Activate(IHandOwner user)
     {
-        Use();
-
-        return true;
+        return false;
     }
 }
