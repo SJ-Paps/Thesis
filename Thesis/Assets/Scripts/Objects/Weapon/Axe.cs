@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Animations;
 
 public class Axe : Weapon, IThrowable
 {
@@ -17,13 +16,14 @@ public class Axe : Weapon, IThrowable
 
     protected override void OnDrop()
     {
-        base.OnDrop();
-
         Rigidbody2D.isKinematic = false;
+
+        Activate(Owner);
     }
 
     protected override void OnUse()
     {
+        sharpEdge.enabled = true;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -38,6 +38,8 @@ public class Axe : Weapon, IThrowable
 
     protected override void OnCollect(IHandOwner user)
     {
+        Activate(user);
+
         Rigidbody2D.isKinematic = true;
     }
 
@@ -46,24 +48,13 @@ public class Axe : Weapon, IThrowable
         return Drop();
     }
 
-    protected override bool ValidateDrop()
+    protected override void OnFinishUse()
     {
-        return State != ActivableState.On;
+        sharpEdge.enabled = false;
     }
 
-    public override bool Activate(IHandOwner user)
+    protected override bool ValidateActivation(IHandOwner user)
     {
-        sharpEdge.enabled = !sharpEdge.enabled;
-
-        if (sharpEdge.enabled)
-        {
-            State = ActivableState.On;
-        }
-        else
-        {
-            State = ActivableState.Off;
-        }
-
-        return true;
+        return Rigidbody2D.isKinematic == false;
     }
 }

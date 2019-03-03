@@ -34,7 +34,8 @@ public class TribalCheckActivablesState : TribalHSMState
                     return true;
                 }
             }
-            else if(activableStorage.ContainsType<MovableObject>(out MovableObject movableObject))
+
+            if (activableStorage.ContainsType<MovableObject>(out MovableObject movableObject))
             {
                 Blackboard.activable = movableObject;
                 if (SendEvent(Character.Order.Push))
@@ -42,7 +43,8 @@ public class TribalCheckActivablesState : TribalHSMState
                     return true;
                 }
             }
-            else if(activableStorage.ContainsType<Hide>(out Hide hide))
+
+            if (activableStorage.ContainsType<Hide>(out Hide hide))
             {
                 Blackboard.activable = hide;
                 if(SendEvent(Character.Order.Hide))
@@ -50,16 +52,14 @@ public class TribalCheckActivablesState : TribalHSMState
                     return true;
                 }
             }
-            else
+
+            activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);
+
+            Blackboard.activable = contextualActivable;
+
+            if (SendEvent(Character.Order.Activate))
             {
-                activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);
-
-                Blackboard.activable = contextualActivable;
-
-                if (SendEvent(Character.Order.Activate))
-                {
-                    return true;
-                }
+                return true;
             }
         }
 

@@ -71,6 +71,27 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
         return false;
     }
 
+    public sealed override bool Activate(IHandOwner user)
+    {
+        if(Owner != null && ValidateActivation(user))
+        {
+            if(Active)
+            {
+                Active = false;
+            }
+            else
+            {
+                Active = true;
+            }
+
+            OnActivation();
+
+            return true;
+        }
+
+        return false;
+    }
+
     protected virtual bool ValidateCollect(IHandOwner user)
     {
         return true;
@@ -81,12 +102,22 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
         return true;
     }
 
+    protected virtual bool ValidateActivation(IHandOwner user)
+    {
+        return true;
+    }
+
     protected virtual void OnCollect(IHandOwner user)
     {
 
     }
 
     protected virtual void OnDrop()
+    {
+
+    }
+
+    protected virtual void OnActivation()
     {
 
     }

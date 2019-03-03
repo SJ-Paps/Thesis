@@ -1,7 +1,5 @@
 ﻿public class TribalUsingWeaponState : TribalHSMState
 {
-    private Weapon currentWeapon;
-
     public TribalUsingWeaponState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
 
@@ -13,10 +11,11 @@
 
         if(Owner.GetHand().CurrentCollectable is Weapon weapon)
         {
-            currentWeapon = weapon;
-
-            currentWeapon.Activate(Owner);
-            Owner.GetHand().UseWeapon();
+            if(Owner.GetHand().UseWeapon() == false)
+            {
+                SendEvent(Character.Order.FinishAction);
+            }
+                
         }
         else
         {
@@ -28,14 +27,13 @@
     {
         base.OnUpdate();
 
-        currentWeapon.Activate(Owner);
+        Owner.GetHand().FinishUseWeapon();
+
         SendEvent(Character.Order.FinishAction);
     }
 
     protected override void OnExit()
     {
         base.OnExit();
-
-        currentWeapon = null;
     }
 }

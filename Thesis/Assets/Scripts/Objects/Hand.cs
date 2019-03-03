@@ -67,11 +67,21 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
         return false;
     }
 
-    public void UseWeapon()
+    public bool UseWeapon()
     {
         if(!IsFree && CurrentCollectable is Weapon weapon)
         {
-            weapon.Use();
+            return weapon.Use();
+        }
+
+        return false;
+    }
+
+    public void FinishUseWeapon()
+    {
+        if(!IsFree && CurrentCollectable is Weapon weapon)
+        {
+            weapon.FinishUse();
         }
     }
 

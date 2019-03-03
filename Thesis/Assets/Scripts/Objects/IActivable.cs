@@ -1,13 +1,6 @@
-﻿
-public enum ActivableState : byte
+﻿public interface IActivable
 {
-    Off,
-    On,
-}
-
-public interface IActivable
-{
-    ActivableState State { get; }
+    bool Active { get; }
 
     bool Activate(object user);
 }
