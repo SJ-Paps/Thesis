@@ -12,15 +12,20 @@ public struct XenophobicIAControllerHSMTransition : IHSMTransitionSerializationW
     public XenophobicIAController.State stateTo;
 
     [SerializeField]
-    public HSMGuardConditionAsset[] guardConditions;
+    public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
 
     public HSMTransition<XenophobicIAController.State, XenophobicIAController.Trigger> ToHSMTransition()
     {
         HSMTransition<XenophobicIAController.State, XenophobicIAController.Trigger> transition = new HSMTransition<XenophobicIAController.State, XenophobicIAController.Trigger>(stateFrom, trigger, stateTo);
 
-        for (int i = 0; i < guardConditions.Length; i++)
+        for (int i = 0; i < ANDGuardConditions.Length; i++)
         {
-            transition.AddGuardCondition(guardConditions[i].CreateConcreteGuardCondition());
+            transition.AddANDGuardCondition(ANDGuardConditions[i].CreateConcreteGuardCondition());
+        }
+
+        for (int i = 0; i < ORGuardConditions.Length; i++)
+        {
+            transition.AddORGuardCondition(ORGuardConditions[i].CreateConcreteGuardCondition());
         }
 
         return transition;

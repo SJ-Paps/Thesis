@@ -874,7 +874,8 @@ public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, 
     public readonly TTrigger trigger;
     public readonly TState stateTo;
 
-    protected List<GuardCondition> guardConditions;
+    protected List<GuardCondition> andGuardConditions;
+    protected List<GuardCondition> orGuardConditions;
 
     public HSMTransition(TState stateFrom, TTrigger trigger, TState stateTo)
     {
@@ -882,7 +883,8 @@ public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, 
         this.trigger = trigger;
         this.stateTo = stateTo;
 
-        guardConditions = new List<GuardCondition>();
+        andGuardConditions = new List<GuardCondition>();
+        orGuardConditions = new List<GuardCondition>();
     }
 
     public HSMTransition(TState stateFrom, TTrigger trigger)
@@ -892,30 +894,60 @@ public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, 
         stateTo = default;
     }
 
-    public void AddGuardCondition(GuardCondition guardCondition)
+    public void AddANDGuardCondition(GuardCondition guardCondition)
     {
-        if(guardConditions.Contains(guardCondition) == false)
+        if(andGuardConditions.Contains(guardCondition) == false)
         {
-            guardConditions.Add(guardCondition);
+            andGuardConditions.Add(guardCondition);
         }
     }
 
-    public void RemoveGuardCondition(GuardCondition guardCondition)
+    public void RemoveANDGuardCondition(GuardCondition guardCondition)
     {
-        guardConditions.Remove(guardCondition);
+        andGuardConditions.Remove(guardCondition);
+    }
+
+    public void AddORGuardCondition(GuardCondition guardCondition)
+    {
+        if (orGuardConditions.Contains(guardCondition) == false)
+        {
+            orGuardConditions.Add(guardCondition);
+        }
+    }
+
+    public void RemoveORGuardCondition(GuardCondition guardCondition)
+    {
+        orGuardConditions.Remove(guardCondition);
     }
 
     public bool IsValidTransition()
     {
-        for (int i = 0; i < guardConditions.Count; i++)
+        for (int i = 0; i < andGuardConditions.Count; i++)
         {
-            if(guardConditions[i].IsValid() == false)
+            if(andGuardConditions[i].IsValid() == false)
             {
                 return false;
             }
         }
+        
+        if(orGuardConditions.Count > 0)
+        {
+            for (int i = 0; i < orGuardConditions.Count; i++)
+            {
+                if (orGuardConditions[i].IsValid())
+                {
+                    return true;
+                }
+            }
 
-        return true;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+        
     }
 
     public bool Equals(HSMTransition<TState, TTrigger> other)
@@ -930,7 +962,7 @@ public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, 
 
     public IEnumerator<GuardCondition> GetEnumerator()
     {
-        return guardConditions.GetEnumerator();
+        return andGuardConditions.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()

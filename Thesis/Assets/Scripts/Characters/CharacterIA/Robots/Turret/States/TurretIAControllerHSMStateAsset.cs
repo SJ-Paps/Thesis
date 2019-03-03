@@ -12,15 +12,20 @@ public struct TurretIAControllerHSMTransition : IHSMTransitionSerializationWrapp
     public TurretIAController.State stateTo;
 
     [SerializeField]
-    public HSMGuardConditionAsset[] guardConditions;
+    public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
 
     public HSMTransition<TurretIAController.State, TurretIAController.Trigger> ToHSMTransition()
     {
         HSMTransition<TurretIAController.State, TurretIAController.Trigger> transition = new HSMTransition<TurretIAController.State, TurretIAController.Trigger>(stateFrom, trigger, stateTo);
 
-        for (int i = 0; i < guardConditions.Length; i++)
+        for (int i = 0; i < ANDGuardConditions.Length; i++)
         {
-            transition.AddGuardCondition(guardConditions[i].CreateConcreteGuardCondition());
+            transition.AddANDGuardCondition(ANDGuardConditions[i].CreateConcreteGuardCondition());
+        }
+
+        for (int i = 0; i < ORGuardConditions.Length; i++)
+        {
+            transition.AddORGuardCondition(ORGuardConditions[i].CreateConcreteGuardCondition());
         }
 
         return transition;

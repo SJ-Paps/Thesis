@@ -12,15 +12,20 @@ public struct TribalHSMTransition : IHSMTransitionSerializationWrapper<Tribal.St
     public Tribal.State stateTo;
 
     [SerializeField]
-    public HSMGuardConditionAsset[] guardConditions;
+    public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
 
     public HSMTransition<Tribal.State, Character.Order> ToHSMTransition()
     {
         HSMTransition<Tribal.State, Character.Order> transition = new HSMTransition<Tribal.State, Character.Order>(stateFrom, trigger, stateTo);
 
-        for(int i = 0; i < guardConditions.Length; i++)
+        for(int i = 0; i < ANDGuardConditions.Length; i++)
         {
-            transition.AddGuardCondition(guardConditions[i].CreateConcreteGuardCondition());
+            transition.AddANDGuardCondition(ANDGuardConditions[i].CreateConcreteGuardCondition());
+        }
+
+        for (int i = 0; i < ORGuardConditions.Length; i++)
+        {
+            transition.AddORGuardCondition(ORGuardConditions[i].CreateConcreteGuardCondition());
         }
 
         return transition;

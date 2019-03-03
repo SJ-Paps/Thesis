@@ -27,32 +27,39 @@ MonoBehaviour:
   - stateFrom: 14
     trigger: 15
     stateTo: 15
-    guardConditions: []
+    ANDGuardConditions: []
+    ORGuardConditions: []
   - stateFrom: 15
     trigger: 14
     stateTo: 14
-    guardConditions:
+    ANDGuardConditions:
     - {fileID: 11400000, guid: c2d126f884d4e7843bec0c4e8357b854, type: 2}
+    ORGuardConditions: []
   - stateFrom: 15
     trigger: 6
     stateTo: 10
-    guardConditions:
+    ANDGuardConditions:
     - {fileID: 11400000, guid: 6a825faf492ad7b4390cc94aba08bde3, type: 2}
+    ORGuardConditions: []
   - stateFrom: 14
     trigger: 6
     stateTo: 10
-    guardConditions:
+    ANDGuardConditions:
     - {fileID: 11400000, guid: 6a825faf492ad7b4390cc94aba08bde3, type: 2}
+    ORGuardConditions: []
   - stateFrom: 10
     trigger: 10
     stateTo: 14
-    guardConditions: []
+    ANDGuardConditions: []
+    ORGuardConditions: []
   - stateFrom: 10
     trigger: 6
     stateTo: 14
-    guardConditions: []
+    ANDGuardConditions: []
+    ORGuardConditions: []
   - stateFrom: 10
     trigger: 26
     stateTo: 14
-    guardConditions: []
+    ANDGuardConditions: []
+    ORGuardConditions: []
   activeDebug: 0
