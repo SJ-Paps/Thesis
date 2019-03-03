@@ -14,7 +14,7 @@ public class Turret : Robot, ISeer, IDamagable
         Attacking
     }
 
-    public class Blackboard
+    public class Blackboard : global::Blackboard
     {
 
     }

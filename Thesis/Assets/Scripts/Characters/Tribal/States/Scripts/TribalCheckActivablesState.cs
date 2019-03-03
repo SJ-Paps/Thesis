@@ -50,12 +50,17 @@ public class TribalCheckActivablesState : TribalHSMState
                     return true;
                 }
             }
+            else
+            {
+                activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);
 
-            activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);
+                Blackboard.activable = contextualActivable;
 
-            Blackboard.activable = contextualActivable;
-
-            SendEvent(Character.Order.Activate);
+                if (SendEvent(Character.Order.Activate))
+                {
+                    return true;
+                }
+            }
         }
 
         EditorDebug.Log("NO ACTIVABLES WERE FOUND");
@@ -67,21 +72,6 @@ public class TribalCheckActivablesState : TribalHSMState
     {
         activableStorage.Clear();
 
-        Bounds ownerBounds = Owner.Collider.bounds;
-
-        int xDirection;
-
-        if (Owner.IsFacingLeft)
-        {
-            xDirection = -1;
-        }
-        else
-        {
-            xDirection = 1;
-        }
-
-        //guardo los activables en la lista del blackboard
-        SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
-                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), Owner.transform.eulerAngles.z, activableStorage);
+        Owner.FindActivables(activableStorage);
     }
 }

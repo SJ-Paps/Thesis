@@ -53,7 +53,7 @@ public class XenophobicIAController : IAController<Xenophobic>
         Seek
     }
 
-    public class Blackboard
+    public class Blackboard : global::Blackboard
     {
         public event Action<Vector2> onLastDetectedPositionUpdated;
 

@@ -1,34 +1,27 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 
 public class TribalCheckIsInFrontOfHide : TribalGuardCondition
 {
-    protected override bool Validate()
-    {
-        if(BlackboardContainsHide())
-        {
-            return true;
-        }
+    private List<IActivable> activables;
 
-        return FindHide();
+    public TribalCheckIsInFrontOfHide()
+    {
+        activables = new List<IActivable>();
     }
 
-    private bool FindHide()
+    protected override bool OnValidate()
     {
-        Vector2 detectionSize = new Vector2((Owner.Collider.bounds.extents.x * 2) + Tribal.activableDetectionOffset, Owner.Collider.bounds.extents.y * 2);
-
-        Hide hide = SJUtil.FindActivable<Hide, Character>(Owner.Collider.bounds.center, detectionSize, Owner.transform.eulerAngles.z);
-
-        if (hide != null)
-        {
-            Blackboard.activable = hide;
-            return true;
-        }
-
-        return false;
+        return Blackboard.activable is Hide || HideFound();
     }
 
-    private bool BlackboardContainsHide()
+    private bool HideFound()
     {
-        return Blackboard.activable is Hide;
+        Owner.FindActivables(activables);
+
+        activables.ContainsType<Hide>(out Hide hide);
+
+        Blackboard.activable = hide;
+
+        return hide != null;
     }
 }

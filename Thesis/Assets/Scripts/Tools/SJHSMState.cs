@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public abstract class SJHSMState<TState, TTrigger, TOwner, TBlackboard> : HSMState<TState, TTrigger>, IOwnable<TOwner>, IBlackboardOwner<TBlackboard> where TState : unmanaged where TTrigger : unmanaged where TOwner : class
+public abstract class SJHSMState<TState, TTrigger> : HSMState<TState, TTrigger>, IOwnable<SJMonoBehaviour>, IBlackboardOwner<Blackboard> where TState : unmanaged where TTrigger : unmanaged
 {
-    public TOwner Owner { get; protected set; }
-    protected TBlackboard Blackboard { get; set; }
+    public SJMonoBehaviour Owner { get; protected set; }
+    protected Blackboard Blackboard { get; set; }
 
     public bool activeDebug;
 
@@ -12,28 +12,28 @@ public abstract class SJHSMState<TState, TTrigger, TOwner, TBlackboard> : HSMSta
 
     }
 
-    public void PropagateOwnerReference(TOwner reference)
+    public void PropagateOwnerReference(SJMonoBehaviour reference)
     {
-        SJHSMState<TState, TTrigger, TOwner, TBlackboard> root = (SJHSMState<TState, TTrigger, TOwner, TBlackboard>)GetRoot();
+        SJHSMState<TState, TTrigger> root = (SJHSMState<TState, TTrigger>)GetRoot();
 
         root.InternalPropagateOwnerReference(reference);
     }
 
-    private void InternalPropagateOwnerReference(TOwner reference)
+    private void InternalPropagateOwnerReference(SJMonoBehaviour reference)
     {
         for (int i = 0; i < parallelChilds.Count; i++)
         {
-            ((SJHSMState<TState, TTrigger, TOwner, TBlackboard>)parallelChilds[i]).InternalPropagateOwnerReference(reference);
+            ((SJHSMState<TState, TTrigger>)parallelChilds[i]).InternalPropagateOwnerReference(reference);
         }
 
         for (int i = 0; i < childs.Count; i++)
         {
-            ((SJHSMState<TState, TTrigger, TOwner, TBlackboard>)childs[i]).InternalPropagateOwnerReference(reference);
+            ((SJHSMState<TState, TTrigger>)childs[i]).InternalPropagateOwnerReference(reference);
         }
 
         for (int i = 0; i < transitions.Count; i++)
         {
-            foreach (SJGuardCondition<TOwner, TBlackboard> guardCondition in transitions[i])
+            foreach (SJGuardCondition guardCondition in transitions[i])
             {
                 guardCondition.PropagateOwnerReference(reference);
             }
@@ -49,28 +49,28 @@ public abstract class SJHSMState<TState, TTrigger, TOwner, TBlackboard> : HSMSta
 
     }
 
-    public void PropagateBlackboardReference(TBlackboard blackboard)
+    public void PropagateBlackboardReference(Blackboard blackboard)
     {
-        SJHSMState<TState, TTrigger, TOwner, TBlackboard> root = (SJHSMState<TState, TTrigger, TOwner, TBlackboard>)GetRoot();
+        SJHSMState<TState, TTrigger> root = (SJHSMState<TState, TTrigger>)GetRoot();
 
         root.InternalPropagateBlackboardReference(blackboard);
     }
 
-    private void InternalPropagateBlackboardReference(TBlackboard blackboard)
+    private void InternalPropagateBlackboardReference(Blackboard blackboard)
     {
         for (int i = 0; i < parallelChilds.Count; i++)
         {
-            ((SJHSMState<TState, TTrigger, TOwner, TBlackboard>)parallelChilds[i]).InternalPropagateBlackboardReference(blackboard);
+            ((SJHSMState<TState, TTrigger>)parallelChilds[i]).InternalPropagateBlackboardReference(blackboard);
         }
 
         for (int i = 0; i < childs.Count; i++)
         {
-            ((SJHSMState<TState, TTrigger, TOwner, TBlackboard>)childs[i]).InternalPropagateBlackboardReference(blackboard);
+            ((SJHSMState<TState, TTrigger>)childs[i]).InternalPropagateBlackboardReference(blackboard);
         }
 
         for (int i = 0; i < transitions.Count; i++)
         {
-            foreach (SJGuardCondition<TOwner, TBlackboard> guardCondition in transitions[i])
+            foreach (SJGuardCondition guardCondition in transitions[i])
             {
                 guardCondition.PropagateBlackboardReference(blackboard);
             }
@@ -95,7 +95,7 @@ public abstract class SJHSMState<TState, TTrigger, TOwner, TBlackboard> : HSMSta
 #if UNITY_EDITOR
         if (activeDebug)
         {
-            UnityEngine.Debug.Log(obj);
+            EditorDebug.Log(obj);
         }
 #endif
     }
@@ -117,12 +117,15 @@ public abstract class SJHSMState<TState, TTrigger, TOwner, TBlackboard> : HSMSta
     }
 }
 
-public abstract class SJGuardCondition<TOwner, TBlackboard> : GuardCondition, IOwnable<TOwner>, IBlackboardOwner<TBlackboard> where TOwner : class
+public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviour>, IBlackboardOwner<Blackboard>
 {
-    public TOwner Owner { get; protected set; }
-    protected TBlackboard Blackboard { get; set; }
+    public SJMonoBehaviour Owner { get; protected set; }
+    protected Blackboard Blackboard { get; set; }
 
-    public void PropagateOwnerReference(TOwner reference)
+    public bool activeDebug;
+    public string debugName;
+
+    public void PropagateOwnerReference(SJMonoBehaviour reference)
     {
         Owner = reference;
 
@@ -134,7 +137,27 @@ public abstract class SJGuardCondition<TOwner, TBlackboard> : GuardCondition, IO
 
     }
 
-    public void PropagateBlackboardReference(TBlackboard blackboard)
+    protected sealed override bool Validate()
+    {
+#if UNITY_EDITOR
+
+        bool validated = OnValidate();
+
+        if (activeDebug)
+        {
+            EditorDebug.Log(debugName + " Guard Condition Returns " + validated);
+        }
+
+        return validated;
+
+#else
+        return OnValidate();
+#endif
+    }
+
+    protected abstract bool OnValidate();
+
+    public void PropagateBlackboardReference(Blackboard blackboard)
     {
         Blackboard = blackboard;
     }

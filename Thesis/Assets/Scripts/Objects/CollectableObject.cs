@@ -60,9 +60,6 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
 
     public bool Drop()
     {
-        Debug.Log(Owner);
-        Debug.Log(ValidateDrop());
-
         if(Owner != null && ValidateDrop())
         {
             OnDrop();

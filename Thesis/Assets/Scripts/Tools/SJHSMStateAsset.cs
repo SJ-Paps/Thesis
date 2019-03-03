@@ -12,20 +12,20 @@ public class SJHSMStateAsset<TConcreteClass, THSMTransitionWrapper, TState, TTri
 
     public bool activeDebug;
 
-    public static T BuildFromAsset<T>(TConcreteClass baseAsset, TOwner ownerReference, TBlackboard blackboardReference) where T : SJHSMState<TState, TTrigger, TOwner, TBlackboard>
+    public static T BuildFromAsset<T>(TConcreteClass baseAsset, SJMonoBehaviour ownerReference, Blackboard blackboardReference) where T : SJHSMState<TState, TTrigger>
     {
         T baseState = (T)BuildFromAsset(baseAsset);
 
-        baseState.PropagateOwnerReference(ownerReference);
-
         baseState.PropagateBlackboardReference(blackboardReference);
+
+        baseState.PropagateOwnerReference(ownerReference);
 
         return baseState;
     }
 
     protected override HSMState<TState, TTrigger> CreateConcreteHSMState()
     {
-        SJHSMState<TState, TTrigger, TOwner, TBlackboard> state = (SJHSMState<TState, TTrigger, TOwner, TBlackboard>)base.CreateConcreteHSMState();
+        SJHSMState<TState, TTrigger> state = (SJHSMState<TState, TTrigger>)base.CreateConcreteHSMState();
 
         state.activeDebug = activeDebug;
 

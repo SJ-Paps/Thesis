@@ -1,12 +1,27 @@
-﻿public class TribalCheckPushable : TribalGuardCondition
+﻿using System.Collections.Generic;
+
+public class TribalCheckPushable : TribalGuardCondition
 {
-    protected override bool Validate()
+    private List<IActivable> activables;
+
+    public TribalCheckPushable()
     {
-        return IsPushableReachable();
+        activables = new List<IActivable>();
     }
 
-    private bool IsPushableReachable()
+    protected override bool OnValidate()
     {
-        return Owner.CheckForMovableObject() != null;
+        return Blackboard.activable is MovableObject || MovableFound();
+    }
+
+    private bool MovableFound()
+    {
+        Owner.FindActivables(activables);
+
+        activables.ContainsType<MovableObject>(out MovableObject movableObject);
+
+        Blackboard.activable = movableObject;
+
+        return movableObject != null;
     }
 }

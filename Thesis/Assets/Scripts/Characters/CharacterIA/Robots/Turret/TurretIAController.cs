@@ -17,7 +17,7 @@ public class TurretIAController : IAController<Turret>
         SetFullAlert,
     }
 
-    public class Blackboard
+    public class Blackboard : global::Blackboard
     {
 
     }

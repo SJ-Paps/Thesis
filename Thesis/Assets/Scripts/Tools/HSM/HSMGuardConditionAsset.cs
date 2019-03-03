@@ -16,13 +16,21 @@ public class HSMGuardConditionAsset : ScriptableObject
     protected string stateClassFullName;
 
     [SerializeField]
+    protected bool activeDebug;
+
+    [SerializeField]
+    protected string debugName;
+
+    [SerializeField]
     protected bool invert;
 
     public GuardCondition CreateConcreteGuardCondition()
     {
-        GuardCondition guardCondition = (GuardCondition)Activator.CreateInstance(Type.GetType(stateClassFullName));
+        SJGuardCondition guardCondition = (SJGuardCondition)Activator.CreateInstance(Type.GetType(stateClassFullName));
 
         guardCondition.invert = invert;
+        guardCondition.activeDebug = activeDebug;
+        guardCondition.debugName = debugName;
 
         return guardCondition;
     }

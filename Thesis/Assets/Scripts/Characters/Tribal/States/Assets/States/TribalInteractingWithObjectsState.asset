@@ -30,7 +30,8 @@ MonoBehaviour:
   - stateFrom: 39
     trigger: 31
     stateTo: 36
-    guardConditions: []
+    guardConditions:
+    - {fileID: 11400000, guid: 30d5e8722ac721e478dc242a38d60972, type: 2}
   - stateFrom: 39
     trigger: 29
     stateTo: 37
@@ -42,9 +43,11 @@ MonoBehaviour:
   - stateFrom: 39
     trigger: 26
     stateTo: 38
-    guardConditions: []
+    guardConditions:
+    - {fileID: 11400000, guid: 666426ffc105bb7409791ca8af9d3874, type: 2}
   - stateFrom: 39
     trigger: 7
     stateTo: 11
-    guardConditions: []
+    guardConditions:
+    - {fileID: 11400000, guid: 60992749552affa40a44a94902fe7947, type: 2}
   activeDebug: 1

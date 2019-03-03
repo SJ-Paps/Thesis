@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalCheckCeiling : TribalGuardCondition
 {
-    protected override bool Validate()
+    protected override bool OnValidate()
     {
         return IsCeiling();
     }

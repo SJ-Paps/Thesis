@@ -1,8 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class TribalGuardCondition : SJGuardCondition<Tribal, Tribal.Blackboard>
+﻿public abstract class TribalGuardCondition : SJGuardCondition
 {
+    public new Tribal Owner { get; protected set; }
+    protected new Tribal.Blackboard Blackboard { get; private set; }
 
+    protected override void OnOwnerReferencePropagated()
+    {
+        base.OnOwnerReferencePropagated();
+
+        Owner = (Tribal)base.Owner;
+        Blackboard = (Tribal.Blackboard)base.Blackboard;
+    }
 }

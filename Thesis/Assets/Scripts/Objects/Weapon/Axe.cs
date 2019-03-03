@@ -57,12 +57,10 @@ public class Axe : Weapon, IThrowable
 
         if (sharpEdge.enabled)
         {
-            Debug.Log("AXE ON");
             State = ActivableState.On;
         }
         else
         {
-            Debug.Log("AXE OFF");
             State = ActivableState.Off;
         }
 

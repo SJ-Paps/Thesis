@@ -48,7 +48,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking
     }
 
-    public class Blackboard
+    public class Blackboard : global::Blackboard
     {
         public IActivable activable;
         public RaycastHit2D ledgeCheckHit;
@@ -319,5 +319,25 @@ public static class TribalExtensions
         EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
 
         return Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
+    }
+
+    public static void FindActivables(this Tribal tribal, List<IActivable> activables)
+    {
+        Bounds ownerBounds = tribal.Collider.bounds;
+
+        int xDirection;
+
+        if (tribal.IsFacingLeft)
+        {
+            xDirection = -1;
+        }
+        else
+        {
+            xDirection = 1;
+        }
+
+        //guardo los activables en la lista del blackboard
+        SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
+                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), tribal.transform.eulerAngles.z, activables);
     }
 }
