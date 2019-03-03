@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TribalCollectingState : TribalHSMState
+﻿public class TribalCollectingState : TribalHSMState
 {
     public TribalCollectingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
     {
@@ -12,8 +8,12 @@ public class TribalCollectingState : TribalHSMState
     protected override void OnEnter()
     {
         base.OnEnter();
-        
-        if(Blackboard.activable is CollectableObject collectableObject)
+
+        CollectableObject collectableObject = Blackboard.activable as CollectableObject;
+
+        Blackboard.activable = null;
+
+        if (collectableObject != null)
         {
             Owner.GetHand().CollectObject(collectableObject);
         }

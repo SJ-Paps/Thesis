@@ -11,10 +11,11 @@
     {
         base.OnEnter();
 
-        if(Owner.GetHand().CurrentCollectable is Weapon cached)
+        if(Owner.GetHand().CurrentCollectable is Weapon weapon)
         {
-            currentWeapon = cached;
+            currentWeapon = weapon;
 
+            currentWeapon.Activate(Owner);
             Owner.GetHand().UseWeapon();
         }
         else
@@ -27,10 +28,8 @@
     {
         base.OnUpdate();
 
-        if(currentWeapon.BeingUsed == false)
-        {
-            SendEvent(Character.Order.FinishAction);
-        }
+        currentWeapon.Activate(Owner);
+        SendEvent(Character.Order.FinishAction);
     }
 
     protected override void OnExit()

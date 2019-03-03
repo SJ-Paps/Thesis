@@ -33,6 +33,8 @@ public class TribalPushingObjectState : TribalHSMState
 
         targetMovableObject = Blackboard.activable as MovableObject;
 
+        Blackboard.activable = null;
+
         if(targetMovableObject != null)
         {
             springJoint2d.enabled = true;

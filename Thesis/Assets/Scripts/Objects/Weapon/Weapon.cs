@@ -1,33 +1,20 @@
 ﻿public abstract class Weapon : CollectableObject {
     
-    public bool BeingUsed { get; private set; }
-    
     protected override void Awake()
     {
         base.Awake();
     }
 
-    public void Use()
+    public bool Use()
     {
-        BeingUsed = true;
+        if(State == ActivableState.On)
+        {
+            OnUse();
+            return true;
+        }
 
-        OnUse();
+        return false;
     }
 
     protected abstract void OnUse();
-
-    protected void FinishUse()
-    {
-        BeingUsed = false;
-    }
-
-    protected override bool ValidateDrop()
-    {
-        return !BeingUsed;
-    }
-
-    public override bool Activate(IHandOwner user)
-    {
-        return false;
-    }
 }

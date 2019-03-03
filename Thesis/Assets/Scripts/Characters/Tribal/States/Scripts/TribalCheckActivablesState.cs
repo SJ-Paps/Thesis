@@ -56,8 +56,6 @@ public class TribalCheckActivablesState : TribalHSMState
             Blackboard.activable = contextualActivable;
 
             SendEvent(Character.Order.Activate);
-
-            activableStorage.Clear();
         }
 
         EditorDebug.Log("NO ACTIVABLES WERE FOUND");
@@ -67,6 +65,8 @@ public class TribalCheckActivablesState : TribalHSMState
 
     private void CacheActivables()
     {
+        activableStorage.Clear();
+
         Bounds ownerBounds = Owner.Collider.bounds;
 
         int xDirection;

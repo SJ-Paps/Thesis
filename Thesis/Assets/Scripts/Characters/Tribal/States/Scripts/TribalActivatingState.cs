@@ -13,14 +13,20 @@ public class TribalActivatingState : TribalHSMState
     {
         base.OnEnter();
 
-        if(Blackboard.activable is ContextualActivable contextualActivable)
+        ContextualActivable contextualActivable = Blackboard.activable as ContextualActivable;
+
+        Blackboard.activable = null;
+
+        if (contextualActivable != null)
         {
             contextualActivable.Activate(Owner);
         }
         else if(Owner.GetHand().CurrentCollectable != null)
         {
             Owner.GetHand().ActivateCurrentObject();
-            SendEvent(Character.Order.FinishAction);
         }
+
+       
+        SendEvent(Character.Order.FinishAction);
     }
 }

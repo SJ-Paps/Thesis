@@ -15,7 +15,9 @@ public class TribalHiddenState : TribalHSMState
 
         currentHide = Blackboard.activable as Hide;
 
-        if(currentHide == null)
+        Blackboard.activable = null;
+
+        if (currentHide == null)
         {
             SendEvent(Character.Order.StopHiding);
         }

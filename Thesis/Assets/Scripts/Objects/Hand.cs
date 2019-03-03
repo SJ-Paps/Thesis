@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Animations;
 
 public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 {
@@ -20,6 +21,8 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
         {
             CurrentCollectable = collectable;
 
+            OnCollect(collectable);
+
             return true;
         }
 
@@ -30,6 +33,8 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
     {
         if (!IsFree && CurrentCollectable.Drop())
         {
+            OnDrop();
+
             CurrentCollectable = null;
 
             return true;
@@ -42,6 +47,8 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
     {
         if (!IsFree && CurrentCollectable is IThrowable throwable && throwable.Throw())
         {
+            OnThrow();
+
             CurrentCollectable = null;
 
             return true;
@@ -66,6 +73,34 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
         {
             weapon.Use();
         }
+    }
+
+    protected virtual void OnCollect(CollectableObject collectableObject)
+    {
+        ConstraintSource source = new ConstraintSource();
+        source.sourceTransform = transform;
+        source.weight = 1;
+
+        collectableObject.ParentConstraint.AddSource(source);
+
+        collectableObject.ParentConstraint.constraintActive = true;
+
+        Vector3 offset = new Vector3(collectableObject.HandlePoint.localPosition.x * collectableObject.transform.localScale.x,
+                                     collectableObject.HandlePoint.localPosition.y * collectableObject.transform.localScale.y);
+
+        collectableObject.ParentConstraint.SetTranslationOffset(0, -offset);
+    }
+
+    protected virtual void OnDrop()
+    {
+        CurrentCollectable.ParentConstraint.RemoveSource(0);
+
+        CurrentCollectable.ParentConstraint.constraintActive = false;
+    }
+
+    protected virtual void OnThrow()
+    {
+        OnDrop();
     }
 
     public void PropagateOwnerReference(IHandOwner ownerReference)

@@ -1,6 +1,49 @@
-﻿public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollectable<IHandOwner> {
+﻿using UnityEngine;
+using UnityEngine.Animations;
+
+public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollectable<IHandOwner> {
 
     public IHandOwner Owner { get; protected set; }
+
+    private new Rigidbody2D rigidbody2D;
+    private ParentConstraint parentConstraint;
+
+    [SerializeField]
+    private Transform handlePoint;
+
+    public Transform HandlePoint
+    {
+        get
+        {
+            return handlePoint;
+        }
+    }
+
+    protected Rigidbody2D Rigidbody2D
+    {
+        get
+        {
+            if(rigidbody2D == null)
+            {
+                rigidbody2D = GetComponentInChildren<Rigidbody2D>();
+            }
+
+            return rigidbody2D;
+        }
+    }
+
+    public ParentConstraint ParentConstraint
+    {
+        get
+        {
+            if(parentConstraint == null)
+            {
+                parentConstraint = GetComponentInChildren<ParentConstraint>();
+            }
+
+            return parentConstraint;
+        }
+    }
 
     public bool Collect(IHandOwner user)
     {
@@ -17,6 +60,9 @@
 
     public bool Drop()
     {
+        Debug.Log(Owner);
+        Debug.Log(ValidateDrop());
+
         if(Owner != null && ValidateDrop())
         {
             OnDrop();
