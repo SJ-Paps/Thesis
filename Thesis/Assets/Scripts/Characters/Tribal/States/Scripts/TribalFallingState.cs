@@ -4,7 +4,7 @@ public class TribalFallingState : TribalHSMState
 {
     private float velocityDeadZone = -0.002f;
 
-    public TribalFallingState(Tribal.State state, string debugName) : base(state, debugName)
+    public TribalFallingState(byte stateId, string debugName) : base(stateId, debugName)
     {
         
     }

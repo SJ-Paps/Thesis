@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 [Serializable]
-public struct TribalHSMTransition : IHSMTransitionSerializationWrapper<Tribal.State, Character.Order>
+public class TribalHSMTransition : SJHSMTransition
 {
     [SerializeField]
     public Tribal.State stateFrom;
@@ -11,29 +12,23 @@ public struct TribalHSMTransition : IHSMTransitionSerializationWrapper<Tribal.St
     [SerializeField]
     public Tribal.State stateTo;
 
-    [SerializeField]
-    public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
-
-    public HSMTransition<Tribal.State, Character.Order> ToHSMTransition()
+    protected override HSMTransition<byte, byte> CreateConcreteTransition()
     {
-        HSMTransition<Tribal.State, Character.Order> transition = new HSMTransition<Tribal.State, Character.Order>(stateFrom, trigger, stateTo);
-
-        for(int i = 0; i < ANDGuardConditions.Length; i++)
-        {
-            transition.AddANDGuardCondition(ANDGuardConditions[i].CreateConcreteGuardCondition());
-        }
-
-        for (int i = 0; i < ORGuardConditions.Length; i++)
-        {
-            transition.AddORGuardCondition(ORGuardConditions[i].CreateConcreteGuardCondition());
-        }
-
-        return transition;
+        return new HSMTransition<byte, byte>((byte)stateFrom, (byte)trigger, (byte)stateTo);
     }
 }
 
 [CreateAssetMenu(menuName = "HSM/Character HSM State Assets/Tribal HSM State Asset")]
-public class TribalHSMStateAsset : SJHSMStateAsset<TribalHSMStateAsset, TribalHSMTransition, Tribal.State, Character.Order, Tribal, Tribal.Blackboard>
+public class TribalHSMStateAsset : CharacterHSMStateAsset
 {
-    
+    [SerializeField]
+    private TribalHSMTransition[] transitions;
+
+    protected override SJHSMTransition[] GetSJHSMTranstions()
+    {
+        return transitions;
+    }
 }
+
+
+

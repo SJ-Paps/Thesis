@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-public struct TurretHSMTransition : IHSMTransitionSerializationWrapper<Turret.State, Character.Order>
+public class TurretHSMTransition : SJHSMTransition
 {
     [SerializeField]
     public Turret.State stateFrom;
@@ -11,29 +11,20 @@ public struct TurretHSMTransition : IHSMTransitionSerializationWrapper<Turret.St
     [SerializeField]
     public Turret.State stateTo;
 
-    [SerializeField]
-    public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
-
-    public HSMTransition<Turret.State, Character.Order> ToHSMTransition()
+    protected override HSMTransition<byte, byte> CreateConcreteTransition()
     {
-        HSMTransition<Turret.State, Character.Order> transition = new HSMTransition<Turret.State, Character.Order>(stateFrom, trigger, stateTo);
-
-        for (int i = 0; i < ANDGuardConditions.Length; i++)
-        {
-            transition.AddANDGuardCondition(ANDGuardConditions[i].CreateConcreteGuardCondition());
-        }
-
-        for (int i = 0; i < ORGuardConditions.Length; i++)
-        {
-            transition.AddORGuardCondition(ORGuardConditions[i].CreateConcreteGuardCondition());
-        }
-
-        return transition;
+        return new HSMTransition<byte, byte>((byte)stateFrom, (byte)trigger, (byte)stateTo);
     }
 }
 
 [CreateAssetMenu(menuName = "HSM/Character HSM State Assets/Turret HSM State Asset")]
-public class TurretHSMStateAsset : SJHSMStateAsset<TurretHSMStateAsset, TurretHSMTransition, Turret.State, Character.Order, Turret, Turret.Blackboard>
+public class TurretHSMStateAsset : CharacterHSMStateAsset
 {
+    [SerializeField]
+    private TurretHSMTransition[] transitions;
 
+    protected override SJHSMTransition[] GetSJHSMTranstions()
+    {
+        return transitions;
+    }
 }

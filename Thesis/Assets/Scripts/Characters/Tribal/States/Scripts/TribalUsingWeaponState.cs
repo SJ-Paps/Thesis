@@ -1,6 +1,6 @@
 ﻿public class TribalUsingWeaponState : TribalHSMState
 {
-    public TribalUsingWeaponState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalUsingWeaponState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

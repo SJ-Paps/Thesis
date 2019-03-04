@@ -3,7 +3,7 @@ using System;
 
 public class Turret : Robot, ISeer, IDamagable
 {
-    public enum State
+    public enum State : byte
     {
         Base,
         Alive,
@@ -14,7 +14,7 @@ public class Turret : Robot, ISeer, IDamagable
         Attacking
     }
 
-    public class Blackboard : global::Blackboard
+    public new class Blackboard : Character.Blackboard
     {
 
     }
@@ -91,17 +91,12 @@ public class Turret : Robot, ISeer, IDamagable
         }
     }
 
-    [SerializeField]
-    private TurretHSMStateAsset hsmAsset;
-
-    private TurretHSMState hsm;
-
-    protected Blackboard blackboard;
-
     private EyeCollection eyes;
 
     protected override void Awake()
     {
+        blackboard = new Blackboard();
+
         base.Awake();
 
         HeadCollider = HeadRigidBody.GetComponent<SJCollider2D>();
@@ -111,30 +106,7 @@ public class Turret : Robot, ISeer, IDamagable
         ShootDamage = new PercentageReversibleNumber(shootDamageBase);
         Acceleration = new PercentageReversibleNumber(accelerationBase);
 
-        blackboard = new Blackboard();
-
-        hsm = TurretHSMStateAsset.BuildFromAsset<TurretHSMState>(hsmAsset, this, blackboard);
-
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        hsm.Enter();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        hsm.Update();
-    }
-
-    protected override void ProcessOrder(Order order)
-    {
-        hsm.SendEvent(order);
     }
 
     public virtual void TakeDamage(float damage, DamageType type)

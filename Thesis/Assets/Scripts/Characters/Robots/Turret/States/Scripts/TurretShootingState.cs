@@ -17,7 +17,7 @@ public class TurretShootingState : TurretHSMState
     //y luego la posiciono en el punto final del LineCast en el segundo update (en el Shoot)
     private bool isSecondUpdate; 
 
-    public TurretShootingState(Turret.State stateId, string debugName = null) : base(stateId, debugName)
+    public TurretShootingState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
         int poolSize = 5;
         bulletPool = new GameObject[poolSize];

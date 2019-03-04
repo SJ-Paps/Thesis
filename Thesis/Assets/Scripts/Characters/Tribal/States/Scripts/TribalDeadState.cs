@@ -1,6 +1,6 @@
 ﻿public class TribalDeadState : TribalHSMState
 {
-    public TribalDeadState(Tribal.State state, string debugName) : base(state, debugName)
+    public TribalDeadState(byte stateId, string debugName) : base(stateId, debugName)
     {
         activeDebug = true;
     }

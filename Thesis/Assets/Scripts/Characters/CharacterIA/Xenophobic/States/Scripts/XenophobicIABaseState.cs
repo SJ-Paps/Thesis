@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class XenophobicIABaseState : XenophobicIAState
 {
-    public XenophobicIABaseState(XenophobicIAController.State state, string debugName) : base(state, debugName)
+    public XenophobicIABaseState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

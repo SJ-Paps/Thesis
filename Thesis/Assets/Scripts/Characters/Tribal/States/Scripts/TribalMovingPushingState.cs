@@ -6,7 +6,7 @@ public class TribalMovingPushingState : TribalMovingState
 {
     private int facingDirection;
 
-    public TribalMovingPushingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalMovingPushingState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

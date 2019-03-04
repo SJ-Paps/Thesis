@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalChoiceIdleOrMovingState : TribalHSMState
 {
-    public TribalChoiceIdleOrMovingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalChoiceIdleOrMovingState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

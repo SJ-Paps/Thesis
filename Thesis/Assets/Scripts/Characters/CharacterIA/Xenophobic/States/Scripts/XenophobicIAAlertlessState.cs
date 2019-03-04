@@ -3,7 +3,7 @@
     private float previousHiddenDetectionDistance;
     private float previousHiddenDetectionProbability;
 
-    public XenophobicIAAlertlessState(XenophobicIAController.State state, string debugName) : base(state, debugName)
+    public XenophobicIAAlertlessState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

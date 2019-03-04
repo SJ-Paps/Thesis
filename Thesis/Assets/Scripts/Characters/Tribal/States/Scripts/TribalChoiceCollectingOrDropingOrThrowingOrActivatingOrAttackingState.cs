@@ -1,6 +1,6 @@
 ﻿public class TribalChoiceCollectingOrDropingOrThrowingOrActivatingOrAttackingState : TribalHSMState
 {
-    public TribalChoiceCollectingOrDropingOrThrowingOrActivatingOrAttackingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalChoiceCollectingOrDropingOrThrowingOrActivatingOrAttackingState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
     }
 

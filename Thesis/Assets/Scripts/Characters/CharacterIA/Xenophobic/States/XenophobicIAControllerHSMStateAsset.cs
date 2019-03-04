@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-public struct XenophobicIAControllerHSMTransition : IHSMTransitionSerializationWrapper<XenophobicIAController.State, XenophobicIAController.Trigger>
+public class XenophobicIAControllerHSMTransition : SJHSMTransition
 {
     [SerializeField]
     public XenophobicIAController.State stateFrom;
@@ -11,29 +11,20 @@ public struct XenophobicIAControllerHSMTransition : IHSMTransitionSerializationW
     [SerializeField]
     public XenophobicIAController.State stateTo;
 
-    [SerializeField]
-    public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
-
-    public HSMTransition<XenophobicIAController.State, XenophobicIAController.Trigger> ToHSMTransition()
+    protected override HSMTransition<byte, byte> CreateConcreteTransition()
     {
-        HSMTransition<XenophobicIAController.State, XenophobicIAController.Trigger> transition = new HSMTransition<XenophobicIAController.State, XenophobicIAController.Trigger>(stateFrom, trigger, stateTo);
-
-        for (int i = 0; i < ANDGuardConditions.Length; i++)
-        {
-            transition.AddANDGuardCondition(ANDGuardConditions[i].CreateConcreteGuardCondition());
-        }
-
-        for (int i = 0; i < ORGuardConditions.Length; i++)
-        {
-            transition.AddORGuardCondition(ORGuardConditions[i].CreateConcreteGuardCondition());
-        }
-
-        return transition;
+        return new HSMTransition<byte, byte>((byte)stateFrom, (byte)trigger, (byte)stateTo);
     }
 }
 
 [CreateAssetMenu(menuName = "HSM/IA Controller HSM State Assets/Xenophobic IA State Asset")]
-public class XenophobicIAControllerHSMStateAsset : SJHSMStateAsset<XenophobicIAControllerHSMStateAsset, XenophobicIAControllerHSMTransition, XenophobicIAController.State, XenophobicIAController.Trigger, XenophobicIAController, XenophobicIAController.Blackboard>
+public class XenophobicIAControllerHSMStateAsset : SJHSMStateAsset
 {
+    [SerializeField]
+    XenophobicIAControllerHSMTransition[] transitions;
 
+    protected override SJHSMTransition[] GetSJHSMTranstions()
+    {
+        return transitions;
+    }
 }

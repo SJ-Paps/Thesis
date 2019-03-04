@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurretBaseState : TurretHSMState
 {
-    public TurretBaseState(Turret.State stateId, string debugName = null) : base(stateId, debugName)
+    public TurretBaseState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
     }
 }

@@ -6,7 +6,7 @@ public class TribalMovingByWillState : TribalHSMState
 {
     private bool isMovingByWill;
 
-    public TribalMovingByWillState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalMovingByWillState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

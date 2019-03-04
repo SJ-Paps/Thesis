@@ -1,9 +1,9 @@
-﻿public class TurretIAControllerHSMState : SJHSMState<TurretIAController.State, TurretIAController.Trigger>
+﻿public class TurretIAControllerHSMState : SJHSMState
 {
     public new TurretIAController Owner { get; private set; }
     protected new TurretIAController.Blackboard Blackboard { get; private set; }
 
-    public TurretIAControllerHSMState(TurretIAController.State state, string debugName) : base(state, debugName)
+    public TurretIAControllerHSMState(byte stateId, string debugName) : base(stateId, debugName)
     {
 
     }
@@ -14,5 +14,20 @@
 
         Owner = (TurretIAController)base.Owner;
         Blackboard = (TurretIAController.Blackboard)base.Blackboard;
+    }
+
+    public bool SendEvent(TurretIAController.Trigger trigger)
+    {
+        return SendEvent((byte)trigger);
+    }
+
+    protected sealed override bool HandleEvent(byte trigger)
+    {
+        return HandleEvent((TurretIAController.Trigger)trigger);
+    }
+
+    protected virtual bool HandleEvent(TurretIAController.Trigger trigger)
+    {
+        return false;
     }
 }

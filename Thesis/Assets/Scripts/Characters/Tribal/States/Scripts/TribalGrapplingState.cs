@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TribalGrapplingState : TribalHSMState
 {
-    public TribalGrapplingState(Tribal.State state, string debugName) : base(state, debugName)
+    public TribalGrapplingState(byte stateId, string debugName) : base(stateId, debugName)
     {
 
     }

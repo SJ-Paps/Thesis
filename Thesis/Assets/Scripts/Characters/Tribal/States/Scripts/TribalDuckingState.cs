@@ -13,7 +13,7 @@ public class TribalDuckingState : TribalHSMState
 
     private bool shouldStandUp;
 
-    public TribalDuckingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalDuckingState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

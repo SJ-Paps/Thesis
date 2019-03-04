@@ -9,7 +9,7 @@ public class TribalCheckingForPushablesState : TribalHSMState
 
     private Vector2 checkBoxSize;
 
-    public TribalCheckingForPushablesState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalCheckingForPushablesState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
         float checkPushableInterval = 0.1f;
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 {
-    public enum State
+    public enum State : byte
     {
         Base,
         Alive,
@@ -48,7 +48,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking
     }
 
-    public class Blackboard : global::Blackboard
+    public new class Blackboard : Character.Blackboard
     {
         public IActivable activable;
         public RaycastHit2D ledgeCheckHit;
@@ -159,13 +159,6 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         }
     }
 
-    [SerializeField]
-    private TribalHSMStateAsset hsmAsset;
-
-    protected TribalHSMState hsm;
-
-    protected Blackboard blackboard;
-
     private EyeCollection eyes;
 
     protected override void Awake()
@@ -177,29 +170,13 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         hand = GetComponentInChildren<Hand>();
         hand.PropagateOwnerReference(this);
 
-        base.Awake();
-        
         blackboard = new Blackboard();
 
-        hsm = TribalHSMStateAsset.BuildFromAsset<TribalHSMState>(hsmAsset, this, blackboard);
+        base.Awake();
 
         MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
 
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        hsm.Enter();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        hsm.Update();
     }
 
     public Hand GetHand()
@@ -220,11 +197,6 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         {
             onDead();
         }
-    }
-
-    protected override void ProcessOrder(Character.Order order)
-    {
-        hsm.SendEvent(order);
     }
 
     public override bool ShouldBeSaved()

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TurretIAController : IAController<Turret>
 {
-    public enum State
+    public enum State : byte
     {
         Base,
         Alertless,
@@ -11,7 +11,7 @@ public class TurretIAController : IAController<Turret>
         Searching
     }
 
-    public enum Trigger
+    public enum Trigger : byte
     {
         CalmDown,
         SetFullAlert,

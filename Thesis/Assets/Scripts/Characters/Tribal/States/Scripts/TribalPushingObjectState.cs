@@ -9,7 +9,7 @@ public class TribalPushingObjectState : TribalHSMState
 
     private SpringJoint2D springJoint2d;
 
-    public TribalPushingObjectState(Tribal.State state, string debugName) : base(state, debugName)
+    public TribalPushingObjectState(byte stateId, string debugName) : base(stateId, debugName)
     {
 
     }

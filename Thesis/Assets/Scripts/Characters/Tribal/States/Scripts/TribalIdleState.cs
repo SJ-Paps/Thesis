@@ -4,7 +4,7 @@ public class TribalIdleState : TribalHSMState
 {
     private Animator animator;
 
-    public TribalIdleState(Tribal.State state, string debugName) : base(state, debugName)
+    public TribalIdleState(byte stateId, string debugName) : base(stateId, debugName)
     {
         
     }

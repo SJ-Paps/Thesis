@@ -10,7 +10,7 @@ public class TurretIAAlertFulState : TurretIAControllerHSMState
 
     private Action<Collider2D, Eyes> onTargetDetectedDelegate;
 
-    public TurretIAAlertFulState(TurretIAController.State state, string debugName) : base(state, debugName)
+    public TurretIAAlertFulState(byte stateId, string debugName) : base(stateId, debugName)
     {
         calmdownTimer = new SyncTimer();
         calmdownTimer.Interval = 20f;

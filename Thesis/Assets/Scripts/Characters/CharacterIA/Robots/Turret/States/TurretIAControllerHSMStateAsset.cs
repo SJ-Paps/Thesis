@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-public struct TurretIAControllerHSMTransition : IHSMTransitionSerializationWrapper<TurretIAController.State, TurretIAController.Trigger>
+public class TurretIAControllerHSMTransition : SJHSMTransition
 {
     [SerializeField]
     public TurretIAController.State stateFrom;
@@ -11,29 +11,20 @@ public struct TurretIAControllerHSMTransition : IHSMTransitionSerializationWrapp
     [SerializeField]
     public TurretIAController.State stateTo;
 
-    [SerializeField]
-    public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
-
-    public HSMTransition<TurretIAController.State, TurretIAController.Trigger> ToHSMTransition()
+    protected override HSMTransition<byte, byte> CreateConcreteTransition()
     {
-        HSMTransition<TurretIAController.State, TurretIAController.Trigger> transition = new HSMTransition<TurretIAController.State, TurretIAController.Trigger>(stateFrom, trigger, stateTo);
-
-        for (int i = 0; i < ANDGuardConditions.Length; i++)
-        {
-            transition.AddANDGuardCondition(ANDGuardConditions[i].CreateConcreteGuardCondition());
-        }
-
-        for (int i = 0; i < ORGuardConditions.Length; i++)
-        {
-            transition.AddORGuardCondition(ORGuardConditions[i].CreateConcreteGuardCondition());
-        }
-
-        return transition;
+        return new HSMTransition<byte, byte>((byte)stateFrom, (byte)trigger, (byte)stateTo);
     }
 }
 
 [CreateAssetMenu(menuName = "HSM/IA Controller HSM State Assets/Turret IA State Asset")]
-public class TurretIAControllerHSMStateAsset : SJHSMStateAsset<TurretIAControllerHSMStateAsset, TurretIAControllerHSMTransition, TurretIAController.State, TurretIAController.Trigger, TurretIAController, TurretIAController.Blackboard>
+public class TurretIAControllerHSMStateAsset : SJHSMStateAsset
 {
+    [SerializeField]
+    private TurretIAControllerHSMTransition[] transitions;
 
+    protected override SJHSMTransition[] GetSJHSMTranstions()
+    {
+        return transitions;
+    }
 }

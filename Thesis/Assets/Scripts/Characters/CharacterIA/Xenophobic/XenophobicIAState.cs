@@ -1,9 +1,9 @@
-﻿public abstract class XenophobicIAState : SJHSMState<XenophobicIAController.State, XenophobicIAController.Trigger>
+﻿public abstract class XenophobicIAState : SJHSMState
 {
     public new XenophobicIAController Owner { get; protected set; }
     protected new XenophobicIAController.Blackboard Blackboard { get; private set; }
 
-    public XenophobicIAState(XenophobicIAController.State state, string debugName) : base(state, debugName)
+    public XenophobicIAState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }
@@ -14,5 +14,20 @@
 
         Owner = (XenophobicIAController)base.Owner;
         Blackboard = (XenophobicIAController.Blackboard)base.Blackboard;
+    }
+
+    public bool SendEvent(XenophobicIAController.Trigger trigger)
+    {
+        return SendEvent((byte)trigger);
+    }
+
+    protected sealed override bool HandleEvent(byte trigger)
+    {
+        return HandleEvent((XenophobicIAController.Trigger)trigger);
+    }
+
+    protected virtual bool HandleEvent(XenophobicIAController.Trigger trigger)
+    {
+        return false;
     }
 }

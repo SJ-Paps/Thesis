@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SJHSMStateAsset<TConcreteClass, THSMTransitionWrapper, TState, TTrigger, TOwner, TBlackboard> : HSMStateAsset<TConcreteClass, THSMTransitionWrapper, TState, TTrigger>
-                                                                                                            where TState : unmanaged
-                                                                                                            where TTrigger : unmanaged
-                                                                                                            where TOwner : class
-                                                                                                            where TConcreteClass : SJHSMStateAsset<TConcreteClass, THSMTransitionWrapper, TState, TTrigger, TOwner, TBlackboard>
-                                                                                                            where THSMTransitionWrapper : IHSMTransitionSerializationWrapper<TState, TTrigger>
+public abstract class SJHSMStateAsset : HSMStateAsset<SJHSMStateAsset, byte, byte>
 {
 
     public bool activeDebug;
 
-    public static T BuildFromAsset<T>(TConcreteClass baseAsset, SJMonoBehaviour ownerReference, Blackboard blackboardReference) where T : SJHSMState<TState, TTrigger>
+    public static T BuildFromAsset<T>(SJHSMStateAsset baseAsset, SJMonoBehaviour ownerReference, Blackboard blackboardReference) where T : SJHSMState
     {
         T baseState = (T)BuildFromAsset(baseAsset);
 
@@ -23,12 +18,30 @@ public class SJHSMStateAsset<TConcreteClass, THSMTransitionWrapper, TState, TTri
         return baseState;
     }
 
-    protected override HSMState<TState, TTrigger> CreateConcreteHSMState()
+    protected override HSMState<byte, byte> CreateConcreteHSMState()
     {
-        SJHSMState<TState, TTrigger> state = (SJHSMState<TState, TTrigger>)base.CreateConcreteHSMState();
+        SJHSMState state = (SJHSMState)base.CreateConcreteHSMState();
 
         state.activeDebug = activeDebug;
 
         return state;
     }
+
+    protected sealed override HSMTransition<byte, byte>[] GetTransitions()
+    {
+        SJHSMTransition[] sjtransitions = GetSJHSMTranstions();
+        HSMTransition<byte, byte>[] transitions = new HSMTransition<byte, byte>[sjtransitions.Length];
+
+
+        for (int i = 0; i < sjtransitions.Length; i++)
+        {
+            transitions[i] = sjtransitions[i].ToHSMTransition();
+        }
+
+        return transitions;
+    }
+
+    protected abstract SJHSMTransition[] GetSJHSMTranstions();
+
+
 }

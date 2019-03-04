@@ -6,7 +6,7 @@ public class XenophobicIAAlertfulState : XenophobicIAState
     private float previousHiddenDetectionProbability;
     private float previousSeekingTime;
 
-    public XenophobicIAAlertfulState(XenophobicIAController.State state, string debugName) : base(state, debugName)
+    public XenophobicIAAlertfulState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

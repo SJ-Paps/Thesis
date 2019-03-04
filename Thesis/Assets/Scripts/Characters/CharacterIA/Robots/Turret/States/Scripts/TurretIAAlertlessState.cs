@@ -5,7 +5,7 @@ public class TurretIAAlertlessState : TurretIAControllerHSMState
 {
     private Action<Collider2D, Eyes> onTargetDetectedDelegate;
 
-    public TurretIAAlertlessState(TurretIAController.State state, string debugName) : base(state, debugName)
+    public TurretIAAlertlessState(byte stateId, string debugName) : base(stateId, debugName)
     {
         onTargetDetectedDelegate = OnTargetDetected;
     }

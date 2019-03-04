@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
 {
-    public TribalChoiceIsMovingByWillOrBrakingState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalChoiceIsMovingByWillOrBrakingState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

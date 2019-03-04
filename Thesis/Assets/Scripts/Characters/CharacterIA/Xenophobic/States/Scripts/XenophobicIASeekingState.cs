@@ -4,7 +4,7 @@ public class XenophobicIASeekingState : XenophobicIAState
 {
     private float positionReachedDeadZoneX = 1f, positionReachedDeadZoneY = 1f;
 
-    public XenophobicIASeekingState(XenophobicIAController.State state, string debugName) : base(state, debugName)
+    public XenophobicIASeekingState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

@@ -2,7 +2,7 @@
 
 public class TurretIdleState : TurretHSMState
 {
-    public TurretIdleState(Turret.State state, string debugName) : base(state, debugName)
+    public TurretIdleState(byte stateId, string debugName) : base(stateId, debugName)
     {
     }
 }

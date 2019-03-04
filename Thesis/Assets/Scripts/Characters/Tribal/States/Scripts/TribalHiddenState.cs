@@ -4,7 +4,7 @@ public class TribalHiddenState : TribalHSMState
 {
     private Hide currentHide;
 
-    public TribalHiddenState(Tribal.State state, string debugName) : base(state, debugName)
+    public TribalHiddenState(byte stateId, string debugName) : base(stateId, debugName)
     {
         activeDebug = true;
     }

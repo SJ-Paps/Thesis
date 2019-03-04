@@ -41,6 +41,11 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         FinishAction,
     }
 
+    public class Blackboard : global::Blackboard
+    {
+
+    }
+
     public event Action onFixedUpdate;
 
 	public event Action<Order> onOrderReceived;
@@ -72,7 +77,13 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     }
 
     protected Queue<Order> orders;
-    
+
+    protected Blackboard blackboard;
+
+    [SerializeField]
+    private CharacterHSMStateAsset hsmAsset;
+
+    private CharacterHSMState hsm;
 
     protected override void Awake()
     {
@@ -80,16 +91,25 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         orders = new Queue<Order>();
 
+        hsm = CharacterHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
         
-        
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        hsm.Enter();
     }
 
     protected virtual void Update()
     {
         while(orders.Count > 0)
         {
-            ProcessOrder(orders.Dequeue());
+            hsm.SendEvent(orders.Dequeue());
         }
+
+        hsm.Update();
     }
 
     protected virtual void FixedUpdate()
@@ -99,8 +119,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
             onFixedUpdate();
         }
     }
-
-    protected abstract void ProcessOrder(Character.Order order);
     
     public abstract void GetEnslaved();
 

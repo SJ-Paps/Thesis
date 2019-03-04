@@ -34,7 +34,7 @@ public class XenophobicIAController : IAController<Xenophobic>
         public float LongRangeAttackDetectionDistance { get => longRangeAttackDetectionDistance; }
     }
 
-    public enum State
+    public enum State : byte
     {
         Base,
         Alert,
@@ -45,7 +45,7 @@ public class XenophobicIAController : IAController<Xenophobic>
         Seeking
     }
 
-    public enum Trigger
+    public enum Trigger : byte
     {
         CalmDown,
         Unnerve,

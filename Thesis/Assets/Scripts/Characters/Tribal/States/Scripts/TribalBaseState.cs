@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TribalBaseState : TribalHSMState
 {
-    public TribalBaseState(Tribal.State stateId, string debugName = null) : base(stateId, debugName)
+    public TribalBaseState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }
