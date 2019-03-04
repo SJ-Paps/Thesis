@@ -14,18 +14,9 @@ public class TribalChoiceHangingLadderOrRopeOrLedge : TribalHSMState
         Redirect();
     }
 
-    protected override void OnUpdate()
-    {
-        base.OnUpdate();
-
-        Redirect();
-    }
-
     private void Redirect()
     {
         Character.Order order;
-
-        Debug.Log("EL LAS ENTERIN TIGUER " + LastEnteringTrigger);
 
         if(LastEnteringTrigger == Character.Order.HangLedge)
         {

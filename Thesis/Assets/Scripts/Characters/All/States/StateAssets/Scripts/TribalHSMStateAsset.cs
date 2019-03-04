@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 [Serializable]
 public class TribalHSMTransition : SJHSMTransition
@@ -37,6 +36,4 @@ public class TribalHSMStateAsset : CharacterHSMStateAsset
         return (byte)state;
     }
 }
-
-
 

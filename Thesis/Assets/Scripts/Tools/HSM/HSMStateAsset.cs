@@ -6,11 +6,7 @@ using System;
 using UnityEditor;
 #endif
 
-
-public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : ScriptableObject
-                                                                        where TConcreteAssetClass : HSMStateAsset<TConcreteAssetClass, TState, TTrigger>
-                                                                        where TState : unmanaged
-                                                                        where TTrigger : unmanaged
+public abstract class HSMStateAsset<TState, TTrigger> : ScriptableObject where TState : unmanaged where TTrigger : unmanaged
 {
     [SerializeField]
     protected TextAsset script;
@@ -31,17 +27,11 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
 
     [SerializeField]
     protected int startStateIndex;
-
-    [SerializeField]
-    protected TConcreteAssetClass[] childs;
-
-    [SerializeField]
-    protected TConcreteAssetClass[] parallelChilds;
     
 
-    public static HSMState<TState, TTrigger> BuildFromAsset(HSMStateAsset<TConcreteAssetClass, TState, TTrigger> rootAsset)
+    public static HSMState<TState, TTrigger> BuildFromAsset(HSMStateAsset<TState, TTrigger> rootAsset)
     {
-        var relationDictionary = new Dictionary<HSMStateAsset<TConcreteAssetClass, TState, TTrigger>, HSMState<TState, TTrigger>>();
+        var relationDictionary = new Dictionary<HSMStateAsset<TState, TTrigger>, HSMState<TState, TTrigger>>();
 
         GetUniqueStates(relationDictionary, rootAsset);
 
@@ -56,39 +46,44 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
         return rootState;
     }
 
-    private static void GetUniqueStates(Dictionary<HSMStateAsset<TConcreteAssetClass, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, TState, TTrigger> baseAsset)
+    private static void GetUniqueStates(Dictionary<HSMStateAsset<TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TState, TTrigger> baseAsset)
     {
+        HSMStateAsset<TState, TTrigger>[] parallelChilds = baseAsset.GetParallelChilds();
+        HSMStateAsset<TState, TTrigger>[] childs = baseAsset.GetNonParallelChilds();
+
         if(relationDictionary.ContainsKey(baseAsset) == false)
         {
             relationDictionary.Add(baseAsset, baseAsset.CreateConcreteHSMState());
         }
 
-        for(int i = 0; i < baseAsset.parallelChilds.Length; i++)
+        for(int i = 0; i < parallelChilds.Length; i++)
         {
-            GetUniqueStates(relationDictionary, baseAsset.parallelChilds[i]);
+            GetUniqueStates(relationDictionary, parallelChilds[i]);
         }
 
-        for(int i = 0; i < baseAsset.childs.Length; i++)
+        for(int i = 0; i < childs.Length; i++)
         {
-            GetUniqueStates(relationDictionary, baseAsset.childs[i]);
+            GetUniqueStates(relationDictionary, childs[i]);
         }
     }
 
-    private static HSMState<TState, TTrigger> BuildHierarchy(Dictionary<HSMStateAsset<TConcreteAssetClass, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, TState, TTrigger> baseAsset)
+    private static HSMState<TState, TTrigger> BuildHierarchy(Dictionary<HSMStateAsset<TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TState, TTrigger> baseAsset)
     {
         HSMState<TState, TTrigger> currentState = relationDictionary[baseAsset];
+        HSMStateAsset<TState, TTrigger>[] parallelChilds = baseAsset.GetParallelChilds();
+        HSMStateAsset<TState, TTrigger>[] childs = baseAsset.GetNonParallelChilds();
 
-        for(int i = 0; i < baseAsset.parallelChilds.Length; i++)
+        for (int i = 0; i < parallelChilds.Length; i++)
         {
-            HSMStateAsset<TConcreteAssetClass, TState, TTrigger> currentAssetChild = baseAsset.parallelChilds[i];
+            HSMStateAsset<TState, TTrigger> currentAssetChild = parallelChilds[i];
 
             currentState.AddParallelChild(relationDictionary[currentAssetChild]);
             BuildHierarchy(relationDictionary, currentAssetChild);
         }
 
-        for(int i = 0; i < baseAsset.childs.Length; i++)
+        for(int i = 0; i < childs.Length; i++)
         {
-            HSMStateAsset<TConcreteAssetClass, TState, TTrigger> currentAssetChild = baseAsset.childs[i];
+            HSMStateAsset<TState, TTrigger> currentAssetChild = childs[i];
 
             currentState.AddChild(relationDictionary[currentAssetChild]);
             BuildHierarchy(relationDictionary, currentAssetChild);
@@ -97,11 +92,13 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
         return currentState;
     }
 
-    private static void BuildTransitions(Dictionary<HSMStateAsset<TConcreteAssetClass, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, TState, TTrigger> baseAsset)
+    private static void BuildTransitions(Dictionary<HSMStateAsset<TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TState, TTrigger> baseAsset)
     {
         HSMState<TState, TTrigger> currentState = relationDictionary[baseAsset];
 
         HSMTransition<TState, TTrigger>[] transitions = baseAsset.GetTransitions();
+        HSMStateAsset<TState, TTrigger>[] parallelChilds = baseAsset.GetParallelChilds();
+        HSMStateAsset<TState, TTrigger>[] childs = baseAsset.GetNonParallelChilds();
 
         for (int i = 0; i < transitions.Length; i++)
         {
@@ -110,41 +107,46 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
             currentState.MakeChildTransition(transition);
         }
 
-        for (int i = 0; i < baseAsset.parallelChilds.Length; i++)
+        for (int i = 0; i < parallelChilds.Length; i++)
         {
-            HSMStateAsset<TConcreteAssetClass, TState, TTrigger> currentAssetChild = baseAsset.parallelChilds[i];
+            HSMStateAsset<TState, TTrigger> currentAssetChild = parallelChilds[i];
 
             BuildTransitions(relationDictionary, currentAssetChild);
         }
 
-        for (int i = 0; i < baseAsset.childs.Length; i++)
+        for (int i = 0; i < childs.Length; i++)
         {
-            HSMStateAsset<TConcreteAssetClass, TState, TTrigger> currentAssetChild = baseAsset.childs[i];
+            HSMStateAsset<TState, TTrigger> currentAssetChild = childs[i];
 
             BuildTransitions(relationDictionary, currentAssetChild);
         }
     }
 
-    private static void SetInitialStates(Dictionary<HSMStateAsset<TConcreteAssetClass, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, TState, TTrigger> baseAsset)
+    private static void SetInitialStates(Dictionary<HSMStateAsset<TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TState, TTrigger> baseAsset)
     {
         HSMState<TState, TTrigger> currentState = relationDictionary[baseAsset];
+        
+        HSMStateAsset<TState, TTrigger>[] childs = baseAsset.GetNonParallelChilds();
 
-        if (baseAsset.childs.Length > 0)
+        if (childs.Length > 0)
         {
-            currentState.SetInitialState(baseAsset.childs[baseAsset.startStateIndex].stateId);
+            currentState.SetInitialState(childs[baseAsset.startStateIndex].stateId);
 
-            for (int i = 0; i < baseAsset.childs.Length; i++)
+            for (int i = 0; i < childs.Length; i++)
             {
-                SetInitialStates(relationDictionary, baseAsset.childs[i]);
+                SetInitialStates(relationDictionary, childs[i]);
             }
         }
     }
 
-    private static void ReplaceCopiables(HSMState<TState, TTrigger> baseState, HSMStateAsset<TConcreteAssetClass, TState, TTrigger> baseAsset)
-    { 
-        for(int i = 0; i < baseAsset.parallelChilds.Length; i++)
+    private static void ReplaceCopiables(HSMState<TState, TTrigger> baseState, HSMStateAsset<TState, TTrigger> baseAsset)
+    {
+        HSMStateAsset<TState, TTrigger>[] parallelChilds = baseAsset.GetParallelChilds();
+        HSMStateAsset<TState, TTrigger>[] childs = baseAsset.GetNonParallelChilds();
+
+        for (int i = 0; i < parallelChilds.Length; i++)
         {
-            var currentAsset = baseAsset.parallelChilds[i];
+            var currentAsset = parallelChilds[i];
             var currentState = baseState.GetImmediateChildState(currentAsset.stateId);
 
             ReplaceCopiables(currentState, currentAsset);
@@ -155,9 +157,9 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
             }
         }
 
-        for(int i = 0; i < baseAsset.childs.Length; i++)
+        for(int i = 0; i < childs.Length; i++)
         {
-            var currentAsset = baseAsset.childs[i];
+            var currentAsset = childs[i];
             var currentState = baseState.GetImmediateChildState(currentAsset.stateId);
 
             ReplaceCopiables(currentState, currentAsset);
@@ -170,6 +172,10 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
     }
 
     protected abstract HSMTransition<TState, TTrigger>[] GetTransitions();
+
+    protected abstract HSMStateAsset<TState, TTrigger>[] GetNonParallelChilds();
+
+    protected abstract HSMStateAsset<TState, TTrigger>[] GetParallelChilds();
 
     protected abstract TState GetStateId();
 
@@ -206,9 +212,4 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
 #endif
     }
 }
-
-/*public interface IHSMTransitionSerializationWrapper<TState, TTrigger> where TState : unmanaged where TTrigger : unmanaged
-{
-    HSMTransition<TState, TTrigger> ToHSMTransition();
-}*/
 

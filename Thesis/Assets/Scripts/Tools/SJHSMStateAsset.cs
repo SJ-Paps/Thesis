@@ -1,9 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class SJHSMStateAsset : HSMStateAsset<SJHSMStateAsset, byte, byte>
+public abstract class SJHSMStateAsset : HSMStateAsset<byte, byte>
 {
+    [SerializeField]
+    private SJHSMStateAsset[] childs;
+
+    [SerializeField]
+    private SJHSMStateAsset[] parallelChilds;
 
     public bool activeDebug;
 
@@ -43,5 +46,14 @@ public abstract class SJHSMStateAsset : HSMStateAsset<SJHSMStateAsset, byte, byt
 
     protected abstract SJHSMTransition[] GetSJHSMTranstions();
 
+    protected override HSMStateAsset<byte, byte>[] GetNonParallelChilds()
+    {
+        return childs;
+    }
+
+    protected override HSMStateAsset<byte, byte>[] GetParallelChilds()
+    {
+        return parallelChilds;
+    }
 
 }
