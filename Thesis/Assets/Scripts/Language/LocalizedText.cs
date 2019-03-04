@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public enum TextOptions
+public enum TextOptions : byte
 {
     None,
     ToUpper,

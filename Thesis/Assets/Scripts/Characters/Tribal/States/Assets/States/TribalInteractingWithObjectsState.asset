@@ -26,28 +26,31 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 422664df409c3f541919ac7eb464914e, type: 2}
   - {fileID: 11400000, guid: 16a3bdc1df8a9a9479267232206910e1, type: 2}
   parallelChilds: []
+  activeDebug: 1
+  state: 38
   transitions:
-  - stateFrom: 39
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    stateFrom: 39
     trigger: 31
     stateTo: 36
-    guardConditions:
-    - {fileID: 11400000, guid: 30d5e8722ac721e478dc242a38d60972, type: 2}
-  - stateFrom: 39
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    stateFrom: 39
     trigger: 29
     stateTo: 37
-    guardConditions: []
-  - stateFrom: 39
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    stateFrom: 39
     trigger: 27
     stateTo: 34
-    guardConditions: []
-  - stateFrom: 39
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    stateFrom: 39
     trigger: 26
     stateTo: 38
-    guardConditions:
-    - {fileID: 11400000, guid: 666426ffc105bb7409791ca8af9d3874, type: 2}
-  - stateFrom: 39
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    stateFrom: 39
     trigger: 7
     stateTo: 11
-    guardConditions:
-    - {fileID: 11400000, guid: 60992749552affa40a44a94902fe7947, type: 2}
-  activeDebug: 1

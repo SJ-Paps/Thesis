@@ -15,9 +15,11 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: d4613997093caa9409e4576333c20137, type: 3}
   stateClassFullName: XenophobicIAPatrollingState
   debugName: Patrolling
+  copy: 0
   stateId: 5
   startStateIndex: 0
   childs: []
   parallelChilds: []
-  transitions: []
   activeDebug: 1
+  state: 5
+  transitions: []

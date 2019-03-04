@@ -15,11 +15,13 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: 01796ec55b66e5842a689383d7851c34, type: 3}
   stateClassFullName: XenophobicIAAwareState
   debugName: Aware
+  copy: 0
   stateId: 3
   startStateIndex: 0
   childs:
   - {fileID: 11400000, guid: 92ff71bf792b6954abe565833fb88907, type: 2}
   - {fileID: 11400000, guid: 33b12ae38f6c3c349ba4b2811ad01295, type: 2}
   parallelChilds: []
-  transitions: []
   activeDebug: 1
+  state: 3
+  transitions: []

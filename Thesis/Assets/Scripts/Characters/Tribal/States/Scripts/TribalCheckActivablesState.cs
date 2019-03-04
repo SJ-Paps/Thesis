@@ -53,6 +53,15 @@ public class TribalCheckActivablesState : TribalHSMState
                 }
             }
 
+            if(activableStorage.ContainsType<ClimbableObject>(out ClimbableObject climbableObject))
+            {
+                Blackboard.activable = climbableObject;
+                if(SendEvent(Character.Order.HangRope))
+                {
+                    return true;
+                }
+            }
+
             activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);
 
             Blackboard.activable = contextualActivable;

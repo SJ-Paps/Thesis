@@ -10,7 +10,7 @@ public sealed class SoundManager
 {
 
 
-    public enum SoundChannels
+    public enum SoundChannels : byte
     {
         Effects,
         Music,

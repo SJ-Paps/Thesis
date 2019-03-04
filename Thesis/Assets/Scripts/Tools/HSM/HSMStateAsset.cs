@@ -26,6 +26,7 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
     protected bool copy;
 
     [SerializeField]
+    [HideInInspector]
     protected TState stateId;
 
     [SerializeField]
@@ -170,6 +171,8 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
 
     protected abstract HSMTransition<TState, TTrigger>[] GetTransitions();
 
+    protected abstract TState GetStateId();
+
     protected virtual HSMState<TState, TTrigger> CreateConcreteHSMState()
     {
         HSMState<TState, TTrigger> state = (HSMState<TState, TTrigger>)Activator.CreateInstance(Type.GetType(stateClassFullName), stateId, debugName);
@@ -180,6 +183,8 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
     void OnValidate()
     {
 #if UNITY_EDITOR
+        stateId = GetStateId();
+
         if (script != null)
         {
             MonoScript monoscript = script as MonoScript;

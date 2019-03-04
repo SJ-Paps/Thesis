@@ -30,7 +30,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         ClimbDown,
         HangLedge,
         HangRope,
-        HangStair,
+        HangLadder,
         StopHanging,
         Activate,
         Throw,
@@ -39,6 +39,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         SwitchActivables,
         Collect,
         FinishAction,
+        HangClimbable,
     }
 
     public class Blackboard : global::Blackboard

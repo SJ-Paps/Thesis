@@ -21,10 +21,18 @@ public class XenophobicIAControllerHSMTransition : SJHSMTransition
 public class XenophobicIAControllerHSMStateAsset : SJHSMStateAsset
 {
     [SerializeField]
-    XenophobicIAControllerHSMTransition[] transitions;
+    private XenophobicIAController.State state;
+
+    [SerializeField]
+    private XenophobicIAControllerHSMTransition[] transitions;
 
     protected override SJHSMTransition[] GetSJHSMTranstions()
     {
         return transitions;
+    }
+
+    protected override byte GetStateId()
+    {
+        return (byte)state;
     }
 }

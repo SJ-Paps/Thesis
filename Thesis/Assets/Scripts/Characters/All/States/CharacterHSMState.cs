@@ -16,8 +16,16 @@ public abstract class CharacterHSMState : SJHSMState
 
     private void CatchEnteringTrigger(byte trigger)
     {
-        if(IsOnState(StateId))
+        if(IsOnState(this))
         {
+#if UNITY_EDITOR
+            if (activeDebug)
+            {
+                EditorDebug.Log("State: " + DebugName + " Type: " + GetType().Name);
+                EditorDebug.Log("Entering Trigger: " + (Character.Order)trigger);
+            }
+#endif
+
             LastEnteringTrigger = (Character.Order)trigger;
 
             for(int i = 0; i < parallelChilds.Count; i++)

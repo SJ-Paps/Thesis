@@ -36,7 +36,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Climbing,
         HangingLedge,
         HangingRope,
-        HangingStair,
+        HangingLadder,
         SwitchingActivables,
         Waiting,
         UsingWeapon,
@@ -45,7 +45,8 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Collecting,
         Droping,
         Activating,
-        ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking
+        ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking,
+        ChoiceHangingLadderOrRopeOrLedge,
     }
 
     public new class Blackboard : Character.Blackboard

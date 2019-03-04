@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public enum DamageType
+public enum DamageType : byte
 {
     Water,
     Sharp,

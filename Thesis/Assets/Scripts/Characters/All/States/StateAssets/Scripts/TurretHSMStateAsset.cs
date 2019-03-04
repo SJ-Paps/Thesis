@@ -21,10 +21,18 @@ public class TurretHSMTransition : SJHSMTransition
 public class TurretHSMStateAsset : CharacterHSMStateAsset
 {
     [SerializeField]
+    private Turret.State state;
+
+    [SerializeField]
     private TurretHSMTransition[] transitions;
 
     protected override SJHSMTransition[] GetSJHSMTranstions()
     {
         return transitions;
+    }
+
+    protected override byte GetStateId()
+    {
+        return (byte)state;
     }
 }

@@ -543,6 +543,13 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return root.InternalIsOnState(state);
     }
 
+    public bool IsOnState(HSMState<TState, TTrigger> state)
+    {
+        var root = GetRoot();
+
+        return root.InternalIsOnState(state);
+    }
+
     private bool InternalIsOnState(TState state)
     {
         if(stateIdComparer(StateId, state))
@@ -559,6 +566,29 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         }
 
         if(ActiveNonParallelChild != null)
+        {
+            return ActiveNonParallelChild.InternalIsOnState(state);
+        }
+
+        return false;
+    }
+
+    private bool InternalIsOnState(HSMState<TState, TTrigger> state)
+    {
+        if(this == state)
+        {
+            return true;
+        }
+
+        for (int i = 0; i < parallelChilds.Count; i++)
+        {
+            if (parallelChilds[i].InternalIsOnState(state))
+            {
+                return true;
+            }
+        }
+
+        if (ActiveNonParallelChild != null)
         {
             return ActiveNonParallelChild.InternalIsOnState(state);
         }
@@ -783,6 +813,29 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         return null;
     }
 
+    public void ForeachInActiveHierarchy(Action<HSMState<TState, TTrigger>> action)
+    {
+        var root = GetRoot();
+
+        root.InternalForeachInActiveHierarchy(action);
+    }
+
+    private void InternalForeachInActiveHierarchy(Action<HSMState<TState, TTrigger>> action)
+    {
+        action(this);
+
+        for(int i = 0; i < parallelChilds.Count; i++)
+        {
+            parallelChilds[i].InternalForeachInActiveHierarchy(action);
+        }
+
+        if(ActiveNonParallelChild != null)
+        {
+            ActiveNonParallelChild.InternalForeachInActiveHierarchy(action);
+        }
+    }
+
+
     public bool SendEvent(TTrigger trigger)
     {
         var root = GetRoot();
@@ -859,12 +912,14 @@ public abstract class HSMState<TState, TTrigger> where TState : unmanaged where 
         }
 
         ActiveNonParallelChild.SetActiveParent(this);
-        ActiveNonParallelChild.Enter();
+        ActiveNonParallelChild.InternalEnter();
 
         if (onStateChanged != null)
         {
             onStateChanged(transition.trigger);
         }
+
+        ActiveNonParallelChild.InternalOnEnter();
     }
 }
 

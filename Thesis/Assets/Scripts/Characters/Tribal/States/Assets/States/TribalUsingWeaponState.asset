@@ -21,5 +21,6 @@ MonoBehaviour:
   childs:
   - {fileID: 11400000, guid: 423533880b2487f40972b5b7bd35c8db, type: 2}
   parallelChilds: []
-  transitions: []
   activeDebug: 1
+  state: 33
+  transitions: []

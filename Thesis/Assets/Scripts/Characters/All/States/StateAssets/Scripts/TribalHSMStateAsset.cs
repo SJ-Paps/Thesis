@@ -22,11 +22,19 @@ public class TribalHSMTransition : SJHSMTransition
 public class TribalHSMStateAsset : CharacterHSMStateAsset
 {
     [SerializeField]
+    private Tribal.State state;
+
+    [SerializeField]
     private TribalHSMTransition[] transitions;
 
     protected override SJHSMTransition[] GetSJHSMTranstions()
     {
         return transitions;
+    }
+
+    protected override byte GetStateId()
+    {
+        return (byte)state;
     }
 }
 
