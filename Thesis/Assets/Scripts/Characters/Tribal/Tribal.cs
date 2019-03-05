@@ -59,13 +59,14 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
     public class TribalConfiguration
     {
         [SerializeField]
-        private float maxMovementVelocity, acceleration, jumpMaxHeight, jumpAcceleration, jumpForceFromLadder;
+        private float maxMovementVelocity, acceleration, jumpMaxHeight, jumpAcceleration, jumpForceFromLadder, climbForce;
 
         public float MaxMovementVelocity { get => maxMovementVelocity; }
         public float Acceleration { get => acceleration; }
         public float JumpMaxHeight { get => jumpMaxHeight; }
         public float JumpAcceleration { get => jumpAcceleration; }
         public float JumpForceFromLadder { get => jumpForceFromLadder; }
+        public float ClimbForce { get => climbForce; }
     }
 
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");

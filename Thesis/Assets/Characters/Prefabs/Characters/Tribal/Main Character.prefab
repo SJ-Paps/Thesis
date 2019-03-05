@@ -907,6 +907,7 @@ MonoBehaviour:
     jumpMaxHeight: 0.5
     jumpAcceleration: 0.5
     jumpForceFromLadder: 2
+    climbForce: 2
 --- !u!114 &1226569705297211115
 MonoBehaviour:
   m_ObjectHideFlags: 0

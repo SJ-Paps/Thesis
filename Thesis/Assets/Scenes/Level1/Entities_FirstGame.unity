@@ -506,11 +506,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114061772566888022, guid: 3c94efd32389ad348a2cfa7765206ca8,
-        type: 3}
-      propertyPath: configuration.jumpForceFromLadder
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 3}
 --- !u!114 &196212823 stripped

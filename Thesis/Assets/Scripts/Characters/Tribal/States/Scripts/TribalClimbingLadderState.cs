@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class TribalClimbingLadderState : TribalHSMState
 {
-    private Character.Order directionOrder;
+    private Character.Order verticalDirectionOrder;
+    private Character.Order horizontalDirectionOrder;
+
     private Action onFixedUpdateDelegate;
 
     private Ladder currentLadder;
@@ -47,49 +49,110 @@ public class TribalClimbingLadderState : TribalHSMState
 
     private void OnFixedUpdate()
     {
+        ExecuteOrders();
+
+        ClampVelocity();
+
+        shouldStop = true;
+        horizontalDirectionOrder = default;
+        verticalDirectionOrder = default;
+    }
+
+    private void ExecuteOrders()
+    {
         float climbDifficulty = currentLadder.GetClimbDifficulty();
 
-        if(climbDifficulty == 0)
+        if (climbDifficulty == 0)
         {
             climbDifficulty = 1;
         }
 
-        switch(directionOrder)
+        Rigidbody2D ownerRigidbody = Owner.RigidBody2D;
+
+        if(verticalDirectionOrder == Character.Order.ClimbUp)
         {
-            case Character.Order.ClimbUp:
+            if(ownerRigidbody.velocity.y < 0)
+            {
+                ownerRigidbody.velocity = new Vector2(ownerRigidbody.velocity.x, 0);
+            }
 
-                Owner.RigidBody2D.AddForce(new Vector2(0, 1 / climbDifficulty));
-                break;
-
-            case Character.Order.ClimbDown:
-
-                Owner.RigidBody2D.AddForce(new Vector2(0, -1));
-                break;
-
-            case Character.Order.MoveRight:
-
-                Owner.RigidBody2D.AddForce(new Vector2(1 / climbDifficulty, 0));
-                Owner.Face(false);
-                break;
-
-            case Character.Order.MoveLeft:
-
-                Owner.RigidBody2D.AddForce(new Vector2(-1 / climbDifficulty, 0));
-                Owner.Face(true);
-                break;
+            ownerRigidbody.AddForce(new Vector2(0, Owner.TribalConfigurationData.ClimbForce / climbDifficulty));
+        }
+        else if(verticalDirectionOrder == Character.Order.ClimbDown)
+        {
+            if(ownerRigidbody.velocity.y > 0)
+            {
+                ownerRigidbody.velocity = new Vector2(ownerRigidbody.velocity.x, 0);
+            }
+            
+            ownerRigidbody.AddForce(new Vector2(0, -1 * Owner.TribalConfigurationData.ClimbForce));
         }
 
-        shouldStop = true;
+        if(horizontalDirectionOrder == Character.Order.MoveLeft)
+        {
+            if(ownerRigidbody.velocity.x > 0)
+            {
+                ownerRigidbody.velocity = new Vector2(0, ownerRigidbody.velocity.y);
+            }
+
+            ownerRigidbody.AddForce(new Vector2(-1 * Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
+            Owner.Face(true);
+        }
+        else if(horizontalDirectionOrder == Character.Order.MoveRight)
+        {
+            if(ownerRigidbody.velocity.x < 0)
+            {
+                ownerRigidbody.velocity = new Vector2(0, ownerRigidbody.velocity.y);
+            }
+
+            ownerRigidbody.AddForce(new Vector2(Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
+            Owner.Face(false);
+        }
+    }
+
+    private void ClampVelocity()
+    {
+        Vector2 velocity = Owner.RigidBody2D.velocity;
+        float maxClimbVelocityPositive = Owner.TribalConfigurationData.ClimbForce / 2;
+        float maxClimbVelocityNegative = Owner.TribalConfigurationData.ClimbForce / 2 * -1;
+
+        if (velocity.x > maxClimbVelocityPositive)
+        {
+            velocity = new Vector2(maxClimbVelocityPositive, velocity.y);
+        }
+        else if (velocity.x < maxClimbVelocityNegative)
+        {
+            velocity = new Vector2(maxClimbVelocityNegative, velocity.y);
+        }
+
+        if (velocity.y > maxClimbVelocityPositive)
+        {
+            velocity = new Vector2(velocity.x, maxClimbVelocityPositive);
+        }
+        else if (velocity.y < maxClimbVelocityNegative)
+        {
+            velocity = new Vector2(velocity.x, maxClimbVelocityNegative);
+        }
+
+        Owner.RigidBody2D.velocity = velocity;
     }
 
     protected override bool HandleEvent(Character.Order trigger)
     {
-        bool isDirectionOrder = trigger == Character.Order.ClimbUp || trigger == Character.Order.ClimbDown
-            || trigger == Character.Order.MoveLeft || trigger == Character.Order.MoveRight;
+        bool isDirectionOrder = false;
 
-        directionOrder = trigger;
-
-        shouldStop = !isDirectionOrder;
+        if (trigger == Character.Order.ClimbUp || trigger == Character.Order.ClimbDown)
+        {
+            verticalDirectionOrder = trigger;
+            shouldStop = false;
+            isDirectionOrder = true;
+        }
+        else if(trigger == Character.Order.MoveRight || trigger == Character.Order.MoveLeft)
+        {
+            horizontalDirectionOrder = trigger;
+            shouldStop = false;
+            isDirectionOrder = true;
+        }
 
         return isDirectionOrder;
     }

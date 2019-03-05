@@ -32,10 +32,7 @@ public class TribalHangingLadderState : TribalHSMState
     {
         if (trigger == Character.Order.Jump)
         {
-            int direction = Owner.FacingDirection * -1;
-
-            Owner.RigidBody2D.AddForce(new Vector2(direction * Owner.TribalConfigurationData.JumpForceFromLadder, 0), ForceMode2D.Impulse);
-            Owner.Face(direction);
+            Owner.RigidBody2D.AddForce(new Vector2(Owner.FacingDirection * Owner.TribalConfigurationData.JumpForceFromLadder, 0), ForceMode2D.Impulse);
         }
 
         return false;
