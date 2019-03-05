@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class FinalTrigger : SJBoxCollider2D {
     
-    protected override void OnAwake()
+    protected override void Awake()
     {
-        base.OnAwake();
+        base.Awake();
 
         onStayTrigger += Finish;
     }

@@ -25,7 +25,7 @@ public class TribalDuckingState : TribalHSMState
         float yFloor = Owner.Collider.bounds.min.y;
 
         previousOffset = Owner.Collider.offset;
-        previousSize = Owner.Collider.GetSize();
+        previousSize = Owner.Collider.InnerCollider.size;
         
         float colliderSizeY = previousSize.y / 2;
 
@@ -34,7 +34,7 @@ public class TribalDuckingState : TribalHSMState
             colliderSizeY = previousSize.x;
         }
 
-        Owner.Collider.ChangeSize(new Vector2(previousSize.x, colliderSizeY));
+        Owner.Collider.InnerCollider.size = new Vector2(previousSize.x, colliderSizeY);
 
         float distanceFromZeroOffsetToFloor = Mathf.Abs((Owner.transform.position.y) - yFloor);
 
@@ -60,11 +60,9 @@ public class TribalDuckingState : TribalHSMState
     protected override void OnExit()
     {
         base.OnExit();
+        
 
-        /*Owner.Collider.ChangeSize(new Vector2(previousSizeX, previousSizeY));
-        Owner.Collider.offset = new Vector2(previousOffsetX, previousOffsetY);*/
-
-        Owner.Collider.ChangeSize(previousSize);
+        Owner.Collider.InnerCollider.size = previousSize;
         Owner.Collider.offset = previousOffset;
 
         Owner.MaxVelocity.RemovePercentageConstraint(velocityContraintId);

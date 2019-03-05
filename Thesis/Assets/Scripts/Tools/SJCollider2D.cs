@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class SJCollider2D : SJCollider2DBase {
+public abstract class SJCollider2D : SJMonoBehaviour {
 
     public event Action<Collider2D> onEnteredTrigger;
     public event Action<Collider2D> onExitedTrigger;
@@ -10,6 +10,42 @@ public abstract class SJCollider2D : SJCollider2DBase {
     public event Action<Collision2D> onEnteredCollision;
     public event Action<Collision2D> onExitedCollision;
     public event Action<Collision2D> onStayCollision;
+
+    private Collider2D internalInnerCollider;
+
+    public Collider2D InnerCollider
+    {
+        get
+        {
+            if (internalInnerCollider == null)
+            {
+                internalInnerCollider = GetComponent<Collider2D>();
+            }
+
+            return internalInnerCollider;
+        }
+    }
+
+    public Bounds bounds
+    {
+        get
+        {
+            return InnerCollider.bounds;
+        }
+    }
+
+    public Vector2 offset
+    {
+        get
+        {
+            return InnerCollider.offset;
+        }
+
+        set
+        {
+            InnerCollider.offset = value;
+        }
+    }
 
     public bool IsTrigger
     {
@@ -85,5 +121,17 @@ public abstract class SJCollider2D : SJCollider2DBase {
     public ColliderDistance2D Distance(SJCollider2D collider)
     {
         return InnerCollider.Distance(collider.InnerCollider);
+    }
+}
+
+public abstract class SJCollider2D<T> : SJCollider2D where T : Collider2D
+{
+    public new T InnerCollider { get; private set; }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        InnerCollider = GetComponent<T>();
     }
 }

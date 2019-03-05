@@ -5,9 +5,9 @@ public class SaveGameTrigger : SJBoxCollider2D
 {
     private Action<Collider2D> saveOnceDelegate;
 
-    protected override void OnAwake()
+    protected override void Awake()
     {
-        base.OnAwake();
+        base.Awake();
 
         saveOnceDelegate = SaveOnce;
 

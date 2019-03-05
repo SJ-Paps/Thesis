@@ -127,9 +127,6 @@ public class TribalClimbingLadderState : TribalHSMState
         {
             ClampVelocityAxis(false);
         }
-        
-
-        
 
     }
 

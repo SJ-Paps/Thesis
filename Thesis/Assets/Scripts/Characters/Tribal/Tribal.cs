@@ -84,7 +84,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
     public Animator Animator { get; protected set; }
     public Rigidbody2D RigidBody2D { get; protected set; }
 
-    public SJCollider2D Collider { get; protected set; }
+    public SJCapsuleCollider2D Collider { get; protected set; }
     
     protected Hand hand;
 
@@ -159,7 +159,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
     {
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
-        Collider = GetComponent<SJCollider2D>();
+        Collider = GetComponent<SJCapsuleCollider2D>();
 
         hand = GetComponentInChildren<Hand>();
         hand.PropagateOwnerReference(this);
