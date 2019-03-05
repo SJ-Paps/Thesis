@@ -2,7 +2,7 @@
 
 public interface IClimbable
 {
-    float ClimbDifficulty();
+    float GetClimbDifficulty();
 
     Vector3 Top { get; }
     Vector3 Bottom { get; }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class TribalClimbingLedgeState : TribalClimbingState
+public class TribalClimbingLedgeState : TribalHSMState
 {
     private IEnumerator climbCoroutine;
 

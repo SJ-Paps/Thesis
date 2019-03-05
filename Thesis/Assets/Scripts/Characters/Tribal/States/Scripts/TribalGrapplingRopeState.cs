@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TribalGrapplingRopeState : TribalGrapplingState
+public class TribalGrapplingRopeState : TribalHSMState
 {
     public TribalGrapplingRopeState(byte stateId, string debugName = null) : base(stateId, debugName)
     {

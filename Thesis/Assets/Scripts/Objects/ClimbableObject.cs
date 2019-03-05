@@ -29,7 +29,7 @@ public abstract class ClimbableObject : ActivableObject<Character>, IClimbable
         return true;
     }
 
-    public float ClimbDifficulty()
+    public float GetClimbDifficulty()
     {
         return climbDifficulty;
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TribalGrapplingLedgeState : TribalGrapplingState
+public class TribalGrapplingLedgeState : TribalHSMState
 {
     private bool isFirstUpdate;
 

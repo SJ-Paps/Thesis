@@ -26,7 +26,7 @@ public class TribalHiddenState : TribalHSMState
             currentHide.Activate(Owner);
 
             Owner.RigidBody2D.velocity = new Vector2(0, 0);
-            Owner.transform.position = new Vector2(currentHide.transform.position.x, Owner.transform.position.y);
+            Owner.RigidBody2D.MovePosition(new Vector2(currentHide.transform.position.x, Owner.transform.position.y));
 
             Owner.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
         }

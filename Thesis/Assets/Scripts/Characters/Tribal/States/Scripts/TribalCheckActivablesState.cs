@@ -56,7 +56,7 @@ public class TribalCheckActivablesState : TribalHSMState
             if(activableStorage.ContainsType<ClimbableObject>(out ClimbableObject climbableObject))
             {
                 Blackboard.activable = climbableObject;
-                if(SendEvent(Character.Order.HangRope))
+                if(SendEvent(Character.Order.HangClimbable))
                 {
                     return true;
                 }
