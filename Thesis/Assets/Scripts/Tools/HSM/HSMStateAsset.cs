@@ -20,22 +20,22 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
     protected string stateClassFullName;
 
     [SerializeField]
-    protected string debugName;
+    public string debugName;
 
     [SerializeField]
     protected bool copy;
 
     [SerializeField]
-    protected TState stateId;
+    public TState stateId;
 
     [SerializeField]
-    protected int startStateIndex;
+    public int startStateIndex;
 
     [SerializeField]
-    protected TConcreteAssetClass[] childs;
+    public TConcreteAssetClass[] childs;
 
     [SerializeField]
-    protected TConcreteAssetClass[] parallelChilds;
+    public TConcreteAssetClass[] parallelChilds;
     
 
     public static HSMState<TState, TTrigger> BuildFromAsset(HSMStateAsset<TConcreteAssetClass, TState, TTrigger> rootAsset)
@@ -99,7 +99,7 @@ public abstract class HSMStateAsset<TConcreteAssetClass, TState, TTrigger> : Scr
     private static void BuildTransitions(Dictionary<HSMStateAsset<TConcreteAssetClass, TState, TTrigger>, HSMState<TState, TTrigger>> relationDictionary, HSMStateAsset<TConcreteAssetClass, TState, TTrigger> baseAsset)
     {
         HSMState<TState, TTrigger> currentState = relationDictionary[baseAsset];
-
+        
         HSMTransition<TState, TTrigger>[] transitions = baseAsset.GetTransitions();
 
         for (int i = 0; i < transitions.Length; i++)

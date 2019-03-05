@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class SJHSMStateAsset : HSMStateAsset<SJHSMStateAsset, byte, byte>
 {
-
     public bool activeDebug;
 
     public static T BuildFromAsset<T>(SJHSMStateAsset baseAsset, SJMonoBehaviour ownerReference, Blackboard blackboardReference) where T : SJHSMState
