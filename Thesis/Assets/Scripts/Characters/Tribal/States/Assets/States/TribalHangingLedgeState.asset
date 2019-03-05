@@ -27,11 +27,15 @@ MonoBehaviour:
   transitions:
   - ANDGuardConditions: []
     ORGuardConditions: []
+    titleName: 
+    disabled: 0
     stateFrom: 13
     trigger: 20
     stateTo: 27
   - ANDGuardConditions: []
     ORGuardConditions: []
+    titleName: 
+    disabled: 0
     stateFrom: 13
     trigger: 4
     stateTo: 27

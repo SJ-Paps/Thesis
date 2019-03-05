@@ -21,7 +21,7 @@ public class TribalJumpingState : TribalHSMState
     {
         base.OnEnter();
 
-        currentMaxHeight = Owner.transform.position.y + Owner.JumpMaxHeight;
+        currentMaxHeight = Owner.transform.position.y + Owner.TribalConfigurationData.JumpMaxHeight;
 
         Owner.onFixedUpdate += onFixedUpdateDelegate;
 
@@ -72,7 +72,7 @@ public class TribalJumpingState : TribalHSMState
 
     private void Jump()
     {
-        Owner.RigidBody2D.AddForce(new Vector2(0, Owner.JumpAcceleration), ForceMode2D.Impulse);
+        Owner.RigidBody2D.AddForce(new Vector2(0, Owner.TribalConfigurationData.JumpAcceleration), ForceMode2D.Impulse);
     }
 
     /*private void CheckingForLedge()

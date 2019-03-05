@@ -130,7 +130,7 @@ public class TribalMovingState : TribalHSMState
 
     protected void ApplyForceOnDirection(int direction)
     {
-        Owner.RigidBody2D.AddForce(new Vector2(direction * Owner.Acceleration, 0), ForceMode2D.Impulse);
+        Owner.RigidBody2D.AddForce(new Vector2(direction * Owner.TribalConfigurationData.Acceleration, 0), ForceMode2D.Impulse);
     }
 
     protected void ClampVelocity(int lastDirection)

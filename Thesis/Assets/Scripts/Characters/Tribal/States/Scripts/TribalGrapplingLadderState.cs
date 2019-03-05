@@ -13,4 +13,6 @@ public class TribalGrapplingLadderState : TribalHSMState
 
         Owner.RigidBody2D.velocity = new Vector2(0, 0);
     }
+
+    
 }

@@ -27,4 +27,17 @@ public class TribalHangingLadderState : TribalHSMState
 
         Owner.RigidBody2D.gravityScale = previousGravityScale;
     }
+
+    protected override bool HandleEvent(Character.Order trigger)
+    {
+        if (trigger == Character.Order.Jump)
+        {
+            int direction = Owner.FacingDirection * -1;
+
+            Owner.RigidBody2D.AddForce(new Vector2(direction * Owner.TribalConfigurationData.JumpForceFromLadder, 0), ForceMode2D.Impulse);
+            Owner.Face(direction);
+        }
+
+        return false;
+    }
 }

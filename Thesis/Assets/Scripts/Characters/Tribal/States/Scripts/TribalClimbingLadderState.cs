@@ -69,11 +69,13 @@ public class TribalClimbingLadderState : TribalHSMState
             case Character.Order.MoveRight:
 
                 Owner.RigidBody2D.AddForce(new Vector2(1 / climbDifficulty, 0));
+                Owner.Face(false);
                 break;
 
             case Character.Order.MoveLeft:
 
                 Owner.RigidBody2D.AddForce(new Vector2(-1 / climbDifficulty, 0));
+                Owner.Face(true);
                 break;
         }
 

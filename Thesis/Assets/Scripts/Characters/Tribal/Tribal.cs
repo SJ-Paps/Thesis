@@ -55,6 +55,19 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         public RaycastHit2D ledgeCheckHit;
     }
 
+    [Serializable]
+    public class TribalConfiguration
+    {
+        [SerializeField]
+        private float maxMovementVelocity, acceleration, jumpMaxHeight, jumpAcceleration, jumpForceFromLadder;
+
+        public float MaxMovementVelocity { get => maxMovementVelocity; }
+        public float Acceleration { get => acceleration; }
+        public float JumpMaxHeight { get => jumpMaxHeight; }
+        public float JumpAcceleration { get => jumpAcceleration; }
+        public float JumpForceFromLadder { get => jumpForceFromLadder; }
+    }
+
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId WalkAnimatorTrigger = new AnimatorParameterId("Move");
@@ -67,46 +80,12 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 
     public event Action onDead;
 
-    public const float activableDetectionOffset = 0.2f;
-
     public Animator Animator { get; protected set; }
     public Rigidbody2D RigidBody2D { get; protected set; }
 
     public SJCollider2D Collider { get; protected set; }
     
     protected Hand hand;
-
-    [SerializeField]
-    private float maxMovementVelocity, acceleration;
-
-    public PercentageReversibleNumber MaxVelocity { get; protected set; }
-
-    public float Acceleration
-    {
-        get
-        {
-            return acceleration;
-        }
-    }
-
-    [SerializeField]
-    private float jumpMaxHeight, jumpAcceleration;
-
-    public float JumpMaxHeight
-    {
-        get
-        {
-            return jumpMaxHeight;
-        }
-    }
-
-    public float JumpAcceleration
-    {
-        get
-        {
-            return jumpAcceleration;
-        }
-    }
 
     public event Action<Collision2D> onCollisionEnter2D
     {
@@ -160,6 +139,19 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         }
     }
 
+    public PercentageReversibleNumber MaxVelocity { get; protected set; }
+
+    [SerializeField]
+    private TribalConfiguration configuration;
+
+    public TribalConfiguration TribalConfigurationData
+    {
+        get
+        {
+            return configuration;
+        }
+    }
+
     private EyeCollection eyes;
 
     protected override void Awake()
@@ -175,7 +167,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 
         base.Awake();
 
-        MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
+        MaxVelocity = new PercentageReversibleNumber(TribalConfigurationData.MaxMovementVelocity);
 
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
     }

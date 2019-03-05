@@ -61,6 +61,21 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
+    public int FacingDirection
+    {
+        get
+        {
+            if(transform.right.x > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+    }
+
     
     
     [HideInInspector]
@@ -140,6 +155,18 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
             transform.Rotate(Vector3.up, 180);
 
             OnFacingChanged(IsFacingLeft);
+        }
+    }
+
+    public void Face(int direction)
+    {
+        if(direction >= 0)
+        {
+            Face(false);
+        }
+        else
+        {
+            Face(true);
         }
     }
 
