@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: 1b6dfcf6b22c0e240a6f45558fd3028b, type: 3}
   stateClassFullName: TribalCheckIsInFrontOfHide
+  activeDebug: 0
+  debugName: 
+  invert: 0

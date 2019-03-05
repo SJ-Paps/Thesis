@@ -46,8 +46,22 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
 
     protected virtual void OnOwnerReferencePropagated()
     {
-
+#if UNITY_EDITOR
+        onBeforeAnyTransitionate += DebugTransition;
+#endif
     }
+
+#if UNITY_EDITOR
+    private void DebugTransition(HSMState<byte, byte> stateFrom, byte trigger, HSMState<byte, byte> stateTo)
+    {
+        if(activeDebug && (stateFrom == this || stateTo == this))
+        {
+            HSMTransition<byte, byte> transition = stateFrom.ActiveParent.GetTransition(stateFrom.StateId, trigger);
+
+            EditorDebug.Log("State Transition: " + System.Environment.NewLine + transition.DebugName);
+        }
+    }
+#endif
 
     public void PropagateBlackboardReference(Blackboard blackboard)
     {
@@ -122,7 +136,7 @@ public abstract class SJHSMTransition
     [SerializeField]
     public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
 
-    public abstract string DebugName { get; }
+    public virtual string DebugName { get; }
 
     public HSMTransition<byte, byte> ToHSMTransition()
     {

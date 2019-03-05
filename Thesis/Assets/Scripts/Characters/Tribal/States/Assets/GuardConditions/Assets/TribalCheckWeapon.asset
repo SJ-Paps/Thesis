@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: 7c1448293028d72408b87fbe4c16bea3, type: 3}
   stateClassFullName: TribalCheckWeapon
+  activeDebug: 0
+  debugName: 
   invert: 0

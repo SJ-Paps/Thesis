@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void StateChangeEvent<TTrigger>(TTrigger trigger) where TTrigger : unmanaged;
+public delegate void StateChangeEvent<TState, TTrigger>(HSMState<TState, TTrigger> stateFrom, TTrigger trigger, HSMState<TState, TTrigger> stateTo) where TState : unmanaged where TTrigger : unmanaged;
 
 public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, TTrigger>> where TState : unmanaged where TTrigger : unmanaged
 {
-    public string DebugName { get; protected set; }
+    public string DebugName { get; set; }
 
     public TState StateId { get; protected set; }
 
@@ -59,10 +59,10 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
         }
     }
 
-    public event StateChangeEvent<TTrigger> onStateChanged;
-    public event StateChangeEvent<TTrigger> onBeforeTransitionate;
+    public event StateChangeEvent<TState, TTrigger> onStateChanged;
+    public event StateChangeEvent<TState, TTrigger> onBeforeTransitionate;
 
-    public event StateChangeEvent<TTrigger> onAnyStateChanged
+    public event StateChangeEvent<TState, TTrigger> onAnyStateChanged
     {
         add
         {
@@ -75,7 +75,7 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
         }
     }
 
-    public event StateChangeEvent<TTrigger> onBeforeAnyTransitionate
+    public event StateChangeEvent<TState, TTrigger> onBeforeAnyTransitionate
     {
         add
         {
@@ -250,7 +250,7 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
 
     }
 
-    private void AddOnAnyStateChangedListener(StateChangeEvent<TTrigger> listener)
+    private void AddOnAnyStateChangedListener(StateChangeEvent<TState, TTrigger> listener)
     {
         for (int i = 0; i < parallelChilds.Count; i++)
         {
@@ -266,7 +266,7 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
         onStateChanged += listener;
     }
 
-    private void RemoveOnAnyStateChangedListener(StateChangeEvent<TTrigger> listener)
+    private void RemoveOnAnyStateChangedListener(StateChangeEvent<TState, TTrigger> listener)
     {
         for (int i = 0; i < parallelChilds.Count; i++)
         {
@@ -281,7 +281,7 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
         onStateChanged -= listener;
     }
 
-    private void AddOnBeforeAnyTransitionateListener(StateChangeEvent<TTrigger> listener)
+    private void AddOnBeforeAnyTransitionateListener(StateChangeEvent<TState, TTrigger> listener)
     {
         for (int i = 0; i < parallelChilds.Count; i++)
         {
@@ -297,7 +297,7 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
         onBeforeTransitionate += listener;
     }
 
-    private void RemoveOnBeforeAnyTransitionateListener(StateChangeEvent<TTrigger> listener)
+    private void RemoveOnBeforeAnyTransitionateListener(StateChangeEvent<TState, TTrigger> listener)
     {
         for (int i = 0; i < parallelChilds.Count; i++)
         {
@@ -560,6 +560,16 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
     public bool ContainsImmediateParallelChildState(TState state)
     {
         return GetImmediateParallelChildState(state) != null;
+    }
+
+    public bool IsOnState(TState state, HSMState<TState, TTrigger> beginPoint)
+    {
+        return beginPoint.InternalIsOnState(state);
+    }
+
+    public bool IsOnState(HSMState<TState, TTrigger> state, HSMState<TState, TTrigger> beginPoint)
+    {
+        return beginPoint.InternalIsOnState(state);
     }
 
     public bool IsOnState(TState state)
@@ -1049,23 +1059,26 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
         return false;
     }
 
-    private void Transitionate(in HSMTransition<TState, TTrigger> transition)
+    private void Transitionate(HSMTransition<TState, TTrigger> transition)
     {
-        if(onBeforeTransitionate != null)
+        var stateFrom = ActiveNonParallelChild;
+        var stateTo = GetImmediateChildState(transition.stateTo);
+
+        if (onBeforeTransitionate != null)
         {
-            onBeforeTransitionate(transition.trigger);
+            onBeforeTransitionate(stateFrom, transition.trigger, stateTo);
         }
 
         ExitActiveNonParallelChild();
 
-        ActiveNonParallelChild = GetImmediateChildState(transition.stateTo);
+        ActiveNonParallelChild = stateTo;
 
         ActiveNonParallelChild.SetActiveParent(this);
         ActiveNonParallelChild.InternalEnter();
 
         if (onStateChanged != null)
         {
-            onStateChanged(transition.trigger);
+            onStateChanged(stateFrom, transition.trigger, stateTo);
         }
 
         ActiveNonParallelChild.InternalOnEnter();
@@ -1185,6 +1198,10 @@ public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, 
     protected List<GuardCondition> andGuardConditions;
     protected List<GuardCondition> orGuardConditions;
 
+    public bool disabled;
+
+    public string DebugName { get; set; }
+
     public HSMTransition(TState stateFrom, TTrigger trigger, TState stateTo)
     {
         this.stateFrom = stateFrom;
@@ -1230,6 +1247,11 @@ public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, 
 
     public bool IsValidTransition()
     {
+        if(disabled)
+        {
+            return false;
+        }
+
         for (int i = 0; i < andGuardConditions.Count; i++)
         {
             if(andGuardConditions[i].IsValid() == false)
@@ -1250,12 +1272,10 @@ public class HSMTransition<TState, TTrigger> : IEquatable<HSMTransition<TState, 
 
             return false;
         }
-        else
-        {
-            return true;
-        }
 
-        
+        return true;
+
+
     }
 
     public bool Equals(HSMTransition<TState, TTrigger> other)

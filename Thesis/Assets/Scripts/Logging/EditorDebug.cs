@@ -16,6 +16,13 @@ public class EditorDebug
 #endif
     }
 
+    public static void LogError(object obj)
+    {
+#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && LOG
+        Debug.LogError(obj);
+#endif
+    }
+
     public static void DrawLine(Vector3 origin, Vector3 end, Color color)
     {
 #if UNITY_EDITOR && LOG

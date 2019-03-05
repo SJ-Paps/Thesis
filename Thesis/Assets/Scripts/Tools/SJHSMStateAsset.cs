@@ -62,6 +62,12 @@ public abstract class SJHSMStateAsset : HSMStateAsset<byte, byte>
 public abstract class SJHSMTransition<TState, TTrigger> : SJHSMTransition where TState : Enum where TTrigger : Enum
 {
     [SerializeField]
+    private string titleName;
+
+    [SerializeField]
+    private bool disabled;
+
+    [SerializeField]
     private TState stateFrom;
 
     [SerializeField]
@@ -69,7 +75,7 @@ public abstract class SJHSMTransition<TState, TTrigger> : SJHSMTransition where 
 
     [SerializeField]
     private TState stateTo;
-
+    
     private string debugName;
 
     public override string DebugName
@@ -78,7 +84,7 @@ public abstract class SJHSMTransition<TState, TTrigger> : SJHSMTransition where 
         {
             if(string.IsNullOrEmpty(debugName))
             {
-                debugName = "State From: " + stateFrom.ToString() + " Trigger: " + trigger.ToString() + " State To: " + stateTo.ToString();
+                debugName = titleName + ' ' + "State From: " + stateFrom.ToString() + " Trigger: " + trigger.ToString() + " State To: " + stateTo.ToString();
             }
 
             return debugName;
@@ -87,7 +93,12 @@ public abstract class SJHSMTransition<TState, TTrigger> : SJHSMTransition where 
 
     protected override HSMTransition<byte, byte> CreateConcreteTransition()
     {
-        return new HSMTransition<byte, byte>((byte)(object)stateFrom, (byte)(object)trigger, (byte)(object)stateTo);
+        HSMTransition<byte, byte> transition = new HSMTransition<byte, byte>((byte)(object)stateFrom, (byte)(object)trigger, (byte)(object)stateTo);
+
+        transition.disabled = disabled;
+        transition.DebugName = DebugName;
+
+        return transition;
     }
 }
 

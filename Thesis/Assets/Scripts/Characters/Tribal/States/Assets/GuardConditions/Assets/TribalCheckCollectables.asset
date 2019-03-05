@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: 45c608fbe557b1d46b7f934de2dccbee, type: 3}
   stateClassFullName: TribalCheckCollectables
-  activeDebug: 1
+  activeDebug: 0
   debugName: Tribal Check Collectables
   invert: 0

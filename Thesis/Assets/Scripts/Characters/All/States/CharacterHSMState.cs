@@ -11,21 +11,15 @@ public abstract class CharacterHSMState : SJHSMState
 
     protected override void OnOwnerReferencePropagated()
     {
+        base.OnOwnerReferencePropagated();
+
         onAnyStateChanged += CatchEnteringTrigger;
     }
 
-    private void CatchEnteringTrigger(byte trigger)
+    private void CatchEnteringTrigger(HSMState<byte, byte> stateFrom, byte trigger, HSMState<byte, byte> stateTo)
     {
-        if(IsOnState(this))
+        if(IsOnState(this, stateTo))
         {
-#if UNITY_EDITOR
-            if (activeDebug)
-            {
-                EditorDebug.Log("State: " + DebugName + " Type: " + GetType().Name);
-                EditorDebug.Log("Entering Trigger: " + (Character.Order)trigger);
-            }
-#endif
-
             LastEnteringTrigger = (Character.Order)trigger;
 
             for(int i = 0; i < parallelChilds.Count; i++)
