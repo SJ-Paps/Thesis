@@ -81,4 +81,9 @@ public abstract class SJCollider2D : SJCollider2DBase {
     {
         return InnerCollider.IsTouching(collider);
     }
+
+    public ColliderDistance2D Distance(SJCollider2D collider)
+    {
+        return InnerCollider.Distance(collider.InnerCollider);
+    }
 }

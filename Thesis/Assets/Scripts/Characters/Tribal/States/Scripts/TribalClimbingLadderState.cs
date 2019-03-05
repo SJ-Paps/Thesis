@@ -53,7 +53,6 @@ public class TribalClimbingLadderState : TribalHSMState
 
         ClampVelocity();
 
-        shouldStop = true;
         horizontalDirectionOrder = default;
         verticalDirectionOrder = default;
     }
@@ -69,45 +68,56 @@ public class TribalClimbingLadderState : TribalHSMState
 
         Rigidbody2D ownerRigidbody = Owner.RigidBody2D;
 
-        if(verticalDirectionOrder == Character.Order.ClimbUp)
+        shouldStop = true;
+
+        if (verticalDirectionOrder == Character.Order.ClimbUp && CanMoveOnDirection(verticalDirectionOrder))
         {
-            if(ownerRigidbody.velocity.y < 0)
+            if (ownerRigidbody.velocity.y < 0)
             {
                 ownerRigidbody.velocity = new Vector2(ownerRigidbody.velocity.x, 0);
             }
 
             ownerRigidbody.AddForce(new Vector2(0, Owner.TribalConfigurationData.ClimbForce / climbDifficulty));
+
+            shouldStop = false;
         }
-        else if(verticalDirectionOrder == Character.Order.ClimbDown)
+        else if (verticalDirectionOrder == Character.Order.ClimbDown && CanMoveOnDirection(verticalDirectionOrder))
         {
-            if(ownerRigidbody.velocity.y > 0)
+            if (ownerRigidbody.velocity.y > 0)
             {
                 ownerRigidbody.velocity = new Vector2(ownerRigidbody.velocity.x, 0);
             }
-            
+
             ownerRigidbody.AddForce(new Vector2(0, -1 * Owner.TribalConfigurationData.ClimbForce));
+
+            shouldStop = false;
         }
 
-        if(horizontalDirectionOrder == Character.Order.MoveLeft)
+        if (horizontalDirectionOrder == Character.Order.MoveLeft && CanMoveOnDirection(horizontalDirectionOrder))
         {
-            if(ownerRigidbody.velocity.x > 0)
+            if (ownerRigidbody.velocity.x > 0)
             {
                 ownerRigidbody.velocity = new Vector2(0, ownerRigidbody.velocity.y);
             }
 
             ownerRigidbody.AddForce(new Vector2(-1 * Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
             Owner.Face(true);
+
+            shouldStop = false;
         }
-        else if(horizontalDirectionOrder == Character.Order.MoveRight)
+        else if (horizontalDirectionOrder == Character.Order.MoveRight && CanMoveOnDirection(horizontalDirectionOrder))
         {
-            if(ownerRigidbody.velocity.x < 0)
+            if (ownerRigidbody.velocity.x < 0)
             {
                 ownerRigidbody.velocity = new Vector2(0, ownerRigidbody.velocity.y);
             }
 
             ownerRigidbody.AddForce(new Vector2(Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
             Owner.Face(false);
+
+            shouldStop = false;
         }
+
     }
 
     private void ClampVelocity()
@@ -118,6 +128,7 @@ public class TribalClimbingLadderState : TribalHSMState
 
         if (velocity.x > maxClimbVelocityPositive)
         {
+            Debug.Log("AA");
             velocity = new Vector2(maxClimbVelocityPositive, velocity.y);
         }
         else if (velocity.x < maxClimbVelocityNegative)
@@ -144,16 +155,51 @@ public class TribalClimbingLadderState : TribalHSMState
         if (trigger == Character.Order.ClimbUp || trigger == Character.Order.ClimbDown)
         {
             verticalDirectionOrder = trigger;
-            shouldStop = false;
             isDirectionOrder = true;
         }
         else if(trigger == Character.Order.MoveRight || trigger == Character.Order.MoveLeft)
         {
             horizontalDirectionOrder = trigger;
-            shouldStop = false;
             isDirectionOrder = true;
         }
 
         return isDirectionOrder;
+    }
+
+    private bool CanMoveOnDirection(Character.Order orderDirection)
+    {
+        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Owner.Collider.offset;
+        float snap = 0.1f;
+
+        if (orderDirection == Character.Order.ClimbUp)
+        {
+            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x, offsetWorldPosition.y + snap)))
+            {
+                return true;
+            }
+        }
+        else if (orderDirection == Character.Order.ClimbDown)
+        {
+            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x, offsetWorldPosition.y - snap)))
+            {
+                return true;
+            }
+        }
+        else if (orderDirection == Character.Order.MoveLeft)
+        {
+            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x - snap, offsetWorldPosition.y)))
+            {
+                return true;
+            }
+        }
+        else if (orderDirection == Character.Order.MoveRight)
+        {
+            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x + snap, offsetWorldPosition.y)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

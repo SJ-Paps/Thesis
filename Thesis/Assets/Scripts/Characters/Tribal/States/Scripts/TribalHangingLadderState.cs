@@ -4,6 +4,8 @@ public class TribalHangingLadderState : TribalHSMState
 {
     private float previousGravityScale;
 
+    private Ladder currentLadder;
+
     public TribalHangingLadderState(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
@@ -13,7 +15,7 @@ public class TribalHangingLadderState : TribalHSMState
     {
         base.OnEnter();
 
-        Ladder ladder = (Ladder)Blackboard.activable;
+        currentLadder = (Ladder)Blackboard.activable;
         
         Owner.RigidBody2D.velocity = new Vector2(0, 0);
 
