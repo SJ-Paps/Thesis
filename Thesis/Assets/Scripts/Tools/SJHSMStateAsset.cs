@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public abstract class SJHSMStateAsset : HSMStateAsset<byte, byte>
 {
@@ -56,4 +57,55 @@ public abstract class SJHSMStateAsset : HSMStateAsset<byte, byte>
         return parallelChilds;
     }
 
+}
+
+public abstract class SJHSMTransition<TState, TTrigger> : SJHSMTransition where TState : Enum where TTrigger : Enum
+{
+    [SerializeField]
+    private TState stateFrom;
+
+    [SerializeField]
+    private TTrigger trigger;
+
+    [SerializeField]
+    private TState stateTo;
+
+    private string debugName;
+
+    public override string DebugName
+    {
+        get
+        {
+            if(string.IsNullOrEmpty(debugName))
+            {
+                debugName = "State From: " + stateFrom.ToString() + " Trigger: " + trigger.ToString() + " State To: " + stateTo.ToString();
+            }
+
+            return debugName;
+        }
+    }
+
+    protected override HSMTransition<byte, byte> CreateConcreteTransition()
+    {
+        return new HSMTransition<byte, byte>((byte)(object)stateFrom, (byte)(object)trigger, (byte)(object)stateTo);
+    }
+}
+
+public abstract class SJHSMStateAsset<TState, TTrigger, TConcreteHSMTransitionClass> : SJHSMStateAsset where TState : Enum where TTrigger : Enum where TConcreteHSMTransitionClass : SJHSMTransition<TState, TTrigger>
+{
+    [SerializeField]
+    private TState state;
+
+    [SerializeField]
+    private TConcreteHSMTransitionClass[] transitions;
+
+    protected override SJHSMTransition[] GetSJHSMTranstions()
+    {
+        return transitions;
+    }
+
+    protected override byte GetStateId()
+    {
+        return (byte)(object)state;
+    }
 }

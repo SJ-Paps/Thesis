@@ -68,4 +68,14 @@ public class TribalClimbingLedgeState : TribalHSMState
             yield return null;
         }
     }
+
+    protected override bool HandleEvent(Character.Order trigger)
+    {
+        if(trigger == Character.Order.Jump)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

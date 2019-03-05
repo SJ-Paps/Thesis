@@ -122,6 +122,8 @@ public abstract class SJHSMTransition
     [SerializeField]
     public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
 
+    public abstract string DebugName { get; }
+
     public HSMTransition<byte, byte> ToHSMTransition()
     {
         HSMTransition<byte, byte> transition = CreateConcreteTransition();

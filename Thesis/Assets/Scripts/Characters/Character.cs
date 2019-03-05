@@ -82,7 +82,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     protected Blackboard blackboard;
 
     [SerializeField]
-    private CharacterHSMStateAsset hsmAsset;
+    private SJHSMStateAsset hsmAsset;
 
     private CharacterHSMState hsm;
 
@@ -92,7 +92,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         orders = new Queue<Order>();
 
-        hsm = CharacterHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
+        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
         
     }
 

@@ -3,7 +3,7 @@
 public abstract class ClimbableObject : ActivableObject<Character>, IClimbable
 {
     [SerializeField]
-    private Transform topPoint, bottomPoint;
+    private Transform bottomPoint;
 
     [SerializeField]
     private float climbDifficulty;
@@ -20,14 +20,6 @@ public abstract class ClimbableObject : ActivableObject<Character>, IClimbable
             }
 
             return collider;
-        }
-    }
-
-    public Vector3 Top
-    {
-        get
-        {
-            return topPoint.position;
         }
     }
 
