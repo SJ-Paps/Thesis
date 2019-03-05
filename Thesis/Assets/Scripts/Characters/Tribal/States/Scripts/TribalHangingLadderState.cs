@@ -21,6 +21,8 @@ public class TribalHangingLadderState : TribalHSMState
 
         previousGravityScale = Owner.RigidBody2D.gravityScale;
         Owner.RigidBody2D.gravityScale = 0;
+
+        ContraintPosition(currentLadder);
     }
 
     protected override void OnExit()
@@ -38,5 +40,17 @@ public class TribalHangingLadderState : TribalHSMState
         }
 
         return false;
+    }
+
+    private void ContraintPosition(Ladder ladder)
+    {
+        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Owner.Collider.offset;
+
+        if (ladder.Collider.OverlapPoint(offsetWorldPosition) == false)
+        {
+            ColliderDistance2D colliderDistance2D = Owner.Collider.Distance(ladder.Collider);
+
+            Owner.RigidBody2D.MovePosition(colliderDistance2D.pointB + (Owner.Collider.offset * Owner.FacingDirection));
+        }
     }
 }

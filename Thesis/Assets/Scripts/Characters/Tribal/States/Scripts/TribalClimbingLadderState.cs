@@ -70,53 +70,66 @@ public class TribalClimbingLadderState : TribalHSMState
 
         shouldStop = true;
 
-        if (verticalDirectionOrder == Character.Order.ClimbUp && CanMoveOnDirection(verticalDirectionOrder))
+        if(CanMoveOnDirection(verticalDirectionOrder))
         {
-            if (ownerRigidbody.velocity.y < 0)
+            if (verticalDirectionOrder == Character.Order.ClimbUp)
             {
-                ownerRigidbody.velocity = new Vector2(ownerRigidbody.velocity.x, 0);
-            }
+                if (ownerRigidbody.velocity.y < 0)
+                {
+                    ClampVelocityAxis(true);
+                }
 
-            ownerRigidbody.AddForce(new Vector2(0, Owner.TribalConfigurationData.ClimbForce / climbDifficulty));
+                ownerRigidbody.AddForce(new Vector2(0, Owner.TribalConfigurationData.ClimbForce / climbDifficulty));
+            }
+            else if (verticalDirectionOrder == Character.Order.ClimbDown)
+            {
+                if (ownerRigidbody.velocity.y > 0)
+                {
+                    ClampVelocityAxis(true);
+                }
+
+                ownerRigidbody.AddForce(new Vector2(0, -1 * Owner.TribalConfigurationData.ClimbForce));
+            }
 
             shouldStop = false;
         }
-        else if (verticalDirectionOrder == Character.Order.ClimbDown && CanMoveOnDirection(verticalDirectionOrder))
+        else
         {
-            if (ownerRigidbody.velocity.y > 0)
-            {
-                ownerRigidbody.velocity = new Vector2(ownerRigidbody.velocity.x, 0);
-            }
+            ClampVelocityAxis(true);
+        }
 
-            ownerRigidbody.AddForce(new Vector2(0, -1 * Owner.TribalConfigurationData.ClimbForce));
+        if(CanMoveOnDirection(horizontalDirectionOrder))
+        {
+            if (horizontalDirectionOrder == Character.Order.MoveLeft)
+            {
+                if (ownerRigidbody.velocity.x > 0)
+                {
+                    ClampVelocityAxis(false);
+                }
+
+                ownerRigidbody.AddForce(new Vector2(-1 * Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
+                Owner.Face(true);
+            }
+            else if (horizontalDirectionOrder == Character.Order.MoveRight)
+            {
+                if (ownerRigidbody.velocity.x < 0)
+                {
+                    ClampVelocityAxis(false);
+                }
+
+                ownerRigidbody.AddForce(new Vector2(Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
+                Owner.Face(false);
+            }
 
             shouldStop = false;
         }
-
-        if (horizontalDirectionOrder == Character.Order.MoveLeft && CanMoveOnDirection(horizontalDirectionOrder))
+        else
         {
-            if (ownerRigidbody.velocity.x > 0)
-            {
-                ownerRigidbody.velocity = new Vector2(0, ownerRigidbody.velocity.y);
-            }
-
-            ownerRigidbody.AddForce(new Vector2(-1 * Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
-            Owner.Face(true);
-
-            shouldStop = false;
+            ClampVelocityAxis(false);
         }
-        else if (horizontalDirectionOrder == Character.Order.MoveRight && CanMoveOnDirection(horizontalDirectionOrder))
-        {
-            if (ownerRigidbody.velocity.x < 0)
-            {
-                ownerRigidbody.velocity = new Vector2(0, ownerRigidbody.velocity.y);
-            }
+        
 
-            ownerRigidbody.AddForce(new Vector2(Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
-            Owner.Face(false);
-
-            shouldStop = false;
-        }
+        
 
     }
 
@@ -128,7 +141,6 @@ public class TribalClimbingLadderState : TribalHSMState
 
         if (velocity.x > maxClimbVelocityPositive)
         {
-            Debug.Log("AA");
             velocity = new Vector2(maxClimbVelocityPositive, velocity.y);
         }
         else if (velocity.x < maxClimbVelocityNegative)
@@ -201,5 +213,17 @@ public class TribalClimbingLadderState : TribalHSMState
         }
 
         return false;
+    }
+
+    private void ClampVelocityAxis(bool vertical)
+    {
+        if(vertical)
+        {
+            Owner.RigidBody2D.velocity = new Vector2(Owner.RigidBody2D.velocity.x, 0);
+        }
+        else
+        {
+            Owner.RigidBody2D.velocity = new Vector2(0, Owner.RigidBody2D.velocity.y);
+        }
     }
 }

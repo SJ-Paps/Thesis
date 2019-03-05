@@ -41,8 +41,7 @@ MonoBehaviour:
     stateFrom: 40
     trigger: 23
     stateTo: 29
-  - ANDGuardConditions:
-    - {fileID: 11400000, guid: 6f51f1c9a899399489b99acaed0910dd, type: 2}
+  - ANDGuardConditions: []
     ORGuardConditions: []
     titleName: 
     disabled: 0
