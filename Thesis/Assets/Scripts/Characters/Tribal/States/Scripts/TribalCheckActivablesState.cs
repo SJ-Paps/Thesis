@@ -62,13 +62,15 @@ public class TribalCheckActivablesState : TribalHSMState
                 }
             }
 
-            activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);
-
-            Blackboard.activable = contextualActivable;
-
-            if (SendEvent(Character.Order.Activate))
+            if(activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable)
+                || activableStorage.ContainsType<CollectableObject>(out collectableObject))
             {
-                return true;
+                Blackboard.activable = contextualActivable;
+
+                if (SendEvent(Character.Order.Activate))
+                {
+                    return true;
+                }
             }
         }
 

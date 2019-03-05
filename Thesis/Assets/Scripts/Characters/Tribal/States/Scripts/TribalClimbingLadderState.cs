@@ -47,11 +47,18 @@ public class TribalClimbingLadderState : TribalHSMState
 
     private void OnFixedUpdate()
     {
+        float climbDifficulty = currentLadder.GetClimbDifficulty();
+
+        if(climbDifficulty == 0)
+        {
+            climbDifficulty = 1;
+        }
+
         switch(directionOrder)
         {
             case Character.Order.ClimbUp:
 
-                Owner.RigidBody2D.AddForce(new Vector2(0, 1 / currentLadder.GetClimbDifficulty()));
+                Owner.RigidBody2D.AddForce(new Vector2(0, 1 / climbDifficulty));
                 break;
 
             case Character.Order.ClimbDown:
@@ -61,12 +68,12 @@ public class TribalClimbingLadderState : TribalHSMState
 
             case Character.Order.MoveRight:
 
-                Owner.RigidBody2D.AddForce(new Vector2(1 / currentLadder.GetClimbDifficulty(), 0));
+                Owner.RigidBody2D.AddForce(new Vector2(1 / climbDifficulty, 0));
                 break;
 
             case Character.Order.MoveLeft:
 
-                Owner.RigidBody2D.AddForce(new Vector2(-1 / currentLadder.GetClimbDifficulty(), 0));
+                Owner.RigidBody2D.AddForce(new Vector2(-1 / climbDifficulty, 0));
                 break;
         }
 

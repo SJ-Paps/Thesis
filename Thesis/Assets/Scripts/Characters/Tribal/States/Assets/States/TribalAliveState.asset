@@ -65,5 +65,10 @@ MonoBehaviour:
   - ANDGuardConditions: []
     ORGuardConditions: []
     stateFrom: 26
+    trigger: 4
+    stateTo: 7
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    stateFrom: 26
     trigger: 5
     stateTo: 7
