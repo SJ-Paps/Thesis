@@ -22,12 +22,12 @@ public class HSMStatesVisualizer : EditorWindow {
     {
         GUI.BeginGroup(new Rect(panX, panY, 100000, 100000));
 
-        if(windowsToAttach.Count == 2)
+        /*if(windowsToAttach.Count == 2)
         {
             attachedWindows.Add(windowsToAttach[0]);
             attachedWindows.Add(windowsToAttach[1]);
             windowsToAttach.Clear();
-        }
+        }*/
 
         //Debug.Log(windowsToAttach.Count);
 
@@ -35,7 +35,7 @@ public class HSMStatesVisualizer : EditorWindow {
         {
             for(int i = 0; i < attachedWindows.Count; i += 2)
             {
-                DrawNodeCurve(windows[attachedWindows[i]], windows[attachedWindows[i + 1]]);
+                DrawNodeCurveForChilds(windows[attachedWindows[i]], windows[attachedWindows[i + 1]]);
             }
         }
 
@@ -57,25 +57,25 @@ public class HSMStatesVisualizer : EditorWindow {
 
         if(GUI.RepeatButton(new Rect(15, 5, 20, 20), "^"))
         {
-            panY -= 1;
+            panY += 1;
             Repaint();
         }
 
         if(GUI.RepeatButton(new Rect(5, 25, 20, 20), "<"))
         {
-            panX -= 1;
+            panX += 1;
             Repaint();
         }
 
         if(GUI.RepeatButton(new Rect(25, 25, 20, 20), ">"))
         {
-            panX += 1;
+            panX -= 1;
             Repaint();
         }
 
         if(GUI.RepeatButton(new Rect(15, 45, 20, 20), "v"))
         {
-            panY += 1;
+            panY -= 1;
             Repaint();
         }
     }
@@ -100,22 +100,38 @@ public class HSMStatesVisualizer : EditorWindow {
         {
             j++;
 
+            int aux = j - 1;
+
             windows.Add(new Rect(10, 10, 100, 100));
 
             for(int i = 0; i < SJHSMSasset.childs.Length; i++)
             {
                 if(!totalStates.Contains(SJHSMSasset.childs[i]))
                 {
+                    attachedWindows.Add(aux);
                     totalStates.Add(SJHSMSasset.childs[i]);
+                    attachedWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
                     StateWindowsGenerator(SJHSMSasset.childs[i]);
+                }
+                else
+                {
+                    attachedWindows.Add(aux);
+                    attachedWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
                 }
             }
             for(int i = 0; i < SJHSMSasset.parallelChilds.Length; i++)
             {
                 if(!totalStates.Contains(SJHSMSasset.parallelChilds[i]))
                 {
+                    attachedWindows.Add(aux);
                     totalStates.Add(SJHSMSasset.parallelChilds[i]);
+                    attachedWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
                     StateWindowsGenerator(SJHSMSasset.parallelChilds[i]);
+                }
+                else
+                {
+                    attachedWindows.Add(aux);
+                    attachedWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
                 }
             }
         }
@@ -125,13 +141,14 @@ public class HSMStatesVisualizer : EditorWindow {
     {
         if(GUILayout.Button("Attach"))
         {
+            Debug.Log(id);
             windowsToAttach.Add(id);
         }
 
         GUI.DragWindow();
     }
 
-    void DrawNodeCurve(Rect start, Rect end)
+    void DrawNodeCurveForChilds(Rect start, Rect end)
     {
         Vector3 startPos = new Vector3(start.x + start.width / 2, start.y + start.height, 0);
         Vector3 endPos = new Vector3(end.x + end.width / 2, end.y, 0);
