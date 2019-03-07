@@ -8,7 +8,8 @@ public class HSMStatesVisualizer : EditorWindow {
     List<SJHSMStateAsset> totalStates = new List<SJHSMStateAsset>();
     List<Rect> windows = new List<Rect>();
     List<int> windowsToAttach = new List<int>();
-    List<int> attachedWindows = new List<int>();
+    List<int> attacheChildWindows = new List<int>();
+    List<int> attachedParallelChildWindows = new List<int>();
     float panX = 0;
     float panY = 0;
 
@@ -31,11 +32,19 @@ public class HSMStatesVisualizer : EditorWindow {
 
         //Debug.Log(windowsToAttach.Count);
 
-        if(attachedWindows.Count >= 2)
+        if(attacheChildWindows.Count >= 2)
         {
-            for(int i = 0; i < attachedWindows.Count; i += 2)
+            for(int i = 0; i < attacheChildWindows.Count; i += 2)
             {
-                DrawNodeCurveForChilds(windows[attachedWindows[i]], windows[attachedWindows[i + 1]]);
+                DrawNodeCurveForChilds(windows[attacheChildWindows[i]], windows[attacheChildWindows[i + 1]]);
+            }
+        }
+
+        if(attachedParallelChildWindows.Count >= 2)
+        {
+            for(int i = 0; i < attachedParallelChildWindows.Count; i += 2)
+            {
+                DrawNodeCurveForParallelChilds(windows[attachedParallelChildWindows[i]], windows[attachedParallelChildWindows[i + 1]]);
             }
         }
 
@@ -86,7 +95,8 @@ public class HSMStatesVisualizer : EditorWindow {
         {
             windows.Clear();
             totalStates.Clear();
-            attachedWindows.Clear();
+            attacheChildWindows.Clear();
+            attachedParallelChildWindows.Clear();
             j = 0;
             totalStates.Add(asset);
             StateWindowsGenerator(asset);
@@ -108,30 +118,31 @@ public class HSMStatesVisualizer : EditorWindow {
             {
                 if(!totalStates.Contains(SJHSMSasset.childs[i]))
                 {
-                    attachedWindows.Add(aux);
+                    attacheChildWindows.Add(aux);
                     totalStates.Add(SJHSMSasset.childs[i]);
-                    attachedWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
+                    attacheChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
                     StateWindowsGenerator(SJHSMSasset.childs[i]);
                 }
                 else
                 {
-                    attachedWindows.Add(aux);
-                    attachedWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
+                    attacheChildWindows.Add(aux);
+                    attacheChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
                 }
             }
+
             for(int i = 0; i < SJHSMSasset.parallelChilds.Length; i++)
             {
                 if(!totalStates.Contains(SJHSMSasset.parallelChilds[i]))
                 {
-                    attachedWindows.Add(aux);
+                    attachedParallelChildWindows.Add(aux);
                     totalStates.Add(SJHSMSasset.parallelChilds[i]);
-                    attachedWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
+                    attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
                     StateWindowsGenerator(SJHSMSasset.parallelChilds[i]);
                 }
                 else
                 {
-                    attachedWindows.Add(aux);
-                    attachedWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
+                    attachedParallelChildWindows.Add(aux);
+                    attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
                 }
             }
         }
@@ -160,5 +171,19 @@ public class HSMStatesVisualizer : EditorWindow {
             Handles.DrawBezier(startPos, endPos, startTan, endTan, shadowCol, null, (i + 1) * 5);
         }
         Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.green, null, 1);
+    }
+
+    void DrawNodeCurveForParallelChilds(Rect start, Rect end)
+    {
+        Vector3 startPos = new Vector3(start.x + start.width, start.y + start.height / 2, 0);
+        Vector3 endPos = new Vector3(end.x, end.y + end.height / 2, 0);
+        Vector3 startTan = startPos + Vector3.right * 50;
+        Vector3 endTan = endPos + Vector3.left * 50;
+        Color shadowCol = new Color(0, 0, 0, 0.06f);
+        for(int i = 0; i < 3; i++)
+        {
+            Handles.DrawBezier(startPos, endPos, startTan, endTan, shadowCol, null, (i + 1) * 5);
+        }
+        Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.red, null, 1);
     }
 }
