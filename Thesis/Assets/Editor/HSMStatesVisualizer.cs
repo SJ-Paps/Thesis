@@ -8,8 +8,10 @@ public class HSMStatesVisualizer : EditorWindow {
     List<SJHSMStateAsset> totalStates = new List<SJHSMStateAsset>();
     List<Rect> windows = new List<Rect>();
     List<int> windowsToAttach = new List<int>();
-    List<int> attacheChildWindows = new List<int>();
+    List<int> attachedChildWindows = new List<int>();
     List<int> attachedParallelChildWindows = new List<int>();
+    float jumpInY = 1;
+    float distanceBetweenStatesInY = 200;
     float panX = 0;
     float panY = 0;
 
@@ -32,11 +34,11 @@ public class HSMStatesVisualizer : EditorWindow {
 
         //Debug.Log(windowsToAttach.Count);
 
-        if(attacheChildWindows.Count >= 2)
+        if(attachedChildWindows.Count >= 2)
         {
-            for(int i = 0; i < attacheChildWindows.Count; i += 2)
+            for(int i = 0; i < attachedChildWindows.Count; i += 2)
             {
-                DrawNodeCurveForChilds(windows[attacheChildWindows[i]], windows[attacheChildWindows[i + 1]]);
+                DrawNodeCurveForChilds(windows[attachedChildWindows[i]], windows[attachedChildWindows[i + 1]]);
             }
         }
 
@@ -64,29 +66,7 @@ public class HSMStatesVisualizer : EditorWindow {
 
         GUI.EndGroup();
 
-        if(GUI.RepeatButton(new Rect(15, 5, 20, 20), "^"))
-        {
-            panY += 1;
-            Repaint();
-        }
-
-        if(GUI.RepeatButton(new Rect(5, 25, 20, 20), "<"))
-        {
-            panX += 1;
-            Repaint();
-        }
-
-        if(GUI.RepeatButton(new Rect(25, 25, 20, 20), ">"))
-        {
-            panX -= 1;
-            Repaint();
-        }
-
-        if(GUI.RepeatButton(new Rect(15, 45, 20, 20), "v"))
-        {
-            panY -= 1;
-            Repaint();
-        }
+        ScrollingFunction();
     }
 
     void OnSelectionChange()
@@ -95,10 +75,12 @@ public class HSMStatesVisualizer : EditorWindow {
         {
             windows.Clear();
             totalStates.Clear();
-            attacheChildWindows.Clear();
+            attachedChildWindows.Clear();
             attachedParallelChildWindows.Clear();
             j = 0;
+            jumpInY = 1;
             totalStates.Add(asset);
+            windows.Add(new Rect((this.position.width / 2), distanceBetweenStatesInY * jumpInY, 200, 100));
             StateWindowsGenerator(asset);
             Debug.Log(j);
         }
@@ -110,39 +92,48 @@ public class HSMStatesVisualizer : EditorWindow {
         {
             j++;
 
-            int aux = j - 1;
+            int counterAux = j - 1;
 
-            windows.Add(new Rect(10, 10, 100, 100));
-
-            for(int i = 0; i < SJHSMSasset.childs.Length; i++)
+            if(SJHSMSasset.childs.Length != 0)
             {
-                if(!totalStates.Contains(SJHSMSasset.childs[i]))
+                jumpInY++;
+                float jumpInYAux = jumpInY - 1;
+
+                for(int i = 0; i < SJHSMSasset.childs.Length; i++)
                 {
-                    attacheChildWindows.Add(aux);
-                    totalStates.Add(SJHSMSasset.childs[i]);
-                    attacheChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
-                    StateWindowsGenerator(SJHSMSasset.childs[i]);
-                }
-                else
-                {
-                    attacheChildWindows.Add(aux);
-                    attacheChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
+                    if(!totalStates.Contains(SJHSMSasset.childs[i]))
+                    {
+                        attachedChildWindows.Add(counterAux);
+                        totalStates.Add(SJHSMSasset.childs[i]);
+                        windows.Add(new Rect(((this.position.width / (SJHSMSasset.childs.Length + 1)) * i) + 200, distanceBetweenStatesInY * jumpInYAux, 200, 100));
+                        attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
+                        StateWindowsGenerator(SJHSMSasset.childs[i]);
+                    }
+                    else
+                    {
+                        attachedChildWindows.Add(counterAux);
+                        attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
+                    }
                 }
             }
 
-            for(int i = 0; i < SJHSMSasset.parallelChilds.Length; i++)
+            if(SJHSMSasset.parallelChilds.Length != 0)
             {
-                if(!totalStates.Contains(SJHSMSasset.parallelChilds[i]))
+                for(int i = 0; i < SJHSMSasset.parallelChilds.Length; i++)
                 {
-                    attachedParallelChildWindows.Add(aux);
-                    totalStates.Add(SJHSMSasset.parallelChilds[i]);
-                    attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
-                    StateWindowsGenerator(SJHSMSasset.parallelChilds[i]);
-                }
-                else
-                {
-                    attachedParallelChildWindows.Add(aux);
-                    attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
+                    if(!totalStates.Contains(SJHSMSasset.parallelChilds[i]))
+                    {
+                        attachedParallelChildWindows.Add(counterAux);
+                        totalStates.Add(SJHSMSasset.parallelChilds[i]);
+                        windows.Add(new Rect(((this.position.width / (i + 2))), distanceBetweenStatesInY * jumpInY, 200, 100));
+                        attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
+                        StateWindowsGenerator(SJHSMSasset.parallelChilds[i]);
+                    }
+                    else
+                    {
+                        attachedParallelChildWindows.Add(counterAux);
+                        attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
+                    }
                 }
             }
         }
@@ -185,5 +176,32 @@ public class HSMStatesVisualizer : EditorWindow {
             Handles.DrawBezier(startPos, endPos, startTan, endTan, shadowCol, null, (i + 1) * 5);
         }
         Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.red, null, 1);
+    }
+
+    void ScrollingFunction()
+    {
+        if(GUI.RepeatButton(new Rect(15, 5, 20, 20), "^"))
+        {
+            panY += 1;
+            Repaint();
+        }
+
+        if(GUI.RepeatButton(new Rect(5, 25, 20, 20), "<"))
+        {
+            panX += 1;
+            Repaint();
+        }
+
+        if(GUI.RepeatButton(new Rect(25, 25, 20, 20), ">"))
+        {
+            panX -= 1;
+            Repaint();
+        }
+
+        if(GUI.RepeatButton(new Rect(15, 45, 20, 20), "v"))
+        {
+            panY -= 1;
+            Repaint();
+        }
     }
 }
