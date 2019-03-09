@@ -171,6 +171,8 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         MaxVelocity = new PercentageReversibleNumber(TribalConfigurationData.MaxMovementVelocity);
 
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
+
+        
     }
 
     public Hand GetHand()

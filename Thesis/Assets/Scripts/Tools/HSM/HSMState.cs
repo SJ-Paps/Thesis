@@ -1101,6 +1101,34 @@ public abstract class HSMState<TState, TTrigger> : IEnumerable<HSMState<TState, 
         return cont;
     }
 
+    public uint GetHeightFromRoot()
+    {
+        return GetRoot().GetHeight();
+    }
+
+    public uint GetHeight()
+    {
+        uint height = 1;
+
+        for(int i = 0; i < childs.Count; i++)
+        {
+            uint currentHeight = 1;
+            currentHeight += childs[i].GetHeight();
+
+            if (currentHeight > height)
+            {
+                height = currentHeight;
+            }
+        }
+
+        return height;
+    }
+
+    /*public uint GetMaxWidth()
+    {
+
+    }*/
+
     public IEnumerator<HSMState<TState, TTrigger>> GetEnumerator()
     {
         if(enumerator == null)
