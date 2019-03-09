@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Paps.StateMachines;
 
 public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>
 {

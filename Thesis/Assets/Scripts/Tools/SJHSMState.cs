@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Paps.StateMachines;
+using Paps.StateMachines.HSM;
 
 public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviour>, IBlackboardOwner<Blackboard>
 {

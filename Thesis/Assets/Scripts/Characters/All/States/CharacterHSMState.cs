@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Paps.StateMachines.HSM;
 
 public abstract class CharacterHSMState : SJHSMState
 {

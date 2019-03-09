@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Paps.StateMachines.HSM;
 
 #if UNITY_EDITOR
 using UnityEditor;
