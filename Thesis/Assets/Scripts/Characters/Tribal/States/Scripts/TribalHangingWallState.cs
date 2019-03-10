@@ -8,11 +8,6 @@ public class TribalHangingWallState : TribalHSMState
 
     private Ladder currentLadder;
 
-    public TribalHangingWallState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnEnter()
     {
         base.OnEnter();

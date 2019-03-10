@@ -5,11 +5,6 @@ public abstract class CharacterHSMState : SJHSMState
 {
     protected Character.Order LastEnteringTrigger { get; private set; }
 
-    protected CharacterHSMState(byte state, string debugName = null) : base(state, debugName)
-    {
-        
-    }
-
     protected override void OnOwnerReferencePropagated()
     {
         base.OnOwnerReferencePropagated();

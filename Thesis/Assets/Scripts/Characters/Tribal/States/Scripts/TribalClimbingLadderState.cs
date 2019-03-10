@@ -14,7 +14,7 @@ public class TribalClimbingLadderState : TribalHSMState
 
     private float previousDrag;
 
-    public TribalClimbingLadderState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TribalClimbingLadderState()
     {
         onFixedUpdateDelegate = OnFixedUpdate;
     }

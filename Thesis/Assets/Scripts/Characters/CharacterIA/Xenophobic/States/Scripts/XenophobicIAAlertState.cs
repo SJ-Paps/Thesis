@@ -15,7 +15,7 @@ public class XenophobicIAAlertState : XenophobicIAState
     private Collider2D lastDetectedCollider;
     private Eyes lastDetectorEyes;
 
-    public XenophobicIAAlertState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public XenophobicIAAlertState()
     {
         unnerveTimer = new SyncTimer();
         unnerveTimer.onTick += OnUnnerveTimerTick;

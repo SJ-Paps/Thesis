@@ -1,13 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TribalChoiceIdleOrMovingState : TribalHSMState
+﻿public class TribalChoiceIdleOrMovingState : TribalHSMState
 {
-    public TribalChoiceIdleOrMovingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
 
     protected override void OnUpdate()
     {

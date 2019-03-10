@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class TribalDropingState : TribalHSMState
 {
-    public TribalDropingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
 
     protected override void OnEnter()
     {

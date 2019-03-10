@@ -3,11 +3,6 @@
     private float previousHiddenDetectionDistance;
     private float previousHiddenDetectionProbability;
 
-    public XenophobicIAAlertlessState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnEnter()
     {
         base.OnEnter();

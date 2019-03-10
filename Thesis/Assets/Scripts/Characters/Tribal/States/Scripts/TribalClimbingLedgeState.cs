@@ -5,7 +5,7 @@ public class TribalClimbingLedgeState : TribalHSMState
 {
     private IEnumerator climbCoroutine;
 
-    public TribalClimbingLedgeState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TribalClimbingLedgeState()
     {
         climbCoroutine = ClimbCoroutine();
     }

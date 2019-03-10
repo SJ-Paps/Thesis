@@ -4,11 +4,6 @@ public class TribalIdleState : TribalHSMState
 {
     private Animator animator;
 
-    public TribalIdleState(byte stateId, string debugName) : base(stateId, debugName)
-    {
-        
-    }
-
     protected override void OnOwnerReferencePropagated()
     {
         base.OnOwnerReferencePropagated();

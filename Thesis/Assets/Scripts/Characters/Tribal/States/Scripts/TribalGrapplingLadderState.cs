@@ -2,10 +2,6 @@
 
 public class TribalGrapplingLadderState : TribalHSMState
 {
-    public TribalGrapplingLadderState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
 
     protected override void OnEnter()
     {

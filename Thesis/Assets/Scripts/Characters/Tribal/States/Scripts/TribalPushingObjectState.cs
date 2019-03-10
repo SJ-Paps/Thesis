@@ -9,11 +9,6 @@ public class TribalPushingObjectState : TribalHSMState
 
     private SpringJoint2D springJoint2d;
 
-    public TribalPushingObjectState(byte stateId, string debugName) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnOwnerReferencePropagated()
     {
         base.OnOwnerReferencePropagated();

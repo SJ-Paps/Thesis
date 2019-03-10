@@ -9,7 +9,7 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
 
     public bool activeDebug;
 
-    protected SJHSMState(byte stateId, string debugName = null) : base(stateId, debugName)
+    protected SJHSMState() : base(0, null)
     {
 
     }

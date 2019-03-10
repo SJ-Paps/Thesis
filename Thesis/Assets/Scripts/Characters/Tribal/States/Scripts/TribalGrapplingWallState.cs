@@ -2,11 +2,6 @@
 
 public class TribalGrapplingWallState : TribalHSMState
 {
-    public TribalGrapplingWallState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnEnter()
     {
         base.OnEnter();

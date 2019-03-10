@@ -13,11 +13,6 @@ public class TribalDuckingState : TribalHSMState
 
     private bool shouldStandUp;
 
-    public TribalDuckingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnEnter()
     {
         base.OnEnter();

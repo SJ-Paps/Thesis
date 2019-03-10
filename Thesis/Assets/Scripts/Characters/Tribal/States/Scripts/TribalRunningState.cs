@@ -4,11 +4,6 @@
 
     private int velocityConstraintId;
 
-    public TribalRunningState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnEnter()
     {
         base.OnEnter();

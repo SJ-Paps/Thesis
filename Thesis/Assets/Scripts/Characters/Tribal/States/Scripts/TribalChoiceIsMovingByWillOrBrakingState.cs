@@ -1,13 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
+﻿public class TribalChoiceIsMovingByWillOrBrakingState : TribalHSMState
 {
-    public TribalChoiceIsMovingByWillOrBrakingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
 
     protected override void OnUpdate()
     {

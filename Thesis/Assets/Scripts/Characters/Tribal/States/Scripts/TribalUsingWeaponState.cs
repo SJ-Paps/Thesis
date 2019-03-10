@@ -1,9 +1,5 @@
 ﻿public class TribalUsingWeaponState : TribalHSMState
 {
-    public TribalUsingWeaponState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
 
     protected override void OnEnter()
     {

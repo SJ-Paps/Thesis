@@ -3,11 +3,6 @@
     public new TurretIAController Owner { get; private set; }
     protected new TurretIAController.Blackboard Blackboard { get; private set; }
 
-    public TurretIAControllerHSMState(byte stateId, string debugName) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnOwnerReferencePropagated()
     {
         base.OnOwnerReferencePropagated();

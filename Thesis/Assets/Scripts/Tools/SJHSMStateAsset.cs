@@ -25,7 +25,10 @@ public abstract class SJHSMStateAsset : HSMStateAsset<byte, byte>
 
     protected override HSMState<byte, byte> CreateConcreteHSMState()
     {
-        SJHSMState state = (SJHSMState)base.CreateConcreteHSMState();
+        SJHSMState state = (SJHSMState)Activator.CreateInstance(Type.GetType(stateClassFullName));
+
+        state.ChangeStateId(stateId);
+        state.DebugName = debugName;
 
         state.activeDebug = activeDebug;
 

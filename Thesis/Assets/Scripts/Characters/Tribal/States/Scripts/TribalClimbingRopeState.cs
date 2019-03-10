@@ -4,7 +4,5 @@ using UnityEngine;
 
 public class TribalClimbingRopeState : TribalHSMState
 {
-    public TribalClimbingRopeState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-    }
+
 }

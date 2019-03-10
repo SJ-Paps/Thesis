@@ -8,7 +8,7 @@ public class TribalGrapplingLedgeState : TribalHSMState
 
     private SpringJoint2D grapplingPoint;
 
-    public TribalGrapplingLedgeState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TribalGrapplingLedgeState()
     {
         grapplingPoint = new GameObject("Character Grappling Ledge Point").AddComponent<SpringJoint2D>();
         grapplingPoint.autoConfigureDistance = false;

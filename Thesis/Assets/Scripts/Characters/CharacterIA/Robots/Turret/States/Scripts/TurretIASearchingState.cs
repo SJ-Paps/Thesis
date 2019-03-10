@@ -10,7 +10,7 @@ public class TurretIASearchingState : TurretIAControllerHSMState
 
     private Character.Order currentOrder;
 
-    public TurretIASearchingState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TurretIASearchingState()
     {
         currentOrder = Character.Order.MoveRight;
     }

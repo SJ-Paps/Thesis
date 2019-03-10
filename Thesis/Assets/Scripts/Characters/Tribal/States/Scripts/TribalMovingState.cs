@@ -16,7 +16,7 @@ public class TribalMovingState : TribalHSMState
 
     private bool isFirstUpdate;
 
-    public TribalMovingState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TribalMovingState()
     {
         onFixedUpdateDelegate = OnFixedUpdate;
     }

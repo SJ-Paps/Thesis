@@ -5,11 +5,7 @@ using UnityEngine;
 public class TribalMovingPushingState : TribalMovingState
 {
     private int facingDirection;
-
-    public TribalMovingPushingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
+    
 
     protected override void OnEnter()
     {

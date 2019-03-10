@@ -5,12 +5,7 @@ using UnityEngine;
 public class TribalMovingByWillState : TribalHSMState
 {
     private bool isMovingByWill;
-
-    public TribalMovingByWillState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
+    
     protected override void OnEnter()
     {
         base.OnEnter();

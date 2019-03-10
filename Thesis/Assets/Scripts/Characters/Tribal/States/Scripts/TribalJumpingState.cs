@@ -12,7 +12,7 @@ public class TribalJumpingState : TribalHSMState
 
     private float velocityDeadZone = 0.002f;
 
-    public TribalJumpingState(byte stateId, string debugName) : base(stateId, debugName)
+    public TribalJumpingState()
     {
         onFixedUpdateDelegate = OnFixedUpdate;
     }

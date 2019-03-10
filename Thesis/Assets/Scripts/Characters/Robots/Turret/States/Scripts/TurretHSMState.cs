@@ -6,11 +6,7 @@ public class TurretHSMState : CharacterHSMState
 {
     public new Turret Owner { get; protected set; }
     protected new Turret.Blackboard Blackboard { get; private set; }
-
-    public TurretHSMState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
+    
 
     protected override void OnOwnerReferencePropagated()
     {

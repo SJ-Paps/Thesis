@@ -4,11 +4,6 @@ public class TribalHiddenState : TribalHSMState
 {
     private Hide currentHide;
 
-    public TribalHiddenState(byte stateId, string debugName) : base(stateId, debugName)
-    {
-        activeDebug = true;
-    }
-
     protected override void OnEnter() 
     {
         base.OnEnter();

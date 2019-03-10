@@ -2,10 +2,6 @@
 
 public class TribalChoiceHangingLadderOrRopeOrWallOrLedge : TribalHSMState
 {
-    public TribalChoiceHangingLadderOrRopeOrWallOrLedge(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
 
     protected override void OnEnter()
     {

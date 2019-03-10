@@ -1,9 +1,5 @@
 ﻿public class TribalCollectingState : TribalHSMState
 {
-    public TribalCollectingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
 
     protected override void OnEnter()
     {
