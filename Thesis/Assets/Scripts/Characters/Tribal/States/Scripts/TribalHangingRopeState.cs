@@ -17,8 +17,9 @@ public class TribalHangingRopeState : TribalHSMState
 
         Rope rope = (Rope)Blackboard.activable;
 
+        Owner.RigidBody2D.velocity = new Vector2(0, 0);
+
         Rigidbody2D nearestSegment = rope.GetNearestSegment(Owner.transform.position);
-        Debug.Log(nearestSegment.name);
 
         Blackboard.ropeHandler.Connect(Owner.RigidBody2D, nearestSegment);
 
