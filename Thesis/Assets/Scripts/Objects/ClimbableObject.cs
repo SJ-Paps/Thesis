@@ -3,9 +3,6 @@
 public abstract class ClimbableObject : ActivableObject<Character>, IClimbable
 {
     [SerializeField]
-    private Transform bottomPoint;
-
-    [SerializeField]
     private float climbDifficulty;
 
     private new SJCollider2D collider;
@@ -20,14 +17,6 @@ public abstract class ClimbableObject : ActivableObject<Character>, IClimbable
             }
 
             return collider;
-        }
-    }
-
-    public Vector3 Bottom
-    {
-        get
-        {
-            return bottomPoint.position;
         }
     }
 

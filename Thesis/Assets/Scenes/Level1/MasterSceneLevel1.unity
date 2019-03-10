@@ -161,13 +161,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabName: 
-  bottomPoint: {fileID: 0}
   climbDifficulty: 10
   segments:
   - {fileID: 1243864835}
   - {fileID: 1369271094}
   - {fileID: 1106637889}
   - {fileID: 1196012120}
+  topPoint: {fileID: 1243864832}
+  bottomPoint: {fileID: 1196012118}
 --- !u!1 &44762312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1998,7 +1999,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabName: 
-  bottomPoint: {fileID: 450061664}
   climbDifficulty: 2
 --- !u!114 &255501684
 MonoBehaviour:
@@ -5716,7 +5716,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabName: 
-  bottomPoint: {fileID: 0}
   climbDifficulty: 0
 --- !u!212 &1283947481
 SpriteRenderer:

@@ -63,17 +63,17 @@ public class TribalClimbingRopeState : TribalHSMState
             Blackboard.ropeHandler.RelativeOther.linearOffset = new Vector2(0, Blackboard.ropeHandler.RelativeOther.linearOffset.y);
         }
 
-        if(verticalDirection == 1)
+        if(verticalDirection == 1 && currentRope.IsNearTop(Owner.RigidBody2D.position, 0.1f) == false)
         {
             Blackboard.ropeHandler.RelativeOther.linearOffset = new Vector2(Blackboard.ropeHandler.RelativeOther.linearOffset.x,
                                                         Blackboard.ropeHandler.RelativeOther.linearOffset.y - (verticalDirection * currentClimbUpForce));
         }
-        else if(verticalDirection == -1)
+        else if(verticalDirection == -1 && currentRope.IsNearBottom(Owner.RigidBody2D.position, 0.1f) == false)
         {
             Blackboard.ropeHandler.RelativeOther.linearOffset = new Vector2(Blackboard.ropeHandler.RelativeOther.linearOffset.x,
                                                         Blackboard.ropeHandler.RelativeOther.linearOffset.y - (verticalDirection * currentClimbDownForce));
         }
-        else if(verticalDirection == 0)
+        else
         {
             shouldStop = true;
         }
