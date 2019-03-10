@@ -53,6 +53,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
     {
         public IActivable activable;
         public RaycastHit2D ledgeCheckHit;
+        public RelativeJoint2DTuple ropeHandler;
     }
 
     [Serializable]

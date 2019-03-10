@@ -9,7 +9,7 @@ public static class SJUtil
 
         for (int i = 0; i < nearObjects.Length; i++)
         {
-            IActivable[] activables = nearObjects[i].GetComponents<IActivable>();
+            IActivable[] activables = nearObjects[i].transform.root.GetComponentsInChildren<IActivable>();
 
             for(int j = 0; j < activables.Length; j++)
             {
@@ -36,7 +36,7 @@ public static class SJUtil
 
         for (int i = 0; i < nearObjects.Length; i++)
         {
-            IActivable[] activables = nearObjects[i].GetComponents<IActivable>();
+            IActivable[] activables = nearObjects[i].transform.root.GetComponentsInChildren<IActivable>();
 
             for(int j = 0; j < activables.Length; j++)
             {
@@ -58,7 +58,7 @@ public static class SJUtil
 
         for (int i = 0; i < nearObjects.Length; i++)
         {
-            MonoBehaviour[] monoBehaviours = nearObjects[i].GetComponents<MonoBehaviour>();
+            MonoBehaviour[] monoBehaviours = nearObjects[i].transform.root.GetComponentsInChildren<MonoBehaviour>();
 
             for(int j = 0; j < monoBehaviours.Length; j++)
             {
@@ -83,7 +83,7 @@ public static class SJUtil
 
         for (int i = 0; i < nearObjects.Length; i++)
         {
-            activablesStorage.AddRange(nearObjects[i].GetComponents<IActivable>());
+            activablesStorage.AddRange(nearObjects[i].transform.root.GetComponentsInChildren<IActivable>());
         }
     }
 }
