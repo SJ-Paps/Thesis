@@ -4,7 +4,6 @@ using UnityEngine;
 public class TribalClimbingLadderState : TribalHSMState
 {
     private Character.Order verticalDirectionOrder;
-    private Character.Order horizontalDirectionOrder;
 
     private Action onFixedUpdateDelegate;
 
@@ -52,8 +51,7 @@ public class TribalClimbingLadderState : TribalHSMState
         ExecuteOrders();
 
         ClampVelocity();
-
-        horizontalDirectionOrder = default;
+        
         verticalDirectionOrder = default;
     }
 
@@ -98,36 +96,6 @@ public class TribalClimbingLadderState : TribalHSMState
             ClampVelocityAxis(true);
         }
 
-        if(CanMoveOnDirection(horizontalDirectionOrder))
-        {
-            if (horizontalDirectionOrder == Character.Order.MoveLeft)
-            {
-                if (ownerRigidbody.velocity.x > 0)
-                {
-                    ClampVelocityAxis(false);
-                }
-
-                ownerRigidbody.AddForce(new Vector2(-1 * Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
-                Owner.Face(true);
-            }
-            else if (horizontalDirectionOrder == Character.Order.MoveRight)
-            {
-                if (ownerRigidbody.velocity.x < 0)
-                {
-                    ClampVelocityAxis(false);
-                }
-
-                ownerRigidbody.AddForce(new Vector2(Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
-                Owner.Face(false);
-            }
-
-            shouldStop = false;
-        }
-        else
-        {
-            ClampVelocityAxis(false);
-        }
-
     }
 
     private void ClampVelocity()
@@ -135,15 +103,6 @@ public class TribalClimbingLadderState : TribalHSMState
         Vector2 velocity = Owner.RigidBody2D.velocity;
         float maxClimbVelocityPositive = Owner.TribalConfigurationData.ClimbForce / 2;
         float maxClimbVelocityNegative = Owner.TribalConfigurationData.ClimbForce / 2 * -1;
-
-        if (velocity.x > maxClimbVelocityPositive)
-        {
-            velocity = new Vector2(maxClimbVelocityPositive, velocity.y);
-        }
-        else if (velocity.x < maxClimbVelocityNegative)
-        {
-            velocity = new Vector2(maxClimbVelocityNegative, velocity.y);
-        }
 
         if (velocity.y > maxClimbVelocityPositive)
         {
@@ -166,11 +125,6 @@ public class TribalClimbingLadderState : TribalHSMState
             verticalDirectionOrder = trigger;
             isDirectionOrder = true;
         }
-        else if(trigger == Character.Order.MoveRight || trigger == Character.Order.MoveLeft)
-        {
-            horizontalDirectionOrder = trigger;
-            isDirectionOrder = true;
-        }
 
         return isDirectionOrder;
     }
@@ -190,20 +144,6 @@ public class TribalClimbingLadderState : TribalHSMState
         else if (orderDirection == Character.Order.ClimbDown)
         {
             if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x, offsetWorldPosition.y - snap)))
-            {
-                return true;
-            }
-        }
-        else if (orderDirection == Character.Order.MoveLeft)
-        {
-            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x - snap, offsetWorldPosition.y)))
-            {
-                return true;
-            }
-        }
-        else if (orderDirection == Character.Order.MoveRight)
-        {
-            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x + snap, offsetWorldPosition.y)))
             {
                 return true;
             }

@@ -110,7 +110,6 @@ public class TribalClimbingWallState : TribalHSMState
                 }
 
                 ownerRigidbody.AddForce(new Vector2(-1 * Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
-                Owner.Face(true);
             }
             else if (horizontalDirectionOrder == Character.Order.MoveRight)
             {
@@ -120,7 +119,6 @@ public class TribalClimbingWallState : TribalHSMState
                 }
 
                 ownerRigidbody.AddForce(new Vector2(Owner.TribalConfigurationData.ClimbForce / climbDifficulty, 0));
-                Owner.Face(false);
             }
 
             shouldStop = false;
@@ -172,6 +170,15 @@ public class TribalClimbingWallState : TribalHSMState
         {
             horizontalDirectionOrder = trigger;
             isDirectionOrder = true;
+
+            if(horizontalDirectionOrder == Character.Order.MoveLeft)
+            {
+                Owner.Face(true);
+            }
+            else
+            {
+                Owner.Face(false);
+            }
         }
 
         return isDirectionOrder;

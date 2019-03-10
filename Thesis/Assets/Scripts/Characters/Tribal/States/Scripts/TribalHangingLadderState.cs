@@ -33,19 +33,20 @@ public class TribalHangingLadderState : TribalHSMState
         {
             Owner.RigidBody2D.AddForce(new Vector2(Owner.FacingDirection * Owner.TribalConfigurationData.JumpForceFromLadder, 0), ForceMode2D.Impulse);
         }
+        else if(trigger == Character.Order.MoveLeft)
+        {
+            Owner.Face(true);
+        }
+        else if(trigger == Character.Order.MoveRight)
+        {
+            Owner.Face(false);
+        }
 
         return false;
     }
 
     private void ContraintPosition(Ladder ladder)
     {
-        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Owner.Collider.offset;
-
-        if (ladder.Collider.OverlapPoint(offsetWorldPosition) == false)
-        {
-            ColliderDistance2D colliderDistance2D = Owner.Collider.Distance(ladder.Collider);
-
-            Owner.RigidBody2D.MovePosition(colliderDistance2D.pointB + (Owner.Collider.offset * Owner.FacingDirection));
-        }
+        Owner.RigidBody2D.MovePosition(new Vector2(((Vector2)ladder.transform.position + ladder.Collider.offset).x, Owner.transform.position.y));
     }
 }

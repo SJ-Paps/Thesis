@@ -46,17 +46,3 @@ MonoBehaviour:
     stateFrom: 27
     trigger: 32
     stateTo: 13
-  - ANDGuardConditions: []
-    ORGuardConditions: []
-    titleName: 
-    disabled: 0
-    stateFrom: 13
-    trigger: 1
-    stateTo: 27
-  - ANDGuardConditions: []
-    ORGuardConditions: []
-    titleName: 
-    disabled: 0
-    stateFrom: 13
-    trigger: 2
-    stateTo: 27
