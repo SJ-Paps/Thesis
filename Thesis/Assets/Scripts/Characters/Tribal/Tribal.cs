@@ -46,7 +46,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Droping,
         Activating,
         ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking,
-        ChoiceHangingLadderOrRopeOrLedge,
+        ChoiceHangingLadderOrRopeOrWallOrLedge,
     }
 
     public new class Blackboard : Character.Blackboard

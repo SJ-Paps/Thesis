@@ -14,7 +14,7 @@ namespace Paps.StateMachines.HSM
 
         public string DebugName { get; set; }
 
-        public TState StateId { get; protected set; }
+        public TState StateId { get; private set; }
 
         protected List<HSMState<TState, TTrigger>> parents;
         protected List<HSMState<TState, TTrigger>> childs;
@@ -128,6 +128,25 @@ namespace Paps.StateMachines.HSM
             {
                 this.triggerComparer = DefaultComparer<TTrigger>;
             }
+        }
+
+        public void ChangeStateId(TState stateId)
+        {
+            for (int i = 0; i < parents.Count; i++)
+            {
+                var parent = parents[i];
+
+                var possiblyChild = parent.GetImmediateChildState(stateId);
+
+                if (possiblyChild != null)
+                {
+                    throw new InvalidOperationException(@"State id could not be changed due to parent NAME: "
+                    + parent.DebugName + " STATE ID: " + parent.StateId.ToString() + 
+                    " having such state id on child state NAME: " + possiblyChild.DebugName);
+                }
+            }
+
+            StateId = stateId;
         }
 
         private void SetActiveParent(HSMState<TState, TTrigger> parent)

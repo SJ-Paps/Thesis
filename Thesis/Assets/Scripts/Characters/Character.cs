@@ -40,7 +40,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         SwitchActivables,
         Collect,
         FinishAction,
-        HangClimbable,
+        HangWall,
     }
 
     public class Blackboard : global::Blackboard
@@ -109,7 +109,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         orders = new Queue<Order>();
 
         hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
-        
+
     }
 
     protected override void Start()

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class TribalChoiceHangingLadderOrRopeOrLedge : TribalHSMState
+public class TribalChoiceHangingLadderOrRopeOrWallOrLedge : TribalHSMState
 {
-    public TribalChoiceHangingLadderOrRopeOrLedge(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TribalChoiceHangingLadderOrRopeOrWallOrLedge(byte stateId, string debugName = null) : base(stateId, debugName)
     {
 
     }

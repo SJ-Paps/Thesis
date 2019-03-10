@@ -53,13 +53,9 @@ public class TribalCheckActivablesState : TribalHSMState
                 }
             }
 
-            if(activableStorage.ContainsType<ClimbableObject>(out ClimbableObject climbableObject))
+            if(SwitchClimbables())
             {
-                Blackboard.activable = climbableObject;
-                if(SendEvent(Character.Order.HangClimbable))
-                {
-                    return true;
-                }
+                return true;
             }
 
             if(activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable)
@@ -84,5 +80,37 @@ public class TribalCheckActivablesState : TribalHSMState
         activableStorage.Clear();
 
         Owner.FindActivables(activableStorage);
+    }
+
+    private bool SwitchClimbables()
+    {
+        if (activableStorage.ContainsType<Ladder>(out Ladder ladder))
+        {
+            Blackboard.activable = ladder;
+            if (SendEvent(Character.Order.HangLadder))
+            {
+                return true;
+            }
+        }
+
+        if (activableStorage.ContainsType<Rope>(out Rope rope))
+        {
+            Blackboard.activable = rope;
+            if (SendEvent(Character.Order.HangRope))
+            {
+                return true;
+            }
+        }
+
+        if (activableStorage.ContainsType<ClimbableWall>(out ClimbableWall climbableWall))
+        {
+            Blackboard.activable = climbableWall;
+            if (SendEvent(Character.Order.HangWall))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
