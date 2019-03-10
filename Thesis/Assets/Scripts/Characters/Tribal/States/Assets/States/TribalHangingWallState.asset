@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
-  m_Name: TribalHangingRopeState
+  m_Name: TribalHangingWallState
   m_EditorClassIdentifier: 
-  script: {fileID: 11500000, guid: 8e1839823eb8b584082a53ffe3c334f5, type: 3}
-  stateClassFullName: TribalHangingRopeState
-  debugName: Hanging Rope
+  script: {fileID: 11500000, guid: 5bc87cbd4ba75d9469c5fadcd8116dee, type: 3}
+  stateClassFullName: TribalHangingWallState
+  debugName: Hanging Wall
   copy: 0
-  stateId: 29
+  stateId: 5
   startStateIndex: 0
   childs:
-  - {fileID: 11400000, guid: 0860d2dfa87ca524483a5443608960da, type: 2}
-  - {fileID: 11400000, guid: bf25d6b393526d748ae78c21115cc9a0, type: 2}
+  - {fileID: 11400000, guid: bd9787d1261e37e47a49fb0ec09f46fc, type: 2}
+  - {fileID: 11400000, guid: 3fd075701d042b84c873e99413e38eef, type: 2}
   parallelChilds: []
   activeDebug: 1
-  state: 29
+  state: 5
   transitions:
   - ANDGuardConditions: []
     ORGuardConditions: []
@@ -37,12 +37,26 @@ MonoBehaviour:
     titleName: 
     disabled: 0
     stateFrom: 13
-    trigger: 4
+    trigger: 21
+    stateTo: 27
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 27
+    trigger: 32
+    stateTo: 13
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 13
+    trigger: 1
     stateTo: 27
   - ANDGuardConditions: []
     ORGuardConditions: []
     titleName: 
     disabled: 0
     stateFrom: 13
-    trigger: 21
+    trigger: 2
     stateTo: 27

@@ -6,20 +6,20 @@ public class TribalHangingWallState : TribalHSMState
 {
     private float previousGravityScale;
 
-    private Ladder currentLadder;
+    private ClimbableWall currentWall;
 
     protected override void OnEnter()
     {
         base.OnEnter();
 
-        currentLadder = (Ladder)Blackboard.activable;
+        currentWall = (ClimbableWall)Blackboard.activable;
 
         Owner.RigidBody2D.velocity = new Vector2(0, 0);
 
         previousGravityScale = Owner.RigidBody2D.gravityScale;
         Owner.RigidBody2D.gravityScale = 0;
 
-        ContraintPosition(currentLadder);
+        ContraintPosition(currentWall);
     }
 
     protected override void OnExit()
@@ -39,13 +39,13 @@ public class TribalHangingWallState : TribalHSMState
         return false;
     }
 
-    private void ContraintPosition(Ladder ladder)
+    private void ContraintPosition(ClimbableWall wall)
     {
         Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Owner.Collider.offset;
 
-        if (ladder.Collider.OverlapPoint(offsetWorldPosition) == false)
+        if (wall.Collider.OverlapPoint(offsetWorldPosition) == false)
         {
-            ColliderDistance2D colliderDistance2D = Owner.Collider.Distance(ladder.Collider);
+            ColliderDistance2D colliderDistance2D = Owner.Collider.Distance(wall.Collider);
 
             Owner.RigidBody2D.MovePosition(colliderDistance2D.pointB + (Owner.Collider.offset * Owner.FacingDirection));
         }

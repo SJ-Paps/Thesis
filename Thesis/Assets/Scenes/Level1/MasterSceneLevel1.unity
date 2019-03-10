@@ -1897,9 +1897,9 @@ GameObject:
   m_Component:
   - component: {fileID: 255501682}
   - component: {fileID: 255501681}
-  - component: {fileID: 255501683}
   - component: {fileID: 255501685}
   - component: {fileID: 255501684}
+  - component: {fileID: 255501683}
   m_Layer: 14
   m_Name: Ladder
   m_TagString: Untagged
@@ -1979,7 +1979,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 255501680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff6117df5c7f646499566f1f332a953b, type: 3}
+  m_Script: {fileID: 11500000, guid: 07ad890fae7e5964792a748ae184410f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   prefabName: 

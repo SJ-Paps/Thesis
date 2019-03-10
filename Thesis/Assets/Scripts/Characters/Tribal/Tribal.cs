@@ -11,7 +11,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Dead,
         Idle,
         Trotting,
-        SlowingDown,
+        HangingWall,
         Grounded,
         OnAir,
         Jumping,

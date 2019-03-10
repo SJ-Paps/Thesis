@@ -10,7 +10,7 @@ public class TribalClimbingWallState : TribalHSMState
 
     private Action onFixedUpdateDelegate;
 
-    private Ladder currentLadder;
+    private ClimbableWall currentWall;
 
     private bool shouldStop;
 
@@ -25,7 +25,7 @@ public class TribalClimbingWallState : TribalHSMState
     {
         base.OnEnter();
 
-        currentLadder = (Ladder)Blackboard.activable;
+        currentWall = (ClimbableWall)Blackboard.activable;
 
         shouldStop = false;
 
@@ -61,7 +61,7 @@ public class TribalClimbingWallState : TribalHSMState
 
     private void ExecuteOrders()
     {
-        float climbDifficulty = currentLadder.GetClimbDifficulty();
+        float climbDifficulty = currentWall.GetClimbDifficulty();
 
         if (climbDifficulty == 0)
         {
@@ -184,28 +184,28 @@ public class TribalClimbingWallState : TribalHSMState
 
         if (orderDirection == Character.Order.ClimbUp)
         {
-            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x, offsetWorldPosition.y + snap)))
+            if (currentWall.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x, offsetWorldPosition.y + snap)))
             {
                 return true;
             }
         }
         else if (orderDirection == Character.Order.ClimbDown)
         {
-            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x, offsetWorldPosition.y - snap)))
+            if (currentWall.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x, offsetWorldPosition.y - snap)))
             {
                 return true;
             }
         }
         else if (orderDirection == Character.Order.MoveLeft)
         {
-            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x - snap, offsetWorldPosition.y)))
+            if (currentWall.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x - snap, offsetWorldPosition.y)))
             {
                 return true;
             }
         }
         else if (orderDirection == Character.Order.MoveRight)
         {
-            if (currentLadder.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x + snap, offsetWorldPosition.y)))
+            if (currentWall.Collider.OverlapPoint(new Vector2(offsetWorldPosition.x + snap, offsetWorldPosition.y)))
             {
                 return true;
             }

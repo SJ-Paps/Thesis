@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class TribalChoiceHangingLadderOrRopeOrWallOrLedge : TribalHSMState
+﻿public class TribalChoiceHangingLadderOrRopeOrWallOrLedge : TribalHSMState
 {
 
     protected override void OnEnter()
@@ -12,28 +10,9 @@ public class TribalChoiceHangingLadderOrRopeOrWallOrLedge : TribalHSMState
 
     private void Redirect()
     {
-        Character.Order order;
-
-        if(LastEnteringTrigger == Character.Order.HangLedge)
+        if(SendEvent(LastEnteringTrigger) == false)
         {
-            order = Character.Order.HangLedge;
-        }
-        else
-        {
-            if(Blackboard.activable is Ladder)
-            {
-                order = Character.Order.HangLadder;
-            }
-            else
-            {
-                order = Character.Order.HangRope;
-            }
-        }
-
-        
-        if(SendEvent(order) == false)
-        {
-            SendEvent(Character.Order.FinishAction);
+            SendEvent(Character.Order.Fall);
         }
     }
 }
