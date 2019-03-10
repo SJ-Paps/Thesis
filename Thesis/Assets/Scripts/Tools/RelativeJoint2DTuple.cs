@@ -15,11 +15,11 @@ public class RelativeJoint2DTuple : SJMonoBehaviour
         RelativeMe = gameObject.AddComponent<RelativeJoint2D>();
         RelativeOther = gameObject.AddComponent<RelativeJoint2D>();
 
-        RelativeMe.autoConfigureOffset = false;
-        RelativeOther.autoConfigureOffset = false;
-
         RelativeMe.enabled = false;
         RelativeOther.enabled = false;
+
+        RelativeMe.autoConfigureOffset = false;
+        RelativeOther.autoConfigureOffset = false;
 
         rigidbody2D = GetComponent<Rigidbody2D>();
         rigidbody2D.gravityScale = 0;

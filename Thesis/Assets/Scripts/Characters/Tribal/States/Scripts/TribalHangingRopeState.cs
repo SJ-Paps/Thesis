@@ -24,8 +24,6 @@ public class TribalHangingRopeState : TribalHSMState
 
         Blackboard.ropeHandler.RelativeMe.linearOffset = new Vector2(0, 0);
         Blackboard.ropeHandler.RelativeOther.linearOffset = new Vector2(0, 0);
-
-
     }
 
     protected override void OnExit()

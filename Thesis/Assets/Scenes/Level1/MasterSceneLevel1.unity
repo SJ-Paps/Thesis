@@ -162,7 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabName: 
   bottomPoint: {fileID: 0}
-  climbDifficulty: 2
+  climbDifficulty: 10
   segments:
   - {fileID: 1243864835}
   - {fileID: 1369271094}
