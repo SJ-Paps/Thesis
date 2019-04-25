@@ -12,11 +12,11 @@ public class HSMStatesVisualizer : EditorWindow {
     List<int> attachedParallelChildWindows = new List<int>();
     HSMStateNode[,] HSMStatesNodesGrid;
 
-    int rowsOfHSMStatesNodesGrid = 60;
-    int columnsOfHSMStatesNodesGrid = 60;
+    int rowsOfHSMStatesNodesGrid = 100;
+    int columnsOfHSMStatesNodesGrid = 100;
 
     int jumpInY = 1;
-    float distanceBetweenStatesInY = 200;
+    float distanceBetweenStatesInY = 300;
     float distanceBetweenStatesInX = 200;
 
     float widthOfTheStateBox = 200;
@@ -88,71 +88,50 @@ public class HSMStatesVisualizer : EditorWindow {
     {
         if(Selection.objects.Length == 1 && Selection.activeObject is SJHSMStateAsset asset)
         {
-            Debug.Log(HSMStatesNodesGrid.Length);
+            //Debug.Log(HSMStatesNodesGrid.Length);
             windows.Clear();
             totalStates.Clear();
             attachedChildWindows.Clear();
             attachedParallelChildWindows.Clear();
             k = 0;
-            ResetHSNStatesNodesValues();
+            ResetHSMStatesNodesValues();
             jumpInY = 0;
             totalStates.Add(asset);
             windows.Add(new Rect(SearchAvailableColumnNode(jumpInY), new Vector2(widthOfTheStateBox, heightOfTheStateBox)));
-            StateWindowsGenerator(asset);
+            StateWindowsGenerator(asset, jumpInY);
             //Debug.Log(k);
         }
     }
 
-    void StateWindowsGenerator(SJHSMStateAsset SJHSMSasset)
+    void StateWindowsGenerator(SJHSMStateAsset SJHSMSasset, int jumpToDoInY)
     {
         if(totalStates.Contains(SJHSMSasset))
         {
             k++;
 
             int counterAux = k - 1;
+            int jumpInYAux = jumpToDoInY;
+            int timesThatEntersIntoTheIfContainsChecker = 0;
 
             if(SJHSMSasset.childs.Length !=0)
             {
-                jumpInY++;
-                int jumpInYAux = jumpInY;
-
                 for(int i = 0; i < SJHSMSasset.childs.Length; i++)
                 {
                     if(!totalStates.Contains(SJHSMSasset.childs[i]))
                     {
-                        attachedChildWindows.Add(counterAux);
-                        totalStates.Add(SJHSMSasset.childs[i]);
-                        Debug.Log(SearchAvailableColumnNode(jumpInYAux));
-                        windows.Add(new Rect(SearchAvailableColumnNode(jumpInYAux), new Vector2(widthOfTheStateBox, heightOfTheStateBox)));
-                        /*for(int j = 0; j < windows.Count; j++)
+                        if(timesThatEntersIntoTheIfContainsChecker == 0)
                         {
-                            Debug.Log(windows[j].position);
-                        }*/
-                        attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
-                        StateWindowsGenerator(SJHSMSasset.childs[i]);
-                    }
-                    else
-                    {
-                        attachedChildWindows.Add(counterAux);
-                        attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
-                    }
-                }
-            }
-
-            /*if(SJHSMSasset.childs.Length != 0)
-            {
-                jumpInY++;
-                float jumpInYAux = jumpInY - 1;
-
-                for(int i = 0; i < SJHSMSasset.childs.Length; i++)
-                {
-                    if(!totalStates.Contains(SJHSMSasset.childs[i]))
-                    {
+                            timesThatEntersIntoTheIfContainsChecker++;
+                        }
+                        if(timesThatEntersIntoTheIfContainsChecker == 1)
+                        {
+                            jumpInYAux = jumpToDoInY+ 1;
+                        }
                         attachedChildWindows.Add(counterAux);
                         totalStates.Add(SJHSMSasset.childs[i]);
-                        windows.Add(new Rect(((this.position.width / (SJHSMSasset.childs.Length + 1)) * i) + 200, distanceBetweenStatesInY * jumpInYAux, widthOfTheStateBox, heightOfTheStateBox));
+                        windows.Add(new Rect(SearchAvailableColumnNode(jumpInYAux), new Vector2(widthOfTheStateBox, heightOfTheStateBox)));
                         attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
-                        StateWindowsGenerator(SJHSMSasset.childs[i]);
+                        StateWindowsGenerator(SJHSMSasset.childs[i], jumpInYAux);
                     }
                     else
                     {
@@ -162,7 +141,7 @@ public class HSMStatesVisualizer : EditorWindow {
                 }
             }
 
-            if(SJHSMSasset.parallelChilds.Length != 0)
+            /*if(SJHSMSasset.parallelChilds.Length != 0)
             {
                 for(int i = 0; i < SJHSMSasset.parallelChilds.Length; i++)
                 {
@@ -226,7 +205,7 @@ public class HSMStatesVisualizer : EditorWindow {
         return positionOfWindow;
     }
 
-    void ResetHSNStatesNodesValues() {
+    void ResetHSMStatesNodesValues() {
         for(int i = 0; i < rowsOfHSMStatesNodesGrid; i++)
         {
             for(int j = 0; j < columnsOfHSMStatesNodesGrid; j++)
