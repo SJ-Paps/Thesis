@@ -15,12 +15,12 @@ public class HSMStatesVisualizer : EditorWindow {
     int rowsOfHSMStatesNodesGrid = 100;
     int columnsOfHSMStatesNodesGrid = 100;
 
-    int jumpInY = 1;
+    int initialJumpInY = 1;
     float distanceBetweenStatesInY = 300;
     float distanceBetweenStatesInX = 200;
 
-    float widthOfTheStateBox = 200;
-    float heightOfTheStateBox = 100;
+    float widthOfTheStateBox = 250;
+    float heightOfTheStateBox = 150;
 
     float panX = 0;
     float panY = 0;
@@ -95,10 +95,10 @@ public class HSMStatesVisualizer : EditorWindow {
             attachedParallelChildWindows.Clear();
             k = 0;
             ResetHSMStatesNodesValues();
-            jumpInY = 0;
+            initialJumpInY = 0;
             totalStates.Add(asset);
-            windows.Add(new Rect(SearchAvailableColumnNode(jumpInY), new Vector2(widthOfTheStateBox, heightOfTheStateBox)));
-            StateWindowsGenerator(asset, jumpInY);
+            windows.Add(new Rect(SearchAvailableColumnNode(initialJumpInY), new Vector2(widthOfTheStateBox, heightOfTheStateBox)));
+            StateWindowsGenerator(asset, initialJumpInY);
             //Debug.Log(k);
         }
     }
@@ -111,7 +111,8 @@ public class HSMStatesVisualizer : EditorWindow {
 
             int counterAux = k - 1;
             int jumpInYAux = jumpToDoInY;
-            int timesThatEntersIntoTheIfContainsChecker = 0;
+            int timesThatEntersIntoTheContainsChildChecker = 0;
+            int timesThatEntersIntoTheContainsParallelChildChecker = 0;
 
             if(SJHSMSasset.childs.Length !=0)
             {
@@ -119,11 +120,11 @@ public class HSMStatesVisualizer : EditorWindow {
                 {
                     if(!totalStates.Contains(SJHSMSasset.childs[i]))
                     {
-                        if(timesThatEntersIntoTheIfContainsChecker == 0)
+                        if(timesThatEntersIntoTheContainsChildChecker == 0)
                         {
-                            timesThatEntersIntoTheIfContainsChecker++;
+                            timesThatEntersIntoTheContainsChildChecker++;
                         }
-                        if(timesThatEntersIntoTheIfContainsChecker == 1)
+                        if(timesThatEntersIntoTheContainsChildChecker == 1)
                         {
                             jumpInYAux = jumpToDoInY+ 1;
                         }
@@ -141,17 +142,25 @@ public class HSMStatesVisualizer : EditorWindow {
                 }
             }
 
-            /*if(SJHSMSasset.parallelChilds.Length != 0)
+            if(SJHSMSasset.parallelChilds.Length != 0)
             {
                 for(int i = 0; i < SJHSMSasset.parallelChilds.Length; i++)
                 {
                     if(!totalStates.Contains(SJHSMSasset.parallelChilds[i]))
                     {
+                        if(timesThatEntersIntoTheContainsParallelChildChecker == 0)
+                        {
+                            timesThatEntersIntoTheContainsParallelChildChecker++;
+                        }
+                        if(timesThatEntersIntoTheContainsParallelChildChecker == 1)
+                        {
+                            jumpInYAux = jumpToDoInY + 1;
+                        }
                         attachedParallelChildWindows.Add(counterAux);
                         totalStates.Add(SJHSMSasset.parallelChilds[i]);
-                        windows.Add(new Rect(((this.position.width / (i + 2))), distanceBetweenStatesInY * jumpInY, widthOfTheStateBox, heightOfTheStateBox));
+                        windows.Add(new Rect(SearchAvailableColumnNode(jumpInYAux), new Vector2(widthOfTheStateBox, heightOfTheStateBox)));
                         attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
-                        StateWindowsGenerator(SJHSMSasset.parallelChilds[i]);
+                        StateWindowsGenerator(SJHSMSasset.parallelChilds[i], jumpInYAux);
                     }
                     else
                     {
@@ -159,16 +168,26 @@ public class HSMStatesVisualizer : EditorWindow {
                         attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
                     }
                 }
-            }*/
+            }
         }
     }
 
     void DrawNodeWindow(int id)
     {
-        if(GUILayout.Button("Attach"))
+        if(totalStates[id].childs.Length != 0)
         {
-            Debug.Log(id);
-            windowsToAttach.Add(id);
+            for(int i = 0; i < totalStates[id].childs.Length; i++)
+            {
+                GUILayout.Label("Child " + i + ": " + totalStates[id].childs[i].name);
+            }
+        }
+
+        if(totalStates[id].parallelChilds.Length != 0)
+        {
+            for(int i = 0; i < totalStates[id].parallelChilds.Length; i++)
+            {
+                GUILayout.Label("Parallel Child " + i + ": " + totalStates[id].parallelChilds[i].name);
+            }
         }
 
         GUI.DragWindow();
@@ -226,7 +245,7 @@ public class HSMStatesVisualizer : EditorWindow {
         {
             Handles.DrawBezier(startPos, endPos, startTan, endTan, shadowCol, null, (i + 1) * 5);
         }
-        Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.green, null, 1);
+        Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.green, null, 2.5f);
     }
 
     void DrawNodeCurveForParallelChilds(Rect start, Rect end)
@@ -240,7 +259,7 @@ public class HSMStatesVisualizer : EditorWindow {
         {
             Handles.DrawBezier(startPos, endPos, startTan, endTan, shadowCol, null, (i + 1) * 5);
         }
-        Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.red, null, 1);
+        Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.red, null, 2.5f);
     }
 
     void ScrollingFunction()
