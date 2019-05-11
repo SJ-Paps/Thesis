@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: 51e3409722eb5574da473b24f25e0070, type: 3}
   stateClassFullName: TribalCheckPushable
-  activeDebug: 1
+  activeDebug: 0
   debugName: 
   invert: 0
