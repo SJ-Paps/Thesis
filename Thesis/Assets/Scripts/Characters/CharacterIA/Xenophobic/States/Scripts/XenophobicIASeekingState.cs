@@ -4,11 +4,6 @@ public class XenophobicIASeekingState : XenophobicIAState
 {
     private float positionReachedDeadZoneX = 1f, positionReachedDeadZoneY = 1f;
 
-    public XenophobicIASeekingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnUpdate()
     {
         base.OnUpdate();

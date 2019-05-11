@@ -2,29 +2,13 @@
 using UnityEngine;
 
 [Serializable]
-public class TurretIAControllerHSMTransition : SJHSMTransition
+public class TurretIAControllerHSMTransition : SJHSMTransition<TurretIAController.State, TurretIAController.Trigger>
 {
-    [SerializeField]
-    public TurretIAController.State stateFrom;
-    [SerializeField]
-    public TurretIAController.Trigger trigger;
-    [SerializeField]
-    public TurretIAController.State stateTo;
 
-    protected override HSMTransition<byte, byte> CreateConcreteTransition()
-    {
-        return new HSMTransition<byte, byte>((byte)stateFrom, (byte)trigger, (byte)stateTo);
-    }
 }
 
 [CreateAssetMenu(menuName = "HSM/IA Controller HSM State Assets/Turret IA State Asset")]
-public class TurretIAControllerHSMStateAsset : SJHSMStateAsset
+public class TurretIAControllerHSMStateAsset : SJHSMStateAsset<TurretIAController.State, TurretIAController.Trigger, TurretIAControllerHSMTransition>
 {
-    [SerializeField]
-    private TurretIAControllerHSMTransition[] transitions;
 
-    protected override SJHSMTransition[] GetSJHSMTranstions()
-    {
-        return transitions;
-    }
 }

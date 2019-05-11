@@ -5,7 +5,7 @@ public class TurretChargingState : TurretHSMState
 {
     private SyncTimer timer;
 
-    public TurretChargingState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TurretChargingState()
     {
         timer = new SyncTimer();
         timer.onTick += OnTimerTick;

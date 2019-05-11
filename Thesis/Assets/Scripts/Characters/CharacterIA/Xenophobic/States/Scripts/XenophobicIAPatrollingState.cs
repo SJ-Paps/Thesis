@@ -9,7 +9,7 @@ public class XenophobicIAPatrollingState : XenophobicIAState
 
     private float minTime = 4f, maxTime = 6f;
 
-    public XenophobicIAPatrollingState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public XenophobicIAPatrollingState()
     {
         turnTimer = new SyncTimer();
     }

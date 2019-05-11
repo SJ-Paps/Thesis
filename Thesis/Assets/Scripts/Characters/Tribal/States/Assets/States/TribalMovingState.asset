@@ -23,21 +23,34 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 483ce1c39d479014bbcf3707e06a97f7, type: 2}
   - {fileID: 11400000, guid: e72119154c3b57a4693c348aa6fdf936, type: 2}
   parallelChilds: []
-  transitions:
-  - stateFrom: 23
-    trigger: 16
-    stateTo: 20
-    guardConditions: []
-  - stateFrom: 23
-    trigger: 9
-    stateTo: 24
-    guardConditions: []
-  - stateFrom: 20
-    trigger: 9
-    stateTo: 24
-    guardConditions: []
-  - stateFrom: 24
-    trigger: 16
-    stateTo: 20
-    guardConditions: []
   activeDebug: 0
+  state: 20
+  transitions:
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 23
+    trigger: 16
+    stateTo: 20
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 23
+    trigger: 9
+    stateTo: 24
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 20
+    trigger: 9
+    stateTo: 24
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 24
+    trigger: 16
+    stateTo: 20

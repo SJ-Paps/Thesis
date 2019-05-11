@@ -15,9 +15,12 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: c966c62f1ff02c5428d186d7ec13022b, type: 3}
   stateClassFullName: TurretIAAlertlessState
   debugName: Alertless
+  copy: 0
   stateId: 1
   startStateIndex: 0
   childs:
   - {fileID: 11400000, guid: c6ba2fb7558d4fe488c23b8915d1f222, type: 2}
   parallelChilds: []
+  activeDebug: 0
+  state: 1
   transitions: []

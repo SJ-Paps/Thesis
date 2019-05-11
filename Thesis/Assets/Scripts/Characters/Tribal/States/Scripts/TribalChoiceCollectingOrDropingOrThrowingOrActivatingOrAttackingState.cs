@@ -1,8 +1,5 @@
 ﻿public class TribalChoiceCollectingOrDropingOrThrowingOrActivatingOrAttackingState : TribalHSMState
 {
-    public TribalChoiceCollectingOrDropingOrThrowingOrActivatingOrAttackingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-    }
 
     protected override void OnUpdate()
     {

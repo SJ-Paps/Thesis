@@ -6,11 +6,6 @@ public class TribalBrakingState : TribalHSMState
 {
     private bool isMovingByWill;
 
-    public TribalBrakingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnUpdate()
     {
         base.OnUpdate();

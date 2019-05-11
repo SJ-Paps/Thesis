@@ -4,11 +4,6 @@ public class TribalFallingState : TribalHSMState
 {
     private float velocityDeadZone = -0.002f;
 
-    public TribalFallingState(byte stateId, string debugName) : base(stateId, debugName)
-    {
-        
-    }
-
     protected override void OnEnter()
     {
         base.OnEnter();

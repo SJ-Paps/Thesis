@@ -2,29 +2,13 @@
 using UnityEngine;
 
 [Serializable]
-public class XenophobicIAControllerHSMTransition : SJHSMTransition
+public class XenophobicIAControllerHSMTransition : SJHSMTransition<XenophobicIAController.State, XenophobicIAController.Trigger>
 {
-    [SerializeField]
-    public XenophobicIAController.State stateFrom;
-    [SerializeField]
-    public XenophobicIAController.Trigger trigger;
-    [SerializeField]
-    public XenophobicIAController.State stateTo;
 
-    protected override HSMTransition<byte, byte> CreateConcreteTransition()
-    {
-        return new HSMTransition<byte, byte>((byte)stateFrom, (byte)trigger, (byte)stateTo);
-    }
 }
 
 [CreateAssetMenu(menuName = "HSM/IA Controller HSM State Assets/Xenophobic IA State Asset")]
-public class XenophobicIAControllerHSMStateAsset : SJHSMStateAsset
+public class XenophobicIAControllerHSMStateAsset : SJHSMStateAsset<XenophobicIAController.State, XenophobicIAController.Trigger, XenophobicIAControllerHSMTransition>
 {
-    [SerializeField]
-    XenophobicIAControllerHSMTransition[] transitions;
 
-    protected override SJHSMTransition[] GetSJHSMTranstions()
-    {
-        return transitions;
-    }
 }

@@ -23,43 +23,58 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c07adb8d0d616c046b1437cc37e00d32, type: 2}
   - {fileID: 11400000, guid: 5217755091391f045b6ebddea83f5d72, type: 2}
   parallelChilds: []
+  activeDebug: 0
+  state: 6
   transitions:
-  - stateFrom: 14
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 14
     trigger: 15
     stateTo: 15
-    ANDGuardConditions: []
-    ORGuardConditions: []
-  - stateFrom: 15
-    trigger: 14
-    stateTo: 14
-    ANDGuardConditions:
+  - ANDGuardConditions:
     - {fileID: 11400000, guid: c2d126f884d4e7843bec0c4e8357b854, type: 2}
     ORGuardConditions: []
-  - stateFrom: 15
-    trigger: 6
-    stateTo: 10
-    ANDGuardConditions:
+    titleName: 
+    disabled: 0
+    stateFrom: 15
+    trigger: 14
+    stateTo: 14
+  - ANDGuardConditions:
     - {fileID: 11400000, guid: 6a825faf492ad7b4390cc94aba08bde3, type: 2}
     ORGuardConditions: []
-  - stateFrom: 14
+    titleName: 
+    disabled: 0
+    stateFrom: 15
     trigger: 6
     stateTo: 10
-    ANDGuardConditions:
+  - ANDGuardConditions:
     - {fileID: 11400000, guid: 6a825faf492ad7b4390cc94aba08bde3, type: 2}
     ORGuardConditions: []
-  - stateFrom: 10
+    titleName: 
+    disabled: 0
+    stateFrom: 14
+    trigger: 6
+    stateTo: 10
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 10
     trigger: 10
     stateTo: 14
-    ANDGuardConditions: []
+  - ANDGuardConditions: []
     ORGuardConditions: []
-  - stateFrom: 10
+    titleName: 
+    disabled: 0
+    stateFrom: 10
     trigger: 6
     stateTo: 14
-    ANDGuardConditions: []
+  - ANDGuardConditions: []
     ORGuardConditions: []
-  - stateFrom: 10
+    titleName: 
+    disabled: 0
+    stateFrom: 10
     trigger: 26
     stateTo: 14
-    ANDGuardConditions: []
-    ORGuardConditions: []
-  activeDebug: 0

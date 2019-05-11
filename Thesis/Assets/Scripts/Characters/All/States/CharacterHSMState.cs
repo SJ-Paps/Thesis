@@ -1,22 +1,20 @@
 ﻿using UnityEngine;
+using Paps.StateMachines.HSM;
 
 public abstract class CharacterHSMState : SJHSMState
 {
     protected Character.Order LastEnteringTrigger { get; private set; }
 
-    protected CharacterHSMState(byte state, string debugName = null) : base(state, debugName)
-    {
-        
-    }
-
     protected override void OnOwnerReferencePropagated()
     {
+        base.OnOwnerReferencePropagated();
+
         onAnyStateChanged += CatchEnteringTrigger;
     }
 
-    private void CatchEnteringTrigger(byte trigger)
+    private void CatchEnteringTrigger(HSMState<byte, byte> stateFrom, byte trigger, HSMState<byte, byte> stateTo)
     {
-        if(IsOnState(StateId))
+        if(IsOnState(this, stateTo))
         {
             LastEnteringTrigger = (Character.Order)trigger;
 

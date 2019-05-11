@@ -22,9 +22,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2beb4216cb9512c4d98a12a0267e195d, type: 2}
   - {fileID: 11400000, guid: 4243567b550a7104d9e8fe59ae6d25e9, type: 2}
   parallelChilds: []
+  activeDebug: 0
+  state: 0
   transitions:
-  - stateFrom: 1
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 1
     trigger: 0
     stateTo: 2
-    guardConditions: []
-  activeDebug: 0

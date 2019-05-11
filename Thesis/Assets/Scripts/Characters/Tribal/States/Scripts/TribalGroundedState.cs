@@ -10,7 +10,7 @@ public class TribalGroundedState : TribalHSMState
 
     private SyncTimer groundingTimer;
 
-    public TribalGroundedState(byte stateId, string debugName) : base(stateId, debugName)
+    public TribalGroundedState()
     {
         groundingTimer = new SyncTimer();
 

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Paps.StateMachines;
+using Paps.StateMachines.HSM;
 
 public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviour>, IBlackboardOwner<Blackboard>
 {
@@ -7,7 +9,7 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
 
     public bool activeDebug;
 
-    protected SJHSMState(byte stateId, string debugName = null) : base(stateId, debugName)
+    protected SJHSMState() : base(0, null)
     {
 
     }
@@ -46,8 +48,22 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
 
     protected virtual void OnOwnerReferencePropagated()
     {
-
+#if UNITY_EDITOR
+        onBeforeAnyTransitionate += DebugTransition;
+#endif
     }
+
+#if UNITY_EDITOR
+    private void DebugTransition(HSMState<byte, byte> stateFrom, byte trigger, HSMState<byte, byte> stateTo)
+    {
+        if(activeDebug && (stateFrom == this || stateTo == this))
+        {
+            HSMTransition<byte, byte> transition = stateFrom.ActiveParent.GetTransition(stateFrom.StateId, trigger);
+
+            EditorDebug.Log("State Transition: " + System.Environment.NewLine + transition.DebugName);
+        }
+    }
+#endif
 
     public void PropagateBlackboardReference(Blackboard blackboard)
     {
@@ -122,6 +138,8 @@ public abstract class SJHSMTransition
     [SerializeField]
     public HSMGuardConditionAsset[] ANDGuardConditions, ORGuardConditions;
 
+    public virtual string DebugName { get; }
+
     public HSMTransition<byte, byte> ToHSMTransition()
     {
         HSMTransition<byte, byte> transition = CreateConcreteTransition();
@@ -170,6 +188,11 @@ public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviou
 
         if (activeDebug)
         {
+            if (string.IsNullOrEmpty(debugName))
+            {
+                debugName = GetType().Name;
+            }
+
             EditorDebug.Log(debugName + " Guard Condition Returns " + validated);
         }
 

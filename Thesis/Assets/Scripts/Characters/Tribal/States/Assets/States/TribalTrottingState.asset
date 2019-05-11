@@ -20,5 +20,6 @@ MonoBehaviour:
   startStateIndex: 0
   childs: []
   parallelChilds: []
-  transitions: []
   activeDebug: 0
+  state: 4
+  transitions: []

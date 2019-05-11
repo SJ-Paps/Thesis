@@ -6,11 +6,6 @@ public class XenophobicIAAwareState : XenophobicIAState
     private float previousHiddenDetectionProbability;
     private float previousSeekingTime;
 
-    public XenophobicIAAwareState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnEnter()
     {
         base.OnEnter();

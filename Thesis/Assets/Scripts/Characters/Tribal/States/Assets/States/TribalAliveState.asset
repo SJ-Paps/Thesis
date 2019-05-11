@@ -24,49 +24,103 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 90acfc6fc5dd8d74795ebc3d90eb3111, type: 2}
   parallelChilds:
   - {fileID: 11400000, guid: 4693d004d574d804baab41cf182c25cb, type: 2}
+  activeDebug: 0
+  state: 1
   transitions:
-  - stateFrom: 6
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
     trigger: 4
     stateTo: 7
-    guardConditions: []
-  - stateFrom: 6
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
     trigger: 5
     stateTo: 7
-    guardConditions: []
-  - stateFrom: 7
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
     trigger: 3
     stateTo: 6
-    guardConditions: []
-  - stateFrom: 7
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
     trigger: 22
     stateTo: 26
-    guardConditions: []
-  - stateFrom: 7
-    trigger: 23
-    stateTo: 26
-    guardConditions: []
-  - stateFrom: 7
-    trigger: 24
-    stateTo: 26
-    guardConditions: []
-  - stateFrom: 6
-    trigger: 22
-    stateTo: 26
-    guardConditions: []
-  - stateFrom: 6
-    trigger: 23
-    stateTo: 26
-    guardConditions: []
-  - stateFrom: 6
-    trigger: 24
-    stateTo: 26
-    guardConditions: []
-  - stateFrom: 26
-    trigger: 25
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 26
+    trigger: 32
     stateTo: 7
-    guardConditions: []
-  - stateFrom: 26
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 26
+    trigger: 4
+    stateTo: 7
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 26
     trigger: 5
     stateTo: 7
-    guardConditions: []
-  activeDebug: 0
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 49b602235193990409e6fa0a5ebd6ad1, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
+    trigger: 23
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 49b602235193990409e6fa0a5ebd6ad1, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
+    trigger: 23
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: a6d1bc5b7fab2744eaa5162b9b332bd2, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
+    trigger: 24
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: a6d1bc5b7fab2744eaa5162b9b332bd2, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
+    trigger: 24
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 8a49e97f5a2fe9242a3459ae70e19859, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
+    trigger: 33
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 8a49e97f5a2fe9242a3459ae70e19859, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
+    trigger: 33
+    stateTo: 26

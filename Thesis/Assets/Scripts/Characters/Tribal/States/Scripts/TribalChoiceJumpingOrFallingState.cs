@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class TribalChoiceJumpingOrFallingState : TribalHSMState
 {
-    public TribalChoiceJumpingOrFallingState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
 
     protected override void OnUpdate()
     {

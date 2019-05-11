@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 606293fdac79bdd438434a27ef255268, type: 3}
+  m_Name: TribalCheckBlackboardContainsWall
+  m_EditorClassIdentifier: 
+  script: {fileID: 11500000, guid: e4de30c061afb5a4493478e39a8a2858, type: 3}
+  stateClassFullName: TribalCheckBlackboardContainsWall
+  activeDebug: 0
+  debugName: Check Blackboard Contains Wall
+  invert: 0

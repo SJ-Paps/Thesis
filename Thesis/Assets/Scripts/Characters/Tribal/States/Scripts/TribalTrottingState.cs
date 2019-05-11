@@ -1,10 +1,6 @@
 ﻿public class TribalTrottingState : TribalHSMState
 {
-
-    public TribalTrottingState(byte stateId, string debugName) : base(stateId, debugName)
-    {
-
-    }
+    
 
     protected override void OnEnter()
     {

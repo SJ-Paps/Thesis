@@ -3,11 +3,6 @@
     public new XenophobicIAController Owner { get; protected set; }
     protected new XenophobicIAController.Blackboard Blackboard { get; private set; }
 
-    public XenophobicIAState(byte stateId, string debugName = null) : base(stateId, debugName)
-    {
-
-    }
-
     protected override void OnOwnerReferencePropagated()
     {
         base.OnOwnerReferencePropagated();

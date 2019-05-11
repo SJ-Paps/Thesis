@@ -11,7 +11,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Dead,
         Idle,
         Trotting,
-        SlowingDown,
+        HangingWall,
         Grounded,
         OnAir,
         Jumping,
@@ -36,7 +36,7 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Climbing,
         HangingLedge,
         HangingRope,
-        HangingStair,
+        HangingLadder,
         SwitchingActivables,
         Waiting,
         UsingWeapon,
@@ -45,13 +45,29 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         Collecting,
         Droping,
         Activating,
-        ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking
+        ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking,
+        ChoiceHangingLadderOrRopeOrWallOrLedge,
     }
 
     public new class Blackboard : Character.Blackboard
     {
         public IActivable activable;
         public RaycastHit2D ledgeCheckHit;
+        public RelativeJoint2DTuple ropeHandler;
+    }
+
+    [Serializable]
+    public class TribalConfiguration
+    {
+        [SerializeField]
+        private float maxMovementVelocity, acceleration, jumpMaxHeight, jumpAcceleration, jumpForceFromLadder, climbForce;
+
+        public float MaxMovementVelocity { get => maxMovementVelocity; }
+        public float Acceleration { get => acceleration; }
+        public float JumpMaxHeight { get => jumpMaxHeight; }
+        public float JumpAcceleration { get => jumpAcceleration; }
+        public float JumpForceFromLadder { get => jumpForceFromLadder; }
+        public float ClimbForce { get => climbForce; }
     }
 
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
@@ -66,46 +82,12 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 
     public event Action onDead;
 
-    public const float activableDetectionOffset = 0.2f;
-
     public Animator Animator { get; protected set; }
     public Rigidbody2D RigidBody2D { get; protected set; }
 
-    public SJCollider2D Collider { get; protected set; }
+    public SJCapsuleCollider2D Collider { get; protected set; }
     
     protected Hand hand;
-
-    [SerializeField]
-    private float maxMovementVelocity, acceleration;
-
-    public PercentageReversibleNumber MaxVelocity { get; protected set; }
-
-    public float Acceleration
-    {
-        get
-        {
-            return acceleration;
-        }
-    }
-
-    [SerializeField]
-    private float jumpMaxHeight, jumpAcceleration;
-
-    public float JumpMaxHeight
-    {
-        get
-        {
-            return jumpMaxHeight;
-        }
-    }
-
-    public float JumpAcceleration
-    {
-        get
-        {
-            return jumpAcceleration;
-        }
-    }
 
     public event Action<Collision2D> onCollisionEnter2D
     {
@@ -159,13 +141,26 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         }
     }
 
+    public PercentageReversibleNumber MaxVelocity { get; protected set; }
+
+    [SerializeField]
+    private TribalConfiguration configuration;
+
+    public TribalConfiguration TribalConfigurationData
+    {
+        get
+        {
+            return configuration;
+        }
+    }
+
     private EyeCollection eyes;
 
     protected override void Awake()
     {
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
-        Collider = GetComponent<SJCollider2D>();
+        Collider = GetComponent<SJCapsuleCollider2D>();
 
         hand = GetComponentInChildren<Hand>();
         hand.PropagateOwnerReference(this);
@@ -174,9 +169,11 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 
         base.Awake();
 
-        MaxVelocity = new PercentageReversibleNumber(maxMovementVelocity);
+        MaxVelocity = new PercentageReversibleNumber(TribalConfigurationData.MaxMovementVelocity);
 
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
+
+        
     }
 
     public Hand GetHand()
@@ -310,6 +307,6 @@ public static class TribalExtensions
 
         //guardo los activables en la lista del blackboard
         SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
-                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), tribal.transform.eulerAngles.z, activables);
+                                    new Vector2(ownerBounds.extents.x * 2, ownerBounds.size.y * 2), tribal.transform.eulerAngles.z, activables);
     }
 }

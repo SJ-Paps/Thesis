@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class TribalClimbingLedgeState : TribalClimbingState
+public class TribalClimbingLedgeState : TribalHSMState
 {
     private IEnumerator climbCoroutine;
 
-    public TribalClimbingLedgeState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TribalClimbingLedgeState()
     {
         climbCoroutine = ClimbCoroutine();
     }
@@ -61,11 +61,21 @@ public class TribalClimbingLedgeState : TribalClimbingState
 
             Owner.transform.position = endPointForX;
 
-            SendEvent(Character.Order.StopHanging);
+            SendEvent(Character.Order.FinishAction);
 
             CoroutineManager.GetInstance().StopCoroutine(climbCoroutine);
 
             yield return null;
         }
+    }
+
+    protected override bool HandleEvent(Character.Order trigger)
+    {
+        if(trigger == Character.Order.Jump)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

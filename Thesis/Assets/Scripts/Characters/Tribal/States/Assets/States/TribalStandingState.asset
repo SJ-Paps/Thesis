@@ -23,51 +23,68 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0640b0d1dac46f642a9b23fb96389d88, type: 2}
   - {fileID: 11400000, guid: 1fe177b21ab1cf6448d0c0a04ccf7464, type: 2}
   parallelChilds: []
+  activeDebug: 0
+  state: 14
   transitions:
-  - stateFrom: 0
-    trigger: 12
-    stateTo: 12
-    ANDGuardConditions:
+  - ANDGuardConditions:
     - {fileID: 11400000, guid: d115b43db75ba9c4490d1248ffe50184, type: 2}
     ORGuardConditions: []
-  - stateFrom: 12
+    titleName: 
+    disabled: 0
+    stateFrom: 0
+    trigger: 12
+    stateTo: 12
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 12
     trigger: 11
     stateTo: 0
-    ANDGuardConditions: []
-    ORGuardConditions: []
-  - stateFrom: 0
-    trigger: 31
-    stateTo: 38
-    ANDGuardConditions:
+  - ANDGuardConditions:
     - {fileID: 11400000, guid: 30d5e8722ac721e478dc242a38d60972, type: 2}
     ORGuardConditions: []
-  - stateFrom: 0
+    titleName: 
+    disabled: 0
+    stateFrom: 0
+    trigger: 31
+    stateTo: 38
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 13b37c562babcb04f88546681f0f08c2, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 0
     trigger: 29
     stateTo: 38
-    ANDGuardConditions:
-    - {fileID: 11400000, guid: 13b37c562babcb04f88546681f0f08c2, type: 2}
-    ORGuardConditions: []
-  - stateFrom: 0
-    trigger: 26
-    stateTo: 38
-    ANDGuardConditions:
+  - ANDGuardConditions:
     - {fileID: 11400000, guid: 666426ffc105bb7409791ca8af9d3874, type: 2}
     ORGuardConditions: []
-  - stateFrom: 0
-    trigger: 27
+    titleName: 
+    disabled: 0
+    stateFrom: 0
+    trigger: 26
     stateTo: 38
-    ANDGuardConditions:
+  - ANDGuardConditions:
     - {fileID: 11400000, guid: 13b37c562babcb04f88546681f0f08c2, type: 2}
     ORGuardConditions: []
-  - stateFrom: 0
-    trigger: 7
+    titleName: 
+    disabled: 0
+    stateFrom: 0
+    trigger: 27
     stateTo: 38
-    ANDGuardConditions:
+  - ANDGuardConditions:
     - {fileID: 11400000, guid: 60992749552affa40a44a94902fe7947, type: 2}
     ORGuardConditions: []
-  - stateFrom: 38
+    titleName: 
+    disabled: 0
+    stateFrom: 0
+    trigger: 7
+    stateTo: 38
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 38
     trigger: 32
     stateTo: 0
-    ANDGuardConditions: []
-    ORGuardConditions: []
-  activeDebug: 0

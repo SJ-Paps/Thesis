@@ -15,8 +15,11 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: b41abe1c53269cc4ab474f4e36d80a71, type: 3}
   stateClassFullName: TurretIASearchingState
   debugName: Searching
+  copy: 0
   stateId: 3
   startStateIndex: 0
   childs: []
   parallelChilds: []
+  activeDebug: 0
+  state: 3
   transitions: []

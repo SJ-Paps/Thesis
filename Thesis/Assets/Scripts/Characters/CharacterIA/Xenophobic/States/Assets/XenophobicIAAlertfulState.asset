@@ -15,10 +15,12 @@ MonoBehaviour:
   script: {fileID: 11500000, guid: f99d5822278e53946ae7ff7ecd391748, type: 3}
   stateClassFullName: XenophobicIAAlertfulState
   debugName: Alertful
+  copy: 0
   stateId: 4
   startStateIndex: 0
   childs:
   - {fileID: 11400000, guid: 92ff71bf792b6954abe565833fb88907, type: 2}
   parallelChilds: []
-  transitions: []
   activeDebug: 1
+  state: 4
+  transitions: []

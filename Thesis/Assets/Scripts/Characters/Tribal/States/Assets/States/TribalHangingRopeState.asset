@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
+  m_Name: TribalHangingRopeState
+  m_EditorClassIdentifier: 
+  script: {fileID: 11500000, guid: 8e1839823eb8b584082a53ffe3c334f5, type: 3}
+  stateClassFullName: TribalHangingRopeState
+  debugName: Hanging Rope
+  copy: 0
+  stateId: 29
+  startStateIndex: 0
+  childs:
+  - {fileID: 11400000, guid: 0860d2dfa87ca524483a5443608960da, type: 2}
+  - {fileID: 11400000, guid: bf25d6b393526d748ae78c21115cc9a0, type: 2}
+  - {fileID: 11400000, guid: d71fdf824e69765489b0c1c11c65e9a2, type: 2}
+  parallelChilds: []
+  activeDebug: 0
+  state: 29
+  transitions:
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 13
+    trigger: 20
+    stateTo: 27
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 27
+    trigger: 32
+    stateTo: 13
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 13
+    trigger: 21
+    stateTo: 27
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 13
+    trigger: 2
+    stateTo: 20
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 13
+    trigger: 1
+    stateTo: 20
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 20
+    trigger: 32
+    stateTo: 13

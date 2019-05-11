@@ -113,7 +113,7 @@ MonoBehaviour:
   - key:
       isAxis: 0
       lessThanZero: 0
-      isKeyDown: 1
+      isKeyDown: 0
       isKeyReleased: 0
       name: ClimbDown
       keys: 1201000073000000
@@ -150,3 +150,19 @@ MonoBehaviour:
       name: Drop
       keys: 71000000
     orders: 1d
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 1
+      isKeyReleased: 0
+      name: Attack
+      keys: 43010000
+    orders: 07
+  - key:
+      isAxis: 0
+      lessThanZero: 0
+      isKeyDown: 1
+      isKeyReleased: 0
+      name: Throw
+      keys: 44010000
+    orders: 1b

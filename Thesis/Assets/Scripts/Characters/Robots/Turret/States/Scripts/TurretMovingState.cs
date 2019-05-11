@@ -9,7 +9,7 @@ public class TurretMovingState : TurretHSMState
 
     private int currentDirectionX;
 
-    public TurretMovingState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TurretMovingState()
     {
         onFixedUpdateDelegate = OnFixedUpdate;
     }

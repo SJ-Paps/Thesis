@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TribalGrapplingLedgeState : TribalGrapplingState
+public class TribalGrapplingLedgeState : TribalHSMState
 {
     private bool isFirstUpdate;
 
     private SpringJoint2D grapplingPoint;
 
-    public TribalGrapplingLedgeState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TribalGrapplingLedgeState()
     {
         grapplingPoint = new GameObject("Character Grappling Ledge Point").AddComponent<SpringJoint2D>();
         grapplingPoint.autoConfigureDistance = false;

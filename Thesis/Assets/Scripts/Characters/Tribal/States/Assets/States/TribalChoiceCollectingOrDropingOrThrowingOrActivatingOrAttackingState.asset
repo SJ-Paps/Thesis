@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: TribalChoiceCollectingOrDropingOrThrowingOrActivatingOrAttackingState
   m_EditorClassIdentifier: 
   script: {fileID: 11500000, guid: 5e859546a635b9240a4f493d9a05dad7, type: 3}
-  stateClassFullName: TribalChoiceCollectingOrDropingOrThrowingOrActivatingState
+  stateClassFullName: TribalChoiceCollectingOrDropingOrThrowingOrActivatingOrAttackingState
   debugName: Choice Collecting Or Droping Or Throwing Or Activating Or Attacking
   copy: 0
   stateId: 39
   startStateIndex: 0
   childs: []
   parallelChilds: []
-  transitions: []
   activeDebug: 0
+  state: 39
+  transitions: []

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Paps.StateMachines;
 
 public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>
 {
@@ -30,7 +31,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         ClimbDown,
         HangLedge,
         HangRope,
-        HangStair,
+        HangLadder,
         StopHanging,
         Activate,
         Throw,
@@ -39,6 +40,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         SwitchActivables,
         Collect,
         FinishAction,
+        HangWall,
     }
 
     public class Blackboard : global::Blackboard
@@ -57,6 +59,21 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         get
         {
             return transform.right.x < 0;
+        }
+    }
+
+    public int FacingDirection
+    {
+        get
+        {
+            if(transform.right.x > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 
@@ -81,7 +98,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
     protected Blackboard blackboard;
 
     [SerializeField]
-    private CharacterHSMStateAsset hsmAsset;
+    private SJHSMStateAsset hsmAsset;
 
     private CharacterHSMState hsm;
 
@@ -91,8 +108,8 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         orders = new Queue<Order>();
 
-        hsm = CharacterHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
-        
+        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
+
     }
 
     protected override void Start()
@@ -139,6 +156,18 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
             transform.Rotate(Vector3.up, 180);
 
             OnFacingChanged(IsFacingLeft);
+        }
+    }
+
+    public void Face(int direction)
+    {
+        if(direction >= 0)
+        {
+            Face(false);
+        }
+        else
+        {
+            Face(true);
         }
     }
 

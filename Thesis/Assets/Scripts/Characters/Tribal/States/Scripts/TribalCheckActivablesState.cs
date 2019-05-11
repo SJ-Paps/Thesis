@@ -5,7 +5,7 @@ public class TribalCheckActivablesState : TribalHSMState
 {
     private List<IActivable> activableStorage;
 
-    public TribalCheckActivablesState(byte stateId, string debugName = null) : base(stateId, debugName)
+    public TribalCheckActivablesState()
     {
         activableStorage = new List<IActivable>();
     }
@@ -53,13 +53,20 @@ public class TribalCheckActivablesState : TribalHSMState
                 }
             }
 
-            activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);
-
-            Blackboard.activable = contextualActivable;
-
-            if (SendEvent(Character.Order.Activate))
+            if(SwitchClimbables())
             {
                 return true;
+            }
+
+            if(activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable)
+                || activableStorage.ContainsType<CollectableObject>(out collectableObject))
+            {
+                Blackboard.activable = contextualActivable;
+
+                if (SendEvent(Character.Order.Activate))
+                {
+                    return true;
+                }
             }
         }
 
@@ -73,5 +80,37 @@ public class TribalCheckActivablesState : TribalHSMState
         activableStorage.Clear();
 
         Owner.FindActivables(activableStorage);
+    }
+
+    private bool SwitchClimbables()
+    {
+        if (activableStorage.ContainsType<Ladder>(out Ladder ladder))
+        {
+            Blackboard.activable = ladder;
+            if (SendEvent(Character.Order.HangLadder))
+            {
+                return true;
+            }
+        }
+
+        if (activableStorage.ContainsType<Rope>(out Rope rope))
+        {
+            Blackboard.activable = rope;
+            if (SendEvent(Character.Order.HangRope))
+            {
+                return true;
+            }
+        }
+
+        if (activableStorage.ContainsType<ClimbableWall>(out ClimbableWall climbableWall))
+        {
+            Blackboard.activable = climbableWall;
+            if (SendEvent(Character.Order.HangWall))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
