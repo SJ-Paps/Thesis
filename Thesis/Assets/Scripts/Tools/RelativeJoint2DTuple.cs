@@ -2,7 +2,7 @@
 
 public class RelativeJoint2DTuple : SJMonoBehaviour
 {
-    private new Rigidbody2D rigidbody2D;
+    public Rigidbody2D Rigidbody2D { get; private set; }
 
     public RelativeJoint2D RelativeMe { get; private set; }
     public RelativeJoint2D RelativeOther { get; private set; }
@@ -18,11 +18,8 @@ public class RelativeJoint2DTuple : SJMonoBehaviour
         RelativeMe.enabled = false;
         RelativeOther.enabled = false;
 
-        RelativeMe.autoConfigureOffset = false;
-        RelativeOther.autoConfigureOffset = false;
-
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        rigidbody2D.gravityScale = 0;
+        Rigidbody2D = GetComponent<Rigidbody2D>();
+        Rigidbody2D.gravityScale = 0;
     }
 
     public void Connect(Rigidbody2D me, Rigidbody2D other)

@@ -21,7 +21,17 @@ public class TribalHangingRopeState : TribalHSMState
 
         Rigidbody2D nearestSegment = rope.GetNearestSegment(Owner.transform.position);
 
+        nearestSegment.velocity = new Vector2(0, 0);
+
+        Blackboard.ropeHandler.Rigidbody2D.MovePosition(nearestSegment.position);
+
         Blackboard.ropeHandler.Connect(Owner.RigidBody2D, nearestSegment);
+
+        Blackboard.ropeHandler.RelativeMe.autoConfigureOffset = false;
+        Blackboard.ropeHandler.RelativeOther.autoConfigureOffset = false;
+
+        Blackboard.ropeHandler.RelativeMe.maxForce = 300;
+        Blackboard.ropeHandler.RelativeOther.maxForce = 300;
 
         Blackboard.ropeHandler.RelativeMe.linearOffset = new Vector2(0, 0);
         Blackboard.ropeHandler.RelativeOther.linearOffset = new Vector2(0, 0);

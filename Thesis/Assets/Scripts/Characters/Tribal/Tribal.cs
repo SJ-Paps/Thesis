@@ -307,6 +307,6 @@ public static class TribalExtensions
 
         //guardo los activables en la lista del blackboard
         SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
-                                    new Vector2(ownerBounds.extents.x, ownerBounds.size.y * 2), tribal.transform.eulerAngles.z, activables);
+                                    new Vector2(ownerBounds.extents.x * 2, ownerBounds.size.y * 2), tribal.transform.eulerAngles.z, activables);
     }
 }
