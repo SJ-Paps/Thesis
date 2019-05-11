@@ -16,6 +16,8 @@ public class TribalCheckIsInFrontOfHide : TribalGuardCondition
 
     private bool HideFound()
     {
+        activables.Clear();
+
         Owner.FindActivables(activables);
 
         activables.ContainsType<Hide>(out Hide hide);

@@ -188,6 +188,11 @@ public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviou
 
         if (activeDebug)
         {
+            if (string.IsNullOrEmpty(debugName))
+            {
+                debugName = GetType().Name;
+            }
+
             EditorDebug.Log(debugName + " Guard Condition Returns " + validated);
         }
 

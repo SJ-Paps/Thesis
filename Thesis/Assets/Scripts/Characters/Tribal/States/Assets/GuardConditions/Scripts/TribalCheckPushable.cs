@@ -16,6 +16,8 @@ public class TribalCheckPushable : TribalGuardCondition
 
     private bool MovableFound()
     {
+        activables.Clear();
+
         Owner.FindActivables(activables);
 
         activables.ContainsType<MovableObject>(out MovableObject movableObject);

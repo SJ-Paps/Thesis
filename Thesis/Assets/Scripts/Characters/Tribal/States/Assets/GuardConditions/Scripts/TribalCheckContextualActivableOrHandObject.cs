@@ -16,6 +16,8 @@ public class TribalCheckContextualActivableOrHandObject : TribalGuardCondition
 
     private bool ContextualActivableFound()
     {
+        activables.Clear();
+
         Owner.FindActivables(activables);
 
         activables.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable);

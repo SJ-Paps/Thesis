@@ -16,6 +16,8 @@ public class TribalCheckCollectables : TribalGuardCondition
 
     private bool CollectableFound()
     {
+        activables.Clear();
+
         Owner.FindActivables(activables);
 
         activables.ContainsType<CollectableObject>(out CollectableObject collectableObject);
