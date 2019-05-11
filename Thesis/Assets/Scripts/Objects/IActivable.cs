@@ -1,8 +1,6 @@
 ﻿public interface IActivable
 {
     bool Active { get; }
-
-    bool Activate(object user);
 }
 
 public interface IActivable<in TActivator> : IActivable where TActivator : class
