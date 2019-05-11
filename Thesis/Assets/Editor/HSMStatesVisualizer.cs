@@ -114,11 +114,11 @@ public class HSMStatesVisualizer : EditorWindow {
             int timesThatEntersIntoTheContainsChildChecker = 0;
             int timesThatEntersIntoTheContainsParallelChildChecker = 0;
 
-            if(SJHSMSasset.childs.Length !=0)
+            if(SJHSMSasset.Childs.Length !=0)
             {
-                for(int i = 0; i < SJHSMSasset.childs.Length; i++)
+                for(int i = 0; i < SJHSMSasset.Childs.Length; i++)
                 {
-                    if(!totalStates.Contains(SJHSMSasset.childs[i]))
+                    if(!totalStates.Contains(SJHSMSasset.Childs[i]))
                     {
                         if(timesThatEntersIntoTheContainsChildChecker == 0)
                         {
@@ -129,24 +129,24 @@ public class HSMStatesVisualizer : EditorWindow {
                             jumpInYAux = jumpToDoInY+ 1;
                         }
                         attachedChildWindows.Add(counterAux);
-                        totalStates.Add(SJHSMSasset.childs[i]);
+                        totalStates.Add(SJHSMSasset.Childs[i]);
                         windows.Add(new Rect(SearchAvailableColumnNode(jumpInYAux), new Vector2(widthOfTheStateBox, heightOfTheStateBox)));
-                        attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
-                        StateWindowsGenerator(SJHSMSasset.childs[i], jumpInYAux);
+                        attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.Childs[i]));
+                        StateWindowsGenerator(SJHSMSasset.Childs[i], jumpInYAux);
                     }
                     else
                     {
                         attachedChildWindows.Add(counterAux);
-                        attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.childs[i]));
+                        attachedChildWindows.Add(totalStates.IndexOf(SJHSMSasset.Childs[i]));
                     }
                 }
             }
 
-            if(SJHSMSasset.parallelChilds.Length != 0)
+            if(SJHSMSasset.ParallelChilds.Length != 0)
             {
-                for(int i = 0; i < SJHSMSasset.parallelChilds.Length; i++)
+                for(int i = 0; i < SJHSMSasset.ParallelChilds.Length; i++)
                 {
-                    if(!totalStates.Contains(SJHSMSasset.parallelChilds[i]))
+                    if(!totalStates.Contains(SJHSMSasset.ParallelChilds[i]))
                     {
                         if(timesThatEntersIntoTheContainsParallelChildChecker == 0)
                         {
@@ -157,15 +157,15 @@ public class HSMStatesVisualizer : EditorWindow {
                             jumpInYAux = jumpToDoInY + 1;
                         }
                         attachedParallelChildWindows.Add(counterAux);
-                        totalStates.Add(SJHSMSasset.parallelChilds[i]);
+                        totalStates.Add(SJHSMSasset.ParallelChilds[i]);
                         windows.Add(new Rect(SearchAvailableColumnNode(jumpInYAux), new Vector2(widthOfTheStateBox, heightOfTheStateBox)));
-                        attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
-                        StateWindowsGenerator(SJHSMSasset.parallelChilds[i], jumpInYAux);
+                        attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.ParallelChilds[i]));
+                        StateWindowsGenerator(SJHSMSasset.ParallelChilds[i], jumpInYAux);
                     }
                     else
                     {
                         attachedParallelChildWindows.Add(counterAux);
-                        attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.parallelChilds[i]));
+                        attachedParallelChildWindows.Add(totalStates.IndexOf(SJHSMSasset.ParallelChilds[i]));
                     }
                 }
             }
@@ -174,19 +174,19 @@ public class HSMStatesVisualizer : EditorWindow {
 
     void DrawNodeWindow(int id)
     {
-        if(totalStates[id].childs.Length != 0)
+        if(totalStates[id].Childs.Length != 0)
         {
-            for(int i = 0; i < totalStates[id].childs.Length; i++)
+            for(int i = 0; i < totalStates[id].Childs.Length; i++)
             {
-                GUILayout.Label("Child " + i + ": " + totalStates[id].childs[i].name);
+                GUILayout.Label("Child " + i + ": " + totalStates[id].Childs[i].name);
             }
         }
 
-        if(totalStates[id].parallelChilds.Length != 0)
+        if(totalStates[id].ParallelChilds.Length != 0)
         {
-            for(int i = 0; i < totalStates[id].parallelChilds.Length; i++)
+            for(int i = 0; i < totalStates[id].ParallelChilds.Length; i++)
             {
-                GUILayout.Label("Parallel Child " + i + ": " + totalStates[id].parallelChilds[i].name);
+                GUILayout.Label("Parallel Child " + i + ": " + totalStates[id].ParallelChilds[i].name);
             }
         }
 
