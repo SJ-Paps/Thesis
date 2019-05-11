@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public enum DeadlyType
+public enum DamageType : byte
 {
     Water,
     Sharp,
@@ -11,7 +11,7 @@ public enum DeadlyType
 public class Deadly : MonoBehaviour {
 
     [SerializeField]
-    private DeadlyType type;
+    private DamageType type;
 
-    public DeadlyType Type { get { return type; } }
+    public DamageType Type { get { return type; } }
 }

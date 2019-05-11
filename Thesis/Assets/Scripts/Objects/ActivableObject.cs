@@ -1,9 +1,17 @@
-﻿using UnityEngine;
-
-public abstract class ActivableObject : SJMonoBehaviourSaveable, IActivable
+﻿
+public abstract class ActivableObject<TActivator> : SJMonoBehaviour, IActivable<TActivator> where TActivator : class
 {
-    public virtual void Activate(Character user)
+    public bool Active { get; protected set; }
+
+    public bool Activate(object user)
     {
-        EditorDebug.Log("EL OBJECTO " + name + " FUE ACTIVADO");
+        if(user is TActivator activator)
+        {
+            return Activate(user);
+        }
+
+        return false;
     }
+
+    public abstract bool Activate(TActivator user);
 }

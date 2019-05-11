@@ -1,35 +1,28 @@
-﻿using SAM.FSM;
-
-public abstract class XenophobicIAState : State<XenophobicIAController.State, XenophobicIAController.Trigger>
+﻿public abstract class XenophobicIAState : SJHSMState
 {
-    protected XenophobicIAController controller;
-    protected XenophobicIAController.Blackboard blackboard;
+    public new XenophobicIAController Owner { get; protected set; }
+    protected new XenophobicIAController.Blackboard Blackboard { get; private set; }
 
-    public XenophobicIAState() : base(null, default(XenophobicIAController.State))
+    protected override void OnOwnerReferencePropagated()
     {
-        
+        base.OnOwnerReferencePropagated();
+
+        Owner = (XenophobicIAController)base.Owner;
+        Blackboard = (XenophobicIAController.Blackboard)base.Blackboard;
     }
 
-    public virtual void InitializeState(FSM<XenophobicIAController.State, XenophobicIAController.Trigger> fsm, XenophobicIAController.State state, XenophobicIAController controller, XenophobicIAController.Blackboard blackboard)
+    public bool SendEvent(XenophobicIAController.Trigger trigger)
     {
-        this.controller = controller;
-        this.blackboard = blackboard;
-        stateMachine = fsm;
-        InnerState = state;
+        return SendEvent((byte)trigger);
     }
 
-    protected override void OnEnter()
+    protected sealed override bool HandleEvent(byte trigger)
     {
-        
+        return HandleEvent((XenophobicIAController.Trigger)trigger);
     }
 
-    protected override void OnUpdate()
+    protected virtual bool HandleEvent(XenophobicIAController.Trigger trigger)
     {
-        
-    }
-
-    protected override void OnExit()
-    {
-        
+        return false;
     }
 }

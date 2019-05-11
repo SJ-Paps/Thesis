@@ -1,8 +1,6 @@
-﻿public interface ICollectable
+﻿public interface ICollectable<TOwner> : IOwnable<TOwner> where TOwner : class
 {
-    Character User { get; }
-
-    bool Collect(Character user);
+    bool Collect(TOwner owner);
 
     bool Drop();
 }

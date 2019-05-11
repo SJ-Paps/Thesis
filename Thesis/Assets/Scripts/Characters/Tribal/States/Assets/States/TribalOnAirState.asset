@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
+  m_Name: TribalOnAirState
+  m_EditorClassIdentifier: 
+  script: {fileID: 11500000, guid: 31d4c0314a38da842ad0febc13af1dcf, type: 3}
+  stateClassFullName: TribalOnAirState
+  debugName: OnAir
+  copy: 0
+  stateId: 7
+  startStateIndex: 0
+  childs:
+  - {fileID: 11400000, guid: 519bd97e7bf8da341b6f4e1498a21472, type: 2}
+  - {fileID: 11400000, guid: 5bc14c2984f4c824f98e0a8c3218fce3, type: 2}
+  - {fileID: 11400000, guid: 860de08cf69a207419cb8d8d74085a5d, type: 2}
+  parallelChilds:
+  - {fileID: 11400000, guid: d058e643ed45a6242b10cca26b2e5e1b, type: 2}
+  activeDebug: 0
+  state: 7
+  transitions:
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 17
+    trigger: 5
+    stateTo: 9
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 17
+    trigger: 4
+    stateTo: 8
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 8
+    trigger: 5
+    stateTo: 9

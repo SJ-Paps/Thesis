@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d4931b58ad85544b34c84df033257f, type: 3}
+  m_Name: TribalAliveState
+  m_EditorClassIdentifier: 
+  script: {fileID: 11500000, guid: 64c9c102ca0b80e4c9394cff4552af56, type: 3}
+  stateClassFullName: TribalAliveState
+  debugName: Alive
+  copy: 0
+  stateId: 1
+  startStateIndex: 0
+  childs:
+  - {fileID: 11400000, guid: 1e10fc765fd26024e89d7fa50784e093, type: 2}
+  - {fileID: 11400000, guid: 3ab756f50caa7c94990f37b7b2ca027e, type: 2}
+  - {fileID: 11400000, guid: 90acfc6fc5dd8d74795ebc3d90eb3111, type: 2}
+  parallelChilds:
+  - {fileID: 11400000, guid: 4693d004d574d804baab41cf182c25cb, type: 2}
+  activeDebug: 0
+  state: 1
+  transitions:
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
+    trigger: 4
+    stateTo: 7
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
+    trigger: 5
+    stateTo: 7
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
+    trigger: 3
+    stateTo: 6
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
+    trigger: 22
+    stateTo: 26
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 26
+    trigger: 32
+    stateTo: 7
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 26
+    trigger: 4
+    stateTo: 7
+  - ANDGuardConditions: []
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 26
+    trigger: 5
+    stateTo: 7
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 49b602235193990409e6fa0a5ebd6ad1, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
+    trigger: 23
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 49b602235193990409e6fa0a5ebd6ad1, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
+    trigger: 23
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: a6d1bc5b7fab2744eaa5162b9b332bd2, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
+    trigger: 24
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: a6d1bc5b7fab2744eaa5162b9b332bd2, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
+    trigger: 24
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 8a49e97f5a2fe9242a3459ae70e19859, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 6
+    trigger: 33
+    stateTo: 26
+  - ANDGuardConditions:
+    - {fileID: 11400000, guid: 8a49e97f5a2fe9242a3459ae70e19859, type: 2}
+    ORGuardConditions: []
+    titleName: 
+    disabled: 0
+    stateFrom: 7
+    trigger: 33
+    stateTo: 26

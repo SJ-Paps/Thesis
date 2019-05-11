@@ -1,4 +1,11 @@
-﻿public interface IMortal
+﻿using System;
+
+public interface IMortal
 {
-    bool Die(DeadlyType deadly);
+    event Action onDead;
+}
+
+public interface IDamagable : IMortal
+{
+    void TakeDamage(float damage, DamageType damageType);
 }

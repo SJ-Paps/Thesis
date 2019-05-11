@@ -1,135 +1,199 @@
-﻿using SAM.FSM;
+﻿using System;
 using UnityEngine;
-using System;
+using System.Collections.Generic;
 
-
-public abstract class Tribal : Character
+public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
 {
-    [SerializeField]
-    protected CollectableObject currentCollectableObject;
-
-    public CollectableObject CurrentCollectableObject
+    public enum State : byte
     {
-        get
+        Base,
+        Alive,
+        Dead,
+        Idle,
+        Trotting,
+        HangingWall,
+        Grounded,
+        OnAir,
+        Jumping,
+        Falling,
+        Hidden,
+        Attacking,
+        Pushing,
+        Grappling,
+        Standing,
+        Ducking,
+        ChoiceIdleOrMoving,
+        ChoiceJumpingOrFalling,
+        Walking,
+        Running,
+        Moving,
+        ChoiceWalkingOrTrottingOrRunning,
+        CheckingForPushables,
+        ChoiceMovingByWillOrBraking,
+        Braking,
+        CheckingForLedges,
+        Hanging,
+        Climbing,
+        HangingLedge,
+        HangingRope,
+        HangingLadder,
+        SwitchingActivables,
+        Waiting,
+        UsingWeapon,
+        Throwing,
+        Shocking,
+        Collecting,
+        Droping,
+        Activating,
+        ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking,
+        ChoiceHangingLadderOrRopeOrWallOrLedge,
+    }
+
+    public new class Blackboard : Character.Blackboard
+    {
+        public IActivable activable;
+        public RaycastHit2D ledgeCheckHit;
+        public RelativeJoint2DTuple ropeHandler;
+    }
+
+    [Serializable]
+    public class TribalConfiguration
+    {
+        [SerializeField]
+        private float maxMovementVelocity, acceleration, jumpMaxHeight, jumpAcceleration, jumpForceFromLadder, climbForce;
+
+        public float MaxMovementVelocity { get => maxMovementVelocity; }
+        public float Acceleration { get => acceleration; }
+        public float JumpMaxHeight { get => jumpMaxHeight; }
+        public float JumpAcceleration { get => jumpAcceleration; }
+        public float JumpForceFromLadder { get => jumpForceFromLadder; }
+        public float ClimbForce { get => climbForce; }
+    }
+
+    public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
+    public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
+    public static readonly AnimatorParameterId WalkAnimatorTrigger = new AnimatorParameterId("Move");
+    public static readonly AnimatorParameterId IdleAnimatorTrigger = new AnimatorParameterId("Idle");
+    public static readonly AnimatorParameterId GroundAnimatorTrigger = new AnimatorParameterId("Ground");
+    public static readonly AnimatorParameterId FallAnimatorTrigger = new AnimatorParameterId("Fall");
+    public static readonly AnimatorParameterId JumpAnimatorTrigger = new AnimatorParameterId("Jump");
+    public static readonly AnimatorParameterId HideAnimatorTrigger = new AnimatorParameterId("Idle");
+    public static readonly AnimatorParameterId ClimbLedgeAnimatorTrigger = new AnimatorParameterId("ClimbLedge");
+
+    public event Action onDead;
+
+    public Animator Animator { get; protected set; }
+    public Rigidbody2D RigidBody2D { get; protected set; }
+
+    public SJCapsuleCollider2D Collider { get; protected set; }
+    
+    protected Hand hand;
+
+    public event Action<Collision2D> onCollisionEnter2D
+    {
+        add
         {
-            return currentCollectableObject;
+            Collider.onEnteredCollision += value;
         }
 
-        protected set
+        remove
         {
-            currentCollectableObject = value;
+            Collider.onEnteredCollision -= value;
         }
     }
 
-    [SerializeField]
-    protected TribalIdleState idleState;
-
-    [SerializeField]
-    protected TribalMovingState movingState;
-
-    [SerializeField]
-    protected TribalSlowDownState slowDownState;
-
-    [SerializeField]
-    protected TribalGroundedState groundedState;
-
-    [SerializeField]
-    protected TribalJumpingState jumpingState;
-
-    [SerializeField]
-    protected TribalFallingState fallingState;
-
-    [SerializeField]
-    protected TribalActionsIdleState actionIdleState;
-
-    [SerializeField]
-    protected TribalHiddenState hiddenState;
-
-    [SerializeField]
-    protected TribalPushingObjectState pushingState;
-
-    [SerializeField]
-    protected TribalGrapplingState grapplingState;
-
-    protected FSM<State, Trigger> movementFSM, jumpingFSM, actionFSM;
-
-    public override bool CanMove
+    public event Action<Collision2D> onCollisionStay2D
     {
-        get
+        add
         {
-            return actionFSM.CurrentState.InnerState != State.Hidden && actionFSM.CurrentState.InnerState != State.Grappling;
+            Collider.onStayCollision += value;
+        }
+
+        remove
+        {
+            Collider.onStayCollision -= value;
         }
     }
 
+    public event Action<Collider2D> onTriggerEnter2D
+    {
+        add
+        {
+            Collider.onEnteredTrigger += value;
+        }
+
+        remove
+        {
+            Collider.onEnteredTrigger -= value;
+        }
+    }
+
+    public event Action<Collider2D> onTriggerExit2D
+    {
+        add
+        {
+            Collider.onExitedTrigger += value;
+        }
+
+        remove
+        {
+            Collider.onExitedTrigger -= value;
+        }
+    }
+
+    public PercentageReversibleNumber MaxVelocity { get; protected set; }
+
+    [SerializeField]
+    private TribalConfiguration configuration;
+
+    public TribalConfiguration TribalConfigurationData
+    {
+        get
+        {
+            return configuration;
+        }
+    }
+
+    private EyeCollection eyes;
 
     protected override void Awake()
     {
+        Animator = GetComponent<Animator>();
+        RigidBody2D = GetComponent<Rigidbody2D>();
+        Collider = GetComponent<SJCapsuleCollider2D>();
+
+        hand = GetComponentInChildren<Hand>();
+        hand.PropagateOwnerReference(this);
+
+        blackboard = new Blackboard();
+
         base.Awake();
 
-        if(CurrentCollectableObject != null)
+        MaxVelocity = new PercentageReversibleNumber(TribalConfigurationData.MaxMovementVelocity);
+
+        eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
+
+        
+    }
+
+    public Hand GetHand()
+    {
+        return hand;
+    }
+
+    public EyeCollection GetEyes()
+    {
+        return eyes;
+    }
+
+    public virtual void TakeDamage(float damage, DamageType damageType)
+    {
+        SendOrder(Order.Die);
+
+        if (onDead != null)
         {
-            CurrentCollectableObject.Collect(this);
+            onDead();
         }
-
-        movementFSM = new FSM<State, Trigger>();
-        jumpingFSM = new FSM<State, Trigger>();
-        actionFSM = new FSM<State, Trigger>();
-
-        idleState.InitializeState(movementFSM, State.Idle, this, orders, blackboard);
-        movingState.InitializeState(movementFSM, State.Moving, this, orders, blackboard);
-        slowDownState.InitializeState(movementFSM, State.SlowingDown, this, orders, blackboard);
-
-        movementFSM.AddState(idleState);
-        movementFSM.AddState(movingState);
-        movementFSM.AddState(slowDownState);
-
-        movementFSM.MakeTransition(State.Idle, Trigger.Move, State.Moving);
-        movementFSM.MakeTransition(State.Moving, Trigger.StopMoving, State.SlowingDown);
-        movementFSM.MakeTransition(State.SlowingDown, Trigger.StopMoving, State.Idle);
-        movementFSM.MakeTransition(State.SlowingDown, Trigger.Move, State.Moving);
-
-        movementFSM.StartBy(State.Idle);
-
-        groundedState.InitializeState(jumpingFSM, State.Grounded, this, orders, blackboard);
-        jumpingState.InitializeState(jumpingFSM, State.Jumping, this, orders, blackboard);
-        fallingState.InitializeState(jumpingFSM, State.Falling, this, orders, blackboard);
-        grapplingState.InitializeState(jumpingFSM, State.Grappling, this, orders, blackboard);
-
-
-        jumpingFSM.AddState(groundedState);
-        jumpingFSM.AddState(jumpingState);
-        jumpingFSM.AddState(fallingState);
-        jumpingFSM.AddState(grapplingState);
-
-        jumpingFSM.MakeTransition(State.Grounded, Trigger.Jump, State.Jumping);
-        jumpingFSM.MakeTransition(State.Grounded, Trigger.Fall, State.Falling);
-        jumpingFSM.MakeTransition(State.Jumping, Trigger.Fall, State.Falling);
-        jumpingFSM.MakeTransition(State.Falling, Trigger.Ground, State.Grounded);
-        jumpingFSM.MakeTransition(State.Jumping, Trigger.Grapple, State.Grappling);
-        jumpingFSM.MakeTransition(State.Falling, Trigger.Grapple, State.Grappling);
-        jumpingFSM.MakeTransition(State.Grappling, Trigger.Fall, State.Falling);
-
-        jumpingFSM.StartBy(State.Falling);
-
-        actionIdleState.InitializeState(actionFSM, State.Idle, this, orders, blackboard);
-        pushingState.InitializeState(actionFSM, State.Pushing, this, orders, blackboard);
-        hiddenState.InitializeState(actionFSM, State.Hidden, this, orders, blackboard);
-
-        actionFSM.AddState(actionIdleState);
-        actionFSM.AddState(pushingState);
-        actionFSM.AddState(hiddenState);
-
-        actionFSM.MakeTransition(State.Idle, Trigger.Hide, State.Hidden);
-        actionFSM.MakeTransition(State.Hidden, Trigger.StopHiding, State.Idle);
-
-        actionFSM.MakeTransition(State.Idle, Trigger.Push, State.Pushing);
-        actionFSM.MakeTransition(State.Pushing, Trigger.StopPushing, State.Idle);
-
-        actionFSM.StartBy(State.Idle);
-
-        AddStateMachineWhenAlive(movementFSM);
-        AddStateMachineWhenAlive(jumpingFSM);
-        AddStateMachineWhenAlive(actionFSM);
     }
 
     public override bool ShouldBeSaved()
@@ -141,12 +205,6 @@ public abstract class Tribal : Character
     {
         data.AddValue("x", transform.position.x);
         data.AddValue("y", transform.position.y);
-        
-
-        if(CurrentCollectableObject != null)
-        {
-            data.AddValue("collectableGUID", CurrentCollectableObject.saveGUID);
-        }
         
     }
 
@@ -171,10 +229,84 @@ public abstract class Tribal : Character
         if(data.ContainsValue("collectableGUID"))
         {
             Guid objGuid = new Guid(data.GetAs<string>("collectableGUID"));
-
-            CurrentCollectableObject = GetSJMonobehaviourSaveableBySaveGUID<CollectableObject>(objGuid);
-
-            CurrentCollectableObject.Collect(this);
         }
+    }
+
+    
+}
+
+public static class TribalExtensions
+{
+    public static MovableObject CheckForMovableObject(this Tribal tribal)
+    {
+        float checkMovableObjectDistanceX = 0.2f;
+
+        float xDirection;
+
+        if (tribal.transform.right.x >= 0)
+        {
+            xDirection = 1;
+        }
+        else
+        {
+            xDirection = -1;
+        }
+
+        Bounds tribalBounds = tribal.Collider.bounds;
+
+        return SJUtil.FindActivable<MovableObject, Tribal>(new Vector2(tribalBounds.center.x + (tribalBounds.extents.x * xDirection),
+                                                                  tribalBounds.center.y - tribalBounds.extents.y / 3),
+                                                     new Vector2(checkMovableObjectDistanceX, tribalBounds.extents.y), tribal.transform.eulerAngles.z);
+    }
+
+    public static bool CheckWall(this Tribal tribal)
+    {
+        Bounds bounds = tribal.Collider.bounds;
+
+        float separation = 0.15f;
+        float xDir = tribal.transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
+        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), bounds.center.y + bounds.extents.y);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
+    }
+
+    public static bool CheckFloorAhead(this Tribal tribal)
+    {
+        Bounds bounds = tribal.Collider.bounds;
+
+        float separation = 1f;
+        float yDistance = 0.5f;
+        float xDir = tribal.transform.right.x;
+
+        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));
+        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), beginPoint.y - yDistance);
+
+        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+
+        return Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
+    }
+
+    public static void FindActivables(this Tribal tribal, List<IActivable> activables)
+    {
+        Bounds ownerBounds = tribal.Collider.bounds;
+
+        int xDirection;
+
+        if (tribal.IsFacingLeft)
+        {
+            xDirection = -1;
+        }
+        else
+        {
+            xDirection = 1;
+        }
+
+        //guardo los activables en la lista del blackboard
+        SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
+                                    new Vector2(ownerBounds.extents.x * 2, ownerBounds.size.y * 2), tribal.transform.eulerAngles.z, activables);
     }
 }

@@ -1,130 +1,46 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using SAM.FSM;
-using System;
 
-public class TurretIAController : UnityController<Turret, Character.Order>
+public class TurretIAController : IAController<Turret>
 {
-    public enum State
+    public enum State : byte
     {
+        Base,
         Alertless,
         Alertful,
-        WithTarget,
-        WithoutTarget
+        Searching
     }
 
-    public enum Trigger
+    public enum Trigger : byte
     {
         CalmDown,
         SetFullAlert,
-        TargetFound,
-        TargetLost
     }
 
-    public class Blackboard
+    public class Blackboard : global::Blackboard
     {
-        public event Action<Vector2> onTargetChanged;
 
-        private Vector2 targetPosition;
-
-        public Vector2 TargetPosition
-        {
-            get
-            {
-                return targetPosition;
-            }
-
-            set
-            {
-                targetPosition = value;
-
-                if(onTargetChanged != null)
-                {
-                    onTargetChanged(targetPosition);
-                }
-            }
-        }
     }
 
-    private Blackboard blackboard;
-
-    private FSM<State, Trigger> alertFSM;
-    private FSM<State, Trigger> searchTargetFSM;
-
     [SerializeField]
-    private TurretAlertlessState turretAlertlessState;
+    private TurretIAControllerHSMStateAsset baseHSMAsset;
 
-    [SerializeField]
-    private TurretAlertFulState turretAlertFulState;
+    protected TurretIAControllerHSMState hsm;
 
-    [SerializeField]
-    private TurretWithoutTargetState turretWithoutTargetState;
-
-    [SerializeField]
-    private TurretWithTargetState turretWithTargetState;
-
-    private Eyes characterEyes;
-
-    public Eyes CharacterEyes
-    {
-        get
-        {
-            if(Slave != null)
-            {
-                if(characterEyes == null)
-                {
-                    characterEyes = Slave.GetComponentInChildren<Eyes>();
-                }
-            }
-            else
-            {
-                characterEyes = null;
-            }
-
-            return characterEyes;
-        }
-    }
+    protected Blackboard blackboard;
 
     protected override void Awake()
     {
         base.Awake();
 
-        blackboard = new Blackboard();
-
-        
-
-
+        hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this, blackboard);
     }
 
     protected override void Start()
     {
         base.Start();
 
-        alertFSM = new FSM<State, Trigger>();
-        searchTargetFSM = new FSM<State, Trigger>();
-
-        turretAlertlessState.InitializeState(alertFSM, State.Alertless, this, blackboard);
-        turretAlertFulState.InitializeState(alertFSM, State.Alertful, this, blackboard);
-
-        alertFSM.AddState(turretAlertlessState);
-        alertFSM.AddState(turretAlertFulState);
-
-        alertFSM.MakeTransition(State.Alertless, Trigger.SetFullAlert, State.Alertful);
-        alertFSM.MakeTransition(State.Alertful, Trigger.CalmDown, State.Alertless);
-
-        alertFSM.StartBy(State.Alertless);
-
-        turretWithoutTargetState.InitializeState(searchTargetFSM, State.WithoutTarget, this, blackboard);
-        turretWithTargetState.InitializeState(searchTargetFSM, State.WithTarget, this, blackboard);
-
-        searchTargetFSM.AddState(turretWithoutTargetState);
-        searchTargetFSM.AddState(turretWithTargetState);
-
-        searchTargetFSM.MakeTransition(State.WithoutTarget, Trigger.TargetFound, State.WithTarget);
-        searchTargetFSM.MakeTransition(State.WithTarget, Trigger.TargetLost, State.WithoutTarget);
-
-        searchTargetFSM.StartBy(State.WithoutTarget);
+        hsm.Enter();
     }
 
     void Update()
@@ -134,8 +50,7 @@ public class TurretIAController : UnityController<Turret, Character.Order>
 
     public override void Control()
     {
-        alertFSM.UpdateCurrentState();
-        searchTargetFSM.UpdateCurrentState();
+        hsm.Update();
     }
 
     public override bool ShouldBeSaved()

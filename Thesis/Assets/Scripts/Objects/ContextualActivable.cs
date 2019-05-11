@@ -1,7 +1,8 @@
-﻿public class ContextualActivable : ActivableObject
+﻿public class ContextualActivable : ActivableObject<Character>
 {
-    public override bool ShouldBeSaved()
+    public override bool Activate(Character user)
     {
-        return false;
+        return true;
     }
+    
 }

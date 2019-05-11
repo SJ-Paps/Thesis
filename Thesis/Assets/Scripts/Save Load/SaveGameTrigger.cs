@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public class SaveGameTrigger : BoxTrigger2D
+public class SaveGameTrigger : SJBoxCollider2D
 {
     private Action<Collider2D> saveOnceDelegate;
 
@@ -11,13 +11,13 @@ public class SaveGameTrigger : BoxTrigger2D
 
         saveOnceDelegate = SaveOnce;
 
-        onStay += saveOnceDelegate;
+        onStayTrigger += saveOnceDelegate;
     }
 
     private void SaveOnce(Collider2D collider)
     {
         SaveLoadManager.GetInstance().SaveGame();
         gameObject.SetActive(false);
-        onStay -= saveOnceDelegate;
+        onStayTrigger -= saveOnceDelegate;
     }
 }

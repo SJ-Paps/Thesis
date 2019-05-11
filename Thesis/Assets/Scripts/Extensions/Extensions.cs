@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public static class Extensions
 {
@@ -25,5 +26,48 @@ public static class Extensions
         return str;
     }
 
+    
+
+    public static bool ContainsType<T>(this IEnumerable<object> enumerable)
+    {
+        return ContainsType<T>(enumerable, out T temp);
+    }
+
+    public static bool ContainsType<T>(this IEnumerable<object> enumerable, out T value)
+    {
+        value = default;
+
+        foreach (object obj in enumerable)
+        {
+            if(obj is T TValue)
+            {
+                value = TValue;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool ContainsType<T, TEnumerableType>(this IEnumerable<TEnumerableType> enumerable)
+    {
+        return ContainsType<T, TEnumerableType>(enumerable, out T temp);
+    }
+
+    public static bool ContainsType<T, TEnumerableType>(this IEnumerable<TEnumerableType> enumerable, out T value)
+    {
+        value = default;
+
+        foreach(TEnumerableType obj in enumerable)
+        {
+            if(obj is T TValue)
+            {
+                value = TValue;
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }

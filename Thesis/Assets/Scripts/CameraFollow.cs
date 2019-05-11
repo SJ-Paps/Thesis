@@ -14,7 +14,7 @@ public class CameraFollow : MonoBehaviour {
 
         if(target == null)
         {
-            Character c = GameManager.GetInstance().FindPlayer();
+            Character c = FindObjectOfType<MainCharacter>();
 
             if(c != null)
             {

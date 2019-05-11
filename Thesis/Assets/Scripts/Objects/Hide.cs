@@ -1,12 +1,7 @@
-﻿public class Hide : ActivableObject {
-
-    public override void Activate(Character user)
+﻿public class Hide : ActivableObject<Character> {
+    
+    public override bool Activate(Character user)
     {
-        base.Activate(user);
-    }
-
-    public override bool ShouldBeSaved()
-    {
-        return false;
+        return true;
     }
 }

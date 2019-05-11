@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75681c926ce5de34c9e4cb8b6c0883d5, type: 3}
+  m_Name: TurretIASearchingState
+  m_EditorClassIdentifier: 
+  script: {fileID: 11500000, guid: b41abe1c53269cc4ab474f4e36d80a71, type: 3}
+  stateClassFullName: TurretIASearchingState
+  debugName: Searching
+  copy: 0
+  stateId: 3
+  startStateIndex: 0
+  childs: []
+  parallelChilds: []
+  activeDebug: 0
+  state: 3
+  transitions: []

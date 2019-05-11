@@ -30,7 +30,7 @@ public class CharacterInputController : UnityInputController<Character, Characte
             {
                 foreach(Character.Order order in keyOrders[i].orders)
                 {
-                    slave.SetOrder(order);
+                    slave.SendOrder(order);
                 }
             }
         }

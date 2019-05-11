@@ -1,12 +1,43 @@
-﻿using SAM.FSM;
+﻿using System;
 using UnityEngine;
-using System;
 
-public class XenophobicIAController : UnityController<Xenophobic, Character.Order>
+public class XenophobicIAController : IAController<Xenophobic>
 {
-
-    public enum State
+    [Serializable]
+    public sealed class ConfigurationData
     {
+        [SerializeField]
+        [Range(0, 100)]
+        private float hiddenDetectionProbabilityAlertless, hiddenDetectionProbabilityAware, hiddenDetectionProbabilityAlertful;
+
+        [SerializeField]
+        private float hiddenDetectionDistanceAlertless, hiddenDetectionDistanceAware, hiddenDetectionDistanceAlertful;
+
+        [SerializeField]
+        private float awareTime, alertfulTime;
+
+        [SerializeField]
+        private float shortRangeAttackDetectionDistance = 0.8f, longRangeAttackDetectionDistance;
+
+        public float HiddenDetectionDistanceAlertless { get => hiddenDetectionDistanceAlertless; }
+        public float HiddenDetectionDistanceAware { get => hiddenDetectionDistanceAware; }
+        public float HiddenDetectionDistanceAlertful { get => hiddenDetectionDistanceAlertful; }
+
+        public float HiddenDetectionProbabilityAlertless { get => hiddenDetectionProbabilityAlertless; }
+        public float HiddenDetectionProbabilityAware { get => hiddenDetectionProbabilityAware; }
+        public float HiddenDetectionProbabilityAlertful { get => hiddenDetectionProbabilityAlertful; }
+
+        public float AwareTime { get => awareTime; }
+        public float AlertfulTime { get => alertfulTime; }
+
+        public float ShortRangeAttackDetectionDistance { get => shortRangeAttackDetectionDistance; }
+        public float LongRangeAttackDetectionDistance { get => longRangeAttackDetectionDistance; }
+    }
+
+    public enum State : byte
+    {
+        Base,
+        Alert,
         Alertless,
         Aware,
         Alertful,
@@ -14,130 +45,75 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         Seeking
     }
 
-    public enum Trigger
+    public enum Trigger : byte
     {
         CalmDown,
-        GetAware,
-        SetFullAlert,
+        Unnerve,
         Patrol,
         Seek
     }
 
-    public class Blackboard
+    public class Blackboard : global::Blackboard
     {
-        public event Action<Vector2> onLastDetectionPositionChanged;
-        public event Action<Character> onPlayerDataChanged;
+        public event Action<Vector2> onLastDetectedPositionUpdated;
 
-        private Character playerData;
+        private Vector2 lastDetectedPosition;
 
-        public Character PlayerData
+        public Vector2 LastDetectedPosition
         {
             get
             {
-                return playerData;
+                return lastDetectedPosition;
             }
 
             set
             {
-                playerData = value;
+                lastDetectedPosition = value;
 
-                if(onPlayerDataChanged != null)
+                if (onLastDetectedPositionUpdated != null)
                 {
-                    onPlayerDataChanged(playerData);
+                    onLastDetectedPositionUpdated(lastDetectedPosition);
                 }
             }
         }
-
-        private Vector2 lastDetectionPosition;
-
-        public Vector2 LastDetectionPosition
-        {
-            get
-            {
-                return lastDetectionPosition;
-            }
-
-            set
-            {
-                lastDetectionPosition = value;
-
-                if(onLastDetectionPositionChanged != null)
-                {
-                    onLastDetectionPositionChanged(lastDetectionPosition);
-                }
-            }
-        }
-
-        
     }
+
+    [SerializeField]
+    private ConfigurationData configuration;
+
+    public ConfigurationData Configuration
+    {
+        get
+        {
+            return configuration;
+        }
+    }
+
+    public float CurrentSeekingTime { get; set; }
+    public float CurrentHiddenDetectionDistance { get; set; }
+    public float CurrentHiddenDetectionProbability { get; set; }
+
+    [SerializeField]
+    private XenophobicIAControllerHSMStateAsset baseHSMAsset;
+
+    protected XenophobicIAState hsm;
 
     protected Blackboard blackboard;
 
-    [SerializeField]
-    protected XenophobicAlertlessState alertlessState;
+    protected override void Awake()
+    {
+        base.Awake();
 
-    [SerializeField]
-    protected XenophobicAwareState awareState;
+        blackboard = new Blackboard();
 
-    [SerializeField]
-    protected XenophobicAlertfulState alertfulState;
-
-    [SerializeField]
-    protected XenophobicPatrolState patrolState;
-
-    [SerializeField]
-    protected XenophobicSeekState seekState;
-
-    protected FSM<State, Trigger> alertnessFSM;
-    protected FSM<State, Trigger> behaviourFSM;
-
-    public Eyes SlaveEyes { get; protected set; }
-
-
+        hsm = XenophobicIAControllerHSMStateAsset.BuildFromAsset<XenophobicIAState>(baseHSMAsset, this, blackboard);
+    }
 
     protected override void Start()
     {
         base.Start();
 
-        blackboard = new Blackboard();
-        SlaveEyes = Slave.GetComponentInChildren<Eyes>();
-
-        alertnessFSM = new FSM<State, Trigger>();
-
-        alertlessState.InitializeState(alertnessFSM, State.Alertless, this, blackboard);
-        awareState.InitializeState(alertnessFSM, State.Aware, this, blackboard);
-        alertfulState.InitializeState(alertnessFSM, State.Alertful, this, blackboard);
-
-        alertnessFSM.AddState(alertlessState);
-        alertnessFSM.AddState(awareState);
-        alertnessFSM.AddState(alertfulState);
-
-        alertnessFSM.MakeTransition(State.Alertless, Trigger.GetAware, State.Aware);
-        alertnessFSM.MakeTransition(State.Aware, Trigger.SetFullAlert, State.Alertful);
-        alertnessFSM.MakeTransition(State.Alertful, Trigger.CalmDown, State.Aware);
-        alertnessFSM.MakeTransition(State.Aware, Trigger.CalmDown, State.Alertless);
-
-        alertnessFSM.StartBy(State.Alertless);
-
-
-        behaviourFSM = new FSM<State, Trigger>();
-
-        patrolState.InitializeState(behaviourFSM, State.Patrolling, this, blackboard);
-        seekState.InitializeState(behaviourFSM, State.Seeking, this, blackboard);
-
-        behaviourFSM.AddState(patrolState);
-        behaviourFSM.AddState(seekState);
-
-        behaviourFSM.MakeTransition(State.Patrolling, Trigger.Seek, State.Seeking);
-        behaviourFSM.MakeTransition(State.Seeking, Trigger.Patrol, State.Patrolling);
-
-        behaviourFSM.StartBy(State.Patrolling);
-    }
-
-    public override void Control()
-    {
-        alertnessFSM.UpdateCurrentState();
-        behaviourFSM.UpdateCurrentState();
+        hsm.Enter();
     }
 
     protected void Update()
@@ -146,7 +122,11 @@ public class XenophobicIAController : UnityController<Xenophobic, Character.Orde
         {
             Control();
         }
-        
+    }
+
+    public override void Control()
+    {
+        hsm.Update();
     }
 
     public override bool ShouldBeSaved()

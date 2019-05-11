@@ -1,37 +1,43 @@
-﻿using UnityEngine;
+﻿public abstract class Weapon : CollectableObject {
+    
+    public bool InUse { get; private set; }
 
-public abstract class Weapon : CollectableObject, IActivable, IThrowable {
-    
-    public virtual bool BeingUsed { get; protected set; }
-    
     protected override void Awake()
     {
         base.Awake();
     }
 
-    public void Activate(Character user)
+    public bool Use()
     {
-        if(User != null && !BeingUsed)
+        if(Active)
         {
-            OnUseWeapon();
-        }
-    }
-
-    public override bool Drop()
-    {
-        if(!BeingUsed)
-        {
-            return base.Drop();
+            InUse = true;
+            OnUse();
+            return true;
         }
 
         return false;
     }
 
-    protected abstract void OnUseWeapon();
-    public abstract bool Throw();
+    public void FinishUse()
+    {
+        if(InUse)
+        {
+            InUse = false;
+            OnFinishUse();
+        }
+    }
 
-    public override bool ShouldBeSaved()
+    protected sealed override bool ValidateDrop()
+    {
+        return InUse == false && WeaponValidateDrop();
+    }
+
+    protected virtual bool WeaponValidateDrop()
     {
         return true;
     }
+
+    protected abstract void OnFinishUse();
+    protected abstract void OnUse();
 }

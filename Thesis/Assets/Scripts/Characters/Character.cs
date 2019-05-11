@@ -1,111 +1,15 @@
-﻿using UnityEngine;
-using System;
-using SAM.FSM;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Paps.StateMachines;
 
-public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>, IMortal
+public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>
 {
-    public event Action<Collision2D> onCollisionEnter2D;
-    public event Action<Collision2D> onCollisionStay2D;
-    public event Action<Collider2D> onTriggerEnter2D;
-    public event Action<Collider2D> onTriggerExit2D;
-
-    public event Action onFixedUpdate;
-
-	public event Action<Order> onOrderReceived;
-    public event Action onDetected;
-    public event Action onDead;
-
-    protected Blackboard blackboard;
-    
-    public bool IsHidden
-    {
-        get { return blackboard.isHidden; }
-    }
-    public bool IsMovingHorizontal
-    {
-        get { return blackboard.movingHorizontal; }
-    }
-    
-    public bool IsGrounded
-    {
-        get { return blackboard.isGrounded; }
-    }
-    public bool IsAlive
-    {
-        get { return blackboard.isAlive; }
-    }
-    public bool FacingLeft
-    {
-        get { return transform.right.x < 0; }
-    }
-    public float MovementVelocity
-    {
-        get { return movementVelocity; }
-        set
-        {
-            if(value >= 0)
-            {
-                movementVelocity = value;
-            }
-        }
-    }
-	public bool IsPushing
-    {
-        get { return blackboard.isPushing; }
-    }
-    public bool IsGrappled
-    {
-        get { return blackboard.isGrappled; }
-    }
-    public bool IsClimbingLedge
-    {
-        get { return blackboard.isClimbingLedge; }
-    }
-
-	public Eyes Eyes
-    {
-        get { return eyes; }
-    }
-
-    public Transform HandPoint
-    {
-        get { return handPoint; }
-    }
-
-    public virtual bool CanMove { get; }
-
-    [SerializeField] 
-    protected float movementVelocity = 1;
-
-    [SerializeField]
-    protected Eyes eyes;
-
-    [SerializeField]
-    protected Transform handPoint;
-    
-    public bool blockFacing;
-
-    public enum State : byte
-    {
-        Alive,
-        Dead,
-        Idle,
-        Moving,
-        SlowingDown,
-        Grounded,
-        Jumping,
-        Falling,
-        Hidden,
-        Attacking,
-        Pushing,
-        Grappling
-    }
-
-    public enum Trigger : byte
+    public enum Order : byte
     {
         Die,
-        Move,
+        MoveLeft,
+        MoveRight,
         Ground,
         Jump,
         Fall,
@@ -116,34 +20,68 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         StopHiding,
         StopPushing,
         Push,
-        Grapple
+        Grapple,
+        StandUp,
+        Duck,
+        Move,
+        Walk,
+        Trot,
+        Run,
+        ClimbUp,
+        ClimbDown,
+        HangLedge,
+        HangRope,
+        HangLadder,
+        StopHanging,
+        Activate,
+        Throw,
+        Shock,
+        Drop,
+        SwitchActivables,
+        Collect,
+        FinishAction,
+        HangWall,
     }
 
-    public enum Order : byte
+    public class Blackboard : global::Blackboard
     {
-        OrderMoveLeft,
-        OrderMoveRight,
-        OrderStopMoving,
-        OrderJump,
-        OrderAttack,
-        OrderHide,
-        OrderPush,
-        OrderGrapple,
-        OrderReleaseLedge,
-        OrderActivate
+
     }
 
-    public class Blackboard
+    public event Action onFixedUpdate;
+
+	public event Action<Order> onOrderReceived;
+    public event Action onDetected;
+    
+    
+    public bool IsFacingLeft
     {
-        public bool isAlive;
-        public bool isHidden;
-        public bool isGrounded;
-        public bool isPushing;
-        public bool isGrappled;
-        public bool isClimbingLedge;
-        public bool movingHorizontal;
-        public Collider2D LastLedgeDetected;
+        get
+        {
+            return transform.right.x < 0;
+        }
     }
+
+    public int FacingDirection
+    {
+        get
+        {
+            if(transform.right.x > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+    }
+
+    
+    
+    [HideInInspector]
+    public bool blockFacing;
+    
 
     protected bool enslaved;
 
@@ -155,62 +93,40 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    protected Action<Collision2D> collisionCheckDeadlyDelegate;
-    protected Action<Collider2D> triggerCheckDeadlyDelegate;
+    protected Queue<Order> orders;
 
-    public Animator Animator { get; protected set; }
-    public Rigidbody2D RigidBody2D { get; protected set; }
-
-    private FSM<State, Trigger> aliveFSM;
+    protected Blackboard blackboard;
 
     [SerializeField]
-    private CharacterAliveState alive;
-    [SerializeField]
-    private CharacterDeadState dead;
+    private SJHSMStateAsset hsmAsset;
 
-    protected List<Order> orders;
-
-    protected float groundDetectionDistance = 0.03f;
-
-    public Collider2D Collider { get; protected set; }
+    private CharacterHSMState hsm;
 
     protected override void Awake()
     {
         base.Awake();
 
-        Animator = GetComponent<Animator>();
-        RigidBody2D = GetComponent<Rigidbody2D>();
+        orders = new Queue<Order>();
 
-        collisionCheckDeadlyDelegate = CheckDeadly;
-        triggerCheckDeadlyDelegate = CheckDeadly;
+        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
 
-        onCollisionEnter2D += collisionCheckDeadlyDelegate;
-        onTriggerEnter2D += triggerCheckDeadlyDelegate;
+    }
 
-        blackboard = new Blackboard();
+    protected override void Start()
+    {
+        base.Start();
 
-        orders = new List<Order>();
-
-        Collider = GetComponent<Collider2D>();
-
-        aliveFSM = new FSM<State, Trigger>();
-
-        alive.InitializeState(aliveFSM, State.Alive, this, orders, blackboard);
-        dead.InitializeState(aliveFSM, State.Dead, this, orders, blackboard);
-
-        aliveFSM.AddState(alive);
-        aliveFSM.AddState(dead);
-
-        aliveFSM.MakeTransition(State.Alive, Trigger.Die, State.Dead);
-
-        aliveFSM.StartBy(State.Alive);
+        hsm.Enter();
     }
 
     protected virtual void Update()
     {
-        aliveFSM.UpdateCurrentState();
+        while(orders.Count > 0)
+        {
+            hsm.SendEvent(orders.Dequeue());
+        }
 
-        ClearOrders();
+        hsm.Update();
     }
 
     protected virtual void FixedUpdate()
@@ -220,48 +136,12 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
             onFixedUpdate();
         }
     }
-
-    protected void AddStateMachineWhenAlive(FSM<State, Trigger> fsm)
-    {
-        alive.AddFSM(fsm);
-    }
-
-    protected void AddStateMachineWhenDead(FSM<State, Trigger> fsm)
-    {
-        dead.AddFSM(fsm);
-    }
-
-    public virtual bool Die(DeadlyType deadly)
-    {
-        if(IsAlive)
-        {
-            Collider.enabled = false;
-
-            Die();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    protected bool Die()
-    {
-        aliveFSM.Trigger(Trigger.Die);
-
-        if (onDead != null)
-        {
-            onDead();
-        }
-
-        return true;
-    }
-
+    
     public abstract void GetEnslaved();
 
-    public virtual void SetOrder(Order order)
+    public virtual void SendOrder(Order order)
     {
-        orders.Add(order);
+        orders.Enqueue(order);
 
         if (onOrderReceived != null)
         {
@@ -269,18 +149,25 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         }
     }
 
-    protected void ClearOrders()
-    {
-        orders.Clear();
-    }
-
     public void Face(bool left)
     {
-        if(!blockFacing && FacingLeft != left)
+        if(!blockFacing && IsFacingLeft != left)
         {
             transform.Rotate(Vector3.up, 180);
 
-            OnFacingChanged(FacingLeft);
+            OnFacingChanged(IsFacingLeft);
+        }
+    }
+
+    public void Face(int direction)
+    {
+        if(direction >= 0)
+        {
+            Face(false);
+        }
+        else
+        {
+            Face(true);
         }
     }
 
@@ -300,111 +187,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     protected virtual void OnDetected()
     {
-        if(IsHidden)
-        {
-            SetOrder(Order.OrderHide);
-        }
+        
     }
 
-    private void CheckDeadly(Collision2D collision)
-    {
-        if(collision.gameObject.layer == Reg.hostileDeadlyLayer || collision.gameObject.layer == Reg.generalDeadlyLayer)
-        {
-            Deadly deadly = collision.gameObject.GetComponent<Deadly>();
-
-            Die(deadly.Type);
-        }
-    }
-
-    private void CheckDeadly(Collider2D collider)
-    {
-        if (collider.gameObject.layer == Reg.hostileDeadlyLayer || collider.gameObject.layer == Reg.generalDeadlyLayer)
-        {
-            Deadly deadly = collider.GetComponent<Deadly>();
-
-            if(deadly != null)
-            {
-                Die(deadly.Type);
-            }
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(onCollisionEnter2D != null)
-        {
-            onCollisionEnter2D(collision);
-        }
-    }
-
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        if(onCollisionStay2D != null)
-        {
-            onCollisionStay2D(collision);
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D collider) 
-    {
-        if (onTriggerEnter2D != null) 
-        {
-            onTriggerEnter2D(collider);
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (onTriggerExit2D != null)
-        {
-            onTriggerExit2D(collider);
-        }
-    }
-
-    public virtual bool IsOnFloor(int layerMask)
-    {
-        Bounds bounds = Collider.bounds;
-        float height = 0.05f;
-
-        Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y);
-        Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y);
-
-        EditorDebug.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
-        EditorDebug.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
-
-        return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
-            Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
-
-    }
-
-    public virtual bool CheckWall(int layers)
-    {
-        Bounds bounds = Collider.bounds;
-
-        float separation = 0.15f;
-        float xDir = transform.right.x;
-
-        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
-        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), bounds.center.y + bounds.extents.y);
-
-        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
-
-        return Physics2D.Linecast(beginPoint, endPoint, layers);
-    }
-
-    public virtual bool CheckFloorAhead(int layers)
-    {
-        Bounds bounds = Collider.bounds;
-
-        float separation = 1f;
-        float yDistance = 0.5f;
-        float xDir = transform.right.x;
-
-        Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));
-        Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), beginPoint.y - yDistance);
-
-        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
-
-        return Physics2D.Linecast(beginPoint, endPoint, layers);
-    }
 }
