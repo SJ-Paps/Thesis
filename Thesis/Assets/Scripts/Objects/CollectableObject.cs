@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Animations;
 
-public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollectable<IHandOwner> {
-
-    public IHandOwner Owner { get; protected set; }
-
+public abstract class CollectableObject : ActivableObject<Character>, ICollectable {
+    
     private new Rigidbody2D rigidbody2D;
     private ParentConstraint parentConstraint;
 
@@ -45,12 +43,11 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
         }
     }
 
-    public bool Collect(IHandOwner user)
+    public bool Collect()
     {
-        if(Owner == null && ValidateCollect(user))
+        if(ValidateCollect())
         {
-            PropagateOwnerReference(user);
-            OnCollect(user);
+            OnCollect();
             
             return true;
         }
@@ -60,10 +57,9 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
 
     public bool Drop()
     {
-        if(Owner != null && ValidateDrop())
+        if(ValidateDrop())
         {
             OnDrop();
-            ClearOwnerReference();
 
             return true;
         }
@@ -71,9 +67,9 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
         return false;
     }
 
-    public sealed override bool Activate(IHandOwner user)
+    public sealed override bool Activate(Character user)
     {
-        if(Owner != null && ValidateActivation(user))
+        if(ValidateActivation(user))
         {
             if(Active)
             {
@@ -92,7 +88,7 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
         return false;
     }
 
-    protected virtual bool ValidateCollect(IHandOwner user)
+    protected virtual bool ValidateCollect()
     {
         return true;
     }
@@ -102,12 +98,12 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
         return true;
     }
 
-    protected virtual bool ValidateActivation(IHandOwner user)
+    protected virtual bool ValidateActivation(Character user)
     {
         return true;
     }
 
-    protected virtual void OnCollect(IHandOwner user)
+    protected virtual void OnCollect()
     {
 
     }
@@ -120,15 +116,5 @@ public abstract class CollectableObject : ActivableObject<IHandOwner>, ICollecta
     protected virtual void OnActivation()
     {
 
-    }
-
-    public void PropagateOwnerReference(IHandOwner ownerReference)
-    {
-        Owner = ownerReference;
-    }
-
-    private void ClearOwnerReference()
-    {
-        Owner = null;
     }
 }

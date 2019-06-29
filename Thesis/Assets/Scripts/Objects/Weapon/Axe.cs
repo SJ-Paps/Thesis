@@ -18,7 +18,7 @@ public class Axe : Weapon, IThrowable
     {
         Rigidbody2D.isKinematic = false;
 
-        Activate(Owner);
+        Activate(null);
     }
 
     protected override void OnUse()
@@ -36,9 +36,9 @@ public class Axe : Weapon, IThrowable
         }
     }
 
-    protected override void OnCollect(IHandOwner user)
+    protected override void OnCollect()
     {
-        Activate(user);
+        Activate(null);
 
         Rigidbody2D.isKinematic = true;
     }
@@ -53,7 +53,7 @@ public class Axe : Weapon, IThrowable
         sharpEdge.enabled = false;
     }
 
-    protected override bool ValidateActivation(IHandOwner user)
+    protected override bool ValidateActivation(Character user)
     {
         return Rigidbody2D.isKinematic == false;
     }

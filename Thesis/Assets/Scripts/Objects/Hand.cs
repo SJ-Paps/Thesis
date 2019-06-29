@@ -17,14 +17,14 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 
     public bool CollectObject(CollectableObject collectable)
     {
-        if (IsFree && collectable.Collect(Owner))
+        /*if (IsFree && collectable.Collect(Owner))
         {
             CurrentCollectable = collectable;
 
             OnCollect(collectable);
 
             return true;
-        }
+        }*/
 
         return false;
     }
@@ -59,10 +59,10 @@ public class Hand : SJMonoBehaviour, IOwnable<IHandOwner>
 
     public bool ActivateCurrentObject()
     {
-        if (!IsFree)
+        /*if (!IsFree)
         {
             return CurrentCollectable.Activate(Owner);
-        }
+        }*/
 
         return false;
     }
