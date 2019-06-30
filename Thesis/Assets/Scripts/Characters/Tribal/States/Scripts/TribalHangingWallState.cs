@@ -12,7 +12,7 @@ public class TribalHangingWallState : TribalHSMState
     {
         base.OnEnter();
 
-        currentWall = (ClimbableWall)Blackboard.activable;
+        currentWall = (ClimbableWall)Blackboard.GetItemOf<IActivable>("Activable");
 
         Owner.RigidBody2D.velocity = new Vector2(0, 0);
 

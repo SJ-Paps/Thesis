@@ -1,14 +1,12 @@
 ﻿public abstract class XenophobicIAState : SJHSMState
 {
     public new XenophobicIAController Owner { get; protected set; }
-    protected new XenophobicIAController.Blackboard Blackboard { get; private set; }
 
     protected override void OnOwnerReferencePropagated()
     {
         base.OnOwnerReferencePropagated();
 
         Owner = (XenophobicIAController)base.Owner;
-        Blackboard = (XenophobicIAController.Blackboard)base.Blackboard;
     }
 
     public bool SendEvent(XenophobicIAController.Trigger trigger)

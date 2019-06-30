@@ -22,7 +22,7 @@ public class TribalClimbingLadderState : TribalHSMState
     {
         base.OnEnter();
 
-        currentLadder = (Ladder)Blackboard.activable;
+        currentLadder = (Ladder)Blackboard.GetItemOf<IActivable>("Activable");
 
         shouldStop = false;
 

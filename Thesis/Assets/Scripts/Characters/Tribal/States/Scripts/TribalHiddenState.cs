@@ -8,9 +8,9 @@ public class TribalHiddenState : TribalHSMState
     {
         base.OnEnter();
 
-        currentHide = Blackboard.activable as Hide;
+        currentHide = Blackboard.GetItemOf<IActivable>("Activable") as Hide;
 
-        Blackboard.activable = null;
+        Blackboard.UpdateItem<IActivable>("Activable", null);
 
         if (currentHide == null)
         {

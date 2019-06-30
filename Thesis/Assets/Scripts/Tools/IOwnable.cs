@@ -8,13 +8,3 @@ public interface IOwnable<TOwner> where TOwner : class
 
     void PropagateOwnerReference(TOwner ownerReference);
 }
-
-public interface IBlackboardOwner<TBlackboard>
-{
-    void PropagateBlackboardReference(TBlackboard blackboard);
-}
-
-public interface IBlackboardOwnerExposed<TBlackboard> : IBlackboardOwner<TBlackboard>
-{
-    TBlackboard Blackboard { get; }
-}

@@ -11,7 +11,7 @@ public class TribalCheckPushable : TribalGuardCondition
 
     protected override bool OnValidate()
     {
-        return Blackboard.activable is MovableObject || MovableFound();
+        return Blackboard.GetItemOf<IActivable>("Activable") is MovableObject || MovableFound();
     }
 
     private bool MovableFound()
@@ -22,7 +22,7 @@ public class TribalCheckPushable : TribalGuardCondition
 
         activables.ContainsType<MovableObject>(out MovableObject movableObject);
 
-        Blackboard.activable = movableObject;
+        Blackboard.UpdateItem<IActivable>("Activable", movableObject);
 
         return movableObject != null;
     }

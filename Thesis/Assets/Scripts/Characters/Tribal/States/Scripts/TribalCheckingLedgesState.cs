@@ -74,7 +74,7 @@ public class TribalCheckingLedgesState : TribalHSMState
             if(IsValidForGrappling(validCheckCenter, checkBox))
             {
                 Log("AND IT'S A VALID LEDGE");
-                Blackboard.ledgeCheckHit = hit;
+                Blackboard.UpdateItem<RaycastHit2D>("LedgeCheckHit", hit);
                 SendEvent(Character.Order.HangLedge);
             }
             else

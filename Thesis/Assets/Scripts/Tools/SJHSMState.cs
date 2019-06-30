@@ -2,7 +2,7 @@
 using Paps.StateMachines;
 using Paps.StateMachines.HSM;
 
-public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviour>, IBlackboardOwner<Blackboard>
+public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviour>
 {
     public SJMonoBehaviour Owner { get; protected set; }
     protected Blackboard Blackboard { get; set; }
@@ -160,7 +160,7 @@ public abstract class SJHSMTransition
     protected abstract HSMTransition<byte, byte> CreateConcreteTransition();
 }
 
-public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviour>, IBlackboardOwner<Blackboard>
+public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviour>
 {
     public SJMonoBehaviour Owner { get; protected set; }
     protected Blackboard Blackboard { get; set; }

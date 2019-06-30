@@ -15,6 +15,8 @@ public class XenophobicIAAlertState : XenophobicIAState
     private Collider2D lastDetectedCollider;
     private Eyes lastDetectorEyes;
 
+    private BlackboardNode<Vector2> lastDetectedPositionNode;
+
     public XenophobicIAAlertState()
     {
         unnerveTimer = new SyncTimer();
@@ -26,6 +28,14 @@ public class XenophobicIAAlertState : XenophobicIAState
         analyzeDetectionTimer.onTick += OnAnalyzeDetectionTimerTick;
 
         onSomethingDetectedDelegate = OnSomethingDetected;
+        
+    }
+
+    protected override void OnOwnerReferencePropagated()
+    {
+        base.OnOwnerReferencePropagated();
+
+        lastDetectedPositionNode = Blackboard.GetItemNodeOf<Vector2>("LastDetectedPosition");
     }
 
     protected override void OnEnter()
@@ -86,7 +96,7 @@ public class XenophobicIAAlertState : XenophobicIAState
 
     private void UpdateTargetPosition(Vector2 position)
     {
-        Blackboard.LastDetectedPosition = position;
+        lastDetectedPositionNode.SetValue(position);
 
         Unnerve();
 

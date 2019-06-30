@@ -2,6 +2,6 @@
 {
     protected override bool OnValidate()
     {
-        return Blackboard.activable is Rope;
+        return Blackboard.GetItemOf<IActivable>("Activable") is Rope;
     }
 }

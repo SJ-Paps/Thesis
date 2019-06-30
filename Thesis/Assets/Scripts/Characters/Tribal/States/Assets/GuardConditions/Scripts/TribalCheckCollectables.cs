@@ -13,7 +13,7 @@ public class TribalCheckCollectables : TribalGuardCondition
 
     protected override bool OnValidate()
     {
-        return (Blackboard.activable is CollectableObject collectable && OwnerHasObject(collectable) == false) || CollectableFound();
+        return (Blackboard.GetItemOf<IActivable>("Activable") is CollectableObject collectable && OwnerHasObject(collectable) == false) || CollectableFound();
     }
 
     private bool CollectableFound()
@@ -26,7 +26,7 @@ public class TribalCheckCollectables : TribalGuardCondition
 
         if(collectableObject != null && OwnerHasObject(collectableObject) == false)
         {
-            Blackboard.activable = collectableObject;
+            Blackboard.UpdateItem<IActivable>("Activable", collectableObject);
 
             return true;
         }

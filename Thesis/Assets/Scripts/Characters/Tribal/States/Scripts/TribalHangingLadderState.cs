@@ -10,7 +10,7 @@ public class TribalHangingLadderState : TribalHSMState
     {
         base.OnEnter();
 
-        currentLadder = (Ladder)Blackboard.activable;
+        currentLadder = (Ladder)Blackboard.GetItemOf<IActivable>("Activable");
         
         Owner.RigidBody2D.velocity = new Vector2(0, 0);
 

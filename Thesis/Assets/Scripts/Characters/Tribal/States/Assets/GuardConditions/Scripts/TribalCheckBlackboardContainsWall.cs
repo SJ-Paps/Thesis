@@ -2,6 +2,6 @@
 {
     protected override bool OnValidate()
     {
-        return Blackboard.activable is ClimbableWall;
+        return Blackboard.GetItemOf<IActivable>("Activable") is ClimbableWall;
     }
 }

@@ -14,11 +14,6 @@ public class Turret : Robot, ISeer, IDamagable
         Attacking
     }
 
-    public new class Blackboard : Character.Blackboard
-    {
-
-    }
-
     public event Action onDead;
 
     [SerializeField]
@@ -95,8 +90,6 @@ public class Turret : Robot, ISeer, IDamagable
 
     protected override void Awake()
     {
-        blackboard = new Blackboard();
-
         base.Awake();
 
         HeadCollider = HeadRigidBody.GetComponent<SJCollider2D>();

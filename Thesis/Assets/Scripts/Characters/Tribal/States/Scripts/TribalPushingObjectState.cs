@@ -26,11 +26,11 @@ public class TribalPushingObjectState : TribalHSMState
     protected override void OnEnter() {
         base.OnEnter();
 
-        targetMovableObject = Blackboard.activable as MovableObject;
+        targetMovableObject = Blackboard.GetItemOf<IActivable>("Activable") as MovableObject;
 
-        Blackboard.activable = null;
+        Blackboard.UpdateItem<IActivable>("Activable", null);
 
-        if(targetMovableObject != null)
+        if (targetMovableObject != null)
         {
             springJoint2d.enabled = true;
             springJoint2d.connectedBody = targetMovableObject.Rigidbody2D;

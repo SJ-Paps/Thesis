@@ -8,14 +8,14 @@ public class TribalHangingRopeState : TribalHSMState
     {
         base.OnOwnerReferencePropagated();
 
-        Blackboard.ropeHandler = new GameObject("RopeHandler").AddComponent<RelativeJoint2DTuple>();
+        Blackboard.UpdateItem<RelativeJoint2DTuple>("RopeHandler", new GameObject("RopeHandler").AddComponent<RelativeJoint2DTuple>());
     }
 
     protected override void OnEnter()
     {
         base.OnEnter();
 
-        Rope rope = (Rope)Blackboard.activable;
+        Rope rope = (Rope)Blackboard.GetItemOf<IActivable>("Activable");
 
         Owner.RigidBody2D.velocity = new Vector2(0, 0);
 
@@ -23,25 +23,28 @@ public class TribalHangingRopeState : TribalHSMState
 
         nearestSegment.velocity = new Vector2(0, 0);
 
-        Blackboard.ropeHandler.Rigidbody2D.MovePosition(nearestSegment.position);
+        RelativeJoint2DTuple ropeHandler = Blackboard.GetItemOf<RelativeJoint2DTuple>("RopeHandler");
+        
 
-        Blackboard.ropeHandler.Connect(Owner.RigidBody2D, nearestSegment);
-
-        Blackboard.ropeHandler.RelativeMe.autoConfigureOffset = false;
-        Blackboard.ropeHandler.RelativeOther.autoConfigureOffset = false;
-
-        Blackboard.ropeHandler.RelativeMe.maxForce = 300;
-        Blackboard.ropeHandler.RelativeOther.maxForce = 300;
-
-        Blackboard.ropeHandler.RelativeMe.linearOffset = new Vector2(0, 0);
-        Blackboard.ropeHandler.RelativeOther.linearOffset = new Vector2(0, 0);
+        ropeHandler.Rigidbody2D.MovePosition(nearestSegment.position);
+        
+        ropeHandler.Connect(Owner.RigidBody2D, nearestSegment);
+        
+        ropeHandler.RelativeMe.autoConfigureOffset = false;
+        ropeHandler.RelativeOther.autoConfigureOffset = false;
+        
+        ropeHandler.RelativeMe.maxForce = 300;
+        ropeHandler.RelativeOther.maxForce = 300;
+        
+        ropeHandler.RelativeMe.linearOffset = new Vector2(0, 0);
+        ropeHandler.RelativeOther.linearOffset = new Vector2(0, 0);
     }
 
     protected override void OnExit()
     {
         base.OnExit();
 
-        Blackboard.ropeHandler.Disconnect();
+        Blackboard.GetItemOf<RelativeJoint2DTuple>("RopeHandler").Disconnect();
     }
 
     protected override bool HandleEvent(Character.Order trigger)

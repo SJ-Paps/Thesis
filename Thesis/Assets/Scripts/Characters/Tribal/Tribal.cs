@@ -50,12 +50,12 @@ public abstract class Tribal : Character, IDamagable, ISeer
         ChoiceHangingLadderOrRopeOrWallOrLedge,
     }
 
-    public new class Blackboard : Character.Blackboard
+    /*public new class Blackboard : Character.Blackboard
     {
         public IActivable activable;
         public RaycastHit2D ledgeCheckHit;
         public RelativeJoint2DTuple ropeHandler;
-    }
+    }*/
 
     [Serializable]
     public class TribalConfiguration
@@ -162,8 +162,6 @@ public abstract class Tribal : Character, IDamagable, ISeer
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
         Collider = GetComponent<SJCapsuleCollider2D>();
-
-        blackboard = new Blackboard();
 
         base.Awake();
 

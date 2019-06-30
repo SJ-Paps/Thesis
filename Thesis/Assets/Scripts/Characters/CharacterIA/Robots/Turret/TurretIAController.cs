@@ -17,23 +17,16 @@ public class TurretIAController : IAController<Turret>
         SetFullAlert,
     }
 
-    public class Blackboard : global::Blackboard
-    {
-
-    }
-
     [SerializeField]
     private TurretIAControllerHSMStateAsset baseHSMAsset;
 
     protected TurretIAControllerHSMState hsm;
 
-    protected Blackboard blackboard;
-
     protected override void Awake()
     {
         base.Awake();
 
-        hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this, blackboard);
+        hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this, GetComponent<Blackboard>());
     }
 
     protected override void Start()

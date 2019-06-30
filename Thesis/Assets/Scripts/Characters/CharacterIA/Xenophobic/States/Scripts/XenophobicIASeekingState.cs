@@ -4,6 +4,15 @@ public class XenophobicIASeekingState : XenophobicIAState
 {
     private float positionReachedDeadZoneX = 1f, positionReachedDeadZoneY = 1f;
 
+    private BlackboardNode<Vector2> lastDetectedPositionNode;
+
+    protected override void OnOwnerReferencePropagated()
+    {
+        base.OnOwnerReferencePropagated();
+
+        lastDetectedPositionNode = Blackboard.GetItemNodeOf<Vector2>("LastDetectedPosition");
+    }
+
     protected override void OnUpdate()
     {
         base.OnUpdate();
@@ -12,9 +21,9 @@ public class XenophobicIASeekingState : XenophobicIAState
         {
             Owner.Slave.SendOrder(Character.Order.StopMoving);
         }
-        else if(HasReachedTarget(Blackboard.LastDetectedPosition) == false)
+        else if(HasReachedTarget(lastDetectedPositionNode.GetValue()) == false)
         {
-            SearchAtPosition(Blackboard.LastDetectedPosition);
+            SearchAtPosition(lastDetectedPositionNode.GetValue());
         }
     }
 

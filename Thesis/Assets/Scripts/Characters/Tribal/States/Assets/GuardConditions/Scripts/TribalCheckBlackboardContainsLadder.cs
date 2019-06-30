@@ -2,6 +2,6 @@
 {
     protected override bool OnValidate()
     {
-        return Blackboard.activable is Ladder;
+        return Blackboard.GetItemOf<IActivable>("Activable") is Ladder;
     }
 }

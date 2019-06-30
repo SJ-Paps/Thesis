@@ -11,7 +11,7 @@ public class TribalCheckIsInFrontOfHide : TribalGuardCondition
 
     protected override bool OnValidate()
     {
-        return Blackboard.activable is Hide || HideFound();
+        return Blackboard.GetItemOf<IActivable>("Activable") is Hide || HideFound();
     }
 
     private bool HideFound()
@@ -22,7 +22,7 @@ public class TribalCheckIsInFrontOfHide : TribalGuardCondition
 
         activables.ContainsType<Hide>(out Hide hide);
 
-        Blackboard.activable = hide;
+        Blackboard.UpdateItem<IActivable>("Activable", hide);
 
         return hide != null;
     }

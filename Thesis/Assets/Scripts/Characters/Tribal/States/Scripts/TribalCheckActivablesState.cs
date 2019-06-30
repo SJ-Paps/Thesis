@@ -28,7 +28,8 @@ public class TribalCheckActivablesState : TribalHSMState
         {
             if(activableStorage.ContainsType<CollectableObject>(out CollectableObject collectableObject))
             {
-                Blackboard.activable = collectableObject;
+
+                Blackboard.UpdateItem<IActivable>("Activable", collectableObject);
                 if(SendEvent(Character.Order.Collect))
                 {
                     return true;
@@ -37,7 +38,7 @@ public class TribalCheckActivablesState : TribalHSMState
 
             if (activableStorage.ContainsType<MovableObject>(out MovableObject movableObject))
             {
-                Blackboard.activable = movableObject;
+                Blackboard.UpdateItem<IActivable>("Activable", movableObject);
                 if (SendEvent(Character.Order.Push))
                 {
                     return true;
@@ -46,7 +47,7 @@ public class TribalCheckActivablesState : TribalHSMState
 
             if (activableStorage.ContainsType<Hide>(out Hide hide))
             {
-                Blackboard.activable = hide;
+                Blackboard.UpdateItem<IActivable>("Activable", hide);
                 if(SendEvent(Character.Order.Hide))
                 {
                     return true;
@@ -61,7 +62,7 @@ public class TribalCheckActivablesState : TribalHSMState
             if(activableStorage.ContainsType<ContextualActivable>(out ContextualActivable contextualActivable)
                 || activableStorage.ContainsType<CollectableObject>(out collectableObject))
             {
-                Blackboard.activable = contextualActivable;
+                Blackboard.UpdateItem<IActivable>("Activable", contextualActivable);
 
                 if (SendEvent(Character.Order.Activate))
                 {
@@ -86,7 +87,7 @@ public class TribalCheckActivablesState : TribalHSMState
     {
         if (activableStorage.ContainsType<Ladder>(out Ladder ladder))
         {
-            Blackboard.activable = ladder;
+            Blackboard.UpdateItem<IActivable>("Activable", ladder);
             if (SendEvent(Character.Order.HangLadder))
             {
                 return true;
@@ -95,7 +96,7 @@ public class TribalCheckActivablesState : TribalHSMState
 
         if (activableStorage.ContainsType<Rope>(out Rope rope))
         {
-            Blackboard.activable = rope;
+            Blackboard.UpdateItem<IActivable>("Activable", rope);
             if (SendEvent(Character.Order.HangRope))
             {
                 return true;
@@ -104,7 +105,7 @@ public class TribalCheckActivablesState : TribalHSMState
 
         if (activableStorage.ContainsType<ClimbableWall>(out ClimbableWall climbableWall))
         {
-            Blackboard.activable = climbableWall;
+            Blackboard.UpdateItem<IActivable>("Activable", climbableWall);
             if (SendEvent(Character.Order.HangWall))
             {
                 return true;

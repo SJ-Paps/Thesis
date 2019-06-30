@@ -53,7 +53,7 @@ public class XenophobicIAController : IAController<Xenophobic>
         Seek
     }
 
-    public class Blackboard : global::Blackboard
+    /*public class Blackboard : global::Blackboard
     {
         public event Action<Vector2> onLastDetectedPositionUpdated;
 
@@ -76,7 +76,7 @@ public class XenophobicIAController : IAController<Xenophobic>
                 }
             }
         }
-    }
+    }*/
 
     [SerializeField]
     private ConfigurationData configuration;
@@ -98,15 +98,11 @@ public class XenophobicIAController : IAController<Xenophobic>
 
     protected XenophobicIAState hsm;
 
-    protected Blackboard blackboard;
-
     protected override void Awake()
     {
         base.Awake();
 
-        blackboard = new Blackboard();
-
-        hsm = XenophobicIAControllerHSMStateAsset.BuildFromAsset<XenophobicIAState>(baseHSMAsset, this, blackboard);
+        hsm = XenophobicIAControllerHSMStateAsset.BuildFromAsset<XenophobicIAState>(baseHSMAsset, this, GetComponent<Blackboard>());
     }
 
     protected override void Start()

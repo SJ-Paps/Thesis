@@ -10,9 +10,9 @@ public class TribalActivatingState : TribalHSMState
     {
         base.OnEnter();
 
-        ContextualActivable contextualActivable = Blackboard.activable as ContextualActivable;
+        ContextualActivable contextualActivable = Blackboard.GetItemOf<IActivable>("Activable") as ContextualActivable;
 
-        Blackboard.activable = null;
+        Blackboard.UpdateItem<IActivable>("Activable", null);
 
         if (contextualActivable != null)
         {

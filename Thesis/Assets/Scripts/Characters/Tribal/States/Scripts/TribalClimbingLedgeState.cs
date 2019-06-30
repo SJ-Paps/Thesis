@@ -35,8 +35,10 @@ public class TribalClimbingLedgeState : TribalHSMState
 
             Vector2 startPoint = Owner.transform.position;
 
-            Vector2 endPointForY = new Vector2(Owner.transform.position.x, Blackboard.ledgeCheckHit.point.y + Owner.Collider.bounds.extents.y + endPointOffsetY);
-            Vector2 endPointForX = new Vector2(Blackboard.ledgeCheckHit.point.x, endPointForY.y);
+            RaycastHit2D ledgeCheckHit = Blackboard.GetItemOf<RaycastHit2D>("LedgeCheckHit");
+
+            Vector2 endPointForY = new Vector2(Owner.transform.position.x, ledgeCheckHit.point.y + Owner.Collider.bounds.extents.y + endPointOffsetY);
+            Vector2 endPointForX = new Vector2(ledgeCheckHit.point.x, endPointForY.y);
 
             float timeAcummulator = 0;
             float time = 0.5f;

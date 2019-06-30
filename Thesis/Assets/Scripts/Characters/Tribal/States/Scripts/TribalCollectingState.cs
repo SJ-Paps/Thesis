@@ -17,9 +17,9 @@
     {
         base.OnEnter();
 
-        CollectableObject collectableObject = Blackboard.activable as CollectableObject;
+        CollectableObject collectableObject = Blackboard.GetItemOf<IActivable>("Activable") as CollectableObject;
 
-        Blackboard.activable = null;
+        Blackboard.UpdateItem<IActivable>("Activable", null);
 
         if (collectableObject != null)
         {

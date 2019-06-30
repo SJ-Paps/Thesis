@@ -34,7 +34,7 @@ public class TribalGrapplingLedgeState : TribalHSMState
         }
 
         grapplingPoint.gameObject.SetActive(true);
-        grapplingPoint.transform.position = new Vector2(Owner.Collider.bounds.center.x + (xDirection * Owner.Collider.bounds.extents.x), Blackboard.ledgeCheckHit.point.y);
+        grapplingPoint.transform.position = new Vector2(Owner.Collider.bounds.center.x + (xDirection * Owner.Collider.bounds.extents.x), Blackboard.GetItemOf<RaycastHit2D>("LedgeCheckHit").point.y);
 
         isFirstUpdate = true;
     }

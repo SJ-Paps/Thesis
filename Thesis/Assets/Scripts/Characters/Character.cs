@@ -43,11 +43,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         HangWall,
     }
 
-    public class Blackboard : global::Blackboard
-    {
-
-    }
-
     public event Action onFixedUpdate;
 
 	public event Action<Order> onOrderReceived;
@@ -95,8 +90,6 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     protected Queue<Order> orders;
 
-    protected Blackboard blackboard;
-
     [SerializeField]
     private SJHSMStateAsset hsmAsset;
 
@@ -108,7 +101,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         orders = new Queue<Order>();
 
-        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, blackboard);
+        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, GetComponent<Blackboard>());
 
     }
 

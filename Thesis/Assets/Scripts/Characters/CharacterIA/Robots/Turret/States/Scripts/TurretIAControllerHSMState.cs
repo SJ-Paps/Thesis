@@ -1,14 +1,12 @@
 ﻿public class TurretIAControllerHSMState : SJHSMState
 {
     public new TurretIAController Owner { get; private set; }
-    protected new TurretIAController.Blackboard Blackboard { get; private set; }
 
     protected override void OnOwnerReferencePropagated()
     {
         base.OnOwnerReferencePropagated();
 
         Owner = (TurretIAController)base.Owner;
-        Blackboard = (TurretIAController.Blackboard)base.Blackboard;
     }
 
     public bool SendEvent(TurretIAController.Trigger trigger)

@@ -25,7 +25,7 @@ public class TribalClimbingWallState : TribalHSMState
     {
         base.OnEnter();
 
-        currentWall = (ClimbableWall)Blackboard.activable;
+        currentWall = (ClimbableWall)Blackboard.GetItemOf<IActivable>("Activable");
 
         shouldStop = false;
 

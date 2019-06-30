@@ -9,15 +9,17 @@ public class TribalSwingingRopeState : TribalHSMState
     {
         base.OnEnter();
 
+        RelativeJoint2DTuple ropeHandler = Blackboard.GetItemOf<RelativeJoint2DTuple>("RopeHandler");
+
         if (LastEnteringTrigger == Character.Order.MoveLeft)
         {
             Owner.Face(true);
-            Blackboard.ropeHandler.RelativeOther.connectedBody.AddRelativeForce(new Vector2(-Owner.TribalConfigurationData.ClimbForce * 6, 0));
+            ropeHandler.RelativeOther.connectedBody.AddRelativeForce(new Vector2(-Owner.TribalConfigurationData.ClimbForce * 6, 0));
         }
         else if (LastEnteringTrigger == Character.Order.MoveRight)
         {
             Owner.Face(false);
-            Blackboard.ropeHandler.RelativeOther.connectedBody.AddRelativeForce(new Vector2(Owner.TribalConfigurationData.ClimbForce * 6, 0));
+            ropeHandler.RelativeOther.connectedBody.AddRelativeForce(new Vector2(Owner.TribalConfigurationData.ClimbForce * 6, 0));
         }
 
         SendEvent(Character.Order.FinishAction);
