@@ -24,9 +24,7 @@ public class PercentageReversibleNumber
 
     public PercentageReversibleNumber(double baseValue) : this()
     {
-        BaseValue = baseValue;
-
-        Recalculate();
+        SetBaseValue(baseValue);
     }
 
     public PercentageReversibleNumber(float baseValue) : this((double)baseValue)

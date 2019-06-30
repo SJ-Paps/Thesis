@@ -25,7 +25,7 @@ public class TribalGroundedState : TribalHSMState
 
         groundingTimer.Start();
 
-        Owner.Animator.SetTrigger(Tribal.GroundAnimatorTrigger);
+        Configuration.Animator.SetTrigger(Tribal.GroundAnimatorTrigger);
     }
 
     protected override void OnUpdate()
@@ -34,7 +34,7 @@ public class TribalGroundedState : TribalHSMState
 
         groundingTimer.Update(Time.deltaTime);
 
-        if (Owner.RigidBody2D.velocity.y < velocityDeadZone && IsOnFloor(Reg.walkableLayerMask) == false)
+        if (Configuration.RigidBody2D.velocity.y < velocityDeadZone && IsOnFloor(Reg.walkableLayerMask) == false)
         {
             SendEvent(Character.Order.Fall);
         }
@@ -46,7 +46,7 @@ public class TribalGroundedState : TribalHSMState
 
         groundingTimer.Stop();
 
-        Owner.Animator.ResetTrigger(Tribal.GroundAnimatorTrigger);
+        Configuration.Animator.ResetTrigger(Tribal.GroundAnimatorTrigger);
     }
 
     protected override bool HandleEvent(Character.Order trigger)
@@ -61,7 +61,7 @@ public class TribalGroundedState : TribalHSMState
 
     private bool IsOnFloor(int layerMask)
     {
-        Bounds bounds = Owner.Collider.bounds;
+        Bounds bounds = Configuration.Collider.bounds;
         float height = 0.05f;
         float checkFloorNegativeOffsetX = -0.1f;
 

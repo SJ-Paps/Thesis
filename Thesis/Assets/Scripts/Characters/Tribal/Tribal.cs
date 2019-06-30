@@ -49,27 +49,7 @@ public abstract class Tribal : Character, IDamagable, ISeer
         ChoiceCollectingOrDropingOrThrowingOrActivatingOrAttacking,
         ChoiceHangingLadderOrRopeOrWallOrLedge,
     }
-
-    /*public new class Blackboard : Character.Blackboard
-    {
-        public IActivable activable;
-        public RaycastHit2D ledgeCheckHit;
-        public RelativeJoint2DTuple ropeHandler;
-    }*/
-
-    [Serializable]
-    public class TribalConfiguration
-    {
-        [SerializeField]
-        private float maxMovementVelocity, acceleration, jumpMaxHeight, jumpAcceleration, jumpForceFromLadder, climbForce;
-
-        public float MaxMovementVelocity { get => maxMovementVelocity; }
-        public float Acceleration { get => acceleration; }
-        public float JumpMaxHeight { get => jumpMaxHeight; }
-        public float JumpAcceleration { get => jumpAcceleration; }
-        public float JumpForceFromLadder { get => jumpForceFromLadder; }
-        public float ClimbForce { get => climbForce; }
-    }
+    
 
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
@@ -85,90 +65,17 @@ public abstract class Tribal : Character, IDamagable, ISeer
 
     public event Action onDead;
 
-    public Animator Animator { get; protected set; }
-    public Rigidbody2D RigidBody2D { get; protected set; }
-
-    public SJCapsuleCollider2D Collider { get; protected set; }
-
-    public event Action<Collision2D> onCollisionEnter2D
-    {
-        add
-        {
-            Collider.onEnteredCollision += value;
-        }
-
-        remove
-        {
-            Collider.onEnteredCollision -= value;
-        }
-    }
-
-    public event Action<Collision2D> onCollisionStay2D
-    {
-        add
-        {
-            Collider.onStayCollision += value;
-        }
-
-        remove
-        {
-            Collider.onStayCollision -= value;
-        }
-    }
-
-    public event Action<Collider2D> onTriggerEnter2D
-    {
-        add
-        {
-            Collider.onEnteredTrigger += value;
-        }
-
-        remove
-        {
-            Collider.onEnteredTrigger -= value;
-        }
-    }
-
-    public event Action<Collider2D> onTriggerExit2D
-    {
-        add
-        {
-            Collider.onExitedTrigger += value;
-        }
-
-        remove
-        {
-            Collider.onExitedTrigger -= value;
-        }
-    }
-
     public PercentageReversibleNumber MaxVelocity { get; protected set; }
-
-    [SerializeField]
-    private TribalConfiguration configuration;
-
-    public TribalConfiguration TribalConfigurationData
-    {
-        get
-        {
-            return configuration;
-        }
-    }
 
     private EyeCollection eyes;
 
     protected override void Awake()
     {
-        Animator = GetComponent<Animator>();
-        RigidBody2D = GetComponent<Rigidbody2D>();
-        Collider = GetComponent<SJCapsuleCollider2D>();
-
-        base.Awake();
-
-        MaxVelocity = new PercentageReversibleNumber(TribalConfigurationData.MaxMovementVelocity);
+        MaxVelocity = new PercentageReversibleNumber();
 
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
 
+        base.Awake();
         
     }
 
@@ -243,7 +150,7 @@ public static class TribalExtensions
             xDirection = -1;
         }
 
-        Bounds tribalBounds = tribal.Collider.bounds;
+        Bounds tribalBounds = ((TribalConfiguration)tribal.GetConfiguration()).Collider.bounds;
 
         return SJUtil.FindActivable<MovableObject, Tribal>(new Vector2(tribalBounds.center.x + (tribalBounds.extents.x * xDirection),
                                                                   tribalBounds.center.y - tribalBounds.extents.y / 3),
@@ -252,7 +159,7 @@ public static class TribalExtensions
 
     public static bool CheckWall(this Tribal tribal)
     {
-        Bounds bounds = tribal.Collider.bounds;
+        Bounds bounds = ((TribalConfiguration)tribal.GetConfiguration()).Collider.bounds;
 
         float separation = 0.15f;
         float xDir = tribal.transform.right.x;
@@ -267,7 +174,7 @@ public static class TribalExtensions
 
     public static bool CheckFloorAhead(this Tribal tribal)
     {
-        Bounds bounds = tribal.Collider.bounds;
+        Bounds bounds = ((TribalConfiguration)tribal.GetConfiguration()).Collider.bounds;
 
         float separation = 1f;
         float yDistance = 0.5f;
@@ -283,7 +190,7 @@ public static class TribalExtensions
 
     public static void FindActivables(this Tribal tribal, List<IActivable> activables)
     {
-        Bounds ownerBounds = tribal.Collider.bounds;
+        Bounds ownerBounds = ((TribalConfiguration)tribal.GetConfiguration()).Collider.bounds;
 
         int xDirection;
 

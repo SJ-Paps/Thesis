@@ -11,6 +11,6 @@
     {
         base.OnConstructionFinished();
 
-        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
+        ownerEquipment = Configuration.Equipment;
     }
 }

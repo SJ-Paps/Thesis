@@ -32,12 +32,12 @@ public class TribalCheckingLedgesState : TribalHSMState
     {
         base.OnExit();
 
-        Owner.onCollisionStay2D -= CheckLedges;
+        Configuration.Collider.onStayCollision -= CheckLedges;
     }
 
     private void OnTimerTick(SyncTimer timer)
     {
-        Owner.onCollisionStay2D += CheckLedges;
+        Configuration.Collider.onStayCollision += CheckLedges;
     }
 
     private void CheckLedges(Collision2D collision)
@@ -55,7 +55,7 @@ public class TribalCheckingLedgesState : TribalHSMState
             xDirection = -1;
         }
 
-        Bounds ownerBounds = Owner.Collider.bounds;
+        Bounds ownerBounds = Configuration.Collider.bounds;
 
         Vector2 beginPoint = new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection),
                                                         ownerBounds.center.y + (ownerBounds.extents.y));
@@ -95,7 +95,7 @@ public class TribalCheckingLedgesState : TribalHSMState
     {
         float rayYSizeReduction = 0.1f;
 
-        Vector2 endPoint = new Vector2(beginPoint.x + (Owner.Collider.bounds.size.x * direction), beginPoint.y - Owner.Collider.bounds.size.y + rayYSizeReduction);
+        Vector2 endPoint = new Vector2(beginPoint.x + (Configuration.Collider.bounds.size.x * direction), beginPoint.y - Configuration.Collider.bounds.size.y + rayYSizeReduction);
 
         hit = Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
 

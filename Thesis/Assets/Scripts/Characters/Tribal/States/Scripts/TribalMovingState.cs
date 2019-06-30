@@ -40,7 +40,7 @@ public class TribalMovingState : TribalHSMState
 
             isFirstUpdate = false;
         }
-        else if(Owner.RigidBody2D.velocity.x > (velocityDeadZone * -1) && Owner.RigidBody2D.velocity.x < velocityDeadZone)
+        else if(Configuration.RigidBody2D.velocity.x > (velocityDeadZone * -1) && Configuration.RigidBody2D.velocity.x < velocityDeadZone)
         {
             SendEvent(Character.Order.StopMoving);
         }
@@ -88,7 +88,7 @@ public class TribalMovingState : TribalHSMState
             MoveOnDirection(currentMoveDirection);
         }
 
-        if (Owner.RigidBody2D.velocity.x > Owner.MaxVelocity.CurrentValue || Owner.RigidBody2D.velocity.x < Owner.MaxVelocity.CurrentValue * -1)
+        if (Configuration.RigidBody2D.velocity.x > Owner.MaxVelocity.CurrentValue || Configuration.RigidBody2D.velocity.x < Owner.MaxVelocity.CurrentValue * -1)
         {
             ClampVelocity(currentMoveDirection);
         }
@@ -102,7 +102,7 @@ public class TribalMovingState : TribalHSMState
 
     private void OnFirstUpdate()
     {
-        float currentVelocity = Owner.RigidBody2D.velocity.x;
+        float currentVelocity = Configuration.RigidBody2D.velocity.x;
 
         if (LastEnteringTrigger == Character.Order.MoveRight || currentVelocity > 0)
         {
@@ -130,7 +130,7 @@ public class TribalMovingState : TribalHSMState
 
     protected void ApplyForceOnDirection(int direction)
     {
-        Owner.RigidBody2D.AddForce(new Vector2(direction * Owner.TribalConfigurationData.Acceleration, 0), ForceMode2D.Impulse);
+        Configuration.RigidBody2D.AddForce(new Vector2(direction * Configuration.Acceleration, 0), ForceMode2D.Impulse);
     }
 
     protected void ClampVelocity(int lastDirection)

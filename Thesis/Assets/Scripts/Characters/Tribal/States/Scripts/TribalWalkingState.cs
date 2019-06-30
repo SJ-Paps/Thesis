@@ -8,7 +8,7 @@
     {
         base.OnEnter();
 
-        Owner.Animator.SetTrigger(Tribal.WalkAnimatorTrigger);
+        Configuration.Animator.SetTrigger(Tribal.WalkAnimatorTrigger);
 
         velocityConstraintId = Owner.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
         
@@ -23,7 +23,7 @@
     {
         base.OnExit();
 
-        Owner.Animator.ResetTrigger(Tribal.WalkAnimatorTrigger);
+        Configuration.Animator.ResetTrigger(Tribal.WalkAnimatorTrigger);
 
         Owner.MaxVelocity.RemovePercentageConstraint(velocityConstraintId);
     }

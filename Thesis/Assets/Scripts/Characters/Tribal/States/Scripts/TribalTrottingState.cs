@@ -6,13 +6,13 @@
     {
         base.OnEnter();
 
-        Owner.Animator.SetTrigger(Tribal.TrotAnimatorTrigger);
+        Configuration.Animator.SetTrigger(Tribal.TrotAnimatorTrigger);
     }
 
     protected override void OnExit()
     {
         base.OnExit();
 
-        Owner.Animator.ResetTrigger(Tribal.TrotAnimatorTrigger);
+        Configuration.Animator.ResetTrigger(Tribal.TrotAnimatorTrigger);
     }
 }

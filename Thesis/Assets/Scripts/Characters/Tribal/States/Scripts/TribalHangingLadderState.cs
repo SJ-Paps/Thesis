@@ -11,11 +11,11 @@ public class TribalHangingLadderState : TribalHSMState
         base.OnEnter();
 
         currentLadder = (Ladder)Blackboard.GetItemOf<IActivable>("Activable");
-        
-        Owner.RigidBody2D.velocity = new Vector2(0, 0);
 
-        previousGravityScale = Owner.RigidBody2D.gravityScale;
-        Owner.RigidBody2D.gravityScale = 0;
+        Configuration.RigidBody2D.velocity = new Vector2(0, 0);
+
+        previousGravityScale = Configuration.RigidBody2D.gravityScale;
+        Configuration.RigidBody2D.gravityScale = 0;
 
         ContraintPosition(currentLadder);
     }
@@ -24,14 +24,14 @@ public class TribalHangingLadderState : TribalHSMState
     {
         base.OnExit();
 
-        Owner.RigidBody2D.gravityScale = previousGravityScale;
+        Configuration.RigidBody2D.gravityScale = previousGravityScale;
     }
 
     protected override bool HandleEvent(Character.Order trigger)
     {
         if (trigger == Character.Order.Jump)
         {
-            Owner.RigidBody2D.AddForce(new Vector2(Owner.FacingDirection * Owner.TribalConfigurationData.JumpForceFromLadder, 0), ForceMode2D.Impulse);
+            Configuration.RigidBody2D.AddForce(new Vector2(Owner.FacingDirection * Configuration.JumpForceFromLadder, 0), ForceMode2D.Impulse);
         }
         else if(trigger == Character.Order.MoveLeft)
         {
@@ -47,6 +47,6 @@ public class TribalHangingLadderState : TribalHSMState
 
     private void ContraintPosition(Ladder ladder)
     {
-        Owner.RigidBody2D.MovePosition(new Vector2(((Vector2)ladder.transform.position + ladder.Collider.offset).x, Owner.transform.position.y));
+        Configuration.RigidBody2D.MovePosition(new Vector2(((Vector2)ladder.transform.position + ladder.Collider.offset).x, Owner.transform.position.y));
     }
 }

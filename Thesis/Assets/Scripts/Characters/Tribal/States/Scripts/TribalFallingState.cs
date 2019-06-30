@@ -8,14 +8,14 @@ public class TribalFallingState : TribalHSMState
     {
         base.OnEnter();
 
-        Owner.Animator.SetTrigger(Tribal.FallAnimatorTrigger);
+        Configuration.Animator.SetTrigger(Tribal.FallAnimatorTrigger);
     }
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
 
-        if(Owner.RigidBody2D.velocity.y > velocityDeadZone)
+        if(Configuration.RigidBody2D.velocity.y > velocityDeadZone)
         {
             if (IsOnFloor(Reg.walkableLayerMask))
             {
@@ -29,13 +29,13 @@ public class TribalFallingState : TribalHSMState
     {
         base.OnExit();
 
-        Owner.Animator.ResetTrigger(Tribal.FallAnimatorTrigger);
+        Configuration.Animator.ResetTrigger(Tribal.FallAnimatorTrigger);
     }
 
 
     private bool IsOnFloor(int layerMask)
     {
-        Bounds bounds = Owner.Collider.bounds;
+        Bounds bounds = Configuration.Collider.bounds;
         float height = 0.05f;
         float checkFloorNegativeOffsetX = -0.1f;
 

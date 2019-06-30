@@ -14,15 +14,15 @@ public class TribalClimbingLedgeState : TribalHSMState
     {
         base.OnEnter();
 
-        Owner.RigidBody2D.velocity = new Vector2(0, 0);
-        Owner.RigidBody2D.isKinematic = true;
+        Configuration.RigidBody2D.velocity = new Vector2(0, 0);
+        Configuration.RigidBody2D.isKinematic = true;
 
         CoroutineManager.GetInstance().StartCoroutine(climbCoroutine);
     }
 
     protected override void OnExit()
     {
-        Owner.RigidBody2D.isKinematic = false;
+        Configuration.RigidBody2D.isKinematic = false;
 
         CoroutineManager.GetInstance().StopCoroutine(climbCoroutine);
     }
@@ -37,7 +37,7 @@ public class TribalClimbingLedgeState : TribalHSMState
 
             RaycastHit2D ledgeCheckHit = Blackboard.GetItemOf<RaycastHit2D>("LedgeCheckHit");
 
-            Vector2 endPointForY = new Vector2(Owner.transform.position.x, ledgeCheckHit.point.y + Owner.Collider.bounds.extents.y + endPointOffsetY);
+            Vector2 endPointForY = new Vector2(Owner.transform.position.x, ledgeCheckHit.point.y + Configuration.Collider.bounds.extents.y + endPointOffsetY);
             Vector2 endPointForX = new Vector2(ledgeCheckHit.point.x, endPointForY.y);
 
             float timeAcummulator = 0;

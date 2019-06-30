@@ -28,7 +28,7 @@ public class TribalDropingState : TribalHSMState
     {
         base.OnConstructionFinished();
 
-        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
-        ownerInventory = Owner.GetComponentInChildren<Inventory>();
+        ownerEquipment = Configuration.Equipment;
+        ownerInventory = Configuration.Inventory;
     }
 }

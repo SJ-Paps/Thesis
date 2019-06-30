@@ -17,10 +17,12 @@ public class TribalDuckingState : TribalHSMState
     {
         base.OnEnter();
 
-        float yFloor = Owner.Collider.bounds.min.y;
+        SJCapsuleCollider2D Collider = (SJCapsuleCollider2D)Configuration.Collider;
 
-        previousOffset = Owner.Collider.offset;
-        previousSize = Owner.Collider.InnerCollider.size;
+        float yFloor = Collider.bounds.min.y;
+
+        previousOffset = Collider.offset;
+        previousSize = Collider.InnerCollider.size;
         
         float colliderSizeY = previousSize.y / 2;
 
@@ -29,11 +31,11 @@ public class TribalDuckingState : TribalHSMState
             colliderSizeY = previousSize.x;
         }
 
-        Owner.Collider.InnerCollider.size = new Vector2(previousSize.x, colliderSizeY);
+        Collider.InnerCollider.size = new Vector2(previousSize.x, colliderSizeY);
 
         float distanceFromZeroOffsetToFloor = Mathf.Abs((Owner.transform.position.y) - yFloor);
 
-        Owner.Collider.offset = new Vector2(previousOffset.x, (previousOffset.y - distanceFromZeroOffsetToFloor / 2));
+        Collider.offset = new Vector2(previousOffset.x, (previousOffset.y - distanceFromZeroOffsetToFloor / 2));
 
         velocityContraintId = Owner.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
 
@@ -55,10 +57,11 @@ public class TribalDuckingState : TribalHSMState
     protected override void OnExit()
     {
         base.OnExit();
-        
 
-        Owner.Collider.InnerCollider.size = previousSize;
-        Owner.Collider.offset = previousOffset;
+        SJCapsuleCollider2D Collider = (SJCapsuleCollider2D)Configuration.Collider;
+
+        Collider.InnerCollider.size = previousSize;
+        Collider.offset = previousOffset;
 
         Owner.MaxVelocity.RemovePercentageConstraint(velocityContraintId);
     }

@@ -14,10 +14,10 @@ public class TribalHangingWallState : TribalHSMState
 
         currentWall = (ClimbableWall)Blackboard.GetItemOf<IActivable>("Activable");
 
-        Owner.RigidBody2D.velocity = new Vector2(0, 0);
+        Configuration.RigidBody2D.velocity = new Vector2(0, 0);
 
-        previousGravityScale = Owner.RigidBody2D.gravityScale;
-        Owner.RigidBody2D.gravityScale = 0;
+        previousGravityScale = Configuration.RigidBody2D.gravityScale;
+        Configuration.RigidBody2D.gravityScale = 0;
 
         ContraintPosition(currentWall);
     }
@@ -26,14 +26,14 @@ public class TribalHangingWallState : TribalHSMState
     {
         base.OnExit();
 
-        Owner.RigidBody2D.gravityScale = previousGravityScale;
+        Configuration.RigidBody2D.gravityScale = previousGravityScale;
     }
 
     protected override bool HandleEvent(Character.Order trigger)
     {
         if (trigger == Character.Order.Jump)
         {
-            Owner.RigidBody2D.AddForce(new Vector2(Owner.FacingDirection * Owner.TribalConfigurationData.JumpForceFromLadder, 0), ForceMode2D.Impulse);
+            Configuration.RigidBody2D.AddForce(new Vector2(Owner.FacingDirection * Configuration.JumpForceFromLadder, 0), ForceMode2D.Impulse);
         }
 
         return false;
@@ -41,13 +41,13 @@ public class TribalHangingWallState : TribalHSMState
 
     private void ContraintPosition(ClimbableWall wall)
     {
-        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Owner.Collider.offset;
+        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Configuration.Collider.offset;
 
         if (wall.Collider.OverlapPoint(offsetWorldPosition) == false)
         {
-            ColliderDistance2D colliderDistance2D = Owner.Collider.Distance(wall.Collider);
+            ColliderDistance2D colliderDistance2D = Configuration.Collider.Distance(wall.Collider);
 
-            Owner.RigidBody2D.MovePosition(colliderDistance2D.pointB + (Owner.Collider.offset * Owner.FacingDirection));
+            Configuration.RigidBody2D.MovePosition(colliderDistance2D.pointB + (Configuration.Collider.offset * Owner.FacingDirection));
         }
     }
 }

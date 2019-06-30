@@ -29,8 +29,8 @@ public class TribalClimbingRopeState : TribalHSMState
         Owner.onFixedUpdate += onFixedUpdateDelegate;
         shouldStop = false;
 
-        currentClimbUpForce = (Owner.TribalConfigurationData.ClimbForce / (currentRope.GetClimbDifficulty() * climbUpDifficultyModifier));
-        currentClimbDownForce = (Owner.TribalConfigurationData.ClimbForce / (currentRope.GetClimbDifficulty() * climbDownDifficultyModifier));
+        currentClimbUpForce = (Configuration.ClimbForce / (currentRope.GetClimbDifficulty() * climbUpDifficultyModifier));
+        currentClimbDownForce = (Configuration.ClimbForce / (currentRope.GetClimbDifficulty() * climbDownDifficultyModifier));
     }
 
     protected override void OnUpdate()
@@ -53,24 +53,24 @@ public class TribalClimbingRopeState : TribalHSMState
 
     private void OnFixedUpdate()
     {
-        Rigidbody2D possiblyNewSegment = currentRope.GetNearestSegment(Owner.RigidBody2D.position);
+        Rigidbody2D possiblyNewSegment = currentRope.GetNearestSegment(Configuration.RigidBody2D.position);
 
         RelativeJoint2DTuple ropeHandler = Blackboard.GetItemOf<RelativeJoint2DTuple>("RopeHandler");
 
         if (possiblyNewSegment != ropeHandler.RelativeOther.connectedBody)
         {
             ropeHandler.RelativeOther.autoConfigureOffset = true;
-            ropeHandler.Connect(Owner.RigidBody2D, possiblyNewSegment);
+            ropeHandler.Connect(Configuration.RigidBody2D, possiblyNewSegment);
             ropeHandler.RelativeOther.autoConfigureOffset = false;
             ropeHandler.RelativeOther.linearOffset = new Vector2(0, ropeHandler.RelativeOther.linearOffset.y);
         }
 
-        if(verticalDirection == 1 && currentRope.IsNearTop(Owner.RigidBody2D.position, 0.1f) == false)
+        if(verticalDirection == 1 && currentRope.IsNearTop(Configuration.RigidBody2D.position, 0.1f) == false)
         {
             ropeHandler.RelativeOther.linearOffset = new Vector2(ropeHandler.RelativeOther.linearOffset.x,
                                                         ropeHandler.RelativeOther.linearOffset.y - (verticalDirection * currentClimbUpForce));
         }
-        else if(verticalDirection == -1 && currentRope.IsNearBottom(Owner.RigidBody2D.position, 0.1f) == false)
+        else if(verticalDirection == -1 && currentRope.IsNearBottom(Configuration.RigidBody2D.position, 0.1f) == false)
         {
             ropeHandler.RelativeOther.linearOffset = new Vector2(ropeHandler.RelativeOther.linearOffset.x,
                                                         ropeHandler.RelativeOther.linearOffset.y - (verticalDirection * currentClimbDownForce));

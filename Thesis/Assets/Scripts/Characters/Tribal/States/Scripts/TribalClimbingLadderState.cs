@@ -64,7 +64,7 @@ public class TribalClimbingLadderState : TribalHSMState
             climbDifficulty = 1;
         }
 
-        Rigidbody2D ownerRigidbody = Owner.RigidBody2D;
+        Rigidbody2D ownerRigidbody = Configuration.RigidBody2D;
 
         shouldStop = true;
 
@@ -77,7 +77,7 @@ public class TribalClimbingLadderState : TribalHSMState
                     ClampVelocityAxis(true);
                 }
 
-                ownerRigidbody.AddForce(new Vector2(0, Owner.TribalConfigurationData.ClimbForce / climbDifficulty));
+                ownerRigidbody.AddForce(new Vector2(0, Configuration.ClimbForce / climbDifficulty));
             }
             else if (verticalDirectionOrder == Character.Order.ClimbDown)
             {
@@ -86,7 +86,7 @@ public class TribalClimbingLadderState : TribalHSMState
                     ClampVelocityAxis(true);
                 }
 
-                ownerRigidbody.AddForce(new Vector2(0, -1 * Owner.TribalConfigurationData.ClimbForce));
+                ownerRigidbody.AddForce(new Vector2(0, -1 * Configuration.ClimbForce));
             }
 
             shouldStop = false;
@@ -100,9 +100,9 @@ public class TribalClimbingLadderState : TribalHSMState
 
     private void ClampVelocity()
     {
-        Vector2 velocity = Owner.RigidBody2D.velocity;
-        float maxClimbVelocityPositive = Owner.TribalConfigurationData.ClimbForce / 2;
-        float maxClimbVelocityNegative = Owner.TribalConfigurationData.ClimbForce / 2 * -1;
+        Vector2 velocity = Configuration.RigidBody2D.velocity;
+        float maxClimbVelocityPositive = Configuration.ClimbForce / 2;
+        float maxClimbVelocityNegative = Configuration.ClimbForce / 2 * -1;
 
         if (velocity.y > maxClimbVelocityPositive)
         {
@@ -113,7 +113,7 @@ public class TribalClimbingLadderState : TribalHSMState
             velocity = new Vector2(velocity.x, maxClimbVelocityNegative);
         }
 
-        Owner.RigidBody2D.velocity = velocity;
+        Configuration.RigidBody2D.velocity = velocity;
     }
 
     protected override bool HandleEvent(Character.Order trigger)
@@ -131,7 +131,7 @@ public class TribalClimbingLadderState : TribalHSMState
 
     private bool CanMoveOnDirection(Character.Order orderDirection)
     {
-        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Owner.Collider.offset;
+        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Configuration.Collider.offset;
         float snap = 0.1f;
 
         if (orderDirection == Character.Order.ClimbUp)
@@ -156,11 +156,11 @@ public class TribalClimbingLadderState : TribalHSMState
     {
         if(vertical)
         {
-            Owner.RigidBody2D.velocity = new Vector2(Owner.RigidBody2D.velocity.x, 0);
+            Configuration.RigidBody2D.velocity = new Vector2(Configuration.RigidBody2D.velocity.x, 0);
         }
         else
         {
-            Owner.RigidBody2D.velocity = new Vector2(0, Owner.RigidBody2D.velocity.y);
+            Configuration.RigidBody2D.velocity = new Vector2(0, Configuration.RigidBody2D.velocity.y);
         }
     }
 }

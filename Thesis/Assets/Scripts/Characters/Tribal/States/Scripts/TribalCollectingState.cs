@@ -7,8 +7,8 @@
     {
         base.OnConstructionFinished();
 
-        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
-        ownerInventory = Owner.GetComponentInChildren<Inventory>();
+        ownerEquipment = Configuration.Equipment;
+        ownerInventory = Configuration.Inventory;
 
         ownerEquipment.AddEquipmentSlot(Tribal.rightHandEquipmentSlotIdentifier);
     }

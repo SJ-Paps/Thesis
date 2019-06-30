@@ -13,7 +13,7 @@ public class TribalPushingObjectState : TribalHSMState
     {
         base.OnConstructionFinished();
 
-        Rigidbody2D rigidbody2D = Owner.RigidBody2D;
+        Rigidbody2D rigidbody2D = Configuration.RigidBody2D;
 
         springJoint2d = rigidbody2D.gameObject.AddComponent<SpringJoint2D>();
         springJoint2d.enabled = false;

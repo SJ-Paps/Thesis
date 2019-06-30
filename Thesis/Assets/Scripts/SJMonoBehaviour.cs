@@ -8,6 +8,8 @@ public abstract class SJMonoBehaviour : MonoBehaviour
     [SerializeField]
     public string prefabName;
 
+    private IConfiguration cachedConfiguration;
+
     protected virtual void Awake()
     {
 
@@ -23,9 +25,14 @@ public abstract class SJMonoBehaviour : MonoBehaviour
 
     }
 
-    protected IConfiguration GetConfiguration()
+    public IConfiguration GetConfiguration()
     {
-        return GetComponent<IConfiguration>();
+        if(cachedConfiguration == null)
+        {
+            cachedConfiguration = GetComponent<IConfiguration>();
+        }
+
+        return cachedConfiguration;
     }
 
 #if UNITY_EDITOR

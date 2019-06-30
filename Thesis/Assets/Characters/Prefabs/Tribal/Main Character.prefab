@@ -905,13 +905,6 @@ MonoBehaviour:
   prefabName: Main Character
   blockFacing: 0
   hsmAsset: {fileID: 11400000, guid: 94da28a8edfc32b45b08148c5a2adaed, type: 2}
-  configuration:
-    maxMovementVelocity: 3
-    acceleration: 0.5
-    jumpMaxHeight: 0.5
-    jumpAcceleration: 0.5
-    jumpForceFromLadder: 2
-    climbForce: 2
 --- !u!114 &1226569705297211115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -976,6 +969,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blackboard: {fileID: 5111192387197576411}
   hand: {fileID: 1768596367033269506}
+  inventory: {fileID: 5488506463616787109}
+  equipment: {fileID: 1680136816799603654}
+  animator: {fileID: 95729428891886690}
+  rigidbody2D: {fileID: 50339217002041110}
+  collider: {fileID: 1226569705297211115}
+  maxMovementVelocity: 3
+  acceleration: 0.5
+  jumpMaxHeight: 0.5
+  jumpAcceleration: 0.5
+  jumpForceFromLadder: 2
+  climbForce: 2
 --- !u!1 &2052117181817079184
 GameObject:
   m_ObjectHideFlags: 0

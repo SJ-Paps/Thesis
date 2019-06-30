@@ -6,7 +6,7 @@
     {
         base.OnConstructionFinished();
 
-        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
+        ownerEquipment = Configuration.Equipment;
     }
 
     protected override bool OnValidate()

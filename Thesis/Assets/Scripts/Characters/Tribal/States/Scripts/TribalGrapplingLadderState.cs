@@ -7,7 +7,7 @@ public class TribalGrapplingLadderState : TribalHSMState
     {
         base.OnEnter();
 
-        Owner.RigidBody2D.velocity = new Vector2(0, 0);
+        Configuration.RigidBody2D.velocity = new Vector2(0, 0);
     }
 
     
