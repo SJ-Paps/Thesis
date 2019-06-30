@@ -4,10 +4,15 @@ using Paps.StateMachines.HSM;
 public abstract class CharacterHSMState : SJHSMState
 {
     protected Character.Order LastEnteringTrigger { get; private set; }
+    protected new CharacterConfiguration Configuration { get; private set; }
+    protected Blackboard Blackboard { get; private set; }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
+
+        Configuration = (CharacterConfiguration)base.Configuration;
+        Blackboard = Configuration.Blackboard;
 
         onAnyStateChanged += CatchEnteringTrigger;
     }

@@ -39,9 +39,9 @@ public class TribalCheckCollectables : TribalGuardCondition
         return ownerInventory.Contains(collectable);
     }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
         
         ownerInventory = Owner.GetComponentInChildren<Inventory>();
     }

@@ -1,10 +1,10 @@
-﻿public abstract class TribalGuardCondition : SJGuardCondition
+﻿public abstract class TribalGuardCondition : CharacterGuardCondition
 {
     public new Tribal Owner { get; protected set; }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         Owner = (Tribal)base.Owner;
     }

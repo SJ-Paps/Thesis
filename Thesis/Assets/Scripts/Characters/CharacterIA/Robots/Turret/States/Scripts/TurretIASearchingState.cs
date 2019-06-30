@@ -33,9 +33,9 @@ public class TurretIASearchingState : TurretIAControllerHSMState
         Owner.Slave.SendOrder(currentOrder);
     }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         joint = Owner.Slave.GetComponentInChildren<HingeJoint2D>();
     }

@@ -6,9 +6,9 @@ public class XenophobicIASeekingState : XenophobicIAState
 
     private BlackboardNode<Vector2> lastDetectedPositionNode;
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         lastDetectedPositionNode = Blackboard.GetItemNodeOf<Vector2>("LastDetectedPosition");
     }

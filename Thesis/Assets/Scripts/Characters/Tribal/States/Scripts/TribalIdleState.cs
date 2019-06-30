@@ -4,9 +4,9 @@ public class TribalIdleState : TribalHSMState
 {
     private Animator animator;
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         animator = Owner.Animator;
     }

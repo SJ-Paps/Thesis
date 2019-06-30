@@ -7,9 +7,9 @@ public class TurretHSMState : CharacterHSMState
     public new Turret Owner { get; protected set; }
     
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         Owner = (Turret)base.Owner;
     }

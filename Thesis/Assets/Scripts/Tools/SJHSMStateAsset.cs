@@ -28,11 +28,11 @@ public abstract class SJHSMStateAsset : HSMStateAsset<byte, byte>
 
     public bool activeDebug;
 
-    public static T BuildFromAsset<T>(SJHSMStateAsset baseAsset, SJMonoBehaviour ownerReference, Blackboard blackboardReference) where T : SJHSMState
+    public static T BuildFromAsset<T>(SJHSMStateAsset baseAsset, SJMonoBehaviour ownerReference, IConfiguration configuration) where T : SJHSMState
     {
         T baseState = (T)BuildFromAsset(baseAsset);
 
-        baseState.PropagateBlackboardReference(blackboardReference);
+        baseState.PropagateConfigurationReference(configuration);
 
         baseState.PropagateOwnerReference(ownerReference);
 

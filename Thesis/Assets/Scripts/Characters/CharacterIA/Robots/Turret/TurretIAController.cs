@@ -26,7 +26,7 @@ public class TurretIAController : IAController<Turret>
     {
         base.Awake();
 
-        hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this, GetComponent<Blackboard>());
+        hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this, GetConfiguration());
     }
 
     protected override void Start()

@@ -4,9 +4,9 @@
     protected new Blackboard Blackboard { get; private set; }
     
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         Owner = (Tribal)base.Owner;
         Blackboard = Owner.GetComponent<Blackboard>();

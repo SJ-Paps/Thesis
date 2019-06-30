@@ -29,9 +29,9 @@ public class TurretShootingState : TurretHSMState
         activeDebug = true;
     }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         InitializePool();
     }

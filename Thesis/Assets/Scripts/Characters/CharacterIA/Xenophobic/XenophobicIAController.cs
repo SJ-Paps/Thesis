@@ -102,7 +102,7 @@ public class XenophobicIAController : IAController<Xenophobic>
     {
         base.Awake();
 
-        hsm = XenophobicIAControllerHSMStateAsset.BuildFromAsset<XenophobicIAState>(baseHSMAsset, this, GetComponent<Blackboard>());
+        hsm = XenophobicIAControllerHSMStateAsset.BuildFromAsset<XenophobicIAState>(baseHSMAsset, this, GetConfiguration());
     }
 
     protected override void Start()

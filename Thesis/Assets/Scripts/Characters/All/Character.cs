@@ -101,7 +101,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
         orders = new Queue<Order>();
 
-        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, GetComponent<Blackboard>());
+        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, GetConfiguration());
 
     }
 

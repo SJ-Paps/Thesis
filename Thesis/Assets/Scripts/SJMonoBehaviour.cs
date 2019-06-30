@@ -23,6 +23,11 @@ public abstract class SJMonoBehaviour : MonoBehaviour
 
     }
 
+    protected IConfiguration GetConfiguration()
+    {
+        return GetComponent<IConfiguration>();
+    }
+
 #if UNITY_EDITOR
 
     private void OnValidate()

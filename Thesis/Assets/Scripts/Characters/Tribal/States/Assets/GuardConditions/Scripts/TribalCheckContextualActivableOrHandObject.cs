@@ -11,9 +11,9 @@ public class TribalCheckContextualActivableOrHandObject : TribalGuardCondition
         activables = new List<IActivable>();
     }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         activableNode = Blackboard.GetItemNodeOf<IActivable>("Activable");
     }

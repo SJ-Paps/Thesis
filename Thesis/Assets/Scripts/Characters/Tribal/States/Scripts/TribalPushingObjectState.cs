@@ -9,9 +9,9 @@ public class TribalPushingObjectState : TribalHSMState
 
     private SpringJoint2D springJoint2d;
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         Rigidbody2D rigidbody2D = Owner.RigidBody2D;
 

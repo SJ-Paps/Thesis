@@ -5,7 +5,7 @@ using Paps.StateMachines.HSM;
 public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviour>
 {
     public SJMonoBehaviour Owner { get; protected set; }
-    protected Blackboard Blackboard { get; set; }
+    protected IConfiguration Configuration { get; set; }
 
     public bool activeDebug;
 
@@ -43,10 +43,10 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
 
         Owner = reference;
 
-        OnOwnerReferencePropagated();
+        OnConstructionFinished();
     }
 
-    protected virtual void OnOwnerReferencePropagated()
+    protected virtual void OnConstructionFinished()
     {
 #if UNITY_EDITOR
         onBeforeAnyTransitionate += DebugTransition;
@@ -65,34 +65,34 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
     }
 #endif
 
-    public void PropagateBlackboardReference(Blackboard blackboard)
+    public void PropagateConfigurationReference(IConfiguration configuration)
     {
         SJHSMState root = (SJHSMState)GetRoot();
 
-        root.InternalPropagateBlackboardReference(blackboard);
+        root.InternalPropagateConfigurationReference(configuration);
     }
 
-    private void InternalPropagateBlackboardReference(Blackboard blackboard)
+    private void InternalPropagateConfigurationReference(IConfiguration configuration)
     {
         for (int i = 0; i < parallelChilds.Count; i++)
         {
-            ((SJHSMState)parallelChilds[i]).InternalPropagateBlackboardReference(blackboard);
+            ((SJHSMState)parallelChilds[i]).InternalPropagateConfigurationReference(configuration);
         }
 
         for (int i = 0; i < childs.Count; i++)
         {
-            ((SJHSMState)childs[i]).InternalPropagateBlackboardReference(blackboard);
+            ((SJHSMState)childs[i]).InternalPropagateConfigurationReference(configuration);
         }
 
         for (int i = 0; i < transitions.Count; i++)
         {
             foreach (SJGuardCondition guardCondition in transitions[i])
             {
-                guardCondition.PropagateBlackboardReference(blackboard);
+                guardCondition.PropagateConfigurationReference(configuration);
             }
         }
 
-        Blackboard = blackboard;
+        Configuration = configuration;
     }
 
 
@@ -163,7 +163,7 @@ public abstract class SJHSMTransition
 public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviour>
 {
     public SJMonoBehaviour Owner { get; protected set; }
-    protected Blackboard Blackboard { get; set; }
+    protected IConfiguration Configuration { get; set; }
 
     public bool activeDebug;
     public string debugName;
@@ -172,10 +172,10 @@ public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviou
     {
         Owner = reference;
 
-        OnOwnerReferencePropagated();
+        OnConstructionFinished();
     }
 
-    protected virtual void OnOwnerReferencePropagated()
+    protected virtual void OnConstructionFinished()
     {
 
     }
@@ -205,9 +205,9 @@ public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviou
 
     protected abstract bool OnValidate();
 
-    public void PropagateBlackboardReference(Blackboard blackboard)
+    public void PropagateConfigurationReference(IConfiguration configuration)
     {
-        Blackboard = blackboard;
+        Configuration = configuration;
     }
 
 

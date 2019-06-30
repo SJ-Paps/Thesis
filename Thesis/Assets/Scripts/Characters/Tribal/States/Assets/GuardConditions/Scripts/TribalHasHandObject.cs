@@ -7,9 +7,9 @@
         return ownerEquipment.HasSomethingEquipped();
     }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         ownerEquipment = Owner.GetComponentInChildren<Equipment>();
     }

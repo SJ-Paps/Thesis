@@ -27,9 +27,9 @@ public class TribalActivatingState : TribalHSMState
         SendEvent(Character.Order.FinishAction);
     }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         ownerEquipment = Owner.GetComponentInChildren<Equipment>();
     }

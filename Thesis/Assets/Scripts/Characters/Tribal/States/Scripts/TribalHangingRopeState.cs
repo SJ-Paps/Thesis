@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TribalHangingRopeState : TribalHSMState
 {
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         Blackboard.UpdateItem<RelativeJoint2DTuple>("RopeHandler", new GameObject("RopeHandler").AddComponent<RelativeJoint2DTuple>());
     }

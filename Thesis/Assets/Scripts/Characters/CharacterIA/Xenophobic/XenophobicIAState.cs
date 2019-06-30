@@ -1,10 +1,10 @@
-﻿public abstract class XenophobicIAState : SJHSMState
+﻿public abstract class XenophobicIAState : IAControllerHSMState
 {
     public new XenophobicIAController Owner { get; protected set; }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         Owner = (XenophobicIAController)base.Owner;
     }

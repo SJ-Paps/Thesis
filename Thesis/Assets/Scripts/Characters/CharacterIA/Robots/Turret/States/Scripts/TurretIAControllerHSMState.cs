@@ -2,9 +2,9 @@
 {
     public new TurretIAController Owner { get; private set; }
 
-    protected override void OnOwnerReferencePropagated()
+    protected override void OnConstructionFinished()
     {
-        base.OnOwnerReferencePropagated();
+        base.OnConstructionFinished();
 
         Owner = (TurretIAController)base.Owner;
     }
