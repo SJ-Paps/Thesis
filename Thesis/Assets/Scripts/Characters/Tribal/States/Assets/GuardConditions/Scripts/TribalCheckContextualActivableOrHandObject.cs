@@ -11,7 +11,7 @@ public class TribalCheckContextualActivableOrHandObject : TribalGuardCondition
 
     protected override bool OnValidate()
     {
-        return Blackboard.activable is ContextualActivable || ContextualActivableFound() || Owner.GetHand().IsFree == false;
+        return Blackboard.activable is ContextualActivable || ContextualActivableFound();
     }
 
     private bool ContextualActivableFound()

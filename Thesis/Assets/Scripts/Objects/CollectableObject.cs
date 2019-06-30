@@ -1,21 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Animations;
 
-public abstract class CollectableObject : ActivableObject<Character>, ICollectable {
+public abstract class CollectableObject : ActivableObject<Character>, IInventoriable {
     
     private new Rigidbody2D rigidbody2D;
-    private ParentConstraint parentConstraint;
-
-    [SerializeField]
-    private Transform handlePoint;
-
-    public Transform HandlePoint
-    {
-        get
-        {
-            return handlePoint;
-        }
-    }
 
     protected Rigidbody2D Rigidbody2D
     {
@@ -27,19 +15,6 @@ public abstract class CollectableObject : ActivableObject<Character>, ICollectab
             }
 
             return rigidbody2D;
-        }
-    }
-
-    public ParentConstraint ParentConstraint
-    {
-        get
-        {
-            if(parentConstraint == null)
-            {
-                parentConstraint = GetComponentInChildren<ParentConstraint>();
-            }
-
-            return parentConstraint;
         }
     }
 

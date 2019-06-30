@@ -4,13 +4,26 @@ using UnityEngine;
 
 public class TribalThrowingState : TribalHSMState
 {
+    private Equipment ownerEquipment;
+    private Inventory ownerInventory;
 
     protected override void OnEnter()
     {
         base.OnEnter();
 
-        Owner.GetHand().ThrowObject();
+        if(ownerEquipment.HasEquippedObjectOfType<IThrowable>(out IThrowable throwable))
+        {
+            throwable.Throw();
+        }
 
         SendEvent(Character.Order.FinishAction);
+    }
+
+    protected override void OnOwnerReferencePropagated()
+    {
+        base.OnOwnerReferencePropagated();
+
+        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
+        ownerInventory = Owner.GetComponentInChildren<Inventory>();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MovableObject : ActivableObject<IHandOwner> {
+public class MovableObject : ActivableObject<Character> {
     
     private new Rigidbody2D rigidbody2D;
 
@@ -17,7 +17,7 @@ public class MovableObject : ActivableObject<IHandOwner> {
         }
     }
 
-    public override bool Activate(IHandOwner user)
+    public override bool Activate(Character user)
     {
         return true;
     }

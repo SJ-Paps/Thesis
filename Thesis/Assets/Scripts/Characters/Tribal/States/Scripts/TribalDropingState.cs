@@ -4,13 +4,31 @@ using UnityEngine;
 
 public class TribalDropingState : TribalHSMState
 {
+    private Equipment ownerEquipment;
+    private Inventory ownerInventory;
 
     protected override void OnEnter()
     {
         base.OnEnter();
 
-        Owner.GetHand().DropObject();
+        IInventoriable obj = ownerInventory.Peek(in Tribal.rightHandEquipmentSlotIdentifier);
 
+        if (obj != null && obj.Drop())
+        {
+            ownerEquipment.ReleaseSlot(in Tribal.rightHandEquipmentSlotIdentifier);
+            ownerInventory.RemoveItem(in Tribal.rightHandEquipmentSlotIdentifier);
+
+            Owner.DisplayDropObject(obj as CollectableObject);
+        }
+        
         SendEvent(Character.Order.FinishAction);
+    }
+
+    protected override void OnOwnerReferencePropagated()
+    {
+        base.OnOwnerReferencePropagated();
+
+        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
+        ownerInventory = Owner.GetComponentInChildren<Inventory>();
     }
 }

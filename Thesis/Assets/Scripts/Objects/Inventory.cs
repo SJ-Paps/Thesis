@@ -5,23 +5,24 @@ using System;
 
 public sealed class Inventory : MonoBehaviour
 {
-    [SerializeField]
-    private uint initialCapacity;
-
-    public uint Capacity { get; private set; }
+    public int Capacity
+    {
+        get
+        {
+            return inventoryObjects.Count;
+        }
+    }
 
     private Dictionary<string, InventoryItem> inventoryObjects;
 
     private void Awake()
     {
-        Capacity = initialCapacity;
-
-        inventoryObjects = new Dictionary<string, InventoryItem>((int)Capacity);
+        inventoryObjects = new Dictionary<string, InventoryItem>();
     }
 
-    public void AddItem(string identifier, IInventoriable collectable)
+    public void AddItem(in string identifier, IInventoriable collectable)
     {
-        if(collectable == null)
+        if (collectable == null)
         {
             throw new ArgumentNullException("collectable object was null");
         }
@@ -29,24 +30,24 @@ public sealed class Inventory : MonoBehaviour
         inventoryObjects.Add(identifier, new InventoryItem() { inventoriable = collectable });
     }
 
-    public IInventoriable Peek(string identifier)
+    public IInventoriable Peek(in string identifier)
     {
         inventoryObjects.TryGetValue(identifier, out InventoryItem value);
 
         return value.inventoriable;
     }
 
-    public void LockItem(string identifier, bool @lock)
+    public void LockItem(in string identifier, bool @lock)
     {
-        if(inventoryObjects.TryGetValue(identifier, out InventoryItem value))
+        if (inventoryObjects.TryGetValue(identifier, out InventoryItem value))
         {
             value.locked = @lock;
         }
     }
 
-    public IInventoriable RemoveItem(string identifier)
+    public IInventoriable RemoveItem(in string identifier)
     {
-        if(inventoryObjects.TryGetValue(identifier, out InventoryItem value) && value.locked == false)
+        if (inventoryObjects.TryGetValue(identifier, out InventoryItem value) && value.locked == false)
         {
             inventoryObjects.Remove(identifier);
 
@@ -56,7 +57,18 @@ public sealed class Inventory : MonoBehaviour
         return default;
     }
 
-    
+    public bool Contains(IInventoriable inventoriable)
+    {
+        foreach (KeyValuePair<string, InventoryItem> item in inventoryObjects)
+        {
+            if (item.Value.inventoriable == inventoriable)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private struct InventoryItem
     {

@@ -1,4 +1,4 @@
-﻿public abstract class Weapon : CollectableObject {
+﻿public abstract class Weapon : EquipableObject {
     
     public bool InUse { get; private set; }
 

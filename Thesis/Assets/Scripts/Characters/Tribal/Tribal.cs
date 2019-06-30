@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Animations;
 
-public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
+public abstract class Tribal : Character, IDamagable, ISeer
 {
     public enum State : byte
     {
@@ -80,14 +81,14 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
     public static readonly AnimatorParameterId HideAnimatorTrigger = new AnimatorParameterId("Idle");
     public static readonly AnimatorParameterId ClimbLedgeAnimatorTrigger = new AnimatorParameterId("ClimbLedge");
 
+    public static readonly string rightHandEquipmentSlotIdentifier = "right_hand";
+
     public event Action onDead;
 
     public Animator Animator { get; protected set; }
     public Rigidbody2D RigidBody2D { get; protected set; }
 
     public SJCapsuleCollider2D Collider { get; protected set; }
-    
-    protected Hand hand;
 
     public event Action<Collision2D> onCollisionEnter2D
     {
@@ -162,9 +163,6 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         RigidBody2D = GetComponent<Rigidbody2D>();
         Collider = GetComponent<SJCapsuleCollider2D>();
 
-        hand = GetComponentInChildren<Hand>();
-        hand.PropagateOwnerReference(this);
-
         blackboard = new Blackboard();
 
         base.Awake();
@@ -174,11 +172,6 @@ public abstract class Tribal : Character, IHandOwner, IDamagable, ISeer
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
 
         
-    }
-
-    public Hand GetHand()
-    {
-        return hand;
     }
 
     public EyeCollection GetEyes()
@@ -308,5 +301,49 @@ public static class TribalExtensions
         //guardo los activables en la lista del blackboard
         SJUtil.FindActivables(new Vector2(ownerBounds.center.x + (ownerBounds.extents.x * xDirection), ownerBounds.center.y),
                                     new Vector2(ownerBounds.extents.x * 2, ownerBounds.size.y * 2), tribal.transform.eulerAngles.z, activables);
+    }
+
+    public static void DisplayCollectObject(this Tribal tribal, CollectableObject collectableObject)
+    {
+
+    }
+
+    public static void DisplayEquipObject(this Tribal tribal, Transform hand, EquipableObject equipableObject)
+    {
+        ConstraintSource source = new ConstraintSource();
+        source.sourceTransform = hand;
+        source.weight = 1;
+
+        equipableObject.ParentConstraint.AddSource(source);
+
+        equipableObject.ParentConstraint.constraintActive = true;
+
+        Vector3 offset = new Vector3(equipableObject.HandlePoint.localPosition.x * equipableObject.transform.localScale.x,
+                                     equipableObject.HandlePoint.localPosition.y * equipableObject.transform.localScale.y);
+
+        equipableObject.ParentConstraint.SetTranslationOffset(0, -offset);
+    }
+
+    public static void DisplayDropObject(this Tribal tribal, CollectableObject collectableObject)
+    {
+        if(collectableObject is EquipableObject equipable)
+        {
+            equipable.ParentConstraint.RemoveSource(0);
+
+            equipable.ParentConstraint.constraintActive = false;
+        }
+        else
+        {
+            //si no es equipable
+        }
+    }
+
+    public static void DisplayThrowObject(this Tribal tribal, EquipableObject throwableObject)
+    {
+        //temporal
+        if(throwableObject is IThrowable)
+        {
+            DisplayDropObject(tribal, throwableObject);
+        }
     }
 }

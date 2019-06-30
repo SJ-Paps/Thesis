@@ -3,6 +3,8 @@
 public class TribalCheckCollectables : TribalGuardCondition
 {
     private List<IActivable> activables;
+    
+    private Inventory ownerInventory;
 
     public TribalCheckCollectables()
     {
@@ -11,7 +13,7 @@ public class TribalCheckCollectables : TribalGuardCondition
 
     protected override bool OnValidate()
     {
-        return (Blackboard.activable != Owner.GetHand().CurrentCollectable && Blackboard.activable is CollectableObject) || CollectableFound();
+        return (Blackboard.activable is CollectableObject collectable && OwnerHasObject(collectable) == false) || CollectableFound();
     }
 
     private bool CollectableFound()
@@ -22,7 +24,7 @@ public class TribalCheckCollectables : TribalGuardCondition
 
         activables.ContainsType<CollectableObject>(out CollectableObject collectableObject);
 
-        if(collectableObject != null && collectableObject != Owner.GetHand().CurrentCollectable)
+        if(collectableObject != null && OwnerHasObject(collectableObject) == false)
         {
             Blackboard.activable = collectableObject;
 
@@ -30,5 +32,17 @@ public class TribalCheckCollectables : TribalGuardCondition
         }
 
         return false;
+    }
+
+    private bool OwnerHasObject(CollectableObject collectable)
+    {
+        return ownerInventory.Contains(collectable);
+    }
+
+    protected override void OnOwnerReferencePropagated()
+    {
+        base.OnOwnerReferencePropagated();
+        
+        ownerInventory = Owner.GetComponentInChildren<Inventory>();
     }
 }
