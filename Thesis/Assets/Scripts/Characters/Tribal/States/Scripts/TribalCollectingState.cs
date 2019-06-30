@@ -32,7 +32,7 @@
             if(collectableObject is EquipableObject equipable)
             {
                 ownerEquipment.SetObjectAtSlot(in Tribal.rightHandEquipmentSlotIdentifier, equipable);
-                Owner.DisplayEquipObject(Owner.transform, equipable);
+                Owner.DisplayEquipObject(Configuration.Hand, equipable);
             }
         }
 

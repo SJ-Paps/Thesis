@@ -975,6 +975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blackboard: {fileID: 5111192387197576411}
+  hand: {fileID: 1768596367033269506}
 --- !u!1 &2052117181817079184
 GameObject:
   m_ObjectHideFlags: 0
