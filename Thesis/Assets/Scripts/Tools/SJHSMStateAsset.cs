@@ -7,8 +7,24 @@ public abstract class SJHSMStateAsset : HSMStateAsset<byte, byte>
     [SerializeField]
     private SJHSMStateAsset[] childs;
 
+    public SJHSMStateAsset[] Childs
+    {
+        get
+        {
+            return childs;
+        }
+    }
+
     [SerializeField]
     private SJHSMStateAsset[] parallelChilds;
+
+    public SJHSMStateAsset[] ParallelChilds
+    {
+        get
+        {
+            return parallelChilds;
+        }
+    }
 
     public bool activeDebug;
 
