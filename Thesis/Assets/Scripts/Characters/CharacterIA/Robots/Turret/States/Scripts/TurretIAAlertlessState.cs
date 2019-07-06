@@ -14,14 +14,14 @@ public class TurretIAAlertlessState : TurretIAControllerHSMState
     {
         base.OnEnter();
 
-        Owner.Slave.GetEyes().onAnyStay += onTargetDetectedDelegate;
+        Slave.GetEyes().onAnyStay += onTargetDetectedDelegate;
     }
 
     protected override void OnExit()
     {
         base.OnExit();
 
-        Owner.Slave.GetEyes().onAnyStay -= onTargetDetectedDelegate;
+        Slave.GetEyes().onAnyStay -= onTargetDetectedDelegate;
     }
 
     private void OnTargetDetected(Collider2D collider, Eyes eyes)

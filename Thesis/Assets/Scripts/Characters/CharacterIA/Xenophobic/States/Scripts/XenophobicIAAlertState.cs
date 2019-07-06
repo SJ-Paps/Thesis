@@ -42,7 +42,7 @@ public class XenophobicIAAlertState : XenophobicIAState
     {
         base.OnEnter();
 
-        Owner.Slave.GetEyes().onAnyStay += onSomethingDetectedDelegate;
+        Slave.GetEyes().onAnyStay += onSomethingDetectedDelegate;
     }
 
     protected override void OnUpdate()
@@ -57,7 +57,7 @@ public class XenophobicIAAlertState : XenophobicIAState
     {
         base.OnExit();
 
-        Owner.Slave.GetEyes().onAnyStay -= onSomethingDetectedDelegate;
+        Slave.GetEyes().onAnyStay -= onSomethingDetectedDelegate;
 
         unnerveTimer.Stop();
     }

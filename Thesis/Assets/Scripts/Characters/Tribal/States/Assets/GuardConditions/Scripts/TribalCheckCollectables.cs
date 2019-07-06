@@ -43,6 +43,6 @@ public class TribalCheckCollectables : TribalGuardCondition
     {
         base.OnConstructionFinished();
         
-        ownerInventory = Configuration.Inventory;
+        ownerInventory = Owner.GetComponentInChildren<Inventory>();
     }
 }

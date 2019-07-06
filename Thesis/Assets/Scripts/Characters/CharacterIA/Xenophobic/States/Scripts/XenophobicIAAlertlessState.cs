@@ -10,8 +10,8 @@
         previousHiddenDetectionDistance = Owner.CurrentHiddenDetectionDistance;
         previousHiddenDetectionProbability = Owner.CurrentHiddenDetectionProbability;
 
-        Owner.CurrentHiddenDetectionDistance = Owner.Configuration.HiddenDetectionDistanceAlertless;
-        Owner.CurrentHiddenDetectionProbability = Owner.Configuration.HiddenDetectionProbabilityAlertless;
+        Owner.CurrentHiddenDetectionDistance = Owner.HiddenDetectionDistanceAlertless;
+        Owner.CurrentHiddenDetectionProbability = Owner.HiddenDetectionProbabilityAlertless;
     }
 
     protected override void OnExit()

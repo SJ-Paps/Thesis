@@ -95,13 +95,17 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     private CharacterHSMState hsm;
 
+    public Blackboard Blackboard { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
 
         orders = new Queue<Order>();
 
-        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this, GetConfiguration());
+        Blackboard = GetComponent<Blackboard>();
+
+        hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this);
 
     }
 

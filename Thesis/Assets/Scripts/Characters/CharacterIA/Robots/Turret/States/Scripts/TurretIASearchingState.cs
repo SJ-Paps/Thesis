@@ -30,13 +30,13 @@ public class TurretIASearchingState : TurretIAControllerHSMState
             currentOrder = Character.Order.MoveLeft;
         }
 
-        Owner.Slave.SendOrder(currentOrder);
+        Slave.SendOrder(currentOrder);
     }
 
     protected override void OnConstructionFinished()
     {
         base.OnConstructionFinished();
 
-        joint = Owner.Slave.GetComponentInChildren<HingeJoint2D>();
+        joint = Slave.GetComponentInChildren<HingeJoint2D>();
     }
 }

@@ -68,7 +68,7 @@ public class TribalClimbingWallState : TribalHSMState
             climbDifficulty = 1;
         }
 
-        Rigidbody2D ownerRigidbody = Configuration.RigidBody2D;
+        Rigidbody2D ownerRigidbody = Owner.RigidBody2D;
 
         shouldStop = true;
 
@@ -81,7 +81,7 @@ public class TribalClimbingWallState : TribalHSMState
                     ClampVelocityAxis(true);
                 }
 
-                ownerRigidbody.AddForce(new Vector2(0, Configuration.ClimbForce / climbDifficulty));
+                ownerRigidbody.AddForce(new Vector2(0, Owner.ClimbForce / climbDifficulty));
             }
             else if (verticalDirectionOrder == Character.Order.ClimbDown)
             {
@@ -90,7 +90,7 @@ public class TribalClimbingWallState : TribalHSMState
                     ClampVelocityAxis(true);
                 }
 
-                ownerRigidbody.AddForce(new Vector2(0, -1 * Configuration.ClimbForce));
+                ownerRigidbody.AddForce(new Vector2(0, -1 * Owner.ClimbForce));
             }
 
             shouldStop = false;
@@ -109,7 +109,7 @@ public class TribalClimbingWallState : TribalHSMState
                     ClampVelocityAxis(false);
                 }
 
-                ownerRigidbody.AddForce(new Vector2(-1 * Configuration.ClimbForce / climbDifficulty, 0));
+                ownerRigidbody.AddForce(new Vector2(-1 * Owner.ClimbForce / climbDifficulty, 0));
             }
             else if (horizontalDirectionOrder == Character.Order.MoveRight)
             {
@@ -118,7 +118,7 @@ public class TribalClimbingWallState : TribalHSMState
                     ClampVelocityAxis(false);
                 }
 
-                ownerRigidbody.AddForce(new Vector2(Configuration.ClimbForce / climbDifficulty, 0));
+                ownerRigidbody.AddForce(new Vector2(Owner.ClimbForce / climbDifficulty, 0));
             }
 
             shouldStop = false;
@@ -132,9 +132,9 @@ public class TribalClimbingWallState : TribalHSMState
 
     private void ClampVelocity()
     {
-        Vector2 velocity = Configuration.RigidBody2D.velocity;
-        float maxClimbVelocityPositive = Configuration.ClimbForce / 2;
-        float maxClimbVelocityNegative = Configuration.ClimbForce / 2 * -1;
+        Vector2 velocity = Owner.RigidBody2D.velocity;
+        float maxClimbVelocityPositive = Owner.ClimbForce / 2;
+        float maxClimbVelocityNegative = Owner.ClimbForce / 2 * -1;
 
         if (velocity.x > maxClimbVelocityPositive)
         {
@@ -154,7 +154,7 @@ public class TribalClimbingWallState : TribalHSMState
             velocity = new Vector2(velocity.x, maxClimbVelocityNegative);
         }
 
-        Configuration.RigidBody2D.velocity = velocity;
+        Owner.RigidBody2D.velocity = velocity;
     }
 
     protected override bool HandleEvent(Character.Order trigger)
@@ -186,7 +186,7 @@ public class TribalClimbingWallState : TribalHSMState
 
     private bool CanMoveOnDirection(Character.Order orderDirection)
     {
-        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Configuration.Collider.offset;
+        Vector2 offsetWorldPosition = (Vector2)Owner.transform.position + Owner.Collider.offset;
         float snap = 0.1f;
 
         if (orderDirection == Character.Order.ClimbUp)
@@ -225,11 +225,11 @@ public class TribalClimbingWallState : TribalHSMState
     {
         if (vertical)
         {
-            Configuration.RigidBody2D.velocity = new Vector2(Configuration.RigidBody2D.velocity.x, 0);
+            Owner.RigidBody2D.velocity = new Vector2(Owner.RigidBody2D.velocity.x, 0);
         }
         else
         {
-            Configuration.RigidBody2D.velocity = new Vector2(0, Configuration.RigidBody2D.velocity.y);
+            Owner.RigidBody2D.velocity = new Vector2(0, Owner.RigidBody2D.velocity.y);
         }
     }
 }

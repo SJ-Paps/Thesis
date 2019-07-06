@@ -25,7 +25,7 @@ public class TurretMovingState : TurretHSMState
     {
         if(isOrderingMove)
         {
-            Owner.HeadRigidBody.AddTorque(currentDirectionX * Owner.Acceleration.CurrentValueFloat, ForceMode2D.Force);
+            Owner.HeadRigidBody.AddTorque(currentDirectionX * Owner.Acceleration, ForceMode2D.Force);
         }
         else
         {

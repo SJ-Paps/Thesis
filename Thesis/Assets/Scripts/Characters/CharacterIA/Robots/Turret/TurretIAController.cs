@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class TurretIAController : IAController<Turret>
+public class TurretIAController : IAController
 {
     public enum State : byte
     {
@@ -26,7 +26,7 @@ public class TurretIAController : IAController<Turret>
     {
         base.Awake();
 
-        hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this, GetConfiguration());
+        hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this);
     }
 
     protected override void Start()

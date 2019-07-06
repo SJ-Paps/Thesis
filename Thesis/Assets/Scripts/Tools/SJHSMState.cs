@@ -5,7 +5,6 @@ using Paps.StateMachines.HSM;
 public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviour>
 {
     public SJMonoBehaviour Owner { get; protected set; }
-    protected IConfiguration Configuration { get; set; }
 
     public bool activeDebug;
 
@@ -64,36 +63,6 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
         }
     }
 #endif
-
-    public void PropagateConfigurationReference(IConfiguration configuration)
-    {
-        SJHSMState root = (SJHSMState)GetRoot();
-
-        root.InternalPropagateConfigurationReference(configuration);
-    }
-
-    private void InternalPropagateConfigurationReference(IConfiguration configuration)
-    {
-        for (int i = 0; i < parallelChilds.Count; i++)
-        {
-            ((SJHSMState)parallelChilds[i]).InternalPropagateConfigurationReference(configuration);
-        }
-
-        for (int i = 0; i < childs.Count; i++)
-        {
-            ((SJHSMState)childs[i]).InternalPropagateConfigurationReference(configuration);
-        }
-
-        for (int i = 0; i < transitions.Count; i++)
-        {
-            foreach (SJGuardCondition guardCondition in transitions[i])
-            {
-                guardCondition.PropagateConfigurationReference(configuration);
-            }
-        }
-
-        Configuration = configuration;
-    }
 
 
     protected override void OnEnter()
@@ -163,7 +132,6 @@ public abstract class SJHSMTransition
 public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviour>
 {
     public SJMonoBehaviour Owner { get; protected set; }
-    protected IConfiguration Configuration { get; set; }
 
     public bool activeDebug;
     public string debugName;
@@ -204,11 +172,6 @@ public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviou
     }
 
     protected abstract bool OnValidate();
-
-    public void PropagateConfigurationReference(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
 
 
 }

@@ -7,8 +7,8 @@
     {
         base.OnConstructionFinished();
 
-        ownerEquipment = Configuration.Equipment;
-        ownerInventory = Configuration.Inventory;
+        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
+        ownerInventory = Owner.GetComponentInChildren<Inventory>();
 
         ownerEquipment.AddEquipmentSlot(Tribal.rightHandEquipmentSlotIdentifier);
     }
@@ -32,7 +32,7 @@
             if(collectableObject is EquipableObject equipable)
             {
                 ownerEquipment.SetObjectAtSlot(in Tribal.rightHandEquipmentSlotIdentifier, equipable);
-                Owner.DisplayEquipObject(Configuration.Hand, equipable);
+                Owner.DisplayEquipObject(Owner.transform, equipable);
             }
         }
 

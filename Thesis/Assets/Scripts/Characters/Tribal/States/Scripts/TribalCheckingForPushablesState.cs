@@ -25,7 +25,7 @@ public class TribalCheckingForPushablesState : TribalHSMState
     {
         base.OnEnter();
         
-        checkBoxSize = new Vector2(Configuration.Collider.bounds.extents.x / 2, Configuration.Collider.bounds.extents.y / 2);
+        checkBoxSize = new Vector2(Owner.Collider.bounds.extents.x / 2, Owner.Collider.bounds.extents.y / 2);
 
         timer.Start();
     }

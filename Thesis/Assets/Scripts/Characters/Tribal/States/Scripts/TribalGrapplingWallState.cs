@@ -6,7 +6,7 @@ public class TribalGrapplingWallState : TribalHSMState
     {
         base.OnEnter();
 
-        Configuration.RigidBody2D.velocity = new Vector2(0, 0);
+        Owner.RigidBody2D.velocity = new Vector2(0, 0);
     }
 
 

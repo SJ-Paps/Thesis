@@ -1,8 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class IAController<TSlave> : UnityController<TSlave, Character.Order> where TSlave : Character
+﻿public abstract class IAController : UnityController<Character, Character.Order>
 {
+    public Blackboard Blackboard { get; protected set; }
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Blackboard = GetComponent<Blackboard>();
+    }
 }

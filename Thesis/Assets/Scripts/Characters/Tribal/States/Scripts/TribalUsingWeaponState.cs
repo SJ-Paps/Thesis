@@ -44,7 +44,7 @@
     {
         base.OnConstructionFinished();
 
-        ownerEquipment = Configuration.Equipment;
-        ownerInventory = Configuration.Inventory;
+        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
+        ownerInventory = Owner.GetComponentInChildren<Inventory>();
     }
 }

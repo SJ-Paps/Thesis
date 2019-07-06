@@ -92,10 +92,12 @@ MonoBehaviour:
   prefabName: XenophobicEnemy
   blockFacing: 0
   hsmAsset: {fileID: 11400000, guid: 94da28a8edfc32b45b08148c5a2adaed, type: 2}
-  maxMovementVelocity: 3
-  acceleration: 0.5
+  movementVelocity: 0
+  movementAcceleration: 0
   jumpMaxHeight: 0.5
   jumpAcceleration: 0.5
+  jumpForceFromLadder: 0
+  climbForce: 0
 --- !u!70 &2142529016452615425
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -124,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c997c4db354b304ea59aa5b427e5978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabName: 
 --- !u!1 &1036216979188154
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c137c811ec22141af0ab0ab28f6740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabName: 
 --- !u!114 &114704428089816536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,7 +779,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4356868908158410}
-  - component: {fileID: 2468585762287613857}
   m_Layer: 9
   m_Name: Hand
   m_TagString: Untagged
@@ -797,19 +800,6 @@ Transform:
   m_Father: {fileID: 4822045818854092}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2468585762287613857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682927699140640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db745411b5ebb7f4f8e01e3ba748194a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabName: 
 --- !u!1 &1698269481132842
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,12 +17,10 @@ public class TribalDuckingState : TribalHSMState
     {
         base.OnEnter();
 
-        SJCapsuleCollider2D Collider = (SJCapsuleCollider2D)Configuration.Collider;
+        float yFloor = Owner.Collider.bounds.min.y;
 
-        float yFloor = Collider.bounds.min.y;
-
-        previousOffset = Collider.offset;
-        previousSize = Collider.InnerCollider.size;
+        previousOffset = Owner.Collider.offset;
+        previousSize = Owner.Collider.InnerCollider.size;
         
         float colliderSizeY = previousSize.y / 2;
 
@@ -31,13 +29,13 @@ public class TribalDuckingState : TribalHSMState
             colliderSizeY = previousSize.x;
         }
 
-        Collider.InnerCollider.size = new Vector2(previousSize.x, colliderSizeY);
+        Owner.Collider.InnerCollider.size = new Vector2(previousSize.x, colliderSizeY);
 
         float distanceFromZeroOffsetToFloor = Mathf.Abs((Owner.transform.position.y) - yFloor);
 
-        Collider.offset = new Vector2(previousOffset.x, (previousOffset.y - distanceFromZeroOffsetToFloor / 2));
+        Owner.Collider.offset = new Vector2(previousOffset.x, (previousOffset.y - distanceFromZeroOffsetToFloor / 2));
 
-        velocityContraintId = Owner.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
+        velocityContraintId = Owner.MovementVelocity.AddPercentageConstraint(velocityConstraintPercentage);
 
         shouldStandUp = false;
     }
@@ -57,13 +55,12 @@ public class TribalDuckingState : TribalHSMState
     protected override void OnExit()
     {
         base.OnExit();
+        
 
-        SJCapsuleCollider2D Collider = (SJCapsuleCollider2D)Configuration.Collider;
+        Owner.Collider.InnerCollider.size = previousSize;
+        Owner.Collider.offset = previousOffset;
 
-        Collider.InnerCollider.size = previousSize;
-        Collider.offset = previousOffset;
-
-        Owner.MaxVelocity.RemovePercentageConstraint(velocityContraintId);
+        Owner.MovementVelocity.RemovePercentageConstraint(velocityContraintId);
     }
 
     protected override bool HandleEvent(Character.Order trigger)

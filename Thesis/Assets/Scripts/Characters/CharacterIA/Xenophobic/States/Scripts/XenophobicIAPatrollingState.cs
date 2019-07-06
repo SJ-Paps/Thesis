@@ -18,7 +18,7 @@ public class XenophobicIAPatrollingState : XenophobicIAState
     {
         base.OnEnter();
 
-        if(Owner.Slave.IsFacingLeft)
+        if(Slave.IsFacingLeft)
         {
             currentOrder = Character.Order.MoveLeft;
         }
@@ -40,8 +40,8 @@ public class XenophobicIAPatrollingState : XenophobicIAState
             Turn();
         }
 
-        Owner.Slave.SendOrder(Character.Order.Walk);
-        Owner.Slave.SendOrder(currentOrder);
+        Slave.SendOrder(Character.Order.Walk);
+        Slave.SendOrder(currentOrder);
     }
 
     protected override void OnExit()
@@ -50,17 +50,17 @@ public class XenophobicIAPatrollingState : XenophobicIAState
 
         turnTimer.Stop();
 
-        Owner.Slave.SendOrder(Character.Order.Trot);
+        Slave.SendOrder(Character.Order.Trot);
     }
 
     private bool ShouldTurn()
     {
-        return turnTimer.Active == false || Owner.Slave.CheckWall() || Owner.Slave.CheckFloorAhead() == false;
+        return turnTimer.Active == false || Slave.CheckWall() || Slave.CheckFloorAhead() == false;
     }
 
     private void Turn()
     {
-        float xDir = Owner.Slave.transform.right.x;
+        float xDir = Slave.transform.right.x;
 
         if (xDir < 0)
         {

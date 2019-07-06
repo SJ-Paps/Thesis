@@ -3,59 +3,39 @@ using System;
 
 public class PercentageReversibleNumber
 {
-    public double BaseValue { get; private set; }
-    public double CurrentValue { get; private set; }
-    public float CurrentValueFloat
-    {
-        get
-        {
-            return (float)CurrentValue;
-        }
-    }
+    public float BaseValue { get; private set; }
+    public float CurrentValue { get; private set; }
 
-    private List<double> constraints;
+    private List<float> constraints;
 
     public PercentageReversibleNumber()
     {
-        constraints = new List<double>();
+        constraints = new List<float>();
 
         AddDefaultConstraint();
     }
 
-    public PercentageReversibleNumber(double baseValue) : this()
+    public PercentageReversibleNumber(float baseValue) : this()
     {
-        SetBaseValue(baseValue);
-    }
-
-    public PercentageReversibleNumber(float baseValue) : this((double)baseValue)
-    {
-
-    }
-
-    public void SetBaseValue(double value)
-    {
-        BaseValue = value;
+        BaseValue = baseValue;
 
         Recalculate();
     }
 
     public void SetBaseValue(float value)
     {
-        SetBaseValue((double)value);
+        BaseValue = value;
+
+        Recalculate();
     }
 
-    public int AddPercentageConstraint(double percentage)
+    public int AddPercentageConstraint(float percentage)
     {
         constraints.Add(percentage);
 
         Recalculate();
 
         return constraints.Count - 1;
-    }
-
-    public int AddPercentageConstraint(float percentage)
-    {
-        return AddPercentageConstraint((double)percentage);
     }
 
     public void RemovePercentageConstraint(int id)
@@ -92,5 +72,10 @@ public class PercentageReversibleNumber
     private void AddDefaultConstraint()
     {
         constraints.Add(100);
+    }
+
+    public static implicit operator float(PercentageReversibleNumber number)
+    {
+        return number.CurrentValue;
     }
 }

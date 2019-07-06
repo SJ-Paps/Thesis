@@ -19,7 +19,7 @@ public class XenophobicIASeekingState : XenophobicIAState
 
         if(ShouldStop())
         {
-            Owner.Slave.SendOrder(Character.Order.StopMoving);
+            Slave.SendOrder(Character.Order.StopMoving);
         }
         else if(HasReachedTarget(lastDetectedPositionNode.GetValue()) == false)
         {
@@ -29,13 +29,13 @@ public class XenophobicIASeekingState : XenophobicIAState
 
     private void SearchAtPosition(Vector2 position)
     {
-        if (position.x < Owner.Slave.transform.position.x)
+        if (position.x < Slave.transform.position.x)
         {
-            Owner.Slave.SendOrder(Character.Order.MoveLeft);
+            Slave.SendOrder(Character.Order.MoveLeft);
         }
         else
         {
-            Owner.Slave.SendOrder(Character.Order.MoveRight);
+            Slave.SendOrder(Character.Order.MoveRight);
         }
     }
 
@@ -43,7 +43,7 @@ public class XenophobicIASeekingState : XenophobicIAState
     {
         Bounds b = new Bounds(targetPosition, new Vector2(positionReachedDeadZoneX * 2, positionReachedDeadZoneY * 2));
 
-        if (b.Contains(Owner.Slave.transform.position))
+        if (b.Contains(Slave.transform.position))
         {
             return true;
         }
@@ -53,6 +53,6 @@ public class XenophobicIASeekingState : XenophobicIAState
 
     private bool ShouldStop()
     {
-        return Owner.Slave.CheckWall() || Owner.Slave.CheckFloorAhead() == false;
+        return Slave.CheckWall() || Slave.CheckFloorAhead() == false;
     }
 }

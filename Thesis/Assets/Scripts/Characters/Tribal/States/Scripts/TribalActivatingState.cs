@@ -31,6 +31,6 @@ public class TribalActivatingState : TribalHSMState
     {
         base.OnConstructionFinished();
 
-        ownerEquipment = Configuration.Equipment;
+        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
     }
 }

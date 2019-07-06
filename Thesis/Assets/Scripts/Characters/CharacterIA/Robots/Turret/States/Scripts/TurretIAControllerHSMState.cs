@@ -1,12 +1,14 @@
-﻿public class TurretIAControllerHSMState : SJHSMState
+﻿public class TurretIAControllerHSMState : IAControllerState
 {
     public new TurretIAController Owner { get; private set; }
+    protected new Turret Slave { get; set; }
 
     protected override void OnConstructionFinished()
     {
         base.OnConstructionFinished();
 
         Owner = (TurretIAController)base.Owner;
+        Slave = (Turret)base.Slave;
     }
 
     public bool SendEvent(TurretIAController.Trigger trigger)

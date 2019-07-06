@@ -20,10 +20,10 @@ public class TribalHiddenState : TribalHSMState
         {
             currentHide.Activate(Owner);
 
-            Configuration.RigidBody2D.velocity = new Vector2(0, 0);
-            Configuration.RigidBody2D.MovePosition(new Vector2(currentHide.transform.position.x, Owner.transform.position.y));
+            Owner.RigidBody2D.velocity = new Vector2(0, 0);
+            Owner.RigidBody2D.MovePosition(new Vector2(currentHide.transform.position.x, Owner.transform.position.y));
 
-            Configuration.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
+            Owner.Animator.SetTrigger(Tribal.HideAnimatorTrigger);
         }
     }
 
@@ -37,7 +37,7 @@ public class TribalHiddenState : TribalHSMState
 
             currentHide = null;
 
-            Configuration.Animator.ResetTrigger(Tribal.HideAnimatorTrigger);
+            Owner.Animator.ResetTrigger(Tribal.HideAnimatorTrigger);
         }
     }
 

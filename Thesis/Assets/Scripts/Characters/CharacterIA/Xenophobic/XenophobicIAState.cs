@@ -1,12 +1,14 @@
-﻿public abstract class XenophobicIAState : IAControllerHSMState
+﻿public abstract class XenophobicIAState : IAControllerState
 {
     public new XenophobicIAController Owner { get; protected set; }
+    protected new Xenophobic Slave { get; set; }
 
     protected override void OnConstructionFinished()
     {
         base.OnConstructionFinished();
 
         Owner = (XenophobicIAController)base.Owner;
+        Slave = (Xenophobic)base.Slave;
     }
 
     public bool SendEvent(XenophobicIAController.Trigger trigger)

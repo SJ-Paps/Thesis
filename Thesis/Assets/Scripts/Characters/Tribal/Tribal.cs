@@ -50,6 +50,7 @@ public abstract class Tribal : Character, IDamagable, ISeer
         ChoiceHangingLadderOrRopeOrWallOrLedge,
     }
     
+    
 
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
@@ -65,18 +66,43 @@ public abstract class Tribal : Character, IDamagable, ISeer
 
     public event Action onDead;
 
-    public PercentageReversibleNumber MaxVelocity { get; protected set; }
+    #region CONFIGURATION
+
+    [SerializeField]
+    private float movementVelocity, movementAcceleration, jumpMaxHeight, jumpAcceleration, jumpForceFromLadder, climbForce;
+
+    #endregion
+
+    public PercentageReversibleNumber MovementVelocity { get; protected set; }
+    public PercentageReversibleNumber MovementAcceleration { get; protected set; }
+    public PercentageReversibleNumber JumpMaxHeight { get; protected set; }
+    public PercentageReversibleNumber JumpAcceleration { get; protected set; }
+    public PercentageReversibleNumber JumpForceFromLadder { get; protected set; }
+    public PercentageReversibleNumber ClimbForce { get; protected set; }
+
+    public Animator Animator { get; protected set; }
+    public Rigidbody2D RigidBody2D { get; protected set; }
+
+    public SJCapsuleCollider2D Collider { get; protected set; }
 
     private EyeCollection eyes;
 
     protected override void Awake()
     {
-        MaxVelocity = new PercentageReversibleNumber();
+        Animator = GetComponent<Animator>();
+        RigidBody2D = GetComponent<Rigidbody2D>();
+        Collider = GetComponent<SJCapsuleCollider2D>();
+
+        MovementVelocity = new PercentageReversibleNumber(movementVelocity);
+        MovementAcceleration = new PercentageReversibleNumber(movementAcceleration);
+        JumpMaxHeight = new PercentageReversibleNumber(jumpMaxHeight);
+        JumpAcceleration = new PercentageReversibleNumber(jumpAcceleration);
+        JumpForceFromLadder = new PercentageReversibleNumber(jumpForceFromLadder);
+        ClimbForce = new PercentageReversibleNumber(climbForce);
 
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
 
         base.Awake();
-        
     }
 
     public EyeCollection GetEyes()
@@ -150,7 +176,7 @@ public static class TribalExtensions
             xDirection = -1;
         }
 
-        Bounds tribalBounds = ((TribalConfiguration)tribal.GetConfiguration()).Collider.bounds;
+        Bounds tribalBounds = tribal.Collider.bounds;
 
         return SJUtil.FindActivable<MovableObject, Tribal>(new Vector2(tribalBounds.center.x + (tribalBounds.extents.x * xDirection),
                                                                   tribalBounds.center.y - tribalBounds.extents.y / 3),
@@ -159,7 +185,7 @@ public static class TribalExtensions
 
     public static bool CheckWall(this Tribal tribal)
     {
-        Bounds bounds = ((TribalConfiguration)tribal.GetConfiguration()).Collider.bounds;
+        Bounds bounds = tribal.Collider.bounds;
 
         float separation = 0.15f;
         float xDir = tribal.transform.right.x;
@@ -174,7 +200,7 @@ public static class TribalExtensions
 
     public static bool CheckFloorAhead(this Tribal tribal)
     {
-        Bounds bounds = ((TribalConfiguration)tribal.GetConfiguration()).Collider.bounds;
+        Bounds bounds = tribal.Collider.bounds;
 
         float separation = 1f;
         float yDistance = 0.5f;
@@ -190,7 +216,7 @@ public static class TribalExtensions
 
     public static void FindActivables(this Tribal tribal, List<IActivable> activables)
     {
-        Bounds ownerBounds = ((TribalConfiguration)tribal.GetConfiguration()).Collider.bounds;
+        Bounds ownerBounds = tribal.Collider.bounds;
 
         int xDirection;
 

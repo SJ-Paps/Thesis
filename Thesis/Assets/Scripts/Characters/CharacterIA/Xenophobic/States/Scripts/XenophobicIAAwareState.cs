@@ -14,11 +14,11 @@ public class XenophobicIAAwareState : XenophobicIAState
         previousHiddenDetectionProbability = Owner.CurrentHiddenDetectionProbability;
         previousSeekingTime = Owner.CurrentSeekingTime;
 
-        Owner.CurrentHiddenDetectionDistance = Owner.Configuration.HiddenDetectionDistanceAware;
-        Owner.CurrentHiddenDetectionProbability = Owner.Configuration.HiddenDetectionProbabilityAware;
-        Owner.CurrentSeekingTime = Owner.Configuration.AwareTime;
+        Owner.CurrentHiddenDetectionDistance = Owner.HiddenDetectionDistanceAware;
+        Owner.CurrentHiddenDetectionProbability = Owner.HiddenDetectionProbabilityAware;
+        Owner.CurrentSeekingTime = Owner.AwareTime;
 
-        EyeCollection eyes = Owner.Slave.GetEyes();
+        EyeCollection eyes = Slave.GetEyes();
 
         for (int i = 0; i < eyes.Count; i++)
         {
@@ -40,7 +40,7 @@ public class XenophobicIAAwareState : XenophobicIAState
         Owner.CurrentHiddenDetectionProbability = previousHiddenDetectionProbability;
         Owner.CurrentSeekingTime = previousSeekingTime;
 
-        EyeCollection eyes = Owner.Slave.GetEyes();
+        EyeCollection eyes = Slave.GetEyes();
 
         for (int i = 0; i < eyes.Count; i++)
         {

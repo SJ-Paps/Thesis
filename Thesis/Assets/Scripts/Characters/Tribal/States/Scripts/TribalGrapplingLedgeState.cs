@@ -34,7 +34,7 @@ public class TribalGrapplingLedgeState : TribalHSMState
         }
 
         grapplingPoint.gameObject.SetActive(true);
-        grapplingPoint.transform.position = new Vector2(Configuration.Collider.bounds.center.x + (xDirection * Configuration.Collider.bounds.extents.x), Blackboard.GetItemOf<RaycastHit2D>("LedgeCheckHit").point.y);
+        grapplingPoint.transform.position = new Vector2(Owner.Collider.bounds.center.x + (xDirection * Owner.Collider.bounds.extents.x), Blackboard.GetItemOf<RaycastHit2D>("LedgeCheckHit").point.y);
 
         isFirstUpdate = true;
     }
@@ -64,7 +64,7 @@ public class TribalGrapplingLedgeState : TribalHSMState
 
     private void Grapple()
     {
-        grapplingPoint.connectedBody = Configuration.RigidBody2D;
+        grapplingPoint.connectedBody = Owner.RigidBody2D;
         
     }
 
@@ -97,9 +97,9 @@ public class TribalGrapplingLedgeState : TribalHSMState
 
             float yCenterOffset = 0.01f;
 
-            if (IsValidForGrapplingAndClimbing(new Vector2(grapplingPoint.transform.position.x + (xDirection * Configuration.Collider.bounds.extents.x),
-                                                grapplingPoint.transform.position.y + Configuration.Collider.bounds.extents.y + yCenterOffset),
-                                                Configuration.Collider.bounds.size))
+            if (IsValidForGrapplingAndClimbing(new Vector2(grapplingPoint.transform.position.x + (xDirection * Owner.Collider.bounds.extents.x),
+                                                grapplingPoint.transform.position.y + Owner.Collider.bounds.extents.y + yCenterOffset),
+                                                Owner.Collider.bounds.size))
             {
                 return false; //dejo que transicione
             }

@@ -115,7 +115,7 @@ public class TurretShootingState : TurretHSMState
 
                 if (damagable != null)
                 {
-                    damagable.TakeDamage(Owner.ShootDamage.CurrentValueFloat, DamageType.Bullet);
+                    damagable.TakeDamage(Owner.ShootDamage, DamageType.Bullet);
                 }
 
                 if (hit.rigidbody != null)

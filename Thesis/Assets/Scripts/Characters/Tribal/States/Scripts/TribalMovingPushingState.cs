@@ -16,8 +16,8 @@ public class TribalMovingPushingState : TribalMovingState
 
     protected override void OnUpdate()
     {
-        if (Configuration.RigidBody2D.velocity.x < 0 && facingDirection > 0
-            || Configuration.RigidBody2D.velocity.x > 0 && facingDirection < 0)
+        if (Owner.RigidBody2D.velocity.x < 0 && facingDirection > 0
+            || Owner.RigidBody2D.velocity.x > 0 && facingDirection < 0)
         {
             SendEvent(Character.Order.StopPushing);
         }

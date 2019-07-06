@@ -15,7 +15,7 @@ public class TurretChargingState : TurretHSMState
     {
         base.OnEnter();
 
-        timer.Interval = Owner.ChargeTime.CurrentValueFloat;
+        timer.Interval = Owner.ChargeTime;
         timer.Start();
 
         Owner.HeadRigidBody.angularVelocity = 0;

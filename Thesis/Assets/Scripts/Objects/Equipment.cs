@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public sealed class Equipment : MonoBehaviour
+public sealed class Equipment : SJMonoBehaviour
 {
     public int SlotsCount
     {
@@ -15,8 +15,10 @@ public sealed class Equipment : MonoBehaviour
 
     private Dictionary<string, EquipmentSlot> equipmentSlots;
     
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         equipmentSlots = new Dictionary<string, EquipmentSlot>();
     }
 

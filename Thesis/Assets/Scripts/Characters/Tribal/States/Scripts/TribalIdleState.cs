@@ -8,7 +8,7 @@ public class TribalIdleState : TribalHSMState
     {
         base.OnConstructionFinished();
 
-        animator = Configuration.Animator;
+        animator = Owner.Animator;
     }
 
     protected override void OnEnter()

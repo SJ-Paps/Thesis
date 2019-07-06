@@ -27,11 +27,11 @@ public class TurretIAAlertFulState : TurretIAControllerHSMState
 
         float accelerationPercentage = 160;
 
-        accelerationConstraintId = Owner.Slave.Acceleration.AddPercentageConstraint(accelerationPercentage);
+        accelerationConstraintId = Slave.Acceleration.AddPercentageConstraint(accelerationPercentage);
 
         calmdownTimer.Start();
 
-        Owner.Slave.GetEyes().onAnyStay += onTargetDetectedDelegate;
+        Slave.GetEyes().onAnyStay += onTargetDetectedDelegate;
     }
 
     protected override void OnUpdate()
@@ -45,9 +45,9 @@ public class TurretIAAlertFulState : TurretIAControllerHSMState
     {
         base.OnExit();
 
-        Owner.Slave.Acceleration.RemovePercentageConstraint(accelerationConstraintId);
+        Slave.Acceleration.RemovePercentageConstraint(accelerationConstraintId);
 
-        Owner.Slave.GetEyes().onAnyStay -= onTargetDetectedDelegate;
+        Slave.GetEyes().onAnyStay -= onTargetDetectedDelegate;
 
         calmdownTimer.Stop();
     }
@@ -66,7 +66,7 @@ public class TurretIAAlertFulState : TurretIAControllerHSMState
     {
         if(eyes.IsVisible(collider, Reg.walkableLayerMask, (1 << collider.gameObject.layer)))
         {
-            Owner.Slave.SendOrder(Character.Order.Attack);
+            Slave.SendOrder(Character.Order.Attack);
             calmdownTimer.Start();
         }
     }

@@ -8,9 +8,9 @@
     {
         base.OnEnter();
 
-        Configuration.Animator.SetTrigger(Tribal.RunAnimatorTrigger);
+        Owner.Animator.SetTrigger(Tribal.RunAnimatorTrigger);
 
-        velocityConstraintId = Owner.MaxVelocity.AddPercentageConstraint(velocityConstraintPercentage);
+        velocityConstraintId = Owner.MovementVelocity.AddPercentageConstraint(velocityConstraintPercentage);
     }
 
     protected override void OnUpdate()
@@ -22,8 +22,8 @@
     {
         base.OnExit();
 
-        Configuration.Animator.ResetTrigger(Tribal.TrotAnimatorTrigger);
+        Owner.Animator.ResetTrigger(Tribal.TrotAnimatorTrigger);
 
-        Owner.MaxVelocity.RemovePercentageConstraint(velocityConstraintId);
+        Owner.MovementVelocity.RemovePercentageConstraint(velocityConstraintId);
     }
 }
