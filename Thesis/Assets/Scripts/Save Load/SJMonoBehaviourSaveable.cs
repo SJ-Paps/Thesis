@@ -31,14 +31,12 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
 
     public object Save()
     {
-        return new SaveTemplate(this, GetSaveData());
+        return new GameplayObjectSave(this, GetSaveData());
     }
 
     public void Load(object data)
     {
-        SaveTemplate saveTemplate = (SaveTemplate)data;
-
-        LoadSaveData(saveTemplate.save);
+        LoadSaveData(data);
     }
 
     protected override void OnDestroy()

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Paps.Unity;
 using UnityEngine;
 
 public class CoroutineManager : SJMonoBehaviour {
@@ -10,12 +9,9 @@ public class CoroutineManager : SJMonoBehaviour {
     {
         if (instance == null)
         {
-            if (instance == null)
-            {
-                GameObject obj = new GameObject("CoroutineManager");
+            GameObject obj = new GameObject("CoroutineManager");
 
-                instance = obj.AddComponent<CoroutineManager>();
-            }
+            instance = obj.AddComponent<CoroutineManager>();
 
             instance.Init();
         }
@@ -25,6 +21,6 @@ public class CoroutineManager : SJMonoBehaviour {
 
     private void Init()
     {
-        DontDestroyOnLoad(this);
+        UnityUtil.DontDestroyOnLoad(gameObject);
     }
 }

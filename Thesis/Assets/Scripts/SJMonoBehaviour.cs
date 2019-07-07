@@ -3,11 +3,31 @@ using System;
 
 public abstract class SJMonoBehaviour : MonoBehaviour
 {
-    public string InstanceGUID { get; private set; }
+    [SerializeField]
+    [ReadOnly]
+    private string instanceGUID;
+
+    public string InstanceGUID
+    {
+        get
+        {
+            return instanceGUID;
+        }
+
+        private set
+        {
+            instanceGUID = value;
+        }
+    }
 
     protected virtual void Awake()
     {
-        InstanceGUID = GameManager.GetInstance().GetNewInstanceGUID(this);
+        if(string.IsNullOrEmpty(InstanceGUID))
+        {
+            InstanceGUID = Guid.NewGuid().ToString();
+        }
+
+        GameManager.GetInstance();
     }
 
     protected virtual void Start()
@@ -24,7 +44,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour
 
     protected virtual void OnValidate()
     {
-
+        InstanceGUID = Guid.NewGuid().ToString();
     }
 
 #endif

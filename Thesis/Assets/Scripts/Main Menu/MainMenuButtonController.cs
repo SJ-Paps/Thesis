@@ -9,8 +9,6 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private Canvas canvas;
 
-    private MainMenu mainMenu;
-
     private LocalizedTextLibrary localizedTextLibrary;
     
 	protected override void Awake () {
@@ -38,11 +36,6 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     }
 
-    void Start()
-    {
-        mainMenu = MainMenu.GetInstance();
-    }
-
     private void ExitToDesktop()
     {
         ModalWindowManager.Instance.DisplayConfirmationMenu(localizedTextLibrary.GetLineByTagAttribute("confirmation_menu_message_exit").FirstLetterToUpper(), Application.Quit, null, canvas.rootCanvas);
@@ -65,12 +58,12 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private void GoNewGame()
     {
-        //SceneLoader.GetInstance().NewGame();
+        GameManager.GetInstance().LoadGame(new string[] { "MasterSceneLevel1", "Entities_FirstGame" });
     }
 
     private void LoadGame()
     {
-        //SceneLoader.GetInstance().LoadGame();
+        GameManager.GetInstance().LoadGame(GameManager.SaveFilePath);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

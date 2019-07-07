@@ -1,4 +1,5 @@
 ﻿using UnityEngine.SceneManagement;
+using UnityEngine;
 
 public class MainMenu : SJMonoBehaviour {
 
@@ -12,7 +13,9 @@ public class MainMenu : SJMonoBehaviour {
 
             if(instance == null)
             {
-                instance = Instantiate<MainMenu>(SJResources.Instance.LoadGameObjectAndGetComponent<MainMenu>("MainMenuCanvas"));
+                GameObject gameObjectInstance = Instantiate(AssetLibrary.GetInstance().GetAsset<GameObject>("MainMenu"));
+
+                instance = gameObjectInstance.GetComponent<MainMenu>();
             }
             
             instance.Init();
@@ -27,10 +30,6 @@ public class MainMenu : SJMonoBehaviour {
 
     private void Init()
     {
-        DontDestroyOnLoad(this);
-
-        GameManager.GetInstance();
-
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 

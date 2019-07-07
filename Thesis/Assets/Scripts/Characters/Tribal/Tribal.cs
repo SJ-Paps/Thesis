@@ -142,7 +142,7 @@ public abstract class Tribal : Character, IDamagable, ISeer
     {
         TribalSaveData saveData = (TribalSaveData)data;
 
-        Debug.Log(saveData.unNumero);
+        Debug.Log("RELOCRO " + saveData.unNumero);
 
         if(onLoading != null)
         {

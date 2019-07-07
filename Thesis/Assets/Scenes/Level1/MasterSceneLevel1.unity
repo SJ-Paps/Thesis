@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee79a3136a5dce0498006eaa898c5706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  instanceGUID: 909f8313-42d6-4895-9389-915e81866236
   climbDifficulty: 10
   segments:
   - {fileID: 1243864835}
@@ -2114,7 +2114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff6117df5c7f646499566f1f332a953b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  instanceGUID: 86261104-76dc-49e8-bd68-ee0019c20040
   climbDifficulty: 2
 --- !u!114 &255501684
 MonoBehaviour:
@@ -2128,7 +2128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c137c811ec22141af0ab0ab28f6740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  instanceGUID: 0fd29369-f235-494b-a565-64c9d5cf1c1b
 --- !u!61 &255501685
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3073,6 +3073,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 255501682}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &510596561
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 510596563}
+  - component: {fileID: 510596562}
+  m_Layer: 0
+  m_Name: AssetLibrary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &510596562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510596561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160b30a1e8852f842a2bf682ae89e456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instanceGUID: 9d1a43c8-373a-44b5-86dc-eecb171973a2
+  serializedAssets:
+  - {fileID: 1989682149116770, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 3}
+--- !u!4 &510596563
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510596561}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.61686254, y: -0.060608037, z: -0.29551995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &532165474
 GameObject:
@@ -6099,7 +6145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c137c811ec22141af0ab0ab28f6740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  instanceGUID: 9286f604-4108-44e4-9724-cb024503ef17
 --- !u!61 &1283947479
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6138,7 +6184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07ad890fae7e5964792a748ae184410f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  instanceGUID: 7006592a-7870-4656-8799-0c409806a93a
   climbDifficulty: 0
 --- !u!212 &1283947481
 SpriteRenderer:
