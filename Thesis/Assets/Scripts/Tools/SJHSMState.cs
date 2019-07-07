@@ -59,7 +59,7 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
         {
             HSMTransition<byte, byte> transition = stateFrom.ActiveParent.GetTransition(stateFrom.StateId, trigger);
 
-            EditorDebug.Log("State Transition: " + System.Environment.NewLine + transition.DebugName);
+            Logger.LogConsole("State Transition: " + System.Environment.NewLine + transition.DebugName);
         }
     }
 #endif
@@ -70,7 +70,7 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
 #if UNITY_EDITOR
         if (activeDebug)
         {
-            EditorDebug.Log(DebugName + " ENTER " + Owner);
+            Logger.LogConsole(DebugName + " ENTER " + Owner);
         }
 #endif
     }
@@ -80,7 +80,7 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
 #if UNITY_EDITOR
         if (activeDebug)
         {
-            EditorDebug.Log(obj);
+            Logger.LogConsole(obj);
         }
 #endif
     }
@@ -96,7 +96,7 @@ public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviou
 #if UNITY_EDITOR
         if (activeDebug)
         {
-            EditorDebug.Log(DebugName + " EXIT " + Owner);
+            Logger.LogConsole(DebugName + " EXIT " + Owner);
         }
 #endif
     }
@@ -161,7 +161,7 @@ public abstract class SJGuardCondition : GuardCondition, IOwnable<SJMonoBehaviou
                 debugName = GetType().Name;
             }
 
-            EditorDebug.Log(debugName + " Guard Condition Returns " + validated);
+            Logger.LogConsole(debugName + " Guard Condition Returns " + validated);
         }
 
         return validated;

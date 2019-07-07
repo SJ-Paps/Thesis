@@ -99,7 +99,7 @@ public class TribalCheckingLedgesState : TribalHSMState
 
         hit = Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
 
-        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+        Logger.DrawLine(beginPoint, endPoint, Color.green);
 
         return hit;
     }

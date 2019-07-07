@@ -130,8 +130,6 @@ public abstract class Tribal : Character, IDamagable, ISeer
     {
         TribalSaveData saveData = new TribalSaveData() { unNumero = UnityEngine.Random.Range(0, 100) };
 
-        saveData.unNumero = 3;
-
         if(onSaving != null)
         {
             onSaving(saveData);
@@ -198,7 +196,7 @@ public static class TribalExtensions
         Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - bounds.extents.y);
         Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), bounds.center.y + bounds.extents.y);
 
-        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+        Logger.DrawLine(beginPoint, endPoint, Color.green);
 
         return Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
     }
@@ -214,7 +212,7 @@ public static class TribalExtensions
         Vector2 beginPoint = new Vector2(bounds.center.x + (xDir * bounds.extents.x), bounds.center.y - (bounds.extents.y / 2));
         Vector2 endPoint = new Vector2(beginPoint.x + (xDir * separation), beginPoint.y - yDistance);
 
-        EditorDebug.DrawLine(beginPoint, endPoint, Color.green);
+        Logger.DrawLine(beginPoint, endPoint, Color.green);
 
         return Physics2D.Linecast(beginPoint, endPoint, Reg.walkableLayerMask);
     }

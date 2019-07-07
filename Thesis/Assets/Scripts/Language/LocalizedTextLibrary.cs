@@ -43,7 +43,7 @@ public class LocalizedTextLibrary
                 }
             }
 
-            EditorDebug.Log("TAG NOT FOUND! REMEMBER BUILD ASSETBUNDLES!");
+            Logger.LogConsole("TAG NOT FOUND! REMEMBER BUILD ASSETBUNDLES!");
 
             return string.Empty;
         }

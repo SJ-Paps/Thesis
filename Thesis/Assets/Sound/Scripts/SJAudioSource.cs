@@ -54,7 +54,7 @@ public class SJAudioSource : SJMonoBehaviour {
             }
             else
             {
-                EditorDebug.Log("El valor del volumen debe ser entre 0 y 1");
+                Logger.LogConsole("El valor del volumen debe ser entre 0 y 1");
             }
         }
     }

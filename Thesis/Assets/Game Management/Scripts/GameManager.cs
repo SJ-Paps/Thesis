@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections;
-using System.Threading.Tasks;
-using UnityEngine.SceneManagement;
-using System.Linq;
-using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -28,7 +27,10 @@ public class GameManager : MonoBehaviour {
     public event Action onSavingBegan;
     public event Action onSavingFailed;
     public event Action onSavingSucceeded;
-    public event Action onSavingCompleted;
+
+    public event Action onLoadingBegan;
+    public event Action onLoadingFailed;
+    public event Action onLoadingSucceeded;
 
     private HashSet<SJMonoBehaviourSaveable> saveables;
 
@@ -59,12 +61,10 @@ public class GameManager : MonoBehaviour {
     {
         CallOnSavingBeganEvent();
 
-        CoroutineManager.GetInstance().StartCoroutine(
-            GetAllSavesAndWaitSaveTaskCoroutine(CallOnSavingSucceededEvent, CallOnSavingFailedEvent, CallOnSavingCompletedEvent)
-            );
+        CoroutineManager.GetInstance().StartCoroutine(GetAllSavesAndAWaitSerializationCoroutine());
     }
 
-    private IEnumerator GetAllSavesAndWaitSaveTaskCoroutine(Action onSuccess, Action onFail, Action onCompletation = null)
+    private IEnumerator GetAllSavesAndAWaitSerializationCoroutine()
     {
         List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
         List<SaveData> saves = new List<SaveData>();
@@ -86,9 +86,95 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        yield return CoroutineManager.GetInstance().StartCoroutine(
-            SaveLoadTool.SaveGameCoroutine(saveFilePath, saves.ToArray(), onSuccess, onFail, onCompletation)
-            );
+        Task serializationTask = SaveLoadTool.SerializeAsync(saveFilePath, saves.ToArray());
+
+        while(serializationTask.IsCompleted == false)
+        {
+            yield return null;
+        }
+
+        if (serializationTask.IsFaulted)
+        {
+            CallOnSavingFailedEvent();
+        }
+        else
+        {
+            CallOnSavingSucceededEvent();
+        }
+
+        serializationTask.Dispose();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            Logger.LogConsole("GUARDANDO");
+            SaveGame();
+        }
+        else if(Input.GetKeyDown(KeyCode.O))
+        {
+            Logger.LogConsole("CARGANDO");
+            LoadGame(saveFilePath);
+        }
+    }
+
+    public void LoadGame(string savePath)
+    {
+        CoroutineManager.GetInstance().StartCoroutine(LoadFromSaveGameCoroutine(savePath));
+    }
+
+    private IEnumerator LoadFromSaveGameCoroutine(string savePath)
+    {
+        Task<SaveData[]> deserializationTask = SaveLoadTool.DeserializeAsync(savePath);
+
+        while(deserializationTask.IsCompleted == false)
+        {
+            yield return null;
+        }
+
+        if(deserializationTask.IsFaulted)
+        {
+            CallOnLoadingFailedEvent();
+        }
+        else
+        {
+            SaveData[] saves = deserializationTask.Result;
+
+            Logger.LogConsole(((Tribal.TribalSaveData)((SaveTemplate)saves[0].saveObject).save).unNumero);
+
+            yield return CoroutineManager.GetInstance().StartCoroutine(PrepareScene(saves));
+
+            CallOnLoadingSucceededEvent();
+        }
+
+        deserializationTask.Dispose();
+    }
+
+    private IEnumerator PrepareScene(SaveData[] saves)
+    {
+        yield return null;
+    }
+
+    public void LoadGame(string[] sceneNames)
+    {
+        CoroutineManager.GetInstance().StartCoroutine(LoadNewGameCoroutine(sceneNames, CallOnLoadingSucceededEvent));
+    }
+
+    private IEnumerator LoadNewGameCoroutine(string[] sceneNames, Action onCompletion)
+    {
+        for(int i = 0; i < sceneNames.Length; i++)
+        {
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneNames[i]);
+
+            while(loadOperation.isDone == false)
+            {
+                yield return null;
+            }
+        }
+
+        onCompletion();
+
     }
 
     private void CallOnSavingSucceededEvent()
@@ -115,77 +201,28 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private void CallOnSavingCompletedEvent()
+    private void CallOnLoadingBeganEvent()
     {
-        if (onSavingCompleted != null)
+        if (onLoadingBegan != null)
         {
-            onSavingCompleted();
+            onLoadingBegan();
         }
     }
 
-    private void Update()
+    private void CallOnLoadingFailedEvent()
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        if (onLoadingFailed != null)
         {
-            Debug.Log("GUARDANDO");
-            SaveGame();
-        }
-        else if(Input.GetKeyDown(KeyCode.O))
-        {
-            //Loading
+            onLoadingFailed();
         }
     }
 
-    /*public void LoadGameAsync(bool fromSaveGame, Action onSuccess, Action onFail, Action onCompletation = null)
+    private void CallOnLoadingSucceededEvent()
     {
-        if(fromSaveGame)
+        if (onLoadingSucceeded != null)
         {
-
-        }
-        else
-        {
-
+            onLoadingSucceeded();
         }
     }
-
-    private IEnumerator LoadFromSaveGameCoroutine()
-    {
-
-    }
-
-    private IEnumerator LoadNewGameCoroutine(Action onSuccess, Action onFail, Action onCompletation = null)
-    {
-        AsyncOperation baseLevelUpload = SceneManager.LoadSceneAsync("BaseLevelScene");
-
-        while(baseLevelUpload.isDone == false)
-        {
-            yield return null;
-        }
-
-        AsyncOperation masterSceneUpload = SceneManager.LoadSceneAsync("MasterSceneLevel1");
-
-        while(masterSceneUpload.isDone == false)
-        {
-            yield return null;
-        }
-
-        AsyncOperation entitiesUpload = SceneManager.LoadSceneAsync("Entities_FirstGame");
-
-        while(entitiesUpload.isDone == false)
-        {
-            yield return null;
-        }
-
-        if(onSuccess != null)
-        {
-            onSuccess();
-        }
-
-        if(onCompletation != null)
-        {
-            onCompletation();
-        }
-
-    }*/
 
 }

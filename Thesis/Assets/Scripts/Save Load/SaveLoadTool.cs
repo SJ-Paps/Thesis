@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -23,33 +21,8 @@ public static class SaveLoadTool
     {
         public SaveData[] saves;
     }
-    
 
-    public static IEnumerator LoadGameCoroutine(string path, Action<SaveData[]> onSuccess, Action onFail, Action onCompletation = null)
-    {
-        Task<SaveData[]> deserializationTask = DeserializeAsync(path);
-
-        while(deserializationTask.IsCompleted == false)
-        {
-            yield return null;
-        }
-
-        if(deserializationTask.IsFaulted)
-        {
-            onFail();
-        }
-        else
-        {
-            onSuccess(deserializationTask.Result);
-        }
-
-        if(onCompletation != null)
-        {
-            onCompletation();
-        }
-    }
-
-    private static Task<SaveData[]> DeserializeAsync(string path)
+    public static Task<SaveData[]> DeserializeAsync(string path)
     {
         return Task.Run<SaveData[]>(
             delegate ()
@@ -68,35 +41,12 @@ public static class SaveLoadTool
             );
     }
 
-    public static IEnumerator SaveGameCoroutine(string path, SaveData[] saves, Action onSuccess, Action onFail, Action onCompletation = null)
+    public static Task SerializeAsync(string path, SaveData[] saves)
     {
         SaveObject saveObject = default;
+
         saveObject.saves = saves;
 
-        Task serializationTask = SerializeAsync(path, saveObject);
-
-        while(serializationTask.IsCompleted == false)
-        {
-            yield return null;
-        }
-
-        if(serializationTask.IsFaulted)
-        {
-            onFail();
-        }
-        else
-        {
-            onSuccess();
-        }
-
-        if(onCompletation != null)
-        {
-            onCompletation();
-        }
-    }
-
-    private static Task SerializeAsync(string path, SaveObject saveObject)
-    {
         return Task.Run(
             delegate ()
             {

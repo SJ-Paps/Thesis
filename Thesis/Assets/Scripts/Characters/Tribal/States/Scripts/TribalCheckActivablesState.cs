@@ -71,7 +71,7 @@ public class TribalCheckActivablesState : TribalHSMState
             }
         }
 
-        EditorDebug.Log("NO ACTIVABLES WERE FOUND");
+        Logger.LogConsole("NO ACTIVABLES WERE FOUND");
 
         return false;
     }
