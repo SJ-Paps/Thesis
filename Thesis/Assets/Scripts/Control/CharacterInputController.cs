@@ -35,29 +35,4 @@ public class CharacterInputController : UnityInputController<Character, Characte
             }
         }
     }
-
-    public override bool ShouldBeSaved()
-    {
-        return true;
-    }
-
-    protected override void OnSave(SaveData data)
-    {
-        data.AddValue("s", Slave.saveGUID);
-    }
-
-    protected override void OnLoad(SaveData data)
-    {
-        slaveGuid = new Guid(data.GetAs<string>("s"));
-    }
-
-    public override void PostLoadCallback(SaveData data)
-    {
-        Character slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Character>(slaveGuid);
-
-        if(slave != null)
-        {
-            SetSlave(slave);
-        }
-    }
 }

@@ -118,28 +118,23 @@ public class Turret : Robot, ISeer, IDamagable
 
     }
 
-    public override bool ShouldBeSaved()
+    protected override object GetSaveData()
     {
-        return true;
+        return null;
     }
 
-    protected override void OnSave(SaveData data)
+    protected override void LoadSaveData(object data)
     {
-        /*data.AddValue("x", transform.parent.position.x);
-        data.AddValue("y", transform.parent.position.y);
-        data.AddValue("limitLeft", leftLimit);
-        data.AddValue("limitRight", rightLimit);
-        data.AddValue("rotation z", transform.parent.rotation.z);
-        data.AddValue("rotation x", transform.parent.rotation.x);
-        data.AddValue("rotation y", transform.parent.rotation.y);
-        data.AddValue("rotation w", transform.parent.rotation.w);*/
+        
     }
 
-    protected override void OnLoad(SaveData data)
+    public override void PostSaveCallback()
     {
-        /*transform.parent.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
-        transform.parent.rotation = new Quaternion(data.GetAs<float>("rotation x"), data.GetAs<float>("rotation y"), data.GetAs<float>("rotation z"), data.GetAs<float>("rotation w"));
-        leftLimit = data.GetAs<float>("limitLeft");
-        rightLimit = data.GetAs<float>("limitRight");*/
+
+    }
+
+    public override void PostLoadCallback(object dataSave)
+    {
+
     }
 }

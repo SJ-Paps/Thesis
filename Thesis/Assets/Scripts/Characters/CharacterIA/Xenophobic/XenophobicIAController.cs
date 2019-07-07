@@ -84,31 +84,4 @@ public class XenophobicIAController : IAController
     {
         hsm.Update();
     }
-
-    public override bool ShouldBeSaved()
-    {
-        return true;
-    }
-
-    private Guid slaveGuid;
-
-    protected override void OnSave(SaveData data)
-    {
-        data.AddValue("s", Slave.saveGUID);
-    }
-
-    protected override void OnLoad(SaveData data)
-    {
-        slaveGuid = new Guid(data.GetAs<string>("s"));
-    }
-
-    public override void PostLoadCallback(SaveData data)
-    {
-        Xenophobic slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Xenophobic>(slaveGuid);
-
-        if(slave != null)
-        {
-            SetSlave(slave);
-        }
-    }
 }

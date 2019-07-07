@@ -1,15 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
 
 public interface ISaveable
 {
-    SaveData Save();
+    string InstanceGUID { get; }
+
+    object Save();
 
     void PostSaveCallback();
 
-    void Load(SaveData data);
+    void Load(object data);
 
-    void PostLoadCallback(SaveData dataSave);
+    void PostLoadCallback(object dataSave);
 
 }

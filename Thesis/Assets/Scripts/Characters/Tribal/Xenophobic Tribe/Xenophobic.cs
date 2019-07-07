@@ -3,23 +3,6 @@ using UnityEngine;
 
 public class Xenophobic : Tribal
 {
-    
-
-    /*[SerializeField]
-protected XenophobicAttackState attackState;
-
-protected override void Awake()
-{
-base.Awake();
-
-attackState.InitializeState(actionFSM, State.Attacking, this, orders, blackboard);
-
-actionFSM.AddState(attackState);
-
-actionFSM.MakeTransition(State.Idle, Trigger.Attack, State.Attacking);
-actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
-
-}*/
 
     public override void GetEnslaved()
     {
@@ -31,24 +14,9 @@ actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
         return base.GetHashCode();
     }
 
-    public override void PostLoadCallback(SaveData data)
-    {
-        base.PostLoadCallback(data);
-    }
-
-    public override void PostSaveCallback()
-    {
-        base.PostSaveCallback();
-    }
-
     public override void SendOrder(Order order)
     {
         base.SendOrder(order);
-    }
-
-    public override bool ShouldBeSaved()
-    {
-        return base.ShouldBeSaved();
     }
 
     public override string ToString()
@@ -79,16 +47,6 @@ actionFSM.MakeTransition(State.Attacking, Trigger.StopAttacking, State.Idle);
     protected override void OnFacingChanged(bool facingLeft)
     {
         base.OnFacingChanged(facingLeft);
-    }
-
-    protected override void OnLoad(SaveData data)
-    {
-        base.OnLoad(data);
-    }
-
-    protected override void OnSave(SaveData data)
-    {
-        base.OnSave(data);
     }
 
     protected override void Start()

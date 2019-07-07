@@ -1,16 +1,13 @@
 ﻿using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using System;
 
 public abstract class SJMonoBehaviour : MonoBehaviour
 {
-    [SerializeField]
-    public string prefabName;
+    public string InstanceGUID { get; private set; }
 
     protected virtual void Awake()
     {
-
+        InstanceGUID = GameManager.GetInstance().GetNewInstanceGUID(this);
     }
 
     protected virtual void Start()
@@ -25,7 +22,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    private void OnValidate()
+    protected virtual void OnValidate()
     {
 
     }

@@ -50,7 +50,10 @@ public abstract class Tribal : Character, IDamagable, ISeer
         ChoiceHangingLadderOrRopeOrWallOrLedge,
     }
     
-    
+    public class TribalSaveData
+    {
+        public int unNumero;
+    }
 
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
     public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
@@ -65,6 +68,9 @@ public abstract class Tribal : Character, IDamagable, ISeer
     public static readonly string rightHandEquipmentSlotIdentifier = "right_hand";
 
     public event Action onDead;
+
+    public event Action<TribalSaveData> onSaving;
+    public event Action<TribalSaveData> onLoading;
 
     #region CONFIGURATION
 
@@ -120,43 +126,42 @@ public abstract class Tribal : Character, IDamagable, ISeer
         }
     }
 
-    public override bool ShouldBeSaved()
+    protected override object GetSaveData()
     {
-        return true;
-    }
+        TribalSaveData saveData = new TribalSaveData() { unNumero = UnityEngine.Random.Range(0, 100) };
 
-    protected override void OnSave(SaveData data)
-    {
-        data.AddValue("x", transform.position.x);
-        data.AddValue("y", transform.position.y);
-        
-    }
+        saveData.unNumero = 3;
 
-    protected override void OnLoad(SaveData data)
-    {
-        /*transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
-
-        if(data.ContainsValue("collectableGUID"))
+        if(onSaving != null)
         {
-            Guid objGuid = new Guid(data.GetAs<string>("collectableGUID"));
+            onSaving(saveData);
+        }
 
-            CurrentCollectableObject = GetSJMonobehaviourSaveableBySaveGUID<CollectableObject>(objGuid);
-
-            CurrentCollectableObject.Collect(this);
-        }*/
+        return saveData;
     }
 
-    public override void PostLoadCallback(SaveData data)
+    protected override void LoadSaveData(object data)
     {
-        transform.position = new Vector2(data.GetAs<float>("x"), data.GetAs<float>("y"));
+        TribalSaveData saveData = (TribalSaveData)data;
 
-        if(data.ContainsValue("collectableGUID"))
+        Debug.Log(saveData.unNumero);
+
+        if(onLoading != null)
         {
-            Guid objGuid = new Guid(data.GetAs<string>("collectableGUID"));
+            onLoading(saveData);
         }
     }
 
-    
+    public override void PostLoadCallback(object dataSave)
+    {
+        
+    }
+
+    public override void PostSaveCallback()
+    {
+        
+    }
+
 }
 
 public static class TribalExtensions

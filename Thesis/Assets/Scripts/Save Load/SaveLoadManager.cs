@@ -1,107 +1,125 @@
-﻿using System.IO;
-using System.Linq;
-using UnityEngine;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections;
+using System.IO;
+using System.Threading.Tasks;
 
-public class SaveLoadManager
+public struct SaveData
 {
-    private static SaveLoadManager instance;
+    public string guid;
 
-    public static SaveLoadManager GetInstance()
+    public object saveObject;
+
+    public SaveData(string guid, object saveObject)
     {
-        if(instance == null)
+        this.guid = guid;
+        this.saveObject = saveObject;
+    }
+}
+
+public static class SaveLoadManager
+{
+    public struct SaveObject
+    {
+        public SaveData[] saves;
+    }
+
+    public static IEnumerator LoadGameCoroutine(string path, Action<SaveData[]> onSuccess, Action onFail, Action onCompletation = null)
+    {
+        Task<SaveData[]> deserializationTask = DeserializeAsync(path);
+
+        while(deserializationTask.IsCompleted == false)
         {
-            instance = new SaveLoadManager();
+            yield return null;
         }
 
-        return instance;
-    }
-
-    private List<ISaveable> saveables;
-
-    private static string saveFilePath = Path.Combine(Application.persistentDataPath, "save.sj");
-
-    private SaveLoadManager()
-    {
-        saveables = new List<ISaveable>();
-    }
-
-    public void Subscribe(ISaveable saveable)
-    {
-        if(saveables.Contains(saveable) == false)
+        if(deserializationTask.IsFaulted)
         {
-            saveables.Add(saveable);
+            throw deserializationTask.Exception;
+            onFail();
+        }
+        else
+        {
+            onSuccess(deserializationTask.Result);
+        }
+
+        if(onCompletation != null)
+        {
+            onCompletation();
         }
     }
 
-    public void Desubscribe(ISaveable saveable)
+    private static Task<SaveData[]> DeserializeAsync(string path)
     {
-        saveables.Remove(saveable);
-    }
-
-    public void SaveGame()
-    {
-        IEnumerable<SaveData> saveData = ForeachSaveDataNotNull(saveables);
-
-        Serialize(saveData);
-
-        CallPostSaveCallbacks(saveables);
-
-        EditorDebug.Log("GUARDADO!");
-    }
-
-    private IEnumerable<SaveData> ForeachSaveDataNotNull(List<ISaveable> saveables)
-    {
-        for(int i = 0; i < saveables.Count; i++)
-        {
-            ISaveable saveable = saveables[i];
-
-            SaveData data = saveable.Save();
-
-            if(data != null)
+        return Task.Run<SaveData[]>(
+            delegate ()
             {
-                yield return data;
+                string json = File.ReadAllText(path);
+
+                var jsonSerializerSettings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                };
+
+                SaveObject saveObject = JsonConvert.DeserializeObject<SaveObject>(json, jsonSerializerSettings);
+
+                return saveObject.saves;
             }
-        }
+            );
     }
 
-    private void CallPostSaveCallbacks(List<ISaveable> saveables)
+    public static IEnumerator SaveGameCoroutine(string path, ISaveable[] saveables, Action onSuccess, Action onFail, Action onCompletation = null)
     {
-        for(int i = 0; i < saveables.Count; i++)
+        SaveData[] saves = new SaveData[saveables.Length];
+
+        int i = 0;
+
+        foreach(ISaveable saveable in saveables)
         {
-            saveables[i].PostSaveCallback();
+            saves[i] = new SaveData(saveable.InstanceGUID, saveable.Save());
+            yield return null;
         }
-    }
 
-    public SaveData[] LoadSaves()
-    {
-        if(SaveFileExists())
+        SaveObject saveObject = default;
+        saveObject.saves = saves;
+
+        Task serializationTask = SerializeAsync(path, saveObject);
+
+        while(serializationTask.IsCompleted == false)
         {
-            return Deserialize(saveFilePath);
+            yield return null;
         }
 
-        return null;
+        if(serializationTask.IsFaulted)
+        {
+            onFail();
+        }
+        else
+        {
+            onSuccess();
+        }
+
+        if(onCompletation != null)
+        {
+            onCompletation();
+        }
     }
 
-    public bool SaveFileExists()
+    private static Task SerializeAsync(string path, SaveObject saveObject)
     {
-        return File.Exists(saveFilePath);
-    }
+        return Task.Run(
+            delegate ()
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                };
 
-    private void Serialize(IEnumerable<SaveData> saves)
-    {
-        string json = JsonConvert.SerializeObject(saves);
+                string json = JsonConvert.SerializeObject(saveObject, jsonSerializerSettings);
 
-        File.WriteAllText(Path.Combine(Application.persistentDataPath, "save.sj"), json);
-    }
-
-    private SaveData[] Deserialize(string path)
-    {
-        string json = File.ReadAllText(Path.Combine(Application.persistentDataPath, "save.sj"));
-
-        return JsonConvert.DeserializeObject<SaveData[]>(json);
-        
+                File.WriteAllText(path, json);
+            }
+            );
     }
     
 }

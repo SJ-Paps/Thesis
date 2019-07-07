@@ -45,31 +45,4 @@ public class TurretIAController : IAController
     {
         hsm.Update();
     }
-
-    public override bool ShouldBeSaved()
-    {
-        return true;
-    }
-
-    private Guid slaveGuid;
-
-    protected override void OnSave(SaveData data)
-    {
-        data.AddValue("s", Slave.saveGUID);
-    }
-
-    protected override void OnLoad(SaveData data)
-    {
-        slaveGuid = new Guid(data.GetAs<string>("s"));
-    }
-
-    public override void PostLoadCallback(SaveData data)
-    {
-        Turret slave = SJMonoBehaviourSaveable.GetSJMonobehaviourSaveableBySaveGUID<Turret>(slaveGuid);
-
-        if (slave != null)
-        {
-            SetSlave(slave);
-        }
-    }
 }

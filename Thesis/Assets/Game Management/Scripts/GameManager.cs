@@ -1,68 +1,164 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using System.Linq;
 using System;
+using System.IO;
 
-public class GameManager : SJMonoBehaviour {
+public class GameManager : MonoBehaviour {
 
     private static GameManager instance;
 
-    public static GameManager Instance
-    {
-        get
-        {
-            if(instance == null)
-            {
-                instance = FindObjectOfType<GameManager>();
-                GameObject obj;
-
-                if (instance == null)
-                {
-                    obj = new GameObject("GameManager");
-
-                    instance = obj.AddComponent<GameManager>();
-                }
-
-                instance.Init();
-            }
-
-            return instance;
-        }
-    }
-
     public static GameManager GetInstance()
     {
-        return Instance;
+        if (instance == null)
+        {
+            var obj = new GameObject("GameManager");
+
+            instance = obj.AddComponent<GameManager>();
+
+            instance.Init();
+        }
+
+        return instance;
     }
 
-    public bool IsPaused { get; private set; }
+    public event Action onSavingBegan;
+    public event Action onSavingFailed;
+    public event Action onSavingSucceeded;
+    public event Action onSavingCompleted;
+
+    private HashSet<SJMonoBehaviourSaveable> saveables;
+
+    private static string saveFilePath;
 
     private void Init()
     {
-
+        saveables = new HashSet<SJMonoBehaviourSaveable>();
+        saveFilePath = Path.Combine(Application.persistentDataPath, "save.sj");
     }
 
-    void Update()
+    public void SubscribeForSave(SJMonoBehaviourSaveable saveable)
     {
-        CheckPause();
+        saveables.Add(saveable);
     }
 
-    private void CheckPause()
+    public void DesubscribeForSave(SJMonoBehaviourSaveable saveable)
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        saveables.Remove(saveable);
+    }
+
+    public string GetNewInstanceGUID(SJMonoBehaviour obj)
+    {
+        return Guid.NewGuid().ToString();
+    }
+
+    public void SaveGame()
+    {
+        CallOnSavingBeganEvent();
+
+        CoroutineManager.GetInstance().StartCoroutine(
+            SaveLoadManager.SaveGameCoroutine(saveFilePath, saveables.ToArray(), CallOnSavingSucceededEvent, CallOnSavingFailedEvent, CallOnSavingCompletedEvent)
+            );
+    }
+
+    private void CallOnSavingSucceededEvent()
+    {
+        if (onSavingSucceeded != null)
         {
-            Pause(!IsPaused);
+            onSavingSucceeded();
         }
     }
 
-    public void Pause(bool shouldPause)
+    private void CallOnSavingFailedEvent()
     {
-        IsPaused = shouldPause;
-
-        MainMenu.GetInstance().Show(shouldPause);
+        if (onSavingFailed != null)
+        {
+            onSavingFailed();
+        }
     }
 
-    public void GoMenu()
+    private void CallOnSavingBeganEvent()
     {
-        SceneManager.LoadScene(0);
+        if (onSavingBegan != null)
+        {
+            onSavingBegan();
+        }
     }
+
+    private void CallOnSavingCompletedEvent()
+    {
+        if (onSavingCompleted != null)
+        {
+            onSavingCompleted();
+        }
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("GUARDANDO");
+            SaveGame();
+        }
+        else if(Input.GetKeyDown(KeyCode.O))
+        {
+            //Loading
+        }
+    }
+
+    /*public void LoadGameAsync(bool fromSaveGame, Action onSuccess, Action onFail, Action onCompletation = null)
+    {
+        if(fromSaveGame)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+
+    private IEnumerator LoadFromSaveGameCoroutine()
+    {
+
+    }
+
+    private IEnumerator LoadNewGameCoroutine(Action onSuccess, Action onFail, Action onCompletation = null)
+    {
+        AsyncOperation baseLevelUpload = SceneManager.LoadSceneAsync("BaseLevelScene");
+
+        while(baseLevelUpload.isDone == false)
+        {
+            yield return null;
+        }
+
+        AsyncOperation masterSceneUpload = SceneManager.LoadSceneAsync("MasterSceneLevel1");
+
+        while(masterSceneUpload.isDone == false)
+        {
+            yield return null;
+        }
+
+        AsyncOperation entitiesUpload = SceneManager.LoadSceneAsync("Entities_FirstGame");
+
+        while(entitiesUpload.isDone == false)
+        {
+            yield return null;
+        }
+
+        if(onSuccess != null)
+        {
+            onSuccess();
+        }
+
+        if(onCompletation != null)
+        {
+            onCompletation();
+        }
+
+    }*/
+
 }

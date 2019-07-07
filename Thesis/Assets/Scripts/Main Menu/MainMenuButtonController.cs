@@ -55,22 +55,22 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private void HideMenu()
     {
-        GameManager.Instance.Pause(false);
+
     }
 
     private void GoMenu()
     {
-        GameManager.Instance.GoMenu();
+
     }
 
     private void GoNewGame()
     {
-        SceneLoader.GetInstance().NewGame();
+        //SceneLoader.GetInstance().NewGame();
     }
 
     private void LoadGame()
     {
-        SceneLoader.GetInstance().LoadGame();
+        //SceneLoader.GetInstance().LoadGame();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
