@@ -68,9 +68,11 @@ public class GameManager : MonoBehaviour {
         List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
         List<SaveData> saves = new List<SaveData>();
 
-        foreach(SJMonoBehaviourSaveable saveable in saveables)
+        currentSaveables.AddRange(saveables);
+
+        for(int i = 0; i < currentSaveables.Count; i++)
         {
-            currentSaveables.Add(saveable);
+            SJMonoBehaviourSaveable saveable = currentSaveables[i];
             saves.Add(new SaveData(saveable.InstanceGUID, saveable.Save()));
             yield return null;
         }
@@ -83,6 +85,11 @@ public class GameManager : MonoBehaviour {
                 saves.RemoveAt(i);
                 i--;
             }
+        }
+
+        for(int i = 0; i < currentSaveables.Count; i++)
+        {
+            currentSaveables[i].PostSaveCallback();
         }
 
         Task serializationTask = SaveLoadTool.SerializeAsync(SaveFilePath, saves.ToArray());
@@ -155,7 +162,7 @@ public class GameManager : MonoBehaviour {
             yield return CoroutineManager.GetInstance().StartCoroutine(UnloadScenes());
         }
 
-        yield return CoroutineManager.GetInstance().StartCoroutine(LoadScenes(new string[] { "MasterSceneLevel1" }));
+        yield return CoroutineManager.GetInstance().StartCoroutine(LoadScenes(new string[] { "BaseLevelScene", "MasterSceneLevel1" }));
 
         List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
 
@@ -208,11 +215,11 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator LoadScenes(string[] sceneNames, Action onCompletion = null)
     {
-        SceneManager.LoadScene("BaseLevelScene");
+        SceneManager.LoadScene(sceneNames[0]);
 
         yield return null;
 
-        for(int i = 0; i < sceneNames.Length; i++)
+        for(int i = 1; i < sceneNames.Length; i++)
         {
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneNames[i], LoadSceneMode.Additive);
 
