@@ -17,12 +17,13 @@ public struct SaveData
     }
 }
 
-public static class SaveLoadManager
+public static class SaveLoadTool
 {
     public struct SaveObject
     {
         public SaveData[] saves;
     }
+    
 
     public static IEnumerator LoadGameCoroutine(string path, Action<SaveData[]> onSuccess, Action onFail, Action onCompletation = null)
     {
@@ -35,7 +36,6 @@ public static class SaveLoadManager
 
         if(deserializationTask.IsFaulted)
         {
-            throw deserializationTask.Exception;
             onFail();
         }
         else
@@ -68,18 +68,8 @@ public static class SaveLoadManager
             );
     }
 
-    public static IEnumerator SaveGameCoroutine(string path, ISaveable[] saveables, Action onSuccess, Action onFail, Action onCompletation = null)
+    public static IEnumerator SaveGameCoroutine(string path, SaveData[] saves, Action onSuccess, Action onFail, Action onCompletation = null)
     {
-        SaveData[] saves = new SaveData[saveables.Length];
-
-        int i = 0;
-
-        foreach(ISaveable saveable in saveables)
-        {
-            saves[i] = new SaveData(saveable.InstanceGUID, saveable.Save());
-            yield return null;
-        }
-
         SaveObject saveObject = default;
         saveObject.saves = saves;
 

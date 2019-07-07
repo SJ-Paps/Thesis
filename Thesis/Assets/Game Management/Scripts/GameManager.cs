@@ -60,7 +60,34 @@ public class GameManager : MonoBehaviour {
         CallOnSavingBeganEvent();
 
         CoroutineManager.GetInstance().StartCoroutine(
-            SaveLoadManager.SaveGameCoroutine(saveFilePath, saveables.ToArray(), CallOnSavingSucceededEvent, CallOnSavingFailedEvent, CallOnSavingCompletedEvent)
+            GetAllSavesAndWaitSaveTaskCoroutine(CallOnSavingSucceededEvent, CallOnSavingFailedEvent, CallOnSavingCompletedEvent)
+            );
+    }
+
+    private IEnumerator GetAllSavesAndWaitSaveTaskCoroutine(Action onSuccess, Action onFail, Action onCompletation = null)
+    {
+        List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
+        List<SaveData> saves = new List<SaveData>();
+
+        foreach(SJMonoBehaviourSaveable saveable in saveables)
+        {
+            currentSaveables.Add(saveable);
+            saves.Add(new SaveData(saveable.InstanceGUID, saveable.Save()));
+            yield return null;
+        }
+
+        for(int i = 0; i < currentSaveables.Count; i++)
+        {
+            if (saveables.Contains(currentSaveables[i]) == false)
+            {
+                currentSaveables.RemoveAt(i);
+                saves.RemoveAt(i);
+                i--;
+            }
+        }
+
+        yield return CoroutineManager.GetInstance().StartCoroutine(
+            SaveLoadTool.SaveGameCoroutine(saveFilePath, saves.ToArray(), onSuccess, onFail, onCompletation)
             );
     }
 
