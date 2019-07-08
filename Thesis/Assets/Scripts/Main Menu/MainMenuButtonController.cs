@@ -6,16 +6,10 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     [SerializeField]
     private Button newGame, loadGame, resumeGame, options, exitDesktop, exitMainMenu;
-
-    private Canvas canvas;
-
-    private LocalizedTextLibrary localizedTextLibrary;
     
-	protected override void Awake () {
-
-        localizedTextLibrary = LocalizedTextLibrary.GetInstance();
-
-        canvas = GetComponent<Canvas>();
+	protected override void Awake ()
+    {
+        MainMenu.GetInstance().onShow += OnMainMenuShow;
 
         //exit desktop button
         exitDesktop.onClick.AddListener(ExitToDesktop);
@@ -32,35 +26,61 @@ public class MainMenuButtonController : SJMonoBehaviour {
         //resume game button
         resumeGame.onClick.AddListener(HideMenu);
 
+        GameManager.GetInstance().SetOnQuitReturnScene("Menu");
+
     }
 
     private void ExitToDesktop()
     {
-        ModalWindowManager.Instance.DisplayConfirmationMenu(localizedTextLibrary.GetLineByTagAttribute("confirmation_menu_message_exit").FirstLetterToUpper(), Application.Quit, null, canvas.rootCanvas);
+        MainMenu.GetInstance().DisplayConfirmationMenu(LocalizedTextLibrary.GetInstance().GetLineByTagAttribute("confirmation_menu_message_exit").FirstLetterToUpper(), Application.Quit, null);
     }
 
     private void ExitToMainMenu()
     {
-        ModalWindowManager.Instance.DisplayConfirmationMenu(localizedTextLibrary.GetLineByTagAttribute("confirmation_menu_message_exit").FirstLetterToUpper(), GoMenu, null, canvas.rootCanvas);
+        MainMenu.GetInstance().DisplayConfirmationMenu(LocalizedTextLibrary.GetInstance().GetLineByTagAttribute("confirmation_menu_message_exit").FirstLetterToUpper(), GoMenu, null);
     }
 
     private void HideMenu()
     {
-
+        MainMenu.GetInstance().Hide();
     }
 
     private void GoMenu()
     {
-
+        GameManager.GetInstance().QuitGame();
     }
 
     private void GoNewGame()
     {
-        GameManager.GetInstance().LoadGame(new string[] { "MasterSceneLevel1", "Entities_FirstGame" });
+        GameManager.GetInstance().LoadGame(new string[] { "MasterSceneLevel1", "Entities_FirstGame_igld" });
+        MainMenu.GetInstance().Hide();
     }
 
     private void LoadGame()
     {
         GameManager.GetInstance().LoadGame(GameManager.SaveFilePath);
+        MainMenu.GetInstance().Hide();
+    }
+
+    private void OnMainMenuShow()
+    {
+        if (GameManager.GetInstance().IsInGame)
+        {
+            exitDesktop.gameObject.SetActive(true);
+            exitMainMenu.gameObject.SetActive(true);
+            newGame.gameObject.SetActive(false);
+            loadGame.gameObject.SetActive(true);
+            resumeGame.gameObject.SetActive(true);
+            options.gameObject.SetActive(true);
+        }
+        else
+        {
+            exitDesktop.gameObject.SetActive(true);
+            exitMainMenu.gameObject.SetActive(false);
+            newGame.gameObject.SetActive(true);
+            loadGame.gameObject.SetActive(true);
+            resumeGame.gameObject.SetActive(false);
+            options.gameObject.SetActive(true);
+        }
     }
 }

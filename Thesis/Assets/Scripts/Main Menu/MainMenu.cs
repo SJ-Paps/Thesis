@@ -1,5 +1,8 @@
 ﻿using UnityEngine.SceneManagement;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class MainMenu : SJMonoBehaviour {
 
@@ -24,57 +27,90 @@ public class MainMenu : SJMonoBehaviour {
         return instance;
     }
 
-    private bool shown;
+    public bool Shown
+    {
+        get
+        {
+            return gameObject.activeSelf;
+        }
+    }
 
-    private bool canHide;
+    public event Action onShow;
+    public event Action onHide;
+
+    private Canvas canvas;
 
     private void Init()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        canvas = GetComponent<Canvas>();
+
+        confirmationMenuPool = new List<ConfirmationMenu>();
+
+        //es necesario hacerlo usando <GameObject> porque al ser un prefab el assetbundle no contempla ninguno de sus componentes
+        //asique se debe pedir el gameobject primero y luego obtener su componente
+        confirmationMenuPrefab = SJResources.LoadAsset<GameObject>("ConfirmationMenuPrefab").GetComponent<ConfirmationMenu>();
     }
 
-    public void Show(bool shouldShow)
+    private void OnEnable()
     {
-        if (shouldShow && !shown)
+        if (onShow != null)
         {
-            Show();
+            onShow();
         }
-        else if(!shouldShow && shown)
+    }
+
+    private void OnDisable()
+    {
+        if (onHide != null)
         {
-            Hide();
+            onHide();
         }
     }
 
-    private void Show()
+    public void Show()
     {
-        shown = true;
-
-        gameObject.SetActive(true);
+        if(!Shown)
+        {
+            gameObject.SetActive(true);
+        }
     }
 
-    private void Hide()
+    public void Hide()
     {
-        if(canHide)
+        if(Shown)
         {
-            shown = false;
-
             gameObject.SetActive(false);
         }
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private ConfirmationMenu confirmationMenuPrefab;
+
+    private List<ConfirmationMenu> confirmationMenuPool;
+
+    public void DisplayConfirmationMenu(string message, UnityAction onSubmit, UnityAction onCancel)
     {
-        if(scene.buildIndex == 0)
-        {
-            canHide = false;
+        ConfirmationMenu menu = GetFirstAvailable();
 
-            Show(true);
-        }
-        else
+        if (menu == null)
         {
-            canHide = true;
+            menu = GameObject.Instantiate<ConfirmationMenu>(confirmationMenuPrefab);
 
-            Show(false);
+            confirmationMenuPool.Add(menu);
         }
+
+        menu.Display(message, onSubmit, onCancel, canvas);
+    }
+
+    private ConfirmationMenu GetFirstAvailable()
+    {
+        foreach (ConfirmationMenu menu in confirmationMenuPool)
+        {
+            if (menu.Active == false)
+            {
+                return menu;
+            }
+        }
+
+        return null;
     }
 }

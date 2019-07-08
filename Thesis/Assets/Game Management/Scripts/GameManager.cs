@@ -7,7 +7,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Reflection;
 
-public class GameManager : MonoBehaviour {
+public class GameManager {
+
+    public class GameManagerSaveData
+    {
+        public int[] loadedScenesIndexes;
+    }
 
     private static GameManager instance;
 
@@ -15,15 +20,15 @@ public class GameManager : MonoBehaviour {
     {
         if (instance == null)
         {
-            var obj = new GameObject("GameManager");
-
-            instance = obj.AddComponent<GameManager>();
-
-            instance.Init();
+            instance = new GameManager();
         }
 
         return instance;
     }
+
+    private const string ignoreScenesOnSavingSubfix = "_igld";
+    private const string gameManagerSaveDataIdentifier = "GMDATA";
+    private const string baseSceneName = "Base";
 
     public event Action onSavingBegan;
     public event Action onSavingFailed;
@@ -33,17 +38,23 @@ public class GameManager : MonoBehaviour {
     public event Action onLoadingFailed;
     public event Action onLoadingSucceeded;
 
+    public event Action onQuitting;
+
     private HashSet<SJMonoBehaviourSaveable> saveables;
 
-    private List<string> loadedScenes;
+    private string quitReturnScene;
+
+    public bool IsInGame { get; private set; }
 
     public static string SaveFilePath { get; private set; }
 
-    private void Init()
+    private GameManager()
     {
         saveables = new HashSet<SJMonoBehaviourSaveable>();
-        loadedScenes = new List<string>();
         SaveFilePath = Path.Combine(Application.persistentDataPath, "save.sj");
+
+        onLoadingSucceeded += SetIsInGameAfterLoading;
+        onQuitting += SetIsNotInGameOnQuitting;
     }
 
     public void SubscribeForSave(SJMonoBehaviourSaveable saveable)
@@ -69,6 +80,14 @@ public class GameManager : MonoBehaviour {
         List<SaveData> saves = new List<SaveData>();
 
         currentSaveables.AddRange(saveables);
+
+        saves.Add(
+            new SaveData(gameManagerSaveDataIdentifier, 
+            new GameManagerSaveData()
+            {
+                loadedScenesIndexes = GetSaveableScenes()
+            }
+            ));
 
         for(int i = 0; i < currentSaveables.Count; i++)
         {
@@ -111,22 +130,15 @@ public class GameManager : MonoBehaviour {
         serializationTask.Dispose();
     }
 
-    private void Update()
+    public void SetOnQuitReturnScene(string sceneName)
     {
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            Logger.LogConsole("GUARDANDO");
-            SaveGame();
-        }
-        else if(Input.GetKeyDown(KeyCode.O))
-        {
-            Logger.LogConsole("CARGANDO");
-            LoadGame(SaveFilePath);
-        }
+        quitReturnScene = sceneName;
     }
 
     public void LoadGame(string savePath)
     {
+        CallOnLoadingBeganEvent();
+
         CoroutineManager.GetInstance().StartCoroutine(LoadFromSaveGameCoroutine(savePath));
     }
 
@@ -157,22 +169,23 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator PrepareScene(SaveData[] saves)
     {
-        if(loadedScenes.Count > 0)
-        {
-            yield return CoroutineManager.GetInstance().StartCoroutine(UnloadScenes());
-        }
-
-        yield return CoroutineManager.GetInstance().StartCoroutine(LoadScenes(new string[] { "MasterSceneLevel1" }));
+        yield return CoroutineManager.GetInstance().StartCoroutine(LoadGameplayScenes(GetSaveDataFrom(saves).loadedScenesIndexes));
 
         List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
+        List<GameplayObjectSave> gameplayObjectSaves = new List<GameplayObjectSave>();
 
         for (int i = 0; i < saves.Length; i++)
         {
-            GameplayObjectSave gameplayObjectSave = (GameplayObjectSave)saves[i].saveObject;
+            GameplayObjectSave gameplayObjectSave = saves[i].saveObject as GameplayObjectSave;
+
+            if(gameplayObjectSave == null)
+            {
+                continue;
+            }
 
             GameObject gameplayGameObject = SJResources.LoadAsset<GameObject>(gameplayObjectSave.prefabName);
 
-            gameplayGameObject = Instantiate(gameplayGameObject);
+            gameplayGameObject = GameObject.Instantiate(gameplayGameObject);
 
             SJMonoBehaviourSaveable monoBehaviourSaveable = gameplayGameObject.GetComponent<SJMonoBehaviourSaveable>();
 
@@ -181,43 +194,44 @@ public class GameManager : MonoBehaviour {
             monoBehaviourSaveable.Load(gameplayObjectSave.save);
 
             currentSaveables.Add(monoBehaviourSaveable);
+            gameplayObjectSaves.Add(gameplayObjectSave);
 
             yield return null;
         }
 
         for(int i = 0; i < currentSaveables.Count; i++)
         {
-            GameplayObjectSave gameplayObjectSave = (GameplayObjectSave)saves[i].saveObject;
-
-            currentSaveables[i].PostLoadCallback(gameplayObjectSave.save);
+            currentSaveables[i].PostLoadCallback(gameplayObjectSaves[i].save);
 
             yield return null;
         }
     }
 
-    private IEnumerator UnloadScenes()
+    private GameManagerSaveData GetSaveDataFrom(SaveData[] saves)
     {
-        for(int i = 0; i < loadedScenes.Count; i++)
+        for(int i = 0; i < saves.Length; i++)
         {
-            AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(loadedScenes[i]);
-
-            while(unloadOperation.isDone == false)
+            if(saves[i].identifier == gameManagerSaveDataIdentifier)
             {
-                yield return null;
+                return (GameManagerSaveData)saves[i].saveObject;
             }
         }
 
-        loadedScenes.Clear();
+        return null;
     }
 
     public void LoadGame(string[] sceneNames)
     {
-        CoroutineManager.GetInstance().StartCoroutine(LoadScenes(sceneNames, CallOnLoadingSucceededEvent));
+        CoroutineManager.GetInstance().StartCoroutine(LoadGameplayScenes(sceneNames, CallOnLoadingSucceededEvent));
     }
 
-    private IEnumerator LoadScenes(string[] sceneNames, Action onCompletion = null)
+    private IEnumerator LoadGameplayScenes(string[] sceneNames, Action onCompletion = null)
     {
-        SceneManager.LoadScene("Base");
+        SceneManager.LoadScene(baseSceneName, LoadSceneMode.Additive);
+
+        yield return null;
+
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(baseSceneName));
 
         yield return null;
 
@@ -229,13 +243,79 @@ public class GameManager : MonoBehaviour {
             {
                 yield return null;
             }
-
-            loadedScenes.Add(sceneNames[i]);
         }
 
         if(onCompletion != null)
         {
             onCompletion();
+        }
+    }
+
+    private IEnumerator LoadGameplayScenes(int[] sceneIndexes, Action onCompletion = null)
+    {
+        SceneManager.LoadScene(baseSceneName);
+
+        yield return null;
+
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(baseSceneName));
+
+        yield return null;
+
+        for (int i = 0; i < sceneIndexes.Length; i++)
+        {
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneIndexes[i], LoadSceneMode.Additive);
+
+            while (loadOperation.isDone == false)
+            {
+                yield return null;
+            }
+        }
+
+        if (onCompletion != null)
+        {
+            onCompletion();
+        }
+    }
+
+    public void QuitGame()
+    {
+        CallOnQuittingEvent();
+
+        SceneManager.LoadScene(quitReturnScene);
+    }
+
+    private void SetIsInGameAfterLoading()
+    {
+        IsInGame = true;
+    }
+
+    private void SetIsNotInGameOnQuitting()
+    {
+        IsInGame = false;
+    }
+
+    private int[] GetSaveableScenes()
+    {
+        List<int> saveableScenes = new List<int>();
+
+        for(int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene current = SceneManager.GetSceneAt(i);
+
+            if (current.name.HasSubfix(ignoreScenesOnSavingSubfix) == false || current.name == baseSceneName)
+            {
+                saveableScenes.Add(current.buildIndex);
+            }
+        }
+
+        return saveableScenes.ToArray();
+    }
+
+    private void CallOnQuittingEvent()
+    {
+        if(onQuitting != null)
+        {
+            onQuitting();
         }
     }
 

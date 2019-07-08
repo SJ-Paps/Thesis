@@ -37,6 +37,14 @@ namespace Paps.Unity
             dontDestroyOnLoadObjects.Clear();
         }
 
+        public static void DestroyDontDestroyOnLoadObject(Object obj)
+        {
+            if(dontDestroyOnLoadObjects.Remove(obj))
+            {
+                Object.Destroy(obj);
+            }
+        }
+
         public static T FindObjectOfTypeIncludingInactive<T>() where T : class
         {
             for (int i = 0; i < SceneManager.sceneCount; i++)

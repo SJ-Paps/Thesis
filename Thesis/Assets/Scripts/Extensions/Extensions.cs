@@ -26,7 +26,23 @@ public static class Extensions
         return str;
     }
 
-    
+    public static bool HasSubfix(this string str, string subfix)
+    {
+        if(str.Length < subfix.Length)
+        {
+            return false;
+        }
+
+        for(int i = 0, j = str.Length - subfix.Length; i < subfix.Length; i++, j++)
+        {
+            if(str[j] != subfix[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public static bool ContainsType<T>(this IEnumerable<object> enumerable)
     {
