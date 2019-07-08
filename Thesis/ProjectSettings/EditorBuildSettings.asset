@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level1/Entities_FirstGame_igld.unity
     guid: 4065e2126f1cfb440ae2a36c40296afe
+  - enabled: 1
+    path: Assets/Scenes/Loading.unity
+    guid: 825dcf7fa3706604ab52d0b893cefd31
   m_configObjects: {}

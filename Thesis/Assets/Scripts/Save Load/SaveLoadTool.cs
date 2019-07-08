@@ -41,7 +41,7 @@ public static class SaveLoadTool
             );
     }
 
-    public static Task SerializeAsync(string path, SaveData[] saves)
+    public static Task SerializeAsync(string path, params SaveData[] saves)
     {
         SaveObject saveObject = default;
 
@@ -61,5 +61,5 @@ public static class SaveLoadTool
             }
             );
     }
-    
+
 }

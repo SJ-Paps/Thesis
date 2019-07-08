@@ -40,6 +40,10 @@ public class MainMenu : SJMonoBehaviour {
 
     private Canvas canvas;
 
+    private ConfirmationMenu confirmationMenuPrefab;
+
+    private List<ConfirmationMenu> confirmationMenuPool;
+
     private void Init()
     {
         canvas = GetComponent<Canvas>();
@@ -83,9 +87,12 @@ public class MainMenu : SJMonoBehaviour {
         }
     }
 
-    private ConfirmationMenu confirmationMenuPrefab;
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
 
-    private List<ConfirmationMenu> confirmationMenuPool;
+        instance = null;
+    }
 
     public void DisplayConfirmationMenu(string message, UnityAction onSubmit, UnityAction onCancel)
     {

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
+using System;
 
 public class MainMenuButtonController : SJMonoBehaviour {
 
@@ -9,7 +11,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
     
 	protected override void Awake ()
     {
-        MainMenu.GetInstance().onShow += OnMainMenuShow;
+        MainMenu.GetInstance().onShow += UpdateButtonStates;
 
         //exit desktop button
         exitDesktop.onClick.AddListener(ExitToDesktop);
@@ -26,7 +28,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
         //resume game button
         resumeGame.onClick.AddListener(HideMenu);
 
-        GameManager.GetInstance().SetOnQuitReturnScene("Menu");
+        UpdateButtonStates();
 
     }
 
@@ -48,21 +50,57 @@ public class MainMenuButtonController : SJMonoBehaviour {
     private void GoMenu()
     {
         GameManager.GetInstance().QuitGame();
+        SceneManager.LoadScene("Menu");
     }
 
     private void GoNewGame()
     {
-        GameManager.GetInstance().LoadGame(new string[] { "MasterSceneLevel1", "Entities_FirstGame_igld" });
-        MainMenu.GetInstance().Hide();
+        CoroutineManager.GetInstance().StartCoroutine(NewGameCoroutine());
+    }
+
+    private IEnumerator NewGameCoroutine()
+    {
+        GameManager.GetInstance().onLoadingSucceeded += CloseLoadingScreen;
+
+        AsyncOperation openLoadingScreenOperation = LoadingScreenManager.Open();
+
+        GameManager.GetInstance().NewGame(Application.persistentDataPath, new string[] { "MasterSceneLevel1", "Entities_FirstGame_igld" });
+
+        while(openLoadingScreenOperation.isDone == false)
+        {
+            yield return null;
+        }
+        
+        SceneManager.UnloadSceneAsync("Menu");
+    }
+
+    private void CloseLoadingScreen()
+    {
+        LoadingScreenManager.Close();
     }
 
     private void LoadGame()
     {
-        GameManager.GetInstance().LoadGame(GameManager.SaveFilePath);
-        MainMenu.GetInstance().Hide();
+        CoroutineManager.GetInstance().StartCoroutine(LoadGameCoroutine());
     }
 
-    private void OnMainMenuShow()
+    private IEnumerator LoadGameCoroutine()
+    {
+        GameManager.GetInstance().onLoadingSucceeded += CloseLoadingScreen;
+
+        AsyncOperation openLoadingScreenOperation = LoadingScreenManager.Open();
+
+        GameManager.GetInstance().LoadGame(Application.persistentDataPath);
+
+        while (openLoadingScreenOperation.isDone == false)
+        {
+            yield return null;
+        }
+
+        SceneManager.UnloadSceneAsync("Menu");
+    }
+
+    private void UpdateButtonStates()
     {
         if (GameManager.GetInstance().IsInGame)
         {

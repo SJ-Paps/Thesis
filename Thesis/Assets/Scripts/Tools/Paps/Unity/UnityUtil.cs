@@ -45,6 +45,23 @@ namespace Paps.Unity
             }
         }
 
+        public static T FindObjectOfTypeInSceneIncludingInactive<T>(Scene scene) where T : class
+        {
+            GameObject[] rootObjects = scene.GetRootGameObjects();
+
+            for (int j = 0; j < rootObjects.Length; j++)
+            {
+                T obj = rootObjects[j].GetComponentInChildren<T>(true);
+
+                if (obj != null)
+                {
+                    return obj;
+                }
+            }
+
+            return default;
+        }
+
         public static T FindObjectOfTypeIncludingInactive<T>() where T : class
         {
             for (int i = 0; i < SceneManager.sceneCount; i++)
