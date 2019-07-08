@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 
 public struct SaveData
 {
-    public string guid;
+    public string identifier;
 
     public object saveObject;
 
-    public SaveData(string guid, object saveObject)
+    public SaveData(string identifier, object saveObject)
     {
-        this.guid = guid;
+        this.identifier = identifier;
         this.saveObject = saveObject;
     }
 }

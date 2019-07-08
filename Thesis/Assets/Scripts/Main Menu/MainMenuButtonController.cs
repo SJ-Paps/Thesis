@@ -32,8 +32,6 @@ public class MainMenuButtonController : SJMonoBehaviour {
         //resume game button
         resumeGame.onClick.AddListener(HideMenu);
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
     }
 
     private void ExitToDesktop()
@@ -64,33 +62,5 @@ public class MainMenuButtonController : SJMonoBehaviour {
     private void LoadGame()
     {
         GameManager.GetInstance().LoadGame(GameManager.SaveFilePath);
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        switch (scene.buildIndex)
-        {
-            case 0:
-                resumeGame.gameObject.SetActive(false);
-                exitMainMenu.gameObject.SetActive(false);
-                newGame.gameObject.SetActive(true);
-                loadGame.gameObject.SetActive(true);
-                exitDesktop.gameObject.SetActive(true);
-                options.gameObject.SetActive(true);
-
-                break;
-
-            case 1:
-                resumeGame.gameObject.SetActive(true);
-                exitMainMenu.gameObject.SetActive(true);
-                newGame.gameObject.SetActive(false);
-                loadGame.gameObject.SetActive(false);
-                exitDesktop.gameObject.SetActive(true);
-                options.gameObject.SetActive(true);
-
-                break;
-
-
-        }
     }
 }

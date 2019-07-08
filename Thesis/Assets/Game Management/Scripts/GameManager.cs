@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour {
             yield return CoroutineManager.GetInstance().StartCoroutine(UnloadScenes());
         }
 
-        yield return CoroutineManager.GetInstance().StartCoroutine(LoadScenes(new string[] { "BaseLevelScene", "MasterSceneLevel1" }));
+        yield return CoroutineManager.GetInstance().StartCoroutine(LoadScenes(new string[] { "MasterSceneLevel1" }));
 
         List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
 
@@ -177,9 +177,7 @@ public class GameManager : MonoBehaviour {
             SJMonoBehaviourSaveable monoBehaviourSaveable = gameplayGameObject.GetComponent<SJMonoBehaviourSaveable>();
 
             typeof(SJMonoBehaviour).GetField("instanceGUID", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(monoBehaviourSaveable, gameplayObjectSave.instanceGUID);
-
-
-
+            
             monoBehaviourSaveable.Load(gameplayObjectSave.save);
 
             currentSaveables.Add(monoBehaviourSaveable);
@@ -208,6 +206,8 @@ public class GameManager : MonoBehaviour {
                 yield return null;
             }
         }
+
+        loadedScenes.Clear();
     }
 
     public void LoadGame(string[] sceneNames)
@@ -217,11 +217,11 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator LoadScenes(string[] sceneNames, Action onCompletion = null)
     {
-        SceneManager.LoadScene(sceneNames[0]);
+        SceneManager.LoadScene("Base");
 
         yield return null;
 
-        for(int i = 1; i < sceneNames.Length; i++)
+        for(int i = 0; i < sceneNames.Length; i++)
         {
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneNames[i], LoadSceneMode.Additive);
 
