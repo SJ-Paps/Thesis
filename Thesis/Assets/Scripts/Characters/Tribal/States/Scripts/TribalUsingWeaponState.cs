@@ -1,15 +1,12 @@
 ﻿public class TribalUsingWeaponState : TribalHSMState
 {
-    private Equipment ownerEquipment;
-    private Inventory ownerInventory;
-
     private Weapon currentInUseWeapon;
 
     protected override void OnEnter()
     {
         base.OnEnter();
 
-        if(ownerEquipment.HasEquippedObjectOfType<Weapon>(out Weapon weapon))
+        if(Owner.Equipment.HasEquippedObjectOfType<Weapon>(out Weapon weapon))
         {
             if(weapon.Use() == false)
             {
@@ -38,13 +35,5 @@
     protected override void OnExit()
     {
         base.OnExit();
-    }
-
-    protected override void OnConstructionFinished()
-    {
-        base.OnConstructionFinished();
-
-        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
-        ownerInventory = Owner.GetComponentInChildren<Inventory>();
     }
 }

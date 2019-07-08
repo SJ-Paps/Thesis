@@ -9,7 +9,7 @@
         base.OnConstructionFinished();
 
         Owner = (Tribal)base.Owner;
-        Blackboard = Owner.GetComponent<Blackboard>();
+        Blackboard = Owner.Blackboard;
     }
     
     

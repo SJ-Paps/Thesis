@@ -3,6 +3,30 @@ using UnityEngine;
 
 public class XenophobicIAController : IAController
 {
+    public enum State : byte
+    {
+        Base,
+        Alert,
+        Alertless,
+        Aware,
+        Alertful,
+        Patrolling,
+        Seeking
+    }
+
+    public enum Trigger : byte
+    {
+        CalmDown,
+        Unnerve,
+        Patrol,
+        Seek
+    }
+
+    public class XenophobicIAControllerSaveData
+    {
+        public string slaveGUID;
+    }
+
     [SerializeField]
     [Range(0, 100)]
     private float hiddenDetectionProbabilityAlertless, hiddenDetectionProbabilityAware, hiddenDetectionProbabilityAlertful;
@@ -30,25 +54,7 @@ public class XenophobicIAController : IAController
     public float ShortRangeAttackDetectionDistance { get => shortRangeAttackDetectionDistance; }
     public float LongRangeAttackDetectionDistance { get => longRangeAttackDetectionDistance; }
 
-    public enum State : byte
-    {
-        Base,
-        Alert,
-        Alertless,
-        Aware,
-        Alertful,
-        Patrolling,
-        Seeking
-    }
-
-    public enum Trigger : byte
-    {
-        CalmDown,
-        Unnerve,
-        Patrol,
-        Seek
-    }
-
+    
     public float CurrentSeekingTime { get; set; }
     public float CurrentHiddenDetectionDistance { get; set; }
     public float CurrentHiddenDetectionProbability { get; set; }
@@ -83,5 +89,27 @@ public class XenophobicIAController : IAController
     public override void Control()
     {
         hsm.Update();
+    }
+
+    protected override object GetSaveData()
+    {
+        return new XenophobicIAControllerSaveData() { slaveGUID = Slave.InstanceGUID };
+    }
+
+    protected override void LoadSaveData(object data)
+    {
+
+    }
+
+    public override void PostSaveCallback()
+    {
+
+    }
+
+    public override void PostLoadCallback(object data)
+    {
+        XenophobicIAControllerSaveData saveData = (XenophobicIAControllerSaveData)data;
+
+        SetSlave(SJUtil.FindSJMonoBehaviourByInstanceGUID<Character>(saveData.slaveGUID));
     }
 }

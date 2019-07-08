@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public sealed class Blackboard : SJMonoBehaviour, IBlackboard
+public sealed class Blackboard : IBlackboard
 {
     private Dictionary<string, BlackboardNode> nodes;
 
-    protected override void Awake()
+    public Blackboard()
     {
-        base.Awake();
-
         nodes = new Dictionary<string, BlackboardNode>();
     }
 

@@ -29,7 +29,7 @@ public class ModalWindowManager {
 
         //es necesario hacerlo usando <GameObject> porque al ser un prefab el assetbundle no contempla ninguno de sus componentes
         //asique se debe pedir el gameobject primero y luego obtener su componente
-        confirmationMenuPrefab = SJResources.Instance.LoadGameObjectAndGetComponent<ConfirmationMenu>("ConfirmationMenuPrefab");
+        confirmationMenuPrefab = SJResources.LoadAsset<GameObject>("ConfirmationMenuPrefab").GetComponent<ConfirmationMenu>();
     }
 
     public void DisplayConfirmationMenu(string message, UnityAction onSubmit, UnityAction onCancel, Canvas root)

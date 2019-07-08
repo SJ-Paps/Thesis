@@ -20,7 +20,10 @@ public class CharacterInputController : UnityInputController<Character, Characte
         Control();
     }
 
-    private Guid slaveGuid;
+    public class CharacterInputControllerSaveData
+    {
+        public string slaveGUID;
+    }
 
     public override void Control()
     {
@@ -34,5 +37,27 @@ public class CharacterInputController : UnityInputController<Character, Characte
                 }
             }
         }
+    }
+
+    protected override object GetSaveData()
+    {
+        return new CharacterInputControllerSaveData() { slaveGUID = Slave.InstanceGUID };
+    }
+
+    protected override void LoadSaveData(object data)
+    {
+        
+    }
+
+    public override void PostSaveCallback()
+    {
+        
+    }
+
+    public override void PostLoadCallback(object data)
+    {
+        CharacterInputControllerSaveData saveData = (CharacterInputControllerSaveData)data;
+
+        SetSlave(SJUtil.FindSJMonoBehaviourByInstanceGUID<Character>(saveData.slaveGUID));
     }
 }

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TribalActivatingState : TribalHSMState
 {
-    private Equipment ownerEquipment;
-
     protected override void OnEnter()
     {
         base.OnEnter();
@@ -18,19 +16,12 @@ public class TribalActivatingState : TribalHSMState
         {
             contextualActivable.Activate(Owner);
         }
-        else if(ownerEquipment.HasSomethingEquipped())
+        else if(Owner.Equipment.HasSomethingEquipped())
         {
-            (ownerEquipment.GetEquipable(in Tribal.rightHandEquipmentSlotIdentifier) as CollectableObject).Activate(Owner);
+            (Owner.Equipment.GetEquipable(in Tribal.rightHandEquipmentSlotIdentifier) as CollectableObject).Activate(Owner);
         }
 
        
         SendEvent(Character.Order.FinishAction);
-    }
-
-    protected override void OnConstructionFinished()
-    {
-        base.OnConstructionFinished();
-
-        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
     }
 }

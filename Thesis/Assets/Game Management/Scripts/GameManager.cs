@@ -170,13 +170,15 @@ public class GameManager : MonoBehaviour {
         {
             GameplayObjectSave gameplayObjectSave = (GameplayObjectSave)saves[i].saveObject;
 
-            GameObject gameplayGameObject = AssetLibrary.GetInstance().GetAsset<GameObject>(gameplayObjectSave.prefabName);
+            GameObject gameplayGameObject = SJResources.LoadAsset<GameObject>(gameplayObjectSave.prefabName);
 
-            Instantiate(gameplayGameObject);
+            gameplayGameObject = Instantiate(gameplayGameObject);
 
             SJMonoBehaviourSaveable monoBehaviourSaveable = gameplayGameObject.GetComponent<SJMonoBehaviourSaveable>();
 
             typeof(SJMonoBehaviour).GetField("instanceGUID", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(monoBehaviourSaveable, gameplayObjectSave.instanceGUID);
+
+
 
             monoBehaviourSaveable.Load(gameplayObjectSave.save);
 

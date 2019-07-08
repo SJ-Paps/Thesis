@@ -52,7 +52,8 @@ public abstract class Tribal : Character, IDamagable, ISeer
     
     public class TribalSaveData
     {
-        public int unNumero;
+        public float x;
+        public float y;
     }
 
     public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
@@ -77,6 +78,9 @@ public abstract class Tribal : Character, IDamagable, ISeer
     [SerializeField]
     private float movementVelocity, movementAcceleration, jumpMaxHeight, jumpAcceleration, jumpForceFromLadder, climbForce;
 
+    [SerializeField]
+    private Transform handPoint;
+
     #endregion
 
     public PercentageReversibleNumber MovementVelocity { get; protected set; }
@@ -86,10 +90,13 @@ public abstract class Tribal : Character, IDamagable, ISeer
     public PercentageReversibleNumber JumpForceFromLadder { get; protected set; }
     public PercentageReversibleNumber ClimbForce { get; protected set; }
 
+    public Transform HandPoint { get { return handPoint; } }
+
     public Animator Animator { get; protected set; }
     public Rigidbody2D RigidBody2D { get; protected set; }
-
     public SJCapsuleCollider2D Collider { get; protected set; }
+    public Inventory Inventory { get; protected set; }
+    public Equipment Equipment { get; protected set; }
 
     private EyeCollection eyes;
 
@@ -98,6 +105,8 @@ public abstract class Tribal : Character, IDamagable, ISeer
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
         Collider = GetComponent<SJCapsuleCollider2D>();
+        Inventory = new Inventory();
+        Equipment = new Equipment();
 
         MovementVelocity = new PercentageReversibleNumber(movementVelocity);
         MovementAcceleration = new PercentageReversibleNumber(movementAcceleration);
@@ -128,7 +137,11 @@ public abstract class Tribal : Character, IDamagable, ISeer
 
     protected override object GetSaveData()
     {
-        TribalSaveData saveData = new TribalSaveData() { unNumero = UnityEngine.Random.Range(0, 100) };
+        TribalSaveData saveData = new TribalSaveData()
+        {
+            x = transform.position.x,
+            y = transform.position.y
+        };
 
         if(onSaving != null)
         {
@@ -142,15 +155,17 @@ public abstract class Tribal : Character, IDamagable, ISeer
     {
         TribalSaveData saveData = (TribalSaveData)data;
 
+        transform.position = new Vector2(saveData.x, saveData.y);
+
         if(onLoading != null)
         {
             onLoading(saveData);
         }
     }
 
-    public override void PostLoadCallback(object dataSave)
+    public override void PostLoadCallback(object data)
     {
-        
+
     }
 
     public override void PostSaveCallback()

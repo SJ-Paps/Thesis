@@ -13,7 +13,7 @@ public class MainMenu : SJMonoBehaviour {
 
             if(instance == null)
             {
-                GameObject gameObjectInstance = Instantiate(AssetLibrary.GetInstance().GetAsset<GameObject>("MainMenu"));
+                GameObject gameObjectInstance = Instantiate(SJResources.LoadAsset<GameObject>("MainMenu"));
 
                 instance = gameObjectInstance.GetComponent<MainMenu>();
             }

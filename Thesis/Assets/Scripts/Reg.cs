@@ -14,14 +14,15 @@ public static class Reg
     public const string resourcesAssetBundleFileName = "resources";
 
 #if UNITY_EDITOR
-    public static readonly string assetBundleDataPath = Application.dataPath + "/AssetBundles";
     public static readonly string buildPath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Application.productName), Application.productName + ".exe");
     public static readonly string assetBundleDataPathBuild = Path.GetFullPath(Path.Combine(buildPath, "../AssetBundles"));
 
 #else
-    public static readonly string assetBundleDataPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../AssetBundles"));
+    
 
 #endif
+
+    public static readonly string assetBundleDataPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../AssetBundles"));
 
     public static readonly int playerLayer = LayerMask.NameToLayer("Player");
     public static readonly int hostileLayer = LayerMask.NameToLayer("Hostile");

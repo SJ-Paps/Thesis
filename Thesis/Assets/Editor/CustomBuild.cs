@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using System.IO;
 
 public class CustomBuild
 {
@@ -6,7 +7,23 @@ public class CustomBuild
     {
         BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Reg.buildPath, BuildTarget.StandaloneWindows, options);
 
-        CreateAssetBundles.BuildAllAssetBundles(Reg.assetBundleDataPathBuild);
+        BuildAssetBundles(Reg.assetBundleDataPathBuild, BuildTarget.StandaloneWindows);
+    }
+
+    [MenuItem("Build/Build AssetBundles")]
+    private static void BuildAssetBundles()
+    {
+        BuildAssetBundles(Reg.assetBundleDataPath, BuildTarget.StandaloneWindows);
+    }
+    
+    private static void BuildAssetBundles(string path, BuildTarget target)
+    {
+        if(Directory.Exists(path) == false)
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        BuildPipeline.BuildAssetBundles(path, BuildAssetBundleOptions.ChunkBasedCompression, target);
     }
     
     private static void PlusVersion(float plusVersion)

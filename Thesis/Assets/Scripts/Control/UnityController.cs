@@ -8,7 +8,7 @@ public interface IController<TSlave, TOrder> where TSlave : IControllable<TOrder
     void SetSlave(TSlave slave);
 }
 
-public abstract class UnityController<TSlave, TOrder> : SJMonoBehaviour, IController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
+public abstract class UnityController<TSlave, TOrder> : SJMonoBehaviourSaveable, IController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
 {
     public event ChangeControlDelegate<TSlave, TOrder> onSlaveChanged;
 

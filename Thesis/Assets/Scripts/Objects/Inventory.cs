@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public sealed class Inventory : SJMonoBehaviour
+public sealed class Inventory
 {
     public int Capacity
     {
@@ -15,10 +15,8 @@ public sealed class Inventory : SJMonoBehaviour
 
     private Dictionary<string, InventoryItem> inventoryObjects;
 
-    protected override void Awake()
+    public Inventory()
     {
-        base.Awake();
-
         inventoryObjects = new Dictionary<string, InventoryItem>();
     }
 
@@ -79,7 +77,7 @@ public sealed class Inventory : SJMonoBehaviour
     }
 }
 
-public interface IInventoriable : ICollectable
+public interface IInventoriable : ICollectible
 {
 
 }

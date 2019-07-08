@@ -15,20 +15,6 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
         GameManager.GetInstance().SubscribeForSave(this);
     }
 
-#if UNITY_EDITOR
-
-    protected override void OnValidate()
-    {
-        base.OnValidate();
-
-        GameObject prefab = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource<GameObject>(gameObject);
-
-        if (prefab != null)
-        {
-            prefabName = prefab.name;
-        }
-    }
-
     public object Save()
     {
         return new GameplayObjectSave(this, GetSaveData());
@@ -43,7 +29,7 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
     {
         base.OnDestroy();
 
-        if(Application.isEditor == false)
+        if (Application.isEditor == false)
         {
             GameManager.GetInstance().DesubscribeForSave(this);
         }
@@ -53,8 +39,24 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
     protected abstract void LoadSaveData(object data);
 
     public abstract void PostSaveCallback();
-    
+
     public abstract void PostLoadCallback(object dataSave);
+
+#if UNITY_EDITOR
+
+    protected override void OnValidate()
+    {
+        base.OnValidate();
+
+        GameObject prefab = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource<GameObject>(gameObject);
+
+        if (prefab != null)
+        {
+            prefabName = prefab.name;
+        }
+    }
+
+    
 
 #endif
 }

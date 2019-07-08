@@ -1,4 +1,4 @@
-﻿public interface ICollectable
+﻿public interface ICollectible
 {
     bool Collect();
 

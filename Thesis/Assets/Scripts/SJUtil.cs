@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Paps.Unity;
 
 public static class SJUtil
 {
@@ -85,5 +86,63 @@ public static class SJUtil
         {
             activablesStorage.AddRange(nearObjects[i].transform.root.GetComponentsInChildren<IActivable>());
         }
+    }
+
+    public static T FindSJMonoBehaviourByInstanceGUIDIncludingInactive<T>(string guid) where T : class
+    {
+        SJMonoBehaviour saveable = FindSJMonoBehaviourByInstanceGUIDIncludingInactive(guid);
+
+        if (saveable != null && saveable is T)
+        {
+            return saveable as T;
+        }
+
+        return null;
+    }
+
+    public static SJMonoBehaviour FindSJMonoBehaviourByInstanceGUIDIncludingInactive(string guid)
+    {
+        SJMonoBehaviour[] allSaveables = UnityUtil.FindObjectsOfTypeIncludingInactive<SJMonoBehaviour>();
+
+        for (int i = 0; i < allSaveables.Length; i++)
+        {
+            SJMonoBehaviour current = allSaveables[i];
+
+            if (current.InstanceGUID == guid)
+            {
+                return current;
+            }
+        }
+
+        return null;
+    }
+
+    public static T FindSJMonoBehaviourByInstanceGUID<T>(string guid) where T : class
+    {
+        SJMonoBehaviour saveable = FindSJMonoBehaviourByInstanceGUID(guid);
+
+        if (saveable != null && saveable is T)
+        {
+            return saveable as T;
+        }
+
+        return null;
+    }
+
+    public static SJMonoBehaviour FindSJMonoBehaviourByInstanceGUID(string guid)
+    {
+        SJMonoBehaviour[] allSaveables = GameObject.FindObjectsOfType<SJMonoBehaviour>();
+
+        for (int i = 0; i < allSaveables.Length; i++)
+        {
+            SJMonoBehaviour current = allSaveables[i];
+
+            if (current.InstanceGUID == guid)
+            {
+                return current;
+            }
+        }
+
+        return null;
     }
 }

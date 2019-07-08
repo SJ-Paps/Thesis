@@ -3,8 +3,6 @@
 public class TribalCheckCollectables : TribalGuardCondition
 {
     private List<IActivable> activables;
-    
-    private Inventory ownerInventory;
 
     public TribalCheckCollectables()
     {
@@ -36,13 +34,6 @@ public class TribalCheckCollectables : TribalGuardCondition
 
     private bool OwnerHasObject(CollectableObject collectable)
     {
-        return ownerInventory.Contains(collectable);
-    }
-
-    protected override void OnConstructionFinished()
-    {
-        base.OnConstructionFinished();
-        
-        ownerInventory = Owner.GetComponentInChildren<Inventory>();
+        return Owner.Inventory.Contains(collectable);
     }
 }

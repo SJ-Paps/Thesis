@@ -1,16 +1,11 @@
 ﻿public class TribalCollectingState : TribalHSMState
 {
-    private Equipment ownerEquipment;
-    private Inventory ownerInventory;
 
     protected override void OnConstructionFinished()
     {
         base.OnConstructionFinished();
 
-        ownerEquipment = Owner.GetComponentInChildren<Equipment>();
-        ownerInventory = Owner.GetComponentInChildren<Inventory>();
-
-        ownerEquipment.AddEquipmentSlot(Tribal.rightHandEquipmentSlotIdentifier);
+        Owner.Equipment.AddEquipmentSlot(Tribal.rightHandEquipmentSlotIdentifier);
     }
 
     protected override void OnEnter()
@@ -25,14 +20,14 @@
         {
             collectableObject.Collect();
 
-            ownerInventory.AddItem(in Tribal.rightHandEquipmentSlotIdentifier, collectableObject);
+            Owner.Inventory.AddItem(in Tribal.rightHandEquipmentSlotIdentifier, collectableObject);
             
             Owner.DisplayCollectObject(collectableObject);
             
             if(collectableObject is EquipableObject equipable)
             {
-                ownerEquipment.SetObjectAtSlot(in Tribal.rightHandEquipmentSlotIdentifier, equipable);
-                Owner.DisplayEquipObject(Owner.transform, equipable);
+                Owner.Equipment.SetObjectAtSlot(in Tribal.rightHandEquipmentSlotIdentifier, equipable);
+                Owner.DisplayEquipObject(Owner.HandPoint, equipable);
             }
         }
 

@@ -86,7 +86,7 @@ public sealed class SoundManager
         }
 
         audioSourcesPool = new List<SJAudioSource>();
-        audioSourcePrefab = SJResources.Instance.LoadGameObjectAndGetComponent<SJAudioSource>("SJAudioSourcePrefab");
+        audioSourcePrefab = SJResources.LoadAsset<GameObject>("SJAudioSourcePrefab").GetComponent<SJAudioSource>();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
