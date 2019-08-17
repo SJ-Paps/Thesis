@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections;
-using System;
 
 public class MainMenuButtonController : SJMonoBehaviour {
 
@@ -18,9 +15,6 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
         //exit main menu button
         exitMainMenu.onClick.AddListener(ExitToMainMenu);
-
-        //new game button
-        newGame.onClick.AddListener(GoNewGame);
 
         //load game button
         loadGame.onClick.AddListener(LoadGame);
@@ -50,16 +44,6 @@ public class MainMenuButtonController : SJMonoBehaviour {
     private void GoMenu()
     {
         GameManager.GetInstance().EndSession();
-    }
-
-    private void GoNewGame()
-    {
-        GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = "DEFAULTPROFILE" });
-    }
-
-    private void CloseLoadingScreen()
-    {
-        LoadingScreenManager.Close();
     }
 
     private void LoadGame()
