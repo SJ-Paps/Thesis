@@ -12,6 +12,8 @@ public class GameManager {
     public class GameSessionSaveData
     {
         public int[] loadedScenesIndexes;
+        public bool isBeginning;
+        public object[] gameplaySaves;
     }
 
     private static GameManager instance;
@@ -26,11 +28,11 @@ public class GameManager {
         return instance;
     }
 
-    private const string ignoreScenesOnSavingSubfix = "_igld";
-    private const string gameSessionSaveData = "GSDATA";
-    private const string gameSessionSaveDataFile = "GSDATA.sj";
-    private const string baseSceneName = "Base";
-    private const string gameplaySaveFile = "SAVE.sj";
+    private string ignoreScenesOnSavingSubfix = "_igld";
+    private string baseSceneName = "Base";
+
+    private string[] beginScenes;
+    private string returnSceneOnEndSession;
 
     public event Action onSavingBegan;
     public event Action onSavingFailed;
@@ -46,10 +48,15 @@ public class GameManager {
 
     public bool IsInGame { get; private set; }
 
-    private string currentSaveDirectory { get; set; }
+    public ProfileData CurrentProfile { get; private set; }
 
     private GameManager()
     {
+        ApplicationInfo applicationInfo = SJResources.LoadAsset<ApplicationInfo>(Reg.APPLICATION_INFO_ASSET_NAME);
+
+        beginScenes = applicationInfo.BeginningScenes;
+        returnSceneOnEndSession = applicationInfo.ReturnSceneOnEndSession;
+
         saveables = new HashSet<SJMonoBehaviourSaveable>();
 
         onLoadingSucceeded += SetIsInGameAfterLoading;
@@ -66,6 +73,52 @@ public class GameManager {
         saveables.Remove(saveable);
     }
 
+    public void BeginSessionWithProfile(ProfileData profileData)
+    {
+        if(ProfileCareTaker.ProfileExistsOrIsValid(profileData.name) == false)
+        {
+            SaveDefaultProfile(profileData);
+        }
+
+        CurrentProfile = profileData;
+
+        LoadGame();
+    }
+
+    private void SaveDefaultProfile(ProfileData profileData)
+    {
+        Task task = ProfileCareTaker.SaveProfileAsync(
+            profileData.name, profileData,
+            new SaveData(profileData.name, new GameSessionSaveData() { gameplaySaves = null, isBeginning = true, loadedScenesIndexes = GetScenesIndex(beginScenes) }));
+
+        task.Wait();
+    }
+
+    private int[] GetScenesIndex(string[] scenes)
+    {
+        int[] indexArray = new int[scenes.Length];
+
+        for(int i = 0, j = 0; i < SceneManager.sceneCount; i++)
+        {
+            if(SceneManager.GetSceneByBuildIndex(i).name == scenes[j])
+            {
+                indexArray[j] = i;
+                j++;
+            }
+        }
+
+        return indexArray;
+    }
+
+    public void EndSession()
+    {
+        CallOnQuittingEvent();
+
+        CurrentProfile = default;
+
+        SceneManager.LoadScene(returnSceneOnEndSession);
+    }
+
     public void SaveGame()
     {
         CallOnSavingBeganEvent();
@@ -76,39 +129,17 @@ public class GameManager {
     private IEnumerator GetAllSavesAndAWaitSerializationCoroutine()
     {
         List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
-        List<SaveData> saves = new List<SaveData>();
+        List<object> saves = new List<object>();
 
         currentSaveables.AddRange(saveables);
 
-        Task sessionSerializationTask = SaveLoadTool.SerializeAsync(
-            Path.Combine(currentSaveDirectory, gameSessionSaveDataFile), 
-            new SaveData(gameSessionSaveData,
-            new GameSessionSaveData()
-            {
-                loadedScenesIndexes = GetSaveableScenes()
-            }
-            ));
-
-        while(sessionSerializationTask.IsCompleted == false)
+        for (int i = 0; i < currentSaveables.Count; i++)
         {
+            saves.Add(currentSaveables[i].Save());
             yield return null;
-        }
-
-        if(sessionSerializationTask.IsFaulted)
-        {
-            CallOnSavingFailedEvent();
-            sessionSerializationTask.Dispose();
-            yield break;
         }
 
         for (int i = 0; i < currentSaveables.Count; i++)
-        {
-            SJMonoBehaviourSaveable saveable = currentSaveables[i];
-            saves.Add(new SaveData(saveable.InstanceGUID, saveable.Save()));
-            yield return null;
-        }
-
-        for(int i = 0; i < currentSaveables.Count; i++)
         {
             if (saveables.Contains(currentSaveables[i]) == false)
             {
@@ -118,14 +149,21 @@ public class GameManager {
             }
         }
 
-        for(int i = 0; i < currentSaveables.Count; i++)
+        for (int i = 0; i < currentSaveables.Count; i++)
         {
             currentSaveables[i].PostSaveCallback();
         }
 
-        Task serializationTask = SaveLoadTool.SerializeAsync(Path.Combine(currentSaveDirectory, gameplaySaveFile), saves.ToArray());
+        GameSessionSaveData sessionData = new GameSessionSaveData()
+        {
+            loadedScenesIndexes = GetSaveableScenes(),
+            gameplaySaves = saves.ToArray(),
+            isBeginning = false
+        };
 
-        while(serializationTask.IsCompleted == false)
+        Task serializationTask = ProfileCareTaker.SaveProfileAsync(CurrentProfile.name, CurrentProfile, new SaveData(CurrentProfile.name, sessionData));
+
+        while (serializationTask.IsCompleted == false)
         {
             yield return null;
         }
@@ -142,70 +180,59 @@ public class GameManager {
         serializationTask.Dispose();
     }
 
-    public void LoadGame(string saveDirectory)
+    public void LoadGame()
     {
         CallOnLoadingBeganEvent();
-
-        CoroutineManager.GetInstance().StartCoroutine(LoadFromSaveGameCoroutine(saveDirectory));
+        
+        CoroutineManager.GetInstance().StartCoroutine(LoadFromSaveGameCoroutine());
     }
 
-    private IEnumerator LoadFromSaveGameCoroutine(string saveDirectory)
+    private IEnumerator LoadFromSaveGameCoroutine()
     {
-        Task<SaveData[]> sessionDeserializationTask = SaveLoadTool.DeserializeAsync(Path.Combine(saveDirectory, gameSessionSaveDataFile));
+        Task<SaveData> saveDeserializationTask = ProfileCareTaker.GetSaveDataFromProfileAsync(CurrentProfile.name);
 
         GameSessionSaveData sessionData = null;
 
-        while(sessionDeserializationTask.IsCompleted == false)
+        while(saveDeserializationTask.IsCompleted == false)
         {
             yield return null;
         }
 
-        if(sessionDeserializationTask.IsFaulted)
+        if(saveDeserializationTask.IsFaulted)
         {
             CallOnLoadingFailedEvent();
-            sessionDeserializationTask.Dispose();
+            saveDeserializationTask.Dispose();
             yield break;
         }
         else
         {
-            sessionData = (GameSessionSaveData)sessionDeserializationTask.Result[0].saveObject;
+            sessionData = (GameSessionSaveData)saveDeserializationTask.Result.saveObject;
+
+            if(sessionData.isBeginning)
+            {
+                NewGame(beginScenes);
+            }
+            else
+            {
+                yield return CoroutineManager.GetInstance().StartCoroutine(PrepareScene(sessionData));
+
+                CallOnLoadingSucceededEvent();
+            }
         }
-
-        Task<SaveData[]> deserializationTask = SaveLoadTool.DeserializeAsync(Path.Combine(saveDirectory, gameplaySaveFile));
-
-        while(deserializationTask.IsCompleted == false)
-        {
-            yield return null;
-        }
-
-        if(deserializationTask.IsFaulted)
-        {
-            CallOnLoadingFailedEvent();
-        }
-        else
-        {
-            SaveData[] saves = deserializationTask.Result;
-
-            currentSaveDirectory = saveDirectory;
-
-            yield return CoroutineManager.GetInstance().StartCoroutine(PrepareScene(sessionData, saves));
-
-            CallOnLoadingSucceededEvent();
-        }
-
-        deserializationTask.Dispose();
     }
 
-    private IEnumerator PrepareScene(GameSessionSaveData sessionData, SaveData[] saves)
+    private IEnumerator PrepareScene(GameSessionSaveData sessionData)
     {
         yield return CoroutineManager.GetInstance().StartCoroutine(LoadGameplayScenes(sessionData.loadedScenesIndexes));
+
+        object[] saves = sessionData.gameplaySaves;
 
         List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
         List<GameplayObjectSave> gameplayObjectSaves = new List<GameplayObjectSave>();
 
         for (int i = 0; i < saves.Length; i++)
         {
-            GameplayObjectSave gameplayObjectSave = saves[i].saveObject as GameplayObjectSave;
+            GameplayObjectSave gameplayObjectSave = saves[i] as GameplayObjectSave;
 
             if(gameplayObjectSave == null)
             {
@@ -218,7 +245,11 @@ public class GameManager {
 
             SJMonoBehaviourSaveable monoBehaviourSaveable = gameplayGameObject.GetComponent<SJMonoBehaviourSaveable>();
 
-            typeof(SJMonoBehaviour).GetField("instanceGUID", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(monoBehaviourSaveable, gameplayObjectSave.instanceGUID);
+            Type type = typeof(SJMonoBehaviour);
+
+            PropertyInfo propertyInfo = type.GetProperty(nameof(monoBehaviourSaveable.InstanceGUID), BindingFlags.Instance | BindingFlags.Public);
+
+            propertyInfo.SetValue(monoBehaviourSaveable, gameplayObjectSave.instanceGUID);
             
             monoBehaviourSaveable.Load(gameplayObjectSave.save);
 
@@ -236,16 +267,15 @@ public class GameManager {
         }
     }
 
-    public void NewGame(string saveDirectory, string[] sceneNames)
-    {
-        currentSaveDirectory = saveDirectory;
 
+    public void NewGame(string[] sceneNames)
+    {
         CoroutineManager.GetInstance().StartCoroutine(LoadGameplayScenes(sceneNames, CallOnLoadingSucceededEvent));
     }
 
     private IEnumerator LoadGameplayScenes(string[] sceneNames, Action onCompletion = null)
     {
-        SceneManager.LoadScene(baseSceneName, LoadSceneMode.Additive);
+        SceneManager.LoadScene(baseSceneName, LoadSceneMode.Single);
 
         yield return null;
 
@@ -271,7 +301,7 @@ public class GameManager {
 
     private IEnumerator LoadGameplayScenes(int[] sceneIndexes, Action onCompletion = null)
     {
-        SceneManager.LoadScene(baseSceneName, LoadSceneMode.Additive);
+        SceneManager.LoadScene(baseSceneName, LoadSceneMode.Single);
 
         yield return null;
 
@@ -293,11 +323,6 @@ public class GameManager {
         {
             onCompletion();
         }
-    }
-
-    public void QuitGame()
-    {
-        CallOnQuittingEvent();
     }
 
     private void SetIsInGameAfterLoading()

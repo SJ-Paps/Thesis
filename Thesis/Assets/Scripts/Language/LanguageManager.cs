@@ -48,9 +48,7 @@ public class LanguageManager
 
     private LanguageManager()
     {
-        AssetBundle langListBundle = AssetBundleLibrary.Instance.GetAssetBundleByNameWithoutExtension(Reg.languageListFileName);
-
-        TextAsset langList = langListBundle.LoadAsset<TextAsset>(Reg.languageListAssetName);
+        TextAsset langList = SJResources.LoadAsset<TextAsset>(Reg.languageListAssetName);
 
         languages = GetLanguagesFrom(langList);
 

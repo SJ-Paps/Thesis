@@ -49,29 +49,12 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private void GoMenu()
     {
-        GameManager.GetInstance().QuitGame();
-        SceneManager.LoadScene("Menu");
+        GameManager.GetInstance().EndSession();
     }
 
     private void GoNewGame()
     {
-        CoroutineManager.GetInstance().StartCoroutine(NewGameCoroutine());
-    }
-
-    private IEnumerator NewGameCoroutine()
-    {
-        GameManager.GetInstance().onLoadingSucceeded += CloseLoadingScreen;
-
-        AsyncOperation openLoadingScreenOperation = LoadingScreenManager.Open();
-
-        GameManager.GetInstance().NewGame(Application.persistentDataPath, new string[] { "MasterSceneLevel1", "Entities_FirstGame_igld" });
-
-        while(openLoadingScreenOperation.isDone == false)
-        {
-            yield return null;
-        }
-        
-        SceneManager.UnloadSceneAsync("Menu");
+        GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = "DEFAULTPROFILE" });
     }
 
     private void CloseLoadingScreen()
@@ -81,23 +64,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private void LoadGame()
     {
-        CoroutineManager.GetInstance().StartCoroutine(LoadGameCoroutine());
-    }
-
-    private IEnumerator LoadGameCoroutine()
-    {
-        GameManager.GetInstance().onLoadingSucceeded += CloseLoadingScreen;
-
-        AsyncOperation openLoadingScreenOperation = LoadingScreenManager.Open();
-
-        GameManager.GetInstance().LoadGame(Application.persistentDataPath);
-
-        while (openLoadingScreenOperation.isDone == false)
-        {
-            yield return null;
-        }
-
-        SceneManager.UnloadSceneAsync("Menu");
+        GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = "DEFAULTPROFILE" });
     }
 
     private void UpdateButtonStates()

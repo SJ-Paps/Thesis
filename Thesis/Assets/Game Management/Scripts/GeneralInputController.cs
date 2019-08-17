@@ -44,13 +44,13 @@ public class GeneralInputController : MonoBehaviour
                 MainMenu.GetInstance().Show();
             }
         }
-        else if(Input.GetKeyDown(KeyCode.P))
+        else if(Input.GetKeyDown(KeyCode.F5))
         {
             GameManager.GetInstance().SaveGame();
         }
-        else if(Input.GetKeyDown(KeyCode.O))
+        else if(Input.GetKeyDown(KeyCode.F9))
         {
-            GameManager.GetInstance().LoadGame(Application.persistentDataPath);
+            GameManager.GetInstance().LoadGame();
         }
     }
 }

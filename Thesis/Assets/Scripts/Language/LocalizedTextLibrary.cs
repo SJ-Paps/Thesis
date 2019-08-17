@@ -14,10 +14,8 @@ public class LocalizedTextLibrary
         public LocalizedTextContainer(Language language)
         {
             this.language = language;
-
-            AssetBundle languageBundle = AssetBundleLibrary.Instance.GetAssetBundleByNameWithExtension(Reg.languageFileName + language.extension);
-
-            TextAsset languageLines = languageBundle.LoadAsset<TextAsset>(Reg.languageAssetName);
+            
+            TextAsset languageLines = SJResources.LoadAsset<TextAsset>(Reg.languageAssetName);
 
             ExtractLinesFrom(languageLines);
         }

@@ -22,8 +22,6 @@ public static class Reg
 
 #endif
 
-    public static readonly string assetBundleDataPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../AssetBundles"));
-
     public static readonly int playerLayer = LayerMask.NameToLayer("Player");
     public static readonly int hostileLayer = LayerMask.NameToLayer("Hostile");
     public static readonly int nonHostileLayer = LayerMask.NameToLayer("NonHostile");
@@ -38,5 +36,8 @@ public static class Reg
 
     public static readonly int walkableLayerMask = (1 << floorLayer) | (1 << movableObjectLayer);
     public static readonly int activableLayerMask = (1 << movableObjectLayer) | (1 << activableObjectLayer);
+
+
+    public const string APPLICATION_INFO_ASSET_NAME = "application_info";
     
 }
