@@ -16,9 +16,6 @@ public class MainMenuButtonController : SJMonoBehaviour {
         //exit main menu button
         exitMainMenu.onClick.AddListener(ExitToMainMenu);
 
-        //load game button
-        loadGame.onClick.AddListener(LoadGame);
-
         //resume game button
         resumeGame.onClick.AddListener(HideMenu);
 
@@ -44,11 +41,6 @@ public class MainMenuButtonController : SJMonoBehaviour {
     private void GoMenu()
     {
         GameManager.GetInstance().EndSession();
-    }
-
-    private void LoadGame()
-    {
-        GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = "DEFAULTPROFILE" });
     }
 
     private void UpdateButtonStates()
