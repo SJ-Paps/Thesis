@@ -26,8 +26,6 @@ public abstract class SJMonoBehaviour : MonoBehaviour
         {
             InstanceGUID = Guid.NewGuid().ToString();
         }
-
-        GameManager.GetInstance();
     }
 
     protected virtual void Start()

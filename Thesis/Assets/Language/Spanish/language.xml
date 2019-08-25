@@ -3,8 +3,6 @@
 
   <!-- Español-->
 
-  <languageData name="Español" extension="es"/>
-
   <lines>
 
     <line tag="menu_button_options">opciones</line>
@@ -14,6 +12,12 @@
     <line tag="menu_button_load_game">cargar partida</line>
     <line tag="menu_button_resume_game">volver al juego</line>
     <line tag="menu_back">atrás</line>
+    <line tag="menu_button_accept">aceptar</line>
+    <line tag="menu_button_select">seleccionar</line>
+    <line tag="menu_button_delete">borrar</line>
+
+    <line tag="menu_load_game_choose_profile">elija un perfil</line>
+    <line tag="menu_new_game_enter_profile">ingrese un nombre de perfil</line>
     
     <line tag="options_menu_text_language">idioma</line>
     <line tag="options_menu_text_sound">configuracion de sonido</line>
@@ -28,8 +32,11 @@
     <line tag="confirmation_menu_message_exit">¿esta seguro de que desea salir?</line>
     
     <line tag="loading">cargando</line>
-    
-    
+
+    <line tag ="language_name_english">inglés</line>
+    <line tag ="language_name_spanish">español</line>
+
+    <line tag ="notification_profile_in_use">este perfil ya existe. Elije otro.</line>
 
   </lines>
 

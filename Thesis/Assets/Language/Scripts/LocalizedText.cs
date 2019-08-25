@@ -29,9 +29,8 @@ public class LocalizedText
             text = value;
         }
     }
-
-    private LanguageManager languageManager;
-    private LocalizedTextLibrary textLibrary;
+    
+    private ILocalizedTextLibrary textLibrary;
 
     [SerializeField]
     private TextOptions option;
@@ -43,13 +42,12 @@ public class LocalizedText
         this.tag = tag;
         this.option = option;
 
-        languageManager = LanguageManager.GetInstance();
-        textLibrary = LocalizedTextLibrary.GetInstance();
+        textLibrary = LanguageManager.GetLocalizedTextLibrary();
 
-        languageManager.onLanguageChanged += OnLanguageChanged;
+        LanguageManager.onLanguageChanged += OnLanguageChanged;
     }
 
-    private void OnLanguageChanged(Language language)
+    private void OnLanguageChanged(string language)
     {
         UpdateText();
     }
@@ -60,25 +58,25 @@ public class LocalizedText
         {
             case TextOptions.None:
 
-                Text = textLibrary.GetLineByTagAttribute(tag);
+                Text = textLibrary.GetLineByTagOfCurrentLanguage(tag);
 
                 break;
 
             case TextOptions.ToLower:
 
-                Text = textLibrary.GetLineByTagAttribute(tag).ToLower();
+                Text = textLibrary.GetLineByTagOfCurrentLanguage(tag).ToLower();
 
                 break;
 
             case TextOptions.ToUpper:
 
-                Text = textLibrary.GetLineByTagAttribute(tag).ToUpper();
+                Text = textLibrary.GetLineByTagOfCurrentLanguage(tag).ToUpper();
 
                 break;
 
             case TextOptions.FirstLetterToUpper:
 
-                Text = textLibrary.GetLineByTagAttribute(tag).FirstLetterToUpper();
+                Text = textLibrary.GetLineByTagOfCurrentLanguage(tag).FirstLetterToUpper();
 
                 break;
         }

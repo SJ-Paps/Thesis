@@ -52,10 +52,8 @@ public class GameManager {
 
     private GameManager()
     {
-        ApplicationInfo applicationInfo = SJResources.LoadAsset<ApplicationInfo>(Reg.APPLICATION_INFO_ASSET_NAME);
-
-        beginScenes = applicationInfo.BeginningScenes;
-        returnSceneOnEndSession = applicationInfo.ReturnSceneOnEndSession;
+        beginScenes = ApplicationInfo.BeginningScenes;
+        returnSceneOnEndSession = ApplicationInfo.ReturnSceneOnEndSession;
 
         saveables = new HashSet<SJMonoBehaviourSaveable>();
 

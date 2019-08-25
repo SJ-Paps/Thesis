@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public struct GameConfiguration
 {
-    public float musicVolume;
-    public float soundsVolume;
-    public float generalVolume;
+    [SerializeField]
+    public float musicVolume, soundsVolume, generalVolume;
+
+    [SerializeField]
+    public string defaultLanguage;
 }

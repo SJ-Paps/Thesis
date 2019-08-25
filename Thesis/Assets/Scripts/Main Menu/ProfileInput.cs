@@ -18,6 +18,11 @@ public class ProfileInput : MonoBehaviour
         submitButton.onClick.AddListener(OnSubmit);
     }
 
+    private void OnEnable()
+    {
+        notificationText.gameObject.SetActive(false);
+    }
+
     private void OnSubmit()
     {
         string profileName = inputField.text;
@@ -25,7 +30,8 @@ public class ProfileInput : MonoBehaviour
         if(ProfileCareTaker.ProfileExistsAndIsValid(profileName))
         {
             inputField.text = string.Empty;
-            notificationText.text = "Profile is in use. Choose another name.";
+            notificationText.gameObject.SetActive(true);
+            notificationText.text = LanguageManager.GetLocalizedTextLibrary().GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper();
         }
         else
         {

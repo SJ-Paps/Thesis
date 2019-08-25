@@ -23,7 +23,9 @@ public abstract class LocalizedTextComponent : SJMonoBehaviour {
         }
     }
 
-    protected void Awake () {
+    protected override void Awake () {
+
+        base.Awake();
 
         localizedText = new LocalizedText(langTag, option);
 

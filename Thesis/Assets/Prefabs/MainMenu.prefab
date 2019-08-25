@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 77099f87-0aa8-4028-be01-135d0f067e8f
+  instanceGUID: 92967489-9373-40e5-8596-53e0420ee2af
   langTag: soundchannel_general
   option: 3
 --- !u!1 &-7947605176941547943
@@ -471,7 +471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1340006c31103c042b2051381ab3d566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 2f6d52e9-3b4b-4d72-a6b5-ac9e4f8c6cff
+  instanceGUID: e4de94d8-fec7-45ee-b88c-dbcc0add2cae
 --- !u!1 &-7575221088330287339
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,7 +866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e20fe70c931a743a74ec34cc51372c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 60c4f875-97d9-4a1e-83fa-b759729b9894
+  instanceGUID: c2ad7136-74b5-411f-ae95-0fd864164975
   languageButtonPrefab: {fileID: 114028936818567454, guid: b33373514cc657344a7e95e03a792267,
     type: 3}
   buttonMenu: {fileID: -5439442794734021293}
@@ -955,6 +955,7 @@ GameObject:
   - component: {fileID: -8939595901719687746}
   - component: {fileID: 9020458505506466306}
   - component: {fileID: 9136863627332285799}
+  - component: {fileID: 1263585104037289791}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1023,6 +1024,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Accept
+--- !u!114 &1263585104037289791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: -6512352821427574832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instanceGUID: 91a3fdb9-b719-4e2d-a0e2-e55ac0a5e646
+  langTag: menu_button_accept
+  option: 3
 --- !u!1 &-6193239361857837595
 GameObject:
   m_ObjectHideFlags: 0
@@ -1566,7 +1582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 763a0d11-348e-47e4-ab41-dbca5d3753e7
+  instanceGUID: eec8fb01-d347-4c33-8e3d-4fcd69665ced
   langTag: menu_back
   option: 3
 --- !u!1 &-4731272264998576430
@@ -1602,7 +1618,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000043613243}
+  m_AnchoredPosition: {x: 0, y: -0.000017393228}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6311375123568673196
@@ -2355,7 +2371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 2cdbe686-e8f0-4e74-93ab-158f25c3d07c
+  instanceGUID: a04fba8c-a7ad-4197-abea-d397cc2d6bf9
   langTag: options_menu_text_language
   option: 3
 --- !u!1 &-2818231509533471824
@@ -2602,7 +2618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 73a40b23-46d6-4792-adf7-dac30ace98a6
+  instanceGUID: e322691c-0eac-4c8a-b9c1-5125f69fee8e
   langTag: menu_button_exit
   option: 3
 --- !u!1 &-1879361650265439260
@@ -3169,7 +3185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: d13899ae-30f3-4af7-bab8-b2dade5bfcfa
+  instanceGUID: 3a921b53-b395-4555-8b79-4b633bd37775
   langTag: menu_back
   option: 3
 --- !u!1 &-833989832310515440
@@ -3389,7 +3405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 32813dae-15de-46c4-854e-033f27f6ab06
+  instanceGUID: c652a633-37ef-478d-8d26-4e31402a7745
   langTag: menu_back
   option: 3
 --- !u!1 &-583455420724461028
@@ -3572,7 +3588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: c2af4748-7437-483a-973d-eb7499e83c79
+  instanceGUID: c1ea6dbf-6cf9-4d96-8a47-b7f64687be2f
   langTag: menu_button_resume_game
   option: 3
 --- !u!1 &-174199888470540481
@@ -3586,7 +3602,6 @@ GameObject:
   - component: {fileID: -1125305665521131856}
   - component: {fileID: -2446712414028615242}
   - component: {fileID: -7886198269155652980}
-  - component: {fileID: -8036203196922076567}
   m_Layer: 5
   m_Name: NotificationText
   m_TagString: Untagged
@@ -3655,21 +3670,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
---- !u!114 &-8036203196922076567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: -174199888470540481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  instanceGUID: 3772cb31-843f-43e6-a6a2-91f538377b81
-  langTag: menu_button_new_game
-  option: 3
 --- !u!1 &132036326572073699
 GameObject:
   m_ObjectHideFlags: 0
@@ -3762,7 +3762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 44f351c2-cfcf-4cad-9239-7c9bebd286e2
+  instanceGUID: 1d3f1aaa-2a3e-43ae-b375-d27dca6dbe68
   langTag: menu_button_exit_main_menu
   option: 3
 --- !u!1 &277266845394293095
@@ -4107,7 +4107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 408cf4fd-3563-4269-b5d6-7f574905b2c6
+  instanceGUID: 99397af6-fe88-4149-abdf-7d3db1eaecd9
   langTag: soundchannel_effects
   option: 3
 --- !u!1 &1534524796582932652
@@ -4219,7 +4219,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4494,7 +4494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ca396920c45a34cab2966d1f94cfe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 64c2bbfb-a138-498e-9acb-ea5a884dd863
+  instanceGUID: 50376b29-675c-448a-a61a-650bc127eab3
   newGame: {fileID: -4380905780799953551}
   loadGame: {fileID: 8243930786260251603}
   resumeGame: {fileID: -6780003663820983745}
@@ -4704,8 +4704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: f3b21788-af8f-47d4-a473-f43848cff5a2
-  langTag: menu_button_new_game
+  instanceGUID: 40229ce9-6d79-48a6-a517-48ec29b8f58a
+  langTag: menu_load_game_choose_profile
   option: 3
 --- !u!1 &3409132093914760140
 GameObject:
@@ -4861,7 +4861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f84295c3ae14e8a867979e2c5181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 88fb2451-3e56-46b9-b556-3108c2b19fba
+  instanceGUID: aa6ebb01-c774-44be-9005-d1dd492f82e8
 --- !u!1 &4843795328193952319
 GameObject:
   m_ObjectHideFlags: 0
@@ -5064,7 +5064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: dd28ae3b-1e70-490f-b909-01d2f7813254
+  instanceGUID: 26797fa5-546f-43ed-802e-decb066d4ea5
   langTag: menu_button_load_game
   option: 3
 --- !u!1 &5118551334020214360
@@ -5159,8 +5159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 14c70d5c-9042-402b-ac76-b5c0e7c8f2d0
-  langTag: menu_button_new_game
+  instanceGUID: d7ec8087-2533-42bf-9674-6b2a7360eb80
+  langTag: menu_new_game_enter_profile
   option: 3
 --- !u!1 &5189169317520038712
 GameObject:
@@ -5364,7 +5364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 7a037bb7-acb9-43a6-bf21-e7fe2c458457
+  instanceGUID: b9db3614-316d-438f-b9b9-35b306f5ee16
   langTag: soundchannel_music
   option: 3
 --- !u!1 &6518183440224269472
@@ -5744,7 +5744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 8818c503-f2fd-4398-8c30-d53c42c90f1c
+  instanceGUID: d2c1c79a-b5b6-4e1b-8d0e-9f8b48d213c1
   langTag: menu_button_new_game
   option: 3
 --- !u!1 &8148638684152326500
@@ -5839,7 +5839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: d3880216-7c75-4775-92e0-0110ddc7b42f
+  instanceGUID: 54799639-69cd-4438-9ce3-7e9461a47432
   langTag: options_menu_text_sound
   option: 3
 --- !u!1 &8475908018097171444
@@ -5934,7 +5934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: ffd22c31-2a81-49a2-8b1c-4a8e99270724
+  instanceGUID: 87be317d-855d-4bf5-9c09-a9122df75909
   langTag: menu_button_options
   option: 3
 --- !u!1 &8492732341551158806
@@ -6009,9 +6009,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &-4083919202735529666
 MonoBehaviour:

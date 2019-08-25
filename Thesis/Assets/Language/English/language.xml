@@ -3,8 +3,6 @@
 
   <!-- English-->
 
-  <languageData name="English" extension="en"/>
-
   <lines>
 
     <line tag="menu_button_options">options</line>
@@ -14,7 +12,12 @@
     <line tag="menu_button_load_game">load game</line>
     <line tag="menu_button_resume_game">resume game</line>
     <line tag="menu_back">back</line>
+    <line tag="menu_button_accept">accept</line>
+    <line tag="menu_button_select">select</line>
+    <line tag="menu_button_delete">delete</line>
 
+    <line tag="menu_load_game_choose_profile">choose a profile</line>
+    <line tag="menu_new_game_enter_profile">enter new profile</line>
 
     <line tag="options_menu_text_language">language settings</line>
     <line tag="options_menu_text_sound">sound settings</line>
@@ -30,6 +33,11 @@
     <line tag="confirmation_menu_message_exit">are you sure you want to quit?</line>
 
     <line tag="loading">loading</line>
+
+    <line tag ="language_name_english">english</line>
+    <line tag ="language_name_spanish">spanish</line>
+
+    <line tag ="notification_profile_in_use">profile is in use. Choose another name.</line>
 
   </lines>
   

@@ -25,12 +25,12 @@ public class MainMenuButtonController : SJMonoBehaviour {
 
     private void ExitToDesktop()
     {
-        MainMenu.GetInstance().DisplayConfirmationMenu(LocalizedTextLibrary.GetInstance().GetLineByTagAttribute("confirmation_menu_message_exit").FirstLetterToUpper(), Application.Quit, null);
+        MainMenu.GetInstance().DisplayConfirmationMenu(LanguageManager.GetLocalizedTextLibrary().GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper(), Application.Quit, null);
     }
 
     private void ExitToMainMenu()
     {
-        MainMenu.GetInstance().DisplayConfirmationMenu(LocalizedTextLibrary.GetInstance().GetLineByTagAttribute("confirmation_menu_message_exit").FirstLetterToUpper(), GoMenu, null);
+        MainMenu.GetInstance().DisplayConfirmationMenu(LanguageManager.GetLocalizedTextLibrary().GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper(), GoMenu, null);
     }
 
     private void HideMenu()

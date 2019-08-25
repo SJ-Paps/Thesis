@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class LanguageButton : SJMonoBehaviour {
 
-    private Language language;
+    private string language;
 
     [SerializeField]
     private Button button;
@@ -11,20 +11,42 @@ public class LanguageButton : SJMonoBehaviour {
     [SerializeField]
     private Text text;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         button.onClick.AddListener(ChangeLanguage);
     }
 
-    public void SetLanguage(Language language)
+    private void OnEnable()
+    {
+        LanguageManager.onLanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        LanguageManager.onLanguageChanged -= OnLanguageChanged;
+    }
+
+    public void SetLanguage(string language)
     {
         this.language = language;
 
-        text.text = language.name;
+        UpdateButtonText();
     }
 	
 	private void ChangeLanguage()
     {
-        LanguageManager.GetInstance().ChangeLanguage(language.name);
+        LanguageManager.ChangeLanguage(language);
+    }
+
+    private void UpdateButtonText()
+    {
+        text.text = LanguageManager.GetLocalizedTextLibrary().GetLineByTagOfCurrentLanguage("language_name_" + language).FirstLetterToUpper();
+    }
+
+    private void OnLanguageChanged(string language)
+    {
+        UpdateButtonText();
     }
 }

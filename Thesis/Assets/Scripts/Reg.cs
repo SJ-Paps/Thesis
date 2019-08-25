@@ -37,7 +37,6 @@ public static class Reg
     public static readonly int walkableLayerMask = (1 << floorLayer) | (1 << movableObjectLayer);
     public static readonly int activableLayerMask = (1 << movableObjectLayer) | (1 << activableObjectLayer);
 
-
-    public const string APPLICATION_INFO_ASSET_NAME = "application_info";
+    
     
 }

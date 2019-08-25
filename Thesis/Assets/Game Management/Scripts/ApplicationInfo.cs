@@ -1,17 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-[CreateAssetMenu(fileName = "ApplicationInfoAsset", menuName = "Application Info Asset")]
-public class ApplicationInfo : ScriptableObject
+﻿public static class ApplicationInfo
 {
-    [SerializeField]
-    private string[] beginningScenes;
+    private const string APPLICATION_INFO_ASSET_NAME = "application_info";
+    private static ApplicationInfoAsset infoAsset;
 
-    [SerializeField]
-    private string returnSceneOnEndSession;
+    static ApplicationInfo()
+    {
+        infoAsset = SJResources.LoadAsset<ApplicationInfoAsset>(APPLICATION_INFO_ASSET_NAME);
+    }
 
-    public string[] BeginningScenes { get { return beginningScenes; } }
+    public static string[] BeginningScenes
+    {
+        get
+        {
+            return infoAsset.BeginningScenes;
+        }
+    }
 
-    public string ReturnSceneOnEndSession { get { return returnSceneOnEndSession; } }
+    public static string ReturnSceneOnEndSession
+    {
+        get
+        {
+            return infoAsset.ReturnSceneOnEndSession;
+        }
+    }
+
+    public static GameConfiguration DefaultGameConfiguration
+    {
+        get
+        {
+            return infoAsset.DefaultGameConfiguration;
+        }
+    }
 }

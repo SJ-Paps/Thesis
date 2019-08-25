@@ -16,3 +16,8 @@ MonoBehaviour:
   - MasterSceneLevel1
   - Entities_FirstGame_igld
   returnSceneOnEndSession: Menu
+  defaultGameConfiguration:
+    musicVolume: 1
+    soundsVolume: 1
+    generalVolume: 1
+    defaultLanguage: english

@@ -80,11 +80,6 @@ public static class GameConfigurationCareTaker
 
     private static GameConfiguration GetDefault()
     {
-        return new GameConfiguration()
-        {
-            generalVolume = 1f,
-            musicVolume = 1f,
-            soundsVolume = 1f
-        };
+        return ApplicationInfo.DefaultGameConfiguration;
     }
 }
