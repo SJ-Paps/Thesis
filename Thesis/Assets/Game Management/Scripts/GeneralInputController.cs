@@ -33,8 +33,6 @@ public class GeneralInputController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log(MainMenu.GetInstance().Shown);
-
             if(MainMenu.GetInstance().Shown)
             {
                 MainMenu.GetInstance().Hide();

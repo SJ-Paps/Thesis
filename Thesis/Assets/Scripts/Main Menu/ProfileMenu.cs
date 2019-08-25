@@ -33,14 +33,22 @@ public class ProfileMenu : MonoBehaviour
             {
                 ProfileInfoItem instance = Instantiate(profileInfoItemPrefab, layoutObject);
                 instance.SetInfo(profiles[i]);
-                instance.onChoose += OnChooseProfile;
+                instance.onSelectRequest += OnSelectProfile;
+                instance.onDeleteRequest += OnDeleteProfile;
             }
         }
         
     }
 
-    private void OnChooseProfile(ProfileInfoItem item)
+    private void OnSelectProfile(ProfileInfoItem item)
     {
         GameManager.GetInstance().BeginSessionWithProfile(item.ProfileData);
     }
+
+    private void OnDeleteProfile(ProfileInfoItem item)
+    {
+        ProfileCareTaker.DeleteProfile(item.ProfileData.name);
+        Destroy(item.gameObject);
+    }
+
 }

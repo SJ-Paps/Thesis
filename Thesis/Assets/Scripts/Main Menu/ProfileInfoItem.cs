@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class ProfileInfoItem : MonoBehaviour
 {
@@ -10,15 +8,17 @@ public class ProfileInfoItem : MonoBehaviour
     private Text profileNameText;
 
     [SerializeField]
-    private Button chooseButton;
+    private Button selectButton, deleteButton;
 
-    public event Action<ProfileInfoItem> onChoose;
+    public event Action<ProfileInfoItem> onSelectRequest;
+    public event Action<ProfileInfoItem> onDeleteRequest;
 
     public ProfileData ProfileData { get; private set; }
 
     void Start()
     {
-        chooseButton.onClick.AddListener(OnClick);
+        selectButton.onClick.AddListener(OnSelectRequest);
+        deleteButton.onClick.AddListener(OnDeleteRequest);
     }
 
     public void SetInfo(ProfileData profileData)
@@ -28,11 +28,19 @@ public class ProfileInfoItem : MonoBehaviour
         profileNameText.text = ProfileData.name;
     }
 
-    private void OnClick()
+    private void OnSelectRequest()
     {
-        if(onChoose != null)
+        if(onSelectRequest != null)
         {
-            onChoose(this);
+            onSelectRequest(this);
+        }
+    }
+
+    private void OnDeleteRequest()
+    {
+        if(onDeleteRequest != null)
+        {
+            onDeleteRequest(this);
         }
     }
 }

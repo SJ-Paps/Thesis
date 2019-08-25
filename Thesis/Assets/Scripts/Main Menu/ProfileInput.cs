@@ -22,7 +22,7 @@ public class ProfileInput : MonoBehaviour
     {
         string profileName = inputField.text;
 
-        if(ProfileCareTaker.ProfileExistsOrIsValid(profileName))
+        if(ProfileCareTaker.ProfileExistsAndIsValid(profileName))
         {
             inputField.text = string.Empty;
             notificationText.text = "Profile is in use. Choose another name.";

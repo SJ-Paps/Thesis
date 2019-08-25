@@ -23,7 +23,7 @@ public static class ProfileCareTaker
 
     private static void SaveProfile(string profileName, ProfileData profileData, SaveData saveData)
     {
-        string currentProfileDirectory = Path.Combine(profileDirectory, profileName);
+        string currentProfileDirectory = GetProfileDirectory(profileName);
 
         if (Directory.Exists(currentProfileDirectory) == false)
         {
@@ -63,7 +63,7 @@ public static class ProfileCareTaker
             {
                 string profileName = Path.GetFileName(Path.GetDirectoryName(profileFilePaths[i]));
 
-                if(ProfileExistsOrIsValid(profileName))
+                if(ProfileExistsAndIsValid(profileName))
                 {
                     SaveData[] saves = SaveLoadTool.Deserialize(profileFilePaths[i]);
 
@@ -90,10 +90,33 @@ public static class ProfileCareTaker
         }
     }
 
-    public static bool ProfileExistsOrIsValid(string profileName)
+    private static string[] GetAllProfileDirectories()
     {
-        string currentProfileFilePath = Path.Combine(profileDirectory, profileName, profileFileName);
-        string currentProfileSaveDataFilePath = Path.Combine(profileDirectory, profileName, saveFileName);
+        string[] profileArray = null;
+
+        try
+        {
+            profileArray = Directory.GetFiles(profileDirectory, profileFileName, SearchOption.AllDirectories);
+        }
+        catch { }
+
+        if (profileArray != null)
+        {
+            for (int i = 0; i < profileArray.Length; i++)
+            {
+                profileArray[i] = Path.GetDirectoryName(profileArray[i]);
+            }
+        }
+
+        return profileArray;
+    }
+
+    public static bool ProfileExistsAndIsValid(string profileName)
+    {
+        string profileDirectory = GetProfileDirectory(profileName);
+
+        string currentProfileFilePath = Path.Combine(profileDirectory, profileFileName);
+        string currentProfileSaveDataFilePath = Path.Combine(profileDirectory, saveFileName);
 
         return File.Exists(currentProfileFilePath) && File.Exists(currentProfileSaveDataFilePath);
     }
@@ -110,9 +133,9 @@ public static class ProfileCareTaker
 
     private static SaveData GetSaveDataFromProfile(string profileName)
     {
-        if(ProfileExistsOrIsValid(profileName))
+        if(ProfileExistsAndIsValid(profileName))
         {
-            string saveDataFilePath = Path.Combine(profileDirectory, profileName, saveFileName);
+            string saveDataFilePath = Path.Combine(GetProfileDirectory(profileName), saveFileName);
 
             if (File.Exists(saveDataFilePath))
             {
@@ -128,5 +151,28 @@ public static class ProfileCareTaker
         }
 
         throw new InvalidOperationException("provided profile name does not exists or is invalid");
+    }
+
+    private static string GetProfileDirectory(string profileName)
+    {
+        return Path.Combine(profileDirectory, profileName);
+    }
+
+    public static void DeleteProfile(string profileName)
+    {
+        if(ProfileExistsAndIsValid(profileName))
+        {
+            Directory.Delete(GetProfileDirectory(profileName), true);
+        }
+    }
+
+    public static void DeleteAllProfiles()
+    {
+        string[] allProfileDirectories = GetAllProfileDirectories();
+
+        for(int i = 0; i < allProfileDirectories.Length; i++)
+        {
+            Directory.Delete(allProfileDirectories[i], true);
+        }
     }
 }

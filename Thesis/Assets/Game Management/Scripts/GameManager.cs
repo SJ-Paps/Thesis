@@ -75,7 +75,7 @@ public class GameManager {
 
     public void BeginSessionWithProfile(ProfileData profileData)
     {
-        if(ProfileCareTaker.ProfileExistsOrIsValid(profileData.name) == false)
+        if(ProfileCareTaker.ProfileExistsAndIsValid(profileData.name) == false)
         {
             SaveDefaultProfile(profileData);
         }
