@@ -34,5 +34,12 @@ public abstract class LocalizedTextComponent : SJMonoBehaviour {
         localizedText.UpdateText();
 	}
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        localizedText.Dispose();
+    }
+
     protected abstract void OnTextChanged(string text);
 }

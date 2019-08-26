@@ -35,6 +35,12 @@ public class ProfileInput : MonoBehaviour
         }
         else
         {
+            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+
+            gameConfiguration.lastProfile = profileName;
+
+            GameConfigurationCareTaker.SaveConfiguration();
+
             GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName });
         }
     }

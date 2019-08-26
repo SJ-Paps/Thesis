@@ -15,6 +15,7 @@
     <line tag="menu_button_accept">accept</line>
     <line tag="menu_button_select">select</line>
     <line tag="menu_button_delete">delete</line>
+    <line tag="menu_button_continue">continue</line>
 
     <line tag="menu_load_game_choose_profile">choose a profile</line>
     <line tag="menu_new_game_enter_profile">enter new profile</line>

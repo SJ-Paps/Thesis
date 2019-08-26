@@ -5,4 +5,9 @@ using UnityEngine;
 public struct ProfileData
 {
     public string name;
+
+    public static bool IsValid(ProfileData data)
+    {
+        return string.IsNullOrEmpty(data.name) == false;
+    }
 }

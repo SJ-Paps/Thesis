@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class MainMenuButtonController : SJMonoBehaviour {
 
     [SerializeField]
-    private Button newGame, loadGame, resumeGame, options, exitDesktop, exitMainMenu;
+    private Button newGame, loadGame, resumeGame, options, exitDesktop, exitMainMenu, continueLastProfile;
     
 	protected override void Awake ()
     {
@@ -19,8 +19,14 @@ public class MainMenuButtonController : SJMonoBehaviour {
         //resume game button
         resumeGame.onClick.AddListener(HideMenu);
 
-        UpdateButtonStates();
+        //continue button
+        continueLastProfile.onClick.AddListener(Continue);
+        
+    }
 
+    private void OnEnable()
+    {
+        UpdateButtonStates();
     }
 
     private void ExitToDesktop()
@@ -43,6 +49,17 @@ public class MainMenuButtonController : SJMonoBehaviour {
         GameManager.GetInstance().EndSession();
     }
 
+    private void Continue()
+    {
+        string lastProfile = GameConfigurationCareTaker.GetConfiguration().lastProfile;
+
+        if (ProfileCareTaker.ProfileExistsAndIsValid(lastProfile))
+        {
+            Debug.Log(lastProfile);
+            GameManager.GetInstance().BeginSessionWithProfile(ProfileCareTaker.GetProfileDataFromProfile(lastProfile));
+        }
+    }
+
     private void UpdateButtonStates()
     {
         if (GameManager.GetInstance().IsInGame)
@@ -53,6 +70,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
             loadGame.gameObject.SetActive(true);
             resumeGame.gameObject.SetActive(true);
             options.gameObject.SetActive(true);
+            continueLastProfile.gameObject.SetActive(false);
         }
         else
         {
@@ -62,6 +80,17 @@ public class MainMenuButtonController : SJMonoBehaviour {
             loadGame.gameObject.SetActive(true);
             resumeGame.gameObject.SetActive(false);
             options.gameObject.SetActive(true);
+
+            if (string.IsNullOrEmpty(GameConfigurationCareTaker.GetConfiguration().lastProfile) == false)
+            {
+                continueLastProfile.gameObject.SetActive(true);
+            }
+            else
+            {
+                continueLastProfile.gameObject.SetActive(false);
+            }
         }
+
+        
     }
 }

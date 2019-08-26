@@ -65,16 +65,16 @@ public static class ProfileCareTaker
 
                 if(ProfileExistsAndIsValid(profileName))
                 {
-                    SaveData[] saves = SaveLoadTool.Deserialize(profileFilePaths[i]);
+                    ProfileData data = GetProfileDataFromProfile(profileName);
 
-                    if (saves != null && saves.Length > 0)
+                    if(ProfileData.IsValid(data))
                     {
                         if (profiles == null)
                         {
                             profiles = new List<ProfileData>();
                         }
 
-                        profiles.Add((ProfileData)saves[0].saveObject);
+                        profiles.Add(data);
                     }
                 }
             }
@@ -88,6 +88,23 @@ public static class ProfileCareTaker
         {
             return profiles.ToArray();
         }
+    }
+
+    public static ProfileData GetProfileDataFromProfile(string profileName)
+    {
+        if (ProfileExistsAndIsValid(profileName))
+        {
+            string profileFilePath = GetProfileFilePath(profileName);
+
+            SaveData[] saves = SaveLoadTool.Deserialize(profileFilePath);
+
+            if (saves != null && saves.Length > 0)
+            {
+                return (ProfileData)saves[0].saveObject;
+            }
+        }
+
+        return default;
     }
 
     private static string[] GetAllProfileDirectories()
@@ -156,6 +173,11 @@ public static class ProfileCareTaker
     private static string GetProfileDirectory(string profileName)
     {
         return Path.Combine(profileDirectory, profileName);
+    }
+
+    private static string GetProfileFilePath(string profileName)
+    {
+        return Path.Combine(GetProfileDirectory(profileName), profileFileName);
     }
 
     public static void DeleteProfile(string profileName)

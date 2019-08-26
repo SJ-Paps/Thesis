@@ -10,10 +10,27 @@ public class ProfileMenu : MonoBehaviour
 
     [SerializeField]
     private Transform layoutObject;
+
+    private List<ProfileInfoItem> items;
     
     void Awake()
     {
+        items = new List<ProfileInfoItem>();
+    }
+
+    private void OnEnable()
+    {
         CoroutineManager.GetInstance().StartCoroutine(WaitLoadProfiles());
+    }
+
+    private void OnDisable()
+    {
+        for(int i = 0; i < items.Count; i++)
+        {
+            Destroy(items[i].gameObject);
+            items.RemoveAt(i);
+            i--;
+        }
     }
 
     private IEnumerator WaitLoadProfiles()
@@ -32,6 +49,7 @@ public class ProfileMenu : MonoBehaviour
             for (int i = 0; i < profiles.Length; i++)
             {
                 ProfileInfoItem instance = Instantiate(profileInfoItemPrefab, layoutObject);
+                items.Add(instance);
                 instance.SetInfo(profiles[i]);
                 instance.onSelectRequest += OnSelectProfile;
                 instance.onDeleteRequest += OnDeleteProfile;
@@ -42,12 +60,28 @@ public class ProfileMenu : MonoBehaviour
 
     private void OnSelectProfile(ProfileInfoItem item)
     {
+        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+
+        gameConfiguration.lastProfile = item.ProfileData.name;
+
+        GameConfigurationCareTaker.SaveConfiguration();
+
         GameManager.GetInstance().BeginSessionWithProfile(item.ProfileData);
     }
 
     private void OnDeleteProfile(ProfileInfoItem item)
     {
+        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+
+        if(gameConfiguration.lastProfile == item.ProfileData.name)
+        {
+            gameConfiguration.lastProfile = null;
+
+            GameConfigurationCareTaker.SaveConfiguration();
+        }
+
         ProfileCareTaker.DeleteProfile(item.ProfileData.name);
+        items.Remove(item);
         Destroy(item.gameObject);
     }
 

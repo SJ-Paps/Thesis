@@ -8,13 +8,17 @@ public class GeneralInputController : MonoBehaviour
     [RuntimeInitializeOnLoadMethod]
     private static void Initialize()
     {
+        GameManager.GetInstance().onLoadingBegan += DestroyOnQuittingGameOrLoading;
         GameManager.GetInstance().onLoadingSucceeded += InstantiateInGame;
-        GameManager.GetInstance().onQuitting += DestroyOnQuittingGame;
+        GameManager.GetInstance().onQuitting += DestroyOnQuittingGameOrLoading;
     }
 
-    private static void DestroyOnQuittingGame()
+    private static void DestroyOnQuittingGameOrLoading()
     {
-        UnityUtil.DestroyDontDestroyOnLoadObject(instance.gameObject);
+        if(instance != null)
+        {
+            UnityUtil.DestroyDontDestroyOnLoadObject(instance.gameObject);
+        }
     }
 
     private static void InstantiateInGame()

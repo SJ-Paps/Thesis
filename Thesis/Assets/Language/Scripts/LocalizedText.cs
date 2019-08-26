@@ -10,9 +10,8 @@ public enum TextOptions : byte
 }
 
 [Serializable]
-public class LocalizedText
+public class LocalizedText : IDisposable
 {
-    
     public string tag;
 
     private string text;
@@ -37,6 +36,8 @@ public class LocalizedText
 
     public event Action<string> onTextChanged;
 
+    public bool IsDisposed { get; private set; }
+
     public LocalizedText(string tag, TextOptions option)
     {
         this.tag = tag;
@@ -47,6 +48,15 @@ public class LocalizedText
         LanguageManager.onLanguageChanged += OnLanguageChanged;
     }
 
+    public void Dispose()
+    {
+        if(IsDisposed == false)
+        {
+            LanguageManager.onLanguageChanged -= OnLanguageChanged;
+            IsDisposed = true;
+        }
+    }
+
     private void OnLanguageChanged(string language)
     {
         UpdateText();
@@ -54,6 +64,11 @@ public class LocalizedText
 
     public void UpdateText()
     {
+        if(IsDisposed)
+        {
+            throw new ObjectDisposedException(nameof(LocalizedText) + " TAG: " + tag);
+        }
+
         switch (option)
         {
             case TextOptions.None:
