@@ -155,9 +155,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e129b42c0303eef44bbf4c3b4de92cb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: d49d315f-e58a-4888-9a2b-df97d6399dc0
+  instanceGUID: 2fd7f549-500d-458c-bed3-c69b249fe3bd
   loadRoutines:
   - {fileID: 8918727039410559447, guid: 855d6189fb693cb46bb02bda1f10066c, type: 3}
+  - {fileID: 6047486636849809067, guid: 336e41cf68fca77448a450b46aad85db, type: 3}
   - {fileID: 8104832844839658636, guid: b0b4cc493b2a3cd43bf4119d99184980, type: 3}
 --- !u!1 &1161284287
 GameObject:

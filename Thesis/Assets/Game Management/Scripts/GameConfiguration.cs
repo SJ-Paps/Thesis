@@ -7,8 +7,11 @@ using System;
 public struct GameConfiguration
 {
     [SerializeField]
+    [Range(0.0f, 1.0f)]
     public float musicVolume, soundsVolume, generalVolume;
 
     [SerializeField]
-    public string defaultLanguage;
+    public string userLanguage;
+
+    public string lastProfile;
 }

@@ -25,7 +25,7 @@ public static class GameConfigurationCareTaker
         return Task.Run(LoadConfiguration);
     }
 
-    private static void LoadConfiguration()
+    public static void LoadConfiguration()
     {
         if(File.Exists(configurationFilePath) == false)
         {
@@ -66,7 +66,7 @@ public static class GameConfigurationCareTaker
         return Task.Run(SaveConfiguration);
     }
 
-    private static void SaveConfiguration()
+    public static void SaveConfiguration()
     {
         string saveDirectory = Path.GetDirectoryName(configurationFilePath);
 

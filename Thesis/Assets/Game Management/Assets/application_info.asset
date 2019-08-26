@@ -20,4 +20,4 @@ MonoBehaviour:
     musicVolume: 1
     soundsVolume: 1
     generalVolume: 1
-    defaultLanguage: english
+    userLanguage: english

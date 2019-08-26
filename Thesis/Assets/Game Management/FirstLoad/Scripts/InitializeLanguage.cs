@@ -29,7 +29,7 @@ public class InitializeLanguage : ScriptableLoadRoutine
 
     private int GetDefaultLanguageIndex(LanguageInfo[] languageInfo)
     {
-        string defaultLanguage = ApplicationInfo.DefaultGameConfiguration.defaultLanguage;
+        string defaultLanguage = GameConfigurationCareTaker.GetConfiguration().userLanguage;
 
         for(int i = 0; i < languageInfo.Length; i++)
         {

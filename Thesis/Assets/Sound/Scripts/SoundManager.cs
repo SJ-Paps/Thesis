@@ -19,17 +19,14 @@ public sealed class SoundManager
 
     private static SoundManager instance;
 
-    public static SoundManager Instance
+    public static SoundManager GetInstance()
     {
-        get
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new SoundManager();
-            }
-
-            return instance;
+            instance = new SoundManager();
         }
+
+        return instance;
     }
 
     private float volume = 1;

@@ -98,9 +98,11 @@ public class SJAudioSource : SJMonoBehaviour {
 
     protected ScaledVolumeChanged scaledVolumeChangedDelegate;
 
-    protected void Awake()
+    protected override void Awake()
     {
-        soundManager = SoundManager.Instance;
+        base.Awake();
+
+        soundManager = SoundManager.GetInstance();
 
         soundChannel = soundManager.Channels[channel];
 

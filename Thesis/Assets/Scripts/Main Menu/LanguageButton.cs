@@ -38,6 +38,12 @@ public class LanguageButton : SJMonoBehaviour {
 	private void ChangeLanguage()
     {
         LanguageManager.ChangeLanguage(language);
+
+        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+
+        gameConfiguration.userLanguage = language;
+
+        GameConfigurationCareTaker.SaveConfiguration();
     }
 
     private void UpdateButtonText()
