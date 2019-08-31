@@ -24,21 +24,6 @@ public class Xenophobic : Tribal
         return base.ToString();
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
     protected override void OnDetected()
     {
         base.OnDetected();
@@ -47,15 +32,5 @@ public class Xenophobic : Tribal
     protected override void OnFacingChanged(bool facingLeft)
     {
         base.OnFacingChanged(facingLeft);
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
     }
 }

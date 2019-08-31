@@ -8,10 +8,8 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
 
     public string PrefabName { get { return prefabName; } }
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
-
         GameManager.GetInstance().SubscribeForSave(this);
     }
 
@@ -25,10 +23,8 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
         LoadSaveData(data);
     }
 
-    protected override void OnDestroy()
+    protected override void SJOnDestroy()
     {
-        base.OnDestroy();
-
         if (Application.isEditor == false)
         {
             GameManager.GetInstance().DesubscribeForSave(this);

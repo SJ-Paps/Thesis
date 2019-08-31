@@ -4,11 +4,11 @@ public class LocalizedUIText : LocalizedTextComponent {
 
     protected Text selfText;
 
-    new protected void Awake () {
+    protected override void SJAwake () {
 
         selfText = GetComponent<Text>();
 
-        base.Awake();
+        base.SJAwake();
     }
 
     protected override void OnTextChanged(string text)

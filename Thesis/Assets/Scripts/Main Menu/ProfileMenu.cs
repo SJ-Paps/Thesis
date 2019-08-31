@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 
-public class ProfileMenu : MonoBehaviour
+public class ProfileMenu : SJMonoBehaviour
 {
     [SerializeField]
     private ProfileInfoItem profileInfoItemPrefab;
@@ -13,17 +13,17 @@ public class ProfileMenu : MonoBehaviour
 
     private List<ProfileInfoItem> items;
     
-    void Awake()
+    protected override void SJAwake()
     {
         items = new List<ProfileInfoItem>();
     }
 
-    private void OnEnable()
+    protected override void SJOnEnable()
     {
         CoroutineManager.GetInstance().StartCoroutine(WaitLoadProfiles());
     }
 
-    private void OnDisable()
+    protected override void SJOnDisable()
     {
         for(int i = 0; i < items.Count; i++)
         {

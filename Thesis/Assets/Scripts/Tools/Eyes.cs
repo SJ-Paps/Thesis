@@ -231,10 +231,8 @@ public class Eyes : SJMonoBehaviour
     private Action<Collider2D> onStayTriggerDelegate;
     private Action<Collider2D> onExitedTriggerDelegate;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
-
         collider = GetComponent<SJCollider2D>();
 
         onEnteredTriggerDelegate = OnEnteredTrigger;
@@ -243,10 +241,8 @@ public class Eyes : SJMonoBehaviour
         
     }
 
-    protected override void Start()
+    protected override void SJStart()
     {
-        base.Start();
-
         Bind(Collider);
     }
 

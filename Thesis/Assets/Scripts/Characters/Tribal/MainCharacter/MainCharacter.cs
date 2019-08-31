@@ -3,9 +3,9 @@
 public class MainCharacter : Tribal
 {
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
+        base.SJAwake();
 
         gameObject.layer = Reg.playerLayer;
     }

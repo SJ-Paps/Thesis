@@ -100,7 +100,7 @@ public abstract class Tribal : Character, IDamagable, ISeer
 
     private EyeCollection eyes;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
         Animator = GetComponent<Animator>();
         RigidBody2D = GetComponent<Rigidbody2D>();
@@ -117,7 +117,7 @@ public abstract class Tribal : Character, IDamagable, ISeer
 
         eyes = new EyeCollection(GetComponentsInChildren<Eyes>());
 
-        base.Awake();
+        base.SJAwake();
     }
 
     public EyeCollection GetEyes()

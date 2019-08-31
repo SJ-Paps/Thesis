@@ -97,26 +97,25 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
 
     public Blackboard Blackboard { get; private set; }
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
-
         orders = new Queue<Order>();
 
         Blackboard = new Blackboard();
 
         hsm = SJHSMStateAsset.BuildFromAsset<CharacterHSMState>(hsmAsset, this);
 
+        base.SJAwake();
     }
 
-    protected override void Start()
+    protected override void SJStart()
     {
-        base.Start();
+        base.SJStart();
 
         hsm.Enter();
     }
 
-    protected virtual void Update()
+    protected override void SJUpdate()
     {
         while(orders.Count > 0)
         {
@@ -126,7 +125,7 @@ public abstract class Character : SJMonoBehaviourSaveable, IControllable<Charact
         hsm.Update();
     }
 
-    protected virtual void FixedUpdate()
+    protected override void SJFixedUpdate()
     {
         if(onFixedUpdate != null)
         {

@@ -10,10 +10,8 @@ public class LanguageMenu : SJMonoBehaviour {
     private VerticalLayoutGroup buttonMenu;
 
 	// Use this for initialization
-	protected override void Awake ()
+	protected override void SJAwake ()
     {
-        base.Awake();
-
         string[] languages = LanguageManager.GetLanguages();
 
         foreach(string language in languages)

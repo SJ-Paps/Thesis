@@ -64,21 +64,21 @@ public class XenophobicIAController : IAController
 
     protected XenophobicIAState hsm;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
+        base.SJAwake();
 
         hsm = XenophobicIAControllerHSMStateAsset.BuildFromAsset<XenophobicIAState>(baseHSMAsset, this);
     }
 
-    protected override void Start()
+    protected override void SJStart()
     {
-        base.Start();
+        base.SJStart();
 
         hsm.Enter();
     }
 
-    protected void Update()
+    protected override void SJUpdate()
     {
         if(Slave != null)
         {

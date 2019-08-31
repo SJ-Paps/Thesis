@@ -6,7 +6,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
     [SerializeField]
     private Button newGame, loadGame, resumeGame, options, exitDesktop, exitMainMenu, continueLastProfile;
     
-	protected override void Awake ()
+	protected override void SJAwake ()
     {
         MainMenu.GetInstance().onShow += UpdateButtonStates;
 
@@ -24,7 +24,7 @@ public class MainMenuButtonController : SJMonoBehaviour {
         
     }
 
-    private void OnEnable()
+    protected override void SJOnEnable()
     {
         UpdateButtonStates();
     }

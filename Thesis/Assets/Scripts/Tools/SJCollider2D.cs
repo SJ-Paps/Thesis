@@ -128,9 +128,9 @@ public abstract class SJCollider2D<T> : SJCollider2D where T : Collider2D
 {
     public new T InnerCollider { get; private set; }
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
+        base.SJAwake();
 
         InnerCollider = GetComponent<T>();
     }

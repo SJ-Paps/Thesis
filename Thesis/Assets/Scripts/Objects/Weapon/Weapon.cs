@@ -2,11 +2,6 @@
     
     public bool InUse { get; private set; }
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
     public bool Use()
     {
         if(Active)

@@ -7,10 +7,8 @@ public class Loader : SJMonoBehaviour
     [SerializeField]
     private ScriptableLoadRoutine[] loadRoutines;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
-
         CoroutineManager.GetInstance().StartCoroutine(WaitLoad());
     }
 

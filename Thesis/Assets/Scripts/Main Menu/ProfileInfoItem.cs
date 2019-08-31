@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ProfileInfoItem : MonoBehaviour
+public class ProfileInfoItem : SJMonoBehaviour
 {
     [SerializeField]
     private Text profileNameText;
@@ -15,7 +15,7 @@ public class ProfileInfoItem : MonoBehaviour
 
     public ProfileData ProfileData { get; private set; }
 
-    void Start()
+    protected override void SJStart()
     {
         selectButton.onClick.AddListener(OnSelectRequest);
         deleteButton.onClick.AddListener(OnDeleteRequest);

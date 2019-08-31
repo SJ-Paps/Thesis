@@ -8,7 +8,7 @@ public enum DamageType : byte
     Bullet
 }
 
-public class Deadly : MonoBehaviour {
+public class Deadly : SJMonoBehaviour {
 
     [SerializeField]
     private DamageType type;

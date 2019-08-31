@@ -27,21 +27,21 @@ public class TurretIAController : IAController
 
     protected TurretIAControllerHSMState hsm;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
+        base.SJAwake();
 
         hsm = TurretIAControllerHSMStateAsset.BuildFromAsset<TurretIAControllerHSMState>(baseHSMAsset, this);
     }
 
-    protected override void Start()
+    protected override void SJStart()
     {
-        base.Start();
+        base.SJStart();
 
         hsm.Enter();
     }
 
-    void Update()
+    protected override void SJUpdate()
     {
         Control();
     }

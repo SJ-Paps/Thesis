@@ -98,10 +98,8 @@ public class SJAudioSource : SJMonoBehaviour {
 
     protected ScaledVolumeChanged scaledVolumeChangedDelegate;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
-
         soundManager = SoundManager.GetInstance();
 
         soundChannel = soundManager.Channels[channel];
@@ -115,7 +113,7 @@ public class SJAudioSource : SJMonoBehaviour {
         soundManager.AddSource(this);
     }
 
-    protected void Start()
+    protected override void SJStart()
     {
         if(playOnStart)
         {
@@ -123,7 +121,7 @@ public class SJAudioSource : SJMonoBehaviour {
         }
     }
 
-    private void OnDestroy()
+    protected override void SJOnDestroy()
     {
         soundChannel.onVolumeChanged -= scaledVolumeChangedDelegate;
     }

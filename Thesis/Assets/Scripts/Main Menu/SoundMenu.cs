@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-public class SoundMenu : MonoBehaviour {
+public class SoundMenu : SJMonoBehaviour {
 
     [SerializeField]
     private SoundSlider general, music, effects;
     
-    void Awake ()
+    protected override void SJAwake ()
     {
         GameConfiguration gameConfiguration = GameConfigurationCareTaker.GetConfiguration();
         

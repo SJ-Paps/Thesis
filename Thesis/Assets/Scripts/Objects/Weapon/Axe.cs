@@ -7,10 +7,8 @@ public class Axe : Weapon, IThrowable
     [SerializeField]
     private Collider2D sharpEdge;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
-
         type = DamageType.Sharp;
     }
 

@@ -55,7 +55,7 @@ public class MainMenu : SJMonoBehaviour {
         confirmationMenuPrefab = SJResources.LoadAsset<GameObject>("ConfirmationMenuPrefab").GetComponent<ConfirmationMenu>();
     }
 
-    private void OnEnable()
+    protected override void SJOnEnable()
     {
         if (onShow != null)
         {
@@ -63,7 +63,7 @@ public class MainMenu : SJMonoBehaviour {
         }
     }
 
-    private void OnDisable()
+    protected override void SJOnDisable()
     {
         if (onHide != null)
         {
@@ -87,10 +87,8 @@ public class MainMenu : SJMonoBehaviour {
         }
     }
 
-    protected override void OnDestroy()
+    protected override void SJOnDestroy()
     {
-        base.OnDestroy();
-
         instance = null;
     }
 

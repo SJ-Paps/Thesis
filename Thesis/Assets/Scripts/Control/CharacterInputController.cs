@@ -15,7 +15,7 @@ public class CharacterInputController : UnityInputController<Character, Characte
     [SerializeField]
     private KeyOrder[] keyOrders;
 
-    void Update()
+    protected override void SJUpdate()
     {
         Control();
     }

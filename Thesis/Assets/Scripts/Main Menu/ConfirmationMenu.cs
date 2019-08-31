@@ -18,7 +18,7 @@ public class ConfirmationMenu : SJMonoBehaviour {
         }
     }
 
-    void Awake()
+    protected override void SJAwake()
     {
         gameObject.SetActive(false);
     }

@@ -11,19 +11,17 @@ public class LanguageButton : SJMonoBehaviour {
     [SerializeField]
     private Text text;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
-
         button.onClick.AddListener(ChangeLanguage);
     }
 
-    private void OnEnable()
+    protected override void SJOnEnable()
     {
         LanguageManager.onLanguageChanged += OnLanguageChanged;
     }
 
-    private void OnDisable()
+    protected override void SJOnDisable()
     {
         LanguageManager.onLanguageChanged -= OnLanguageChanged;
     }

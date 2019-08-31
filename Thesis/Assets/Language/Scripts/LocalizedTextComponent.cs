@@ -23,10 +23,8 @@ public abstract class LocalizedTextComponent : SJMonoBehaviour {
         }
     }
 
-    protected override void Awake () {
-
-        base.Awake();
-
+    protected override void SJAwake () {
+        
         localizedText = new LocalizedText(langTag, option);
 
         localizedText.onTextChanged += OnTextChanged;
@@ -34,10 +32,8 @@ public abstract class LocalizedTextComponent : SJMonoBehaviour {
         localizedText.UpdateText();
 	}
 
-    protected override void OnDestroy()
+    protected override void SJOnDestroy()
     {
-        base.OnDestroy();
-
         localizedText.Dispose();
     }
 

@@ -8,10 +8,8 @@ public class RelativeJoint2DTuple : SJMonoBehaviour
     public RelativeJoint2D RelativeOther { get; private set; }
 
     
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
-
         RelativeMe = gameObject.AddComponent<RelativeJoint2D>();
         RelativeOther = gameObject.AddComponent<RelativeJoint2D>();
 

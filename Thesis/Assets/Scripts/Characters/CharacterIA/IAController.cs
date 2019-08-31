@@ -2,9 +2,9 @@
 {
     public Blackboard Blackboard { get; protected set; }
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
+        base.SJAwake();
 
         Blackboard = GetComponent<Blackboard>();
     }

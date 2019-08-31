@@ -6,8 +6,10 @@ public class TriggerLogger : SJBoxCollider2D
     [SerializeField]
     private UnityEvent onTriggerEnter;
 
-    void Start()
+    protected override void SJStart()
     {
+        base.SJStart();
+
         onEnteredTrigger += OnEnter;
     }
 

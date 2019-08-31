@@ -88,9 +88,9 @@ public class Turret : Robot, ISeer, IDamagable
 
     private EyeCollection eyes;
 
-    protected override void Awake()
+    protected override void SJAwake()
     {
-        base.Awake();
+        base.SJAwake();
 
         HeadCollider = HeadRigidBody.GetComponent<SJCollider2D>();
         BodyCollider = BodyRigidBody.GetComponent<SJCollider2D>();

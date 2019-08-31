@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System;
 
-public class SoundSlider : MonoBehaviour {
+public class SoundSlider : SJMonoBehaviour {
 
     [SerializeField]
     private Slider slider;

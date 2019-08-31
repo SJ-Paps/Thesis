@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ProfileInput : MonoBehaviour
+public class ProfileInput : SJMonoBehaviour
 {
     [SerializeField]
     private InputField inputField;
@@ -11,14 +11,13 @@ public class ProfileInput : MonoBehaviour
 
     [SerializeField]
     private Text notificationText;
-
-    // Start is called before the first frame update
-    void Start()
+    
+    protected override void SJStart()
     {
         submitButton.onClick.AddListener(OnSubmit);
     }
 
-    private void OnEnable()
+    protected override void SJOnEnable()
     {
         notificationText.gameObject.SetActive(false);
     }

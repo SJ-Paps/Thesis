@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 
-public class CameraFollow : MonoBehaviour {
+public class CameraFollow : SJMonoBehaviour {
     
 	private Transform target;
     private float z;
 
-    void Start() {
+    protected override void SJStart() {
 
         z = transform.position.z;
 	}
 
-	void Update () {
+	protected override void SJUpdate () {
 
         if(target == null)
         {

@@ -1,7 +1,7 @@
 ﻿using Paps.Unity;
 using UnityEngine;
 
-public class GeneralInputController : MonoBehaviour
+public class GeneralInputController : SJMonoBehaviour
 {
     private static GeneralInputController instance;
 
@@ -28,12 +28,12 @@ public class GeneralInputController : MonoBehaviour
         UnityUtil.DontDestroyOnLoad(instance.gameObject);
     }
 
-    private void Awake()
+    protected override void SJAwake()
     {
         MainMenu.GetInstance().Hide();
     }
 
-    void Update()
+    protected override void SJUpdate()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
