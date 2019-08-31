@@ -1,5 +1,6 @@
 ﻿using Paps.Unity;
 using UnityEngine;
+using System.Collections;
 
 public class CoroutineManager : SJMonoBehaviour {
 
@@ -22,5 +23,14 @@ public class CoroutineManager : SJMonoBehaviour {
     private void Init()
     {
         UnityUtil.DontDestroyOnLoad(gameObject);
+    }
+
+    public new void StopCoroutine(IEnumerator coroutine)
+    {
+        try
+        {
+            base.StopCoroutine(coroutine);
+        }
+        catch { }
     }
 }

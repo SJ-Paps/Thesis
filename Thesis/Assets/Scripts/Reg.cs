@@ -4,22 +4,13 @@ using UnityEngine;
 
 public static class Reg
 {
-    public const string languageListFileName = "langl";
-    public const string languageFileName = "lang";
-    public const string languageListAssetName = "langList";
-    public const string languageAssetName = "language";
-
-    public const string assetBundleManifestAssetName = "AssetBundles";
-
-    public const string resourcesAssetBundleFileName = "resources";
+    public static readonly string APPLICATION_INFO_ASSET_NAME = "application_info";
+    public static readonly string LANGUAGE_INFO_ASSET_NAME = "language_info";
 
 #if UNITY_EDITOR
     public static readonly string buildPath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Application.productName), Application.productName + ".exe");
     public static readonly string assetBundleDataPathBuild = Path.GetFullPath(Path.Combine(buildPath, "../AssetBundles"));
-
-#else
     
-
 #endif
 
     public static readonly int playerLayer = LayerMask.NameToLayer("Player");

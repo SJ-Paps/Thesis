@@ -2,7 +2,6 @@
 
 public class InitializeLanguage : ScriptableLoadRoutine
 {
-    private const string LANGUAGE_INFO_ASSET_NAME = "language_info";
 
     public override bool IsCompleted
     {
@@ -22,7 +21,7 @@ public class InitializeLanguage : ScriptableLoadRoutine
 
     public override void Load()
     {
-        LanguageInfo[] languageInfo = SJResources.LoadAsset<LanguageInfoAsset>(LANGUAGE_INFO_ASSET_NAME).LanguageInfo;
+        LanguageInfo[] languageInfo = SJResources.LoadAsset<LanguageInfoAsset>(Reg.LANGUAGE_INFO_ASSET_NAME).LanguageInfo;
 
         LanguageManager.LoadLanguageInfo(languageInfo, GetDefaultLanguageIndex(languageInfo));
     }

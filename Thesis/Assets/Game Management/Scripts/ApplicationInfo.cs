@@ -1,11 +1,10 @@
 ﻿public static class ApplicationInfo
 {
-    private const string APPLICATION_INFO_ASSET_NAME = "application_info";
     private static ApplicationInfoAsset infoAsset;
 
     static ApplicationInfo()
     {
-        infoAsset = SJResources.LoadAsset<ApplicationInfoAsset>(APPLICATION_INFO_ASSET_NAME);
+        infoAsset = SJResources.LoadAsset<ApplicationInfoAsset>(Reg.APPLICATION_INFO_ASSET_NAME);
     }
 
     public static string[] BeginningScenes
