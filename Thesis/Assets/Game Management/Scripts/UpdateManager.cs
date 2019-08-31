@@ -36,7 +36,7 @@ public class UpdateManager
         return instance;
     }
 
-    private List<IUpdateable> updateables;
+    private List<IUnityUpdateable> updateables;
 
     private UpdateManagerObjectInstance objectInstance;
 
@@ -52,7 +52,7 @@ public class UpdateManager
 
     private void Initialize()
     {
-        updateables = new List<IUpdateable>();
+        updateables = new List<IUnityUpdateable>();
 
         GameObject gameObject = new GameObject(nameof(UpdateManagerObjectInstance));
 
@@ -61,12 +61,12 @@ public class UpdateManager
         UnityUtil.DontDestroyOnLoad(objectInstance);
     }
 
-    public void Subscribe(IUpdateable updateable)
+    public void Subscribe(IUnityUpdateable updateable)
     {
         updateables.Add(updateable);
     }
 
-    public void Unsubscribe(IUpdateable updateable)
+    public void Unsubscribe(IUnityUpdateable updateable)
     {
         if(updateables.Remove(updateable))
         {
@@ -96,7 +96,7 @@ public class UpdateManager
                 break;
             }
 
-            IUpdateable updateableItem = updateables[currentIndex];
+            IUnityUpdateable updateableItem = updateables[currentIndex];
 
             updateableItem.DoUpdate();
         }
@@ -113,7 +113,7 @@ public class UpdateManager
                 break;
             }
 
-            IUpdateable updateableItem = updateables[currentIndex];
+            IUnityUpdateable updateableItem = updateables[currentIndex];
 
             updateableItem.DoLateUpdate();
         }
@@ -130,7 +130,7 @@ public class UpdateManager
                 break;
             }
 
-            IUpdateable updateableItem = updateables[currentIndex];
+            IUnityUpdateable updateableItem = updateables[currentIndex];
 
             updateableItem.DoFixedUpdate();
         }

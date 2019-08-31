@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public abstract class SJMonoBehaviour : MonoBehaviour, IUpdateable
+public abstract class SJMonoBehaviour : MonoBehaviour, IUnityUpdateable
 {
     [SerializeField]
     [ReadOnly]

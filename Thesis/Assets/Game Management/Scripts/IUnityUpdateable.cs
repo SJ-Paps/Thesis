@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IUpdateable
+public interface IUnityUpdateable
 {
     void DoUpdate();
     void DoLateUpdate();
