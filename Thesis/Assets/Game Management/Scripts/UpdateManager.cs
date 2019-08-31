@@ -8,17 +8,17 @@ public class UpdateManager
     {
         public void Update()
         {
-            UpdateManager.GetInstance().Update();
+            UpdateManager.GetInstance().ExecuteUpdates();
         }
 
         public void LateUpdate()
         {
-            UpdateManager.GetInstance().LateUpdate();
+            UpdateManager.GetInstance().ExecuteLateUpdates();
         }
 
         public void FixedUpdate()
         {
-            UpdateManager.GetInstance().FixedUpdate();
+            UpdateManager.GetInstance().ExecuteFixedUpdates();
         }
     }
 
@@ -38,19 +38,27 @@ public class UpdateManager
 
     private List<IUpdateable> updateables;
 
-    private GameObject gameObjectInstance;
+    private UpdateManagerObjectInstance objectInstance;
 
     private int currentIndex = 0;
+
+    public bool IsActive
+    {
+        get
+        {
+            return objectInstance.gameObject.activeSelf && objectInstance.enabled;
+        }
+    }
 
     private void Initialize()
     {
         updateables = new List<IUpdateable>();
 
-        gameObjectInstance = new GameObject(nameof(UpdateManagerObjectInstance));
+        GameObject gameObject = new GameObject(nameof(UpdateManagerObjectInstance));
 
-        gameObjectInstance.AddComponent<UpdateManagerObjectInstance>();
+        objectInstance = gameObject.AddComponent<UpdateManagerObjectInstance>();
 
-        UnityUtil.DontDestroyOnLoad(gameObjectInstance);
+        UnityUtil.DontDestroyOnLoad(objectInstance);
     }
 
     public void Subscribe(IUpdateable updateable)
@@ -68,11 +76,26 @@ public class UpdateManager
             }
         }
     }
+
+    public void Disable()
+    {
+        objectInstance.gameObject.SetActive(false);
+    }
+
+    public void Enable()
+    {
+        objectInstance.gameObject.SetActive(true);
+    }
     
-    void Update()
+    private void ExecuteUpdates()
     {
         for(currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
         {
+            if(IsActive == false)
+            {
+                break;
+            }
+
             IUpdateable updateableItem = updateables[currentIndex];
 
             updateableItem.DoUpdate();
@@ -81,10 +104,15 @@ public class UpdateManager
         currentIndex = 0;
     }
 
-    void LateUpdate()
+    private void ExecuteLateUpdates()
     {
         for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
         {
+            if (IsActive == false)
+            {
+                break;
+            }
+
             IUpdateable updateableItem = updateables[currentIndex];
 
             updateableItem.DoLateUpdate();
@@ -93,10 +121,15 @@ public class UpdateManager
         currentIndex = 0;
     }
 
-    void FixedUpdate()
+    private void ExecuteFixedUpdates()
     {
         for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
         {
+            if (IsActive == false)
+            {
+                break;
+            }
+
             IUpdateable updateableItem = updateables[currentIndex];
 
             updateableItem.DoFixedUpdate();
