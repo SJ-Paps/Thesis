@@ -2,20 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 
-/// <summary>
-/// Esta clase esta para reemplazar a la clase de Resources de Unity. Se puede acceder a los mismos recursos mediante AssetBundleLibrary, pidiendo el assetbundle llamado "resources"
-/// </summary>
 public static class SJResources
 {
-    public static readonly string assetBundleDataPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../AssetBundles"));
-
     private static List<AssetBundle> assetBundles;
 
     static SJResources()
     {
         assetBundles = new List<AssetBundle>();
 
-        AssetBundle manifestBundle = AssetBundle.LoadFromFile(Path.Combine(assetBundleDataPath, "AssetBundles"));
+        AssetBundle manifestBundle = AssetBundle.LoadFromFile(Path.Combine(Reg.ASSETBUNDLE_DIRECTORY, "AssetBundles"));
 
         AssetBundleManifest manifest = manifestBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
 
@@ -23,7 +18,7 @@ public static class SJResources
 
         for (int i = 0; i < assetBundleNames.Length; i++)
         {
-            AssetBundle assetBundle = AssetBundle.LoadFromFile(Path.Combine(assetBundleDataPath, assetBundleNames[i]));
+            AssetBundle assetBundle = AssetBundle.LoadFromFile(Path.Combine(Reg.ASSETBUNDLE_DIRECTORY, assetBundleNames[i]));
 
             if (assetBundle != null)
             {

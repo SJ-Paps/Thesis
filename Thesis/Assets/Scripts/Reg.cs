@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class Reg
 {
+    public static readonly string ASSETBUNDLE_DIRECTORY = Path.GetFullPath(Path.Combine(Application.dataPath, "../AssetBundles"));
     public static readonly string APPLICATION_INFO_ASSET_NAME = "application_info";
     public static readonly string LANGUAGE_INFO_ASSET_NAME = "language_info";
 

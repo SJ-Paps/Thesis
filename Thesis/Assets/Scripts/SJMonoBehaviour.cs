@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System;
+using SJ.Updatables;
 
-public abstract class SJMonoBehaviour : MonoBehaviour, IUnityUpdateable
+public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
 {
     [SerializeField]
     [ReadOnly]
@@ -32,7 +33,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUnityUpdateable
 
         set
         {
-            if(enableUpdate != value)
+            if (enableUpdate != value)
             {
                 enableUpdate = value;
 
@@ -43,13 +44,13 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUnityUpdateable
 
     private void UpdateEnableUpdateSubscription()
     {
-        if(EnableUpdate && gameObject.activeSelf && this.enabled)
+        if (EnableUpdate && gameObject.activeSelf && this.enabled)
         {
-            UpdateManager.GetInstance().Subscribe(this);
+            SJ.Application.GetUpdater().Subscribe(this);
         }
         else
         {
-            UpdateManager.GetInstance().Unsubscribe(this);
+            SJ.Application.GetUpdater().Unsubscribe(this);
         }
     }
 
@@ -85,7 +86,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUnityUpdateable
 
         SJOnEnable();
     }
-    
+
     protected virtual void SJOnEnable()
     {
 
@@ -152,5 +153,6 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUnityUpdateable
 
 #endif
 
-    
+
 }
+

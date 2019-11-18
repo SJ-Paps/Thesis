@@ -2,141 +2,141 @@
 using Paps.Unity;
 using UnityEngine;
 
-public class UpdateManager
+namespace SJ.Updatables
 {
-    private class UpdateManagerObjectInstance : SJMonoBehaviour
+    public class UpdateManager : IUpdater
     {
-        public void Update()
+        private class UpdateManagerObject : MonoBehaviour
         {
-            UpdateManager.GetInstance().ExecuteUpdates();
-        }
+            private UpdateManager updateManager;
 
-        public void LateUpdate()
-        {
-            UpdateManager.GetInstance().ExecuteLateUpdates();
-        }
-
-        public void FixedUpdate()
-        {
-            UpdateManager.GetInstance().ExecuteFixedUpdates();
-        }
-    }
-
-    private static UpdateManager instance;
-
-    public static UpdateManager GetInstance()
-    {
-        if(instance == null)
-        {
-            instance = new UpdateManager();
-
-            instance.Initialize();
-        }
-
-        return instance;
-    }
-
-    private List<IUnityUpdateable> updateables;
-
-    private UpdateManagerObjectInstance objectInstance;
-
-    private int currentIndex = 0;
-
-    public bool IsActive
-    {
-        get
-        {
-            return objectInstance.gameObject.activeSelf && objectInstance.enabled;
-        }
-    }
-
-    private void Initialize()
-    {
-        updateables = new List<IUnityUpdateable>();
-
-        GameObject gameObject = new GameObject(nameof(UpdateManagerObjectInstance));
-
-        objectInstance = gameObject.AddComponent<UpdateManagerObjectInstance>();
-
-        UnityUtil.DontDestroyOnLoad(objectInstance);
-    }
-
-    public void Subscribe(IUnityUpdateable updateable)
-    {
-        updateables.Add(updateable);
-    }
-
-    public void Unsubscribe(IUnityUpdateable updateable)
-    {
-        if(updateables.Remove(updateable))
-        {
-            if(currentIndex > 0)
+            public void SetUpdateManager(UpdateManager updateManager)
             {
-                currentIndex--;
-            }
-        }
-    }
-
-    public void Disable()
-    {
-        objectInstance.gameObject.SetActive(false);
-    }
-
-    public void Enable()
-    {
-        objectInstance.gameObject.SetActive(true);
-    }
-    
-    private void ExecuteUpdates()
-    {
-        for(currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
-        {
-            if(IsActive == false)
-            {
-                break;
+                this.updateManager = updateManager;
             }
 
-            IUnityUpdateable updateableItem = updateables[currentIndex];
-
-            updateableItem.DoUpdate();
-        }
-
-        currentIndex = 0;
-    }
-
-    private void ExecuteLateUpdates()
-    {
-        for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
-        {
-            if (IsActive == false)
+            public void Update()
             {
-                break;
+                updateManager.ExecuteUpdates();
             }
 
-            IUnityUpdateable updateableItem = updateables[currentIndex];
-
-            updateableItem.DoLateUpdate();
-        }
-
-        currentIndex = 0;
-    }
-
-    private void ExecuteFixedUpdates()
-    {
-        for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
-        {
-            if (IsActive == false)
+            public void LateUpdate()
             {
-                break;
+                updateManager.ExecuteLateUpdates();
             }
 
-            IUnityUpdateable updateableItem = updateables[currentIndex];
-
-            updateableItem.DoFixedUpdate();
+            public void FixedUpdate()
+            {
+                updateManager.ExecuteFixedUpdates();
+            }
         }
 
-        currentIndex = 0;
+        private List<IUpdatable> updateables;
+
+        private UpdateManagerObject objectInstance;
+
+        private int currentIndex = 0;
+
+        public bool IsActive
+        {
+            get
+            {
+                return objectInstance.gameObject.activeSelf && objectInstance.enabled;
+            }
+        }
+
+        public UpdateManager()
+        {
+            updateables = new List<IUpdatable>();
+
+            GameObject gameObject = new GameObject(nameof(UpdateManagerObject));
+
+            objectInstance = gameObject.AddComponent<UpdateManagerObject>();
+
+            UnityUtil.DontDestroyOnLoad(objectInstance);
+
+            objectInstance.SetUpdateManager(this);
+        }
+
+        public void Subscribe(IUpdatable updateable)
+        {
+            updateables.Add(updateable);
+        }
+
+        public void Unsubscribe(IUpdatable updateable)
+        {
+            if (updateables.Remove(updateable))
+            {
+                if (currentIndex > 0)
+                {
+                    currentIndex--;
+                }
+            }
+        }
+
+        public void Disable()
+        {
+            objectInstance.gameObject.SetActive(false);
+        }
+
+        public void Enable()
+        {
+            objectInstance.gameObject.SetActive(true);
+        }
+
+        private void ExecuteUpdates()
+        {
+            for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
+            {
+                if (IsActive == false)
+                {
+                    break;
+                }
+
+                IUpdatable updateableItem = updateables[currentIndex];
+
+                updateableItem.DoUpdate();
+            }
+
+            currentIndex = 0;
+        }
+
+        private void ExecuteLateUpdates()
+        {
+            for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
+            {
+                if (IsActive == false)
+                {
+                    break;
+                }
+
+                IUpdatable updateableItem = updateables[currentIndex];
+
+                updateableItem.DoLateUpdate();
+            }
+
+            currentIndex = 0;
+        }
+
+        private void ExecuteFixedUpdates()
+        {
+            for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
+            {
+                if (IsActive == false)
+                {
+                    break;
+                }
+
+                IUpdatable updateableItem = updateables[currentIndex];
+
+                updateableItem.DoFixedUpdate();
+            }
+
+            currentIndex = 0;
+        }
     }
 }
+
+
 
 

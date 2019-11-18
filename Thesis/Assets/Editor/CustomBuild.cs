@@ -13,7 +13,7 @@ public class CustomBuild
     [MenuItem("Build/Build AssetBundles")]
     private static void BuildAssetBundles()
     {
-        BuildAssetBundles(SJResources.assetBundleDataPath, BuildTarget.StandaloneWindows);
+        BuildAssetBundles(Reg.ASSETBUNDLE_DIRECTORY, BuildTarget.StandaloneWindows);
     }
     
     private static void BuildAssetBundles(string path, BuildTarget target)
