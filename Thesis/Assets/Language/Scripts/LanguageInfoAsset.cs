@@ -3,43 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[CreateAssetMenu(fileName = "language_info", menuName = nameof(LanguageInfoAsset))]
-public class LanguageInfoAsset : ScriptableObject
+namespace SJ.Localization
 {
-    [SerializeField]
-    private LanguageInfo[] languageInfo;
-
-    public LanguageInfo[] LanguageInfo
+    [CreateAssetMenu(fileName = "language_info", menuName = nameof(LanguageInfoAsset))]
+    public class LanguageInfoAsset : ScriptableObject
     {
-        get
+        [SerializeField]
+        private LanguageInfo[] languageInfo;
+
+        public LanguageInfo[] LanguageInfo
         {
-            return languageInfo;
-        }
-    }
-} 
-
-[Serializable]
-public class LanguageInfo
-{
-    [SerializeField]
-    private string language;
-
-    [SerializeField]
-    private TextAsset textAsset;
-
-    public string Language
-    {
-        get
-        {
-            return language;
+            get
+            {
+                return languageInfo;
+            }
         }
     }
 
-    public string Text
+    [Serializable]
+    public class LanguageInfo
     {
-        get
+        [SerializeField]
+        private string language;
+
+        [SerializeField]
+        private TextAsset textAsset;
+
+        public string Language
         {
-            return textAsset.text;
+            get
+            {
+                return language;
+            }
+        }
+
+        public string Text
+        {
+            get
+            {
+                return textAsset.text;
+            }
         }
     }
 }
+

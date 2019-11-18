@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using SJ.Localization;
 using SJ.Updatables;
-using System;
 using UnityEngine.SceneManagement;
-using SJ.Localization;
 
 namespace SJ
 {
