@@ -1,5 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using SJ.Profiles;
+using SJ.Profiles.Exceptions;
+using System.Threading.Tasks;
+using SJ.Coroutines;
+using System;
 
 namespace SJ.UI
 {
@@ -56,11 +61,25 @@ namespace SJ.UI
         {
             string lastProfile = GameConfigurationCareTaker.GetConfiguration().lastProfile;
 
-            if (ProfileCareTaker.ProfileExistsAndIsValid(lastProfile))
-            {
-                Debug.Log(lastProfile);
-                GameManager.GetInstance().BeginSessionWithProfile(ProfileCareTaker.GetProfileDataFromProfile(lastProfile));
-            }
+            IProfileRepository profileRepository = Repositories.GetProfileRepository();
+            ICoroutineScheduler coroutineScheduler = Application.GetCoroutineScheduler();
+
+            coroutineScheduler.AwaitTask(profileRepository.Exists(lastProfile),
+                delegate (bool exists)
+                {
+                    if (exists)
+                    {
+                        coroutineScheduler.AwaitTask(profileRepository.GetProfileDataFrom(lastProfile),
+                            delegate (ProfileData profileData)
+                            {
+                                GameManager.GetInstance().BeginSessionWithProfile(profileData);
+                            });
+                    }
+                    else
+                    {
+                        Logger.LogConsole("Profile " + lastProfile + " missing");
+                    }
+                });
         }
 
         private void UpdateButtonStates()

@@ -1,46 +1,50 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using SJ.Profiles;
 
-public class ProfileInfoItem : SJMonoBehaviour
+namespace SJ.UI
 {
-    [SerializeField]
-    private Text profileNameText;
-
-    [SerializeField]
-    private Button selectButton, deleteButton;
-
-    public event Action<ProfileInfoItem> onSelectRequest;
-    public event Action<ProfileInfoItem> onDeleteRequest;
-
-    public ProfileData ProfileData { get; private set; }
-
-    protected override void SJStart()
+    public class ProfileInfoItem : SJMonoBehaviour
     {
-        selectButton.onClick.AddListener(OnSelectRequest);
-        deleteButton.onClick.AddListener(OnDeleteRequest);
-    }
+        [SerializeField]
+        private Text profileNameText;
 
-    public void SetInfo(ProfileData profileData)
-    {
-        ProfileData = profileData;
+        [SerializeField]
+        private Button selectButton, deleteButton;
 
-        profileNameText.text = ProfileData.name;
-    }
+        public event Action<ProfileInfoItem> onSelectRequest;
+        public event Action<ProfileInfoItem> onDeleteRequest;
 
-    private void OnSelectRequest()
-    {
-        if(onSelectRequest != null)
+        public ProfileData ProfileData { get; private set; }
+
+        protected override void SJStart()
         {
-            onSelectRequest(this);
+            selectButton.onClick.AddListener(OnSelectRequest);
+            deleteButton.onClick.AddListener(OnDeleteRequest);
         }
-    }
 
-    private void OnDeleteRequest()
-    {
-        if(onDeleteRequest != null)
+        public void SetInfo(ProfileData profileData)
         {
-            onDeleteRequest(this);
+            ProfileData = profileData;
+
+            profileNameText.text = ProfileData.name;
+        }
+
+        private void OnSelectRequest()
+        {
+            if (onSelectRequest != null)
+            {
+                onSelectRequest(this);
+            }
+        }
+
+        private void OnDeleteRequest()
+        {
+            if (onDeleteRequest != null)
+            {
+                onDeleteRequest(this);
+            }
         }
     }
 }

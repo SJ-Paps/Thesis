@@ -2,87 +2,96 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using SJ.Profiles;
 
-public class ProfileMenu : SJMonoBehaviour
+namespace SJ.UI
 {
-    [SerializeField]
-    private ProfileInfoItem profileInfoItemPrefab;
-
-    [SerializeField]
-    private Transform layoutObject;
-
-    private List<ProfileInfoItem> items;
-    
-    protected override void SJAwake()
+    public class ProfileMenu : SJMonoBehaviour
     {
-        items = new List<ProfileInfoItem>();
-    }
+        [SerializeField]
+        private ProfileInfoItem profileInfoItemPrefab;
 
-    protected override void SJOnEnable()
-    {
-        CoroutineManager.GetInstance().StartCoroutine(WaitLoadProfiles());
-    }
+        [SerializeField]
+        private Transform layoutObject;
 
-    protected override void SJOnDisable()
-    {
-        for(int i = 0; i < items.Count; i++)
+        private List<ProfileInfoItem> items;
+
+        private IProfileRepository profileRepository;
+
+        protected override void SJAwake()
         {
-            Destroy(items[i].gameObject);
-            items.RemoveAt(i);
-            i--;
-        }
-    }
-
-    private IEnumerator WaitLoadProfiles()
-    {
-        Task<ProfileData[]> taskProfiles = ProfileCareTaker.GetAllProfilesAsync();
-
-        while(taskProfiles.IsCompleted == false)
-        {
-            yield return null;
+            profileRepository = Repositories.GetProfileRepository();
+            items = new List<ProfileInfoItem>();
         }
 
-        ProfileData[] profiles = taskProfiles.Result;
-
-        if(profiles != null && profiles.Length > 0)
+        protected override void SJOnEnable()
         {
-            for (int i = 0; i < profiles.Length; i++)
+            Application.GetCoroutineScheduler().StartCoroutine(WaitLoadProfiles());
+        }
+
+        protected override void SJOnDisable()
+        {
+            for (int i = 0; i < items.Count; i++)
             {
-                ProfileInfoItem instance = Instantiate(profileInfoItemPrefab, layoutObject);
-                items.Add(instance);
-                instance.SetInfo(profiles[i]);
-                instance.onSelectRequest += OnSelectProfile;
-                instance.onDeleteRequest += OnDeleteProfile;
+                Destroy(items[i].gameObject);
+                items.RemoveAt(i);
+                i--;
             }
         }
-        
-    }
 
-    private void OnSelectProfile(ProfileInfoItem item)
-    {
-        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
-
-        gameConfiguration.lastProfile = item.ProfileData.name;
-
-        GameConfigurationCareTaker.SaveConfiguration();
-
-        GameManager.GetInstance().BeginSessionWithProfile(item.ProfileData);
-    }
-
-    private void OnDeleteProfile(ProfileInfoItem item)
-    {
-        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
-
-        if(gameConfiguration.lastProfile == item.ProfileData.name)
+        private IEnumerator WaitLoadProfiles()
         {
-            gameConfiguration.lastProfile = null;
+            Task<ProfileData[]> taskProfiles = profileRepository.GetAllProfileData();
 
-            GameConfigurationCareTaker.SaveConfiguration();
+            while (taskProfiles.IsCompleted == false)
+            {
+                yield return null;
+            }
+
+            ProfileData[] profiles = taskProfiles.Result;
+
+            if (profiles != null && profiles.Length > 0)
+            {
+                for (int i = 0; i < profiles.Length; i++)
+                {
+                    ProfileInfoItem instance = Instantiate(profileInfoItemPrefab, layoutObject);
+                    items.Add(instance);
+                    instance.SetInfo(profiles[i]);
+                    instance.onSelectRequest += OnSelectProfile;
+                    instance.onDeleteRequest += OnDeleteProfile;
+                }
+            }
+
         }
 
-        ProfileCareTaker.DeleteProfile(item.ProfileData.name);
-        items.Remove(item);
-        Destroy(item.gameObject);
-    }
+        private void OnSelectProfile(ProfileInfoItem item)
+        {
+            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
 
+            gameConfiguration.lastProfile = item.ProfileData.name;
+
+            GameConfigurationCareTaker.SaveConfiguration();
+
+            GameManager.GetInstance().BeginSessionWithProfile(item.ProfileData);
+        }
+
+        private void OnDeleteProfile(ProfileInfoItem item)
+        {
+            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+
+            if (gameConfiguration.lastProfile == item.ProfileData.name)
+            {
+                gameConfiguration.lastProfile = null;
+
+                GameConfigurationCareTaker.SaveConfiguration();
+            }
+
+            profileRepository.DeleteProfile(item.ProfileData.name).Wait();
+            items.Remove(item);
+            Destroy(item.gameObject);
+        }
+
+    }
 }
+
+

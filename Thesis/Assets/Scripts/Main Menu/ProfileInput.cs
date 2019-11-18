@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using SJ.Profiles;
+using SJ.Coroutines;
 
 namespace SJ.UI
 {
@@ -28,22 +30,35 @@ namespace SJ.UI
         {
             string profileName = inputField.text;
 
-            if (ProfileCareTaker.ProfileExistsAndIsValid(profileName))
+            if(IsValidProfileName(profileName))
             {
-                inputField.text = string.Empty;
-                notificationText.gameObject.SetActive(true);
-                notificationText.text = Application.GetTranslatorService().GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper();
+                Application.GetCoroutineScheduler()
+                .AwaitTask(Repositories.GetProfileRepository().Exists(profileName),
+                delegate (bool exists)
+                {
+                    if (exists)
+                    {
+                        inputField.text = string.Empty;
+                        notificationText.gameObject.SetActive(true);
+                        notificationText.text = Application.GetTranslatorService().GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper();
+                    }
+                    else
+                    {
+                        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+
+                        gameConfiguration.lastProfile = profileName;
+
+                        GameConfigurationCareTaker.SaveConfiguration();
+
+                        GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName });
+                    }
+                });
             }
-            else
-            {
-                ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+        }
 
-                gameConfiguration.lastProfile = profileName;
-
-                GameConfigurationCareTaker.SaveConfiguration();
-
-                GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName });
-            }
+        private bool IsValidProfileName(string profileName)
+        {
+            return string.IsNullOrEmpty(profileName) == false;
         }
     }
 

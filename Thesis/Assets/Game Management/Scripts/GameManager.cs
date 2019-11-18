@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Reflection;
+using SJ.Profiles;
+using SJ.Coroutines;
+using SJ;
 
-public class GameManager {
+public class GameManager
+{
 
     public class GameSessionSaveData
     {
@@ -50,8 +54,14 @@ public class GameManager {
 
     public ProfileData CurrentProfile { get; private set; }
 
+    private ICoroutineScheduler coroutineScheduler;
+    private IProfileRepository profileRepository;
+
     private GameManager()
     {
+        coroutineScheduler = SJ.Application.GetCoroutineScheduler();
+        profileRepository = Repositories.GetProfileRepository();
+
         beginScenes = ApplicationInfo.BeginningScenes;
         returnSceneOnEndSession = ApplicationInfo.ReturnSceneOnEndSession;
 
@@ -73,20 +83,24 @@ public class GameManager {
 
     public void BeginSessionWithProfile(ProfileData profileData)
     {
-        if(ProfileCareTaker.ProfileExistsAndIsValid(profileData.name) == false)
-        {
-            SaveDefaultProfile(profileData);
-        }
+        coroutineScheduler.AwaitTask(profileRepository.Exists(profileData.name),
+            delegate (bool exists)
+            {
+                if (exists == false)
+                {
+                    SaveDefaultProfile(profileData);
+                }
 
-        CurrentProfile = profileData;
+                CurrentProfile = profileData;
 
-        LoadGame();
+                LoadGame();
+            });
     }
 
     private void SaveDefaultProfile(ProfileData profileData)
     {
-        Task task = ProfileCareTaker.SaveProfileAsync(
-            profileData.name, profileData,
+        Task task = profileRepository.SaveProfile(
+            profileData,
             new SaveData(profileData.name, new GameSessionSaveData() { gameplaySaves = null, isBeginning = true, loadedScenesIndexes = GetScenesIndex(beginScenes) }));
 
         task.Wait();
@@ -96,9 +110,9 @@ public class GameManager {
     {
         int[] indexArray = new int[scenes.Length];
 
-        for(int i = 0, j = 0; i < SceneManager.sceneCount; i++)
+        for (int i = 0, j = 0; i < SceneManager.sceneCount; i++)
         {
-            if(SceneManager.GetSceneByBuildIndex(i).name == scenes[j])
+            if (SceneManager.GetSceneByBuildIndex(i).name == scenes[j])
             {
                 indexArray[j] = i;
                 j++;
@@ -121,7 +135,7 @@ public class GameManager {
     {
         CallOnSavingBeganEvent();
 
-        CoroutineManager.GetInstance().StartCoroutine(GetAllSavesAndAWaitSerializationCoroutine());
+        coroutineScheduler.StartCoroutine(GetAllSavesAndAWaitSerializationCoroutine());
     }
 
     private IEnumerator GetAllSavesAndAWaitSerializationCoroutine()
@@ -159,7 +173,7 @@ public class GameManager {
             isBeginning = false
         };
 
-        Task serializationTask = ProfileCareTaker.SaveProfileAsync(CurrentProfile.name, CurrentProfile, new SaveData(CurrentProfile.name, sessionData));
+        Task serializationTask = profileRepository.SaveProfile(CurrentProfile, new SaveData(CurrentProfile.name, sessionData));
 
         while (serializationTask.IsCompleted == false)
         {
@@ -181,22 +195,22 @@ public class GameManager {
     public void LoadGame()
     {
         CallOnLoadingBeganEvent();
-        
-        CoroutineManager.GetInstance().StartCoroutine(LoadFromSaveGameCoroutine());
+
+        coroutineScheduler.StartCoroutine(LoadFromSaveGameCoroutine());
     }
 
     private IEnumerator LoadFromSaveGameCoroutine()
     {
-        Task<SaveData> saveDeserializationTask = ProfileCareTaker.GetSaveDataFromProfileAsync(CurrentProfile.name);
+        Task<SaveData> saveDeserializationTask = profileRepository.GetSaveDataFromProfile(CurrentProfile.name);
 
         GameSessionSaveData sessionData = null;
 
-        while(saveDeserializationTask.IsCompleted == false)
+        while (saveDeserializationTask.IsCompleted == false)
         {
             yield return null;
         }
 
-        if(saveDeserializationTask.IsFaulted)
+        if (saveDeserializationTask.IsFaulted)
         {
             CallOnLoadingFailedEvent();
             saveDeserializationTask.Dispose();
@@ -206,13 +220,15 @@ public class GameManager {
         {
             sessionData = (GameSessionSaveData)saveDeserializationTask.Result.saveObject;
 
-            if(sessionData.isBeginning)
+            if (sessionData.isBeginning)
             {
                 NewGame(beginScenes);
             }
             else
             {
-                yield return CoroutineManager.GetInstance().StartCoroutine(PrepareScene(sessionData));
+
+
+                yield return coroutineScheduler.AwaitCoroutine(PrepareScene(sessionData));
 
                 CallOnLoadingSucceededEvent();
             }
@@ -221,7 +237,7 @@ public class GameManager {
 
     private IEnumerator PrepareScene(GameSessionSaveData sessionData)
     {
-        yield return CoroutineManager.GetInstance().StartCoroutine(LoadGameplayScenes(sessionData.loadedScenesIndexes));
+        yield return coroutineScheduler.AwaitCoroutine(LoadGameplayScenes(sessionData.loadedScenesIndexes));
 
         object[] saves = sessionData.gameplaySaves;
 
@@ -232,7 +248,7 @@ public class GameManager {
         {
             GameplayObjectSave gameplayObjectSave = saves[i] as GameplayObjectSave;
 
-            if(gameplayObjectSave == null)
+            if (gameplayObjectSave == null)
             {
                 continue;
             }
@@ -248,7 +264,7 @@ public class GameManager {
             PropertyInfo propertyInfo = type.GetProperty(nameof(monoBehaviourSaveable.InstanceGUID), BindingFlags.Instance | BindingFlags.Public);
 
             propertyInfo.SetValue(monoBehaviourSaveable, gameplayObjectSave.instanceGUID);
-            
+
             monoBehaviourSaveable.Load(gameplayObjectSave.save);
 
             currentSaveables.Add(monoBehaviourSaveable);
@@ -257,7 +273,7 @@ public class GameManager {
             yield return null;
         }
 
-        for(int i = 0; i < currentSaveables.Count; i++)
+        for (int i = 0; i < currentSaveables.Count; i++)
         {
             currentSaveables[i].PostLoadCallback(gameplayObjectSaves[i].save);
 
@@ -268,7 +284,7 @@ public class GameManager {
 
     public void NewGame(string[] sceneNames)
     {
-        CoroutineManager.GetInstance().StartCoroutine(LoadGameplayScenes(sceneNames, CallOnLoadingSucceededEvent));
+        coroutineScheduler.StartCoroutine(LoadGameplayScenes(sceneNames, CallOnLoadingSucceededEvent));
     }
 
     private IEnumerator LoadGameplayScenes(string[] sceneNames, Action onCompletion = null)
@@ -281,17 +297,17 @@ public class GameManager {
 
         yield return null;
 
-        for(int i = 0; i < sceneNames.Length; i++)
+        for (int i = 0; i < sceneNames.Length; i++)
         {
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneNames[i], LoadSceneMode.Additive);
 
-            while(loadOperation.isDone == false)
+            while (loadOperation.isDone == false)
             {
                 yield return null;
             }
         }
 
-        if(onCompletion != null)
+        if (onCompletion != null)
         {
             onCompletion();
         }
@@ -337,7 +353,7 @@ public class GameManager {
     {
         List<int> saveableScenes = new List<int>();
 
-        for(int i = 0; i < SceneManager.sceneCount; i++)
+        for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             Scene current = SceneManager.GetSceneAt(i);
 
@@ -352,7 +368,7 @@ public class GameManager {
 
     private void CallOnQuittingEvent()
     {
-        if(onQuitting != null)
+        if (onQuitting != null)
         {
             onQuitting();
         }
@@ -407,3 +423,4 @@ public class GameManager {
     }
 
 }
+

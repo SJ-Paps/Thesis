@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using UnityEngine;
+using SJ.Coroutines;
 
 public class TribalClimbingLedgeState : TribalHSMState
 {
     private IEnumerator climbCoroutine;
+    private ICoroutineScheduler coroutineScheduler;
+    
 
     public TribalClimbingLedgeState()
     {
+        coroutineScheduler = SJ.Application.GetCoroutineScheduler();
+
         climbCoroutine = ClimbCoroutine();
     }
 
@@ -17,14 +22,14 @@ public class TribalClimbingLedgeState : TribalHSMState
         Owner.RigidBody2D.velocity = new Vector2(0, 0);
         Owner.RigidBody2D.isKinematic = true;
 
-        CoroutineManager.GetInstance().StartCoroutine(climbCoroutine);
+        coroutineScheduler.StartCoroutine(climbCoroutine);
     }
 
     protected override void OnExit()
     {
         Owner.RigidBody2D.isKinematic = false;
 
-        CoroutineManager.GetInstance().StopCoroutine(climbCoroutine);
+        coroutineScheduler.StopCoroutine(climbCoroutine);
     }
 
     private IEnumerator ClimbCoroutine()
@@ -65,7 +70,7 @@ public class TribalClimbingLedgeState : TribalHSMState
 
             SendEvent(Character.Order.FinishAction);
 
-            CoroutineManager.GetInstance().StopCoroutine(climbCoroutine);
+            coroutineScheduler.StopCoroutine(climbCoroutine);
 
             yield return null;
         }
