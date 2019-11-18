@@ -1,56 +1,61 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LanguageButton : SJMonoBehaviour {
-
-    private string language;
-
-    [SerializeField]
-    private Button button;
-
-    [SerializeField]
-    private Text text;
-
-    protected override void SJAwake()
+namespace SJ.UI
+{
+    public class LanguageButton : SJMonoBehaviour
     {
-        button.onClick.AddListener(ChangeLanguage);
-    }
+        private string language;
 
-    protected override void SJOnEnable()
-    {
-        LanguageManager.onLanguageChanged += OnLanguageChanged;
-    }
+        [SerializeField]
+        private Button button;
 
-    protected override void SJOnDisable()
-    {
-        LanguageManager.onLanguageChanged -= OnLanguageChanged;
-    }
+        [SerializeField]
+        private Text text;
 
-    public void SetLanguage(string language)
-    {
-        this.language = language;
+        protected override void SJAwake()
+        {
+            button.onClick.AddListener(ChangeLanguage);
+        }
 
-        UpdateButtonText();
-    }
-	
-	private void ChangeLanguage()
-    {
-        LanguageManager.ChangeLanguage(language);
+        protected override void SJOnEnable()
+        {
+            Application.GetTranslatorService().onLanguageChanged += OnLanguageChanged;
+        }
 
-        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+        protected override void SJOnDisable()
+        {
+            Application.GetTranslatorService().onLanguageChanged -= OnLanguageChanged;
+        }
 
-        gameConfiguration.userLanguage = language;
+        public void SetLanguage(string language)
+        {
+            this.language = language;
 
-        GameConfigurationCareTaker.SaveConfiguration();
-    }
+            UpdateButtonText();
+        }
 
-    private void UpdateButtonText()
-    {
-        text.text = LanguageManager.GetLocalizedTextLibrary().GetLineByTagOfCurrentLanguage("language_name_" + language).FirstLetterToUpper();
-    }
+        private void ChangeLanguage()
+        {
+            Application.GetTranslatorService().ChangeLanguage(language);
 
-    private void OnLanguageChanged(string language)
-    {
-        UpdateButtonText();
+            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+
+            gameConfiguration.userLanguage = language;
+
+            GameConfigurationCareTaker.SaveConfiguration();
+        }
+
+        private void UpdateButtonText()
+        {
+            text.text = Application.GetTranslatorService().GetLineByTagOfCurrentLanguage("language_name_" + language).FirstLetterToUpper();
+        }
+
+        private void OnLanguageChanged(string language)
+        {
+            UpdateButtonText();
+        }
     }
 }
+
+

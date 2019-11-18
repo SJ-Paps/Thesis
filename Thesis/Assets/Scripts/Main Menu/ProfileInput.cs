@@ -1,46 +1,51 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ProfileInput : SJMonoBehaviour
+namespace SJ.UI
 {
-    [SerializeField]
-    private InputField inputField;
-
-    [SerializeField]
-    private Button submitButton;
-
-    [SerializeField]
-    private Text notificationText;
-    
-    protected override void SJStart()
+    public class ProfileInput : SJMonoBehaviour
     {
-        submitButton.onClick.AddListener(OnSubmit);
-    }
+        [SerializeField]
+        private InputField inputField;
 
-    protected override void SJOnEnable()
-    {
-        notificationText.gameObject.SetActive(false);
-    }
+        [SerializeField]
+        private Button submitButton;
 
-    private void OnSubmit()
-    {
-        string profileName = inputField.text;
+        [SerializeField]
+        private Text notificationText;
 
-        if(ProfileCareTaker.ProfileExistsAndIsValid(profileName))
+        protected override void SJStart()
         {
-            inputField.text = string.Empty;
-            notificationText.gameObject.SetActive(true);
-            notificationText.text = LanguageManager.GetLocalizedTextLibrary().GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper();
+            submitButton.onClick.AddListener(OnSubmit);
         }
-        else
+
+        protected override void SJOnEnable()
         {
-            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+            notificationText.gameObject.SetActive(false);
+        }
 
-            gameConfiguration.lastProfile = profileName;
+        private void OnSubmit()
+        {
+            string profileName = inputField.text;
 
-            GameConfigurationCareTaker.SaveConfiguration();
+            if (ProfileCareTaker.ProfileExistsAndIsValid(profileName))
+            {
+                inputField.text = string.Empty;
+                notificationText.gameObject.SetActive(true);
+                notificationText.text = Application.GetTranslatorService().GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper();
+            }
+            else
+            {
+                ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
 
-            GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName });
+                gameConfiguration.lastProfile = profileName;
+
+                GameConfigurationCareTaker.SaveConfiguration();
+
+                GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName });
+            }
         }
     }
+
 }
+

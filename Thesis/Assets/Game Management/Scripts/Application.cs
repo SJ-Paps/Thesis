@@ -4,20 +4,21 @@ using UnityEngine;
 using SJ.Updatables;
 using System;
 using UnityEngine.SceneManagement;
+using SJ.Localization;
 
 namespace SJ
 {
     public static class Application
     {
         private static IUpdater updater;
+        private static ITranslatorService translatorService;
 
         public static void Initialize()
         {
             updater = UpdaterFactory.Create();
+            translatorService = TranslatorServiceFactory.Create();
 
-            LanguageInfo[] languageInfo = SJResources.LoadAsset<LanguageInfoAsset>(Reg.LANGUAGE_INFO_ASSET_NAME).LanguageInfo;
-
-            LanguageManager.LoadLanguageInfo(languageInfo, GetDefaultLanguageIndex(languageInfo));
+            translatorService.ChangeLanguage(GameConfigurationCareTaker.GetConfiguration().userLanguage);
 
             GameConfiguration gameConfiguration = GameConfigurationCareTaker.GetConfiguration();
 
@@ -28,24 +29,14 @@ namespace SJ
             SceneManager.LoadScene("Menu");
         }
 
-        private static int GetDefaultLanguageIndex(LanguageInfo[] languageInfo)
-        {
-            string defaultLanguage = GameConfigurationCareTaker.GetConfiguration().userLanguage;
-
-            for (int i = 0; i < languageInfo.Length; i++)
-            {
-                if (languageInfo[i].Language == defaultLanguage)
-                {
-                    return i;
-                }
-            }
-
-            throw new InvalidOperationException("default langauge mismatch");
-        }
-
         public static IUpdater GetUpdater()
         {
             return updater;
+        }
+
+        public static ITranslatorService GetTranslatorService()
+        {
+            return translatorService;
         }
 
     }

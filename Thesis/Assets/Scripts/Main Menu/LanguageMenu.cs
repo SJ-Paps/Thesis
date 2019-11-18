@@ -1,24 +1,30 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LanguageMenu : SJMonoBehaviour {
+namespace SJ.UI
+{
 
-    [SerializeField]
-    private LanguageButton languageButtonPrefab;
-
-    [SerializeField]
-    private VerticalLayoutGroup buttonMenu;
-
-	// Use this for initialization
-	protected override void SJAwake ()
+    public class LanguageMenu : SJMonoBehaviour
     {
-        string[] languages = LanguageManager.GetLanguages();
 
-        foreach(string language in languages)
+        [SerializeField]
+        private LanguageButton languageButtonPrefab;
+
+        [SerializeField]
+        private VerticalLayoutGroup buttonMenu;
+
+        // Use this for initialization
+        protected override void SJAwake()
         {
-            LanguageButton button = Instantiate<LanguageButton>(languageButtonPrefab, buttonMenu.transform);
+            string[] languages = Application.GetTranslatorService().GetLanguages();
 
-            button.SetLanguage(language);
+            foreach (string language in languages)
+            {
+                LanguageButton button = Instantiate<LanguageButton>(languageButtonPrefab, buttonMenu.transform);
+
+                button.SetLanguage(language);
+            }
         }
-	}
+    }
 }
+
