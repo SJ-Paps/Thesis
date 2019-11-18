@@ -8,6 +8,7 @@ namespace SJ
     public static class Repositories
     {
         private static IProfileRepository profileRepository;
+        private static IGameSettingsRepository gameSettingsRepository;
 
         public static IProfileRepository GetProfileRepository()
         {
@@ -17,6 +18,16 @@ namespace SJ
             }
 
             return profileRepository;
+        }
+
+        public static IGameSettingsRepository GetGameSettingsRepository()
+        {
+            if(gameSettingsRepository == null)
+            {
+                gameSettingsRepository = GameSettingsRepositoryFactory.Create();
+            }
+
+            return gameSettingsRepository;
         }
     }
 }

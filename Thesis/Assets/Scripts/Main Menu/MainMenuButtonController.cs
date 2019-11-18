@@ -59,10 +59,11 @@ namespace SJ.UI
 
         private void Continue()
         {
-            string lastProfile = GameConfigurationCareTaker.GetConfiguration().lastProfile;
-
             IProfileRepository profileRepository = Repositories.GetProfileRepository();
             ICoroutineScheduler coroutineScheduler = Application.GetCoroutineScheduler();
+            IGameSettingsRepository gameSettingsRepository = Repositories.GetGameSettingsRepository();
+
+            string lastProfile = gameSettingsRepository.GetSettingsSynchronously().lastProfile;
 
             coroutineScheduler.AwaitTask(profileRepository.Exists(lastProfile),
                 delegate (bool exists)
@@ -103,7 +104,7 @@ namespace SJ.UI
                 resumeGame.gameObject.SetActive(false);
                 options.gameObject.SetActive(true);
 
-                if (string.IsNullOrEmpty(GameConfigurationCareTaker.GetConfiguration().lastProfile) == false)
+                if (string.IsNullOrEmpty(Repositories.GetGameSettingsRepository().GetSettingsSynchronously().lastProfile) == false)
                 {
                     continueLastProfile.gameObject.SetActive(true);
                 }

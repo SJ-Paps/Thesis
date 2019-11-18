@@ -8,9 +8,7 @@ namespace SJ.Profiles
     {
         public static IProfileRepository Create()
         {
-#if UNITY_STANDALONE_WIN
-            return new WindowsFileSystemProfileRepository();
-#endif
+            return new WindowsFileSystemProfileRepository(Serializers.GetSaveSerializer());
         }
     }
 }

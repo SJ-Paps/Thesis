@@ -17,10 +17,12 @@ namespace SJ.UI
         private List<ProfileInfoItem> items;
 
         private IProfileRepository profileRepository;
+        private IGameSettingsRepository gameSettingsRepository;
 
         protected override void SJAwake()
         {
             profileRepository = Repositories.GetProfileRepository();
+            gameSettingsRepository = Repositories.GetGameSettingsRepository();
             items = new List<ProfileInfoItem>();
         }
 
@@ -66,24 +68,22 @@ namespace SJ.UI
 
         private void OnSelectProfile(ProfileInfoItem item)
         {
-            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+            gameSettingsRepository.GetSettingsSynchronously().lastProfile = item.ProfileData.name;
 
-            gameConfiguration.lastProfile = item.ProfileData.name;
-
-            GameConfigurationCareTaker.SaveConfiguration();
+            gameSettingsRepository.SaveSettingsSynchronously();
 
             GameManager.GetInstance().BeginSessionWithProfile(item.ProfileData);
         }
 
         private void OnDeleteProfile(ProfileInfoItem item)
         {
-            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+            GameSettings gameSettings = gameSettingsRepository.GetSettingsSynchronously();
 
-            if (gameConfiguration.lastProfile == item.ProfileData.name)
+            if (gameSettings.lastProfile == item.ProfileData.name)
             {
-                gameConfiguration.lastProfile = null;
+                gameSettings.lastProfile = null;
 
-                GameConfigurationCareTaker.SaveConfiguration();
+                gameSettingsRepository.SaveSettingsSynchronously();
             }
 
             profileRepository.DeleteProfile(item.ProfileData.name).Wait();

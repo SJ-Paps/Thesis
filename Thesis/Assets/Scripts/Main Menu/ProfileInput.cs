@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using SJ.Profiles;
 using SJ.Coroutines;
+using System.Threading.Tasks;
 
 namespace SJ.UI
 {
@@ -15,6 +16,15 @@ namespace SJ.UI
 
         [SerializeField]
         private Text notificationText;
+
+        private IProfileRepository profileRepository;
+        private IGameSettingsRepository gameSettingsRepository;
+
+        protected override void SJAwake()
+        {
+            profileRepository = Repositories.GetProfileRepository();
+            gameSettingsRepository = Repositories.GetGameSettingsRepository();
+        }
 
         protected override void SJStart()
         {
@@ -33,7 +43,7 @@ namespace SJ.UI
             if(IsValidProfileName(profileName))
             {
                 Application.GetCoroutineScheduler()
-                .AwaitTask(Repositories.GetProfileRepository().Exists(profileName),
+                .AwaitTask(profileRepository.Exists(profileName),
                 delegate (bool exists)
                 {
                     if (exists)
@@ -44,11 +54,9 @@ namespace SJ.UI
                     }
                     else
                     {
-                        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+                        gameSettingsRepository.GetSettingsSynchronously().lastProfile = profileName;
 
-                        gameConfiguration.lastProfile = profileName;
-
-                        GameConfigurationCareTaker.SaveConfiguration();
+                        gameSettingsRepository.SaveSettingsSynchronously();
 
                         GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName });
                     }

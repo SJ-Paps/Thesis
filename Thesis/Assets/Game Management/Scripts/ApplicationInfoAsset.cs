@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ApplicationInfoAsset", menuName = "Application Info Asset")]
-public class ApplicationInfoAsset : ScriptableObject
+namespace SJ
 {
-    [SerializeField]
-    private string[] beginningScenes;
+    [CreateAssetMenu(fileName = "ApplicationInfoAsset", menuName = "Application Info Asset")]
+    public class ApplicationInfoAsset : ScriptableObject
+    {
+        [SerializeField]
+        private string[] beginningScenes;
 
-    [SerializeField]
-    private string returnSceneOnEndSession;
+        [SerializeField]
+        private string returnSceneOnEndSession;
 
-    [SerializeField]
-    private GameConfiguration defaultGameConfiguration;
+        [SerializeField]
+        private GameSettings defaultGameConfiguration;
 
-    public string[] BeginningScenes { get { return beginningScenes; } }
+        public string[] BeginningScenes { get { return beginningScenes; } }
 
-    public string ReturnSceneOnEndSession { get { return returnSceneOnEndSession; } }
+        public string ReturnSceneOnEndSession { get { return returnSceneOnEndSession; } }
 
-    public GameConfiguration DefaultGameConfiguration { get { return defaultGameConfiguration; } }
+        public GameSettings DefaultGameConfiguration { get { return defaultGameConfiguration; } }
+    }
 }

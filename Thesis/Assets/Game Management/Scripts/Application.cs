@@ -3,6 +3,7 @@ using SJ.Updatables;
 using SJ.Audio;
 using SJ.Coroutines;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 namespace SJ
 {
@@ -15,18 +16,20 @@ namespace SJ
 
         public static void Initialize()
         {
+            ApplicationInfo.Load();
+
             updater = UpdaterFactory.Create();
             translatorService = TranslatorServiceFactory.Create();
             soundService = SoundServiceFactory.Create();
             coroutineScheduler = CoroutineSchedulerFactory.Create();
 
-            GameConfiguration gameConfiguration = GameConfigurationCareTaker.GetConfiguration();
+            GameSettings gameSettings = Repositories.GetGameSettingsRepository().GetSettingsSynchronously();
 
-            translatorService.ChangeLanguage(gameConfiguration.userLanguage);
+            translatorService.ChangeLanguage(gameSettings.userLanguage);
 
-            soundService.SetVolume(gameConfiguration.generalVolume);
-            soundService.SetVolumeOfChannel(SoundChannels.Music, gameConfiguration.musicVolume);
-            soundService.SetVolumeOfChannel(SoundChannels.Effects, gameConfiguration.soundsVolume);
+            soundService.SetVolume(gameSettings.generalVolume);
+            soundService.SetVolumeOfChannel(SoundChannels.Music, gameSettings.musicVolume);
+            soundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.soundsVolume);
 
             SceneManager.LoadScene("Menu");
         }

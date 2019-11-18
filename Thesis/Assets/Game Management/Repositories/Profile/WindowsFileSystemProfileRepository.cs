@@ -4,16 +4,23 @@ using UnityEngine;
 using System.IO;
 using System.Threading.Tasks;
 using System;
-using UnityApplication = UnityEngine.Application;
 using SJ.Profiles.Exceptions;
+using SJ.Save;
 
 namespace SJ.Profiles
 {
     public class WindowsFileSystemProfileRepository : IProfileRepository
     {
-        private static readonly string profileDirectory = Path.Combine(UnityApplication.dataPath, "../saves/profiles");
+        private static readonly string profileDirectory = Path.Combine(UnityEngine.Application.dataPath, "../saves/profiles");
         private static readonly string profileFileName = "profile.sj";
         private static readonly string saveFileName = "save.sj";
+
+        private ISaveSerializer saveSerializer;
+
+        public WindowsFileSystemProfileRepository(ISaveSerializer saveSerializer)
+        {
+            this.saveSerializer = saveSerializer;
+        }
 
         public Task DeleteProfile(string profile)
         {
@@ -136,7 +143,9 @@ namespace SJ.Profiles
             {
                 string profileFilePath = GetProfileFilePath(profileName);
 
-                SaveData[] saves = SaveLoadTool.Deserialize(profileFilePath);
+                string serialized = File.ReadAllText(profileFilePath);
+
+                SaveData[] saves = saveSerializer.Deserialize(serialized);
 
                 if (saves != null && saves.Length > 0)
                 {
@@ -160,7 +169,9 @@ namespace SJ.Profiles
 
                 if (File.Exists(saveDataFilePath))
                 {
-                    SaveData[] saves = SaveLoadTool.Deserialize(saveDataFilePath);
+                    string serialized = File.ReadAllText(saveDataFilePath);
+
+                    SaveData[] saves = saveSerializer.Deserialize(serialized);
 
                     if (saves != null && saves.Length > 0)
                     {
@@ -193,8 +204,11 @@ namespace SJ.Profiles
             string profileFilePath = Path.Combine(currentProfileDirectory, profileFileName);
             string saveFilePath = Path.Combine(currentProfileDirectory, saveFileName);
 
-            SaveLoadTool.Serialize(profileFilePath, profileSaveData);
-            SaveLoadTool.Serialize(saveFilePath, saveData);
+            string serializedProfileData = saveSerializer.Serialize(profileSaveData);
+            string serializedSaves = saveSerializer.Serialize(saveData);
+
+            File.WriteAllText(profileFilePath, serializedProfileData);
+            File.WriteAllText(saveFilePath, serializedSaves);
         }
 
         private string GetProfileDirectory(string profileName)

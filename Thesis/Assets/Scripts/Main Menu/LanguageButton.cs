@@ -39,11 +39,9 @@ namespace SJ.UI
         {
             Application.GetTranslatorService().ChangeLanguage(language);
 
-            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+            Repositories.GetGameSettingsRepository().GetSettingsSynchronously().userLanguage = language;
 
-            gameConfiguration.userLanguage = language;
-
-            GameConfigurationCareTaker.SaveConfiguration();
+            Repositories.GetGameSettingsRepository().SaveSettingsSynchronously();
         }
 
         private void UpdateButtonText()
