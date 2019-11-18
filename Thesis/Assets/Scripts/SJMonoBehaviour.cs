@@ -4,6 +4,9 @@ using SJ.Updatables;
 
 public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
 {
+    public static event Action<SJMonoBehaviour> onInstantiation;
+    public static event Action<SJMonoBehaviour> onDestruction;
+
     [SerializeField]
     [ReadOnly]
     private string instanceGUID;
@@ -57,6 +60,11 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
 
     private void Awake()
     {
+        if(onInstantiation != null)
+        {
+            onInstantiation(this);
+        }
+
         if (string.IsNullOrEmpty(InstanceGUID))
         {
             InstanceGUID = Guid.NewGuid().ToString();
@@ -106,6 +114,11 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
 
     private void OnDestroy()
     {
+        if(onDestruction != null)
+        {
+            onDestruction(this);
+        }
+
         SJOnDestroy();
     }
 

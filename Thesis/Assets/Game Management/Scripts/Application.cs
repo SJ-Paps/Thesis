@@ -1,5 +1,6 @@
 ﻿using SJ.Localization;
 using SJ.Updatables;
+using SJ.Audio;
 using UnityEngine.SceneManagement;
 
 namespace SJ
@@ -8,19 +9,21 @@ namespace SJ
     {
         private static IUpdater updater;
         private static ITranslatorService translatorService;
+        private static ISoundService soundService;
 
         public static void Initialize()
         {
             updater = UpdaterFactory.Create();
             translatorService = TranslatorServiceFactory.Create();
-
-            translatorService.ChangeLanguage(GameConfigurationCareTaker.GetConfiguration().userLanguage);
+            soundService = SoundServiceFactory.Create();
 
             GameConfiguration gameConfiguration = GameConfigurationCareTaker.GetConfiguration();
 
-            SoundManager.GetInstance().ChangeVolume(gameConfiguration.generalVolume);
-            SoundManager.GetInstance().Channels[SoundManager.SoundChannels.Music].ChangeVolume(gameConfiguration.musicVolume);
-            SoundManager.GetInstance().Channels[SoundManager.SoundChannels.Effects].ChangeVolume(gameConfiguration.soundsVolume);
+            translatorService.ChangeLanguage(gameConfiguration.userLanguage);
+
+            soundService.SetVolume(gameConfiguration.generalVolume);
+            soundService.SetVolumeOfChannel(SoundChannels.Music, gameConfiguration.musicVolume);
+            soundService.SetVolumeOfChannel(SoundChannels.Effects, gameConfiguration.soundsVolume);
 
             SceneManager.LoadScene("Menu");
         }
@@ -33,6 +36,11 @@ namespace SJ
         public static ITranslatorService GetTranslatorService()
         {
             return translatorService;
+        }
+
+        public static ISoundService GetSoundService()
+        {
+            return soundService;
         }
 
     }

@@ -1,50 +1,59 @@
 ﻿using UnityEngine;
+using SJ.Audio;
 
-public class SoundMenu : SJMonoBehaviour {
-
-    [SerializeField]
-    private SoundSlider general, music, effects;
-    
-    protected override void SJAwake ()
+namespace SJ.UI
+{
+    public class SoundMenu : SJMonoBehaviour
     {
-        GameConfiguration gameConfiguration = GameConfigurationCareTaker.GetConfiguration();
-        
-        general.SetData(ChangeGeneralVolume, SoundManager.GetInstance().Volume);
-        music.SetData(ChangeMusicChannelVolume, SoundManager.GetInstance().Channels[SoundManager.SoundChannels.Music].IndependentVolume);
-        effects.SetData(ChangeEffectsChannelVolume, SoundManager.GetInstance().Channels[SoundManager.SoundChannels.Effects].IndependentVolume);
 
-	}
+        [SerializeField]
+        private SoundSlider general, music, effects;
 
-    private void ChangeGeneralVolume(float value)
-    {
-        SoundManager.GetInstance().ChangeVolume(value);
+        private ISoundService soundService;
 
-        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+        protected override void SJAwake()
+        {
+            soundService = Application.GetSoundService();
 
-        gameConfiguration.generalVolume = SoundManager.GetInstance().Volume;
+            general.SetData(ChangeGeneralVolume, soundService.GetVolume());
+            music.SetData(ChangeMusicChannelVolume, soundService.GetVolumeOfChannel(SoundChannels.Music));
+            effects.SetData(ChangeEffectsChannelVolume, soundService.GetVolumeOfChannel(SoundChannels.Effects));
 
-        GameConfigurationCareTaker.SaveConfiguration();
-    }
+        }
 
-    private void ChangeMusicChannelVolume(float value)
-    {
-        SoundManager.GetInstance().Channels[SoundManager.SoundChannels.Music].ChangeVolume(value);
+        private void ChangeGeneralVolume(float value)
+        {
+            soundService.SetVolume(value);
 
-        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
 
-        gameConfiguration.musicVolume = SoundManager.GetInstance().Channels[SoundManager.SoundChannels.Music].IndependentVolume;
+            gameConfiguration.generalVolume = soundService.GetVolume();
 
-        GameConfigurationCareTaker.SaveConfiguration();
-    }
+            GameConfigurationCareTaker.SaveConfiguration();
+        }
 
-    private void ChangeEffectsChannelVolume(float value)
-    {
-        SoundManager.GetInstance().Channels[SoundManager.SoundChannels.Effects].ChangeVolume(value);
+        private void ChangeMusicChannelVolume(float value)
+        {
+            soundService.SetVolumeOfChannel(SoundChannels.Music, value);
 
-        ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+            
+            gameConfiguration.musicVolume = soundService.GetVolumeOfChannel(SoundChannels.Music);
 
-        gameConfiguration.soundsVolume = SoundManager.GetInstance().Channels[SoundManager.SoundChannels.Effects].IndependentVolume;
+            GameConfigurationCareTaker.SaveConfiguration();
+        }
 
-        GameConfigurationCareTaker.SaveConfiguration();
+        private void ChangeEffectsChannelVolume(float value)
+        {
+            soundService.SetVolumeOfChannel(SoundChannels.Effects, value);
+
+            ref GameConfiguration gameConfiguration = ref GameConfigurationCareTaker.GetConfiguration();
+            
+            gameConfiguration.soundsVolume = soundService.GetVolumeOfChannel(SoundChannels.Effects);
+
+            GameConfigurationCareTaker.SaveConfiguration();
+        }
     }
 }
+
+

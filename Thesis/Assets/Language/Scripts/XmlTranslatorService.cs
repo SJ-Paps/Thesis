@@ -87,9 +87,16 @@ namespace SJ.Localization
             if(ContainsLanguage(language))
             {
                 CurrentLanguage = language;
-            }
 
-            throw new InvalidOperationException("language " + language + " is invalid");
+                if(onLanguageChanged != null)
+                {
+                    onLanguageChanged(CurrentLanguage);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("language " + language + " is invalid");
+            }
         }
 
         public string[] GetLanguages()

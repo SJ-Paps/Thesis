@@ -1,196 +1,173 @@
 ﻿using UnityEngine;
 using System;
 
-[RequireComponent(typeof(AudioSource))]
-public class SJAudioSource : SJMonoBehaviour {
-
-    [SerializeField]
-    protected AudioSource source;
-    [SerializeField]
-    private float independentVolume = 1;
-    [SerializeField]
-    private bool playOnStart;
-
-    public AudioSource Source
+namespace SJ.Audio
+{
+    [RequireComponent(typeof(AudioSource))]
+    public class SJAudioSource : SJMonoBehaviour
     {
-        get
-        {
-            return source;
-        }
+        public delegate void VolumeChanged(float independentVolume, float scaledVolume);
 
-        protected set
-        {
-            source = value;
-        }
-    }
+        [SerializeField]
+        protected AudioSource source;
+        [SerializeField]
+        private float independentVolume = 1;
+        [SerializeField]
+        private bool playOnStart;
 
-    public AudioClip Clip
-    {
-        get
+        public AudioSource Source
         {
-            return source.clip;
-        }
-
-        set
-        {
-            source.clip = value;
-        }
-    }
-
-    public float IndependentVolume
-    {
-        get
-        {
-            return independentVolume;
-        }
-
-        set
-        {
-            if (value >= 0 && value <= 1)
+            get
             {
-                independentVolume = value;
-
-                UpdateScaledVolume(soundChannel.ScaledVolume);
+                return source;
             }
-            else
+
+            protected set
             {
-                Logger.LogConsole("El valor del volumen debe ser entre 0 y 1");
+                source = value;
             }
         }
-    }
 
-    public float ScaledVolume
-    {
-        get
+        public AudioClip Clip
         {
-            return source.volume;
+            get
+            {
+                return source.clip;
+            }
+
+            set
+            {
+                source.clip = value;
+            }
+        }
+
+        public float IndependentVolume
+        {
+            get
+            {
+                return independentVolume;
+            }
+
+            set
+            {
+                if (value >= 0 && value <= 1)
+                {
+                    independentVolume = value;
+
+                    UpdateScaledVolume(SoundService.GetScaledVolumeOfChannel(channel));
+                }
+                else
+                {
+                    Logger.LogConsole("El valor del volumen debe ser entre 0 y 1");
+                }
+            }
+        }
+
+        public float ScaledVolume
+        {
+            get
+            {
+                return source.volume;
+            }
+        }
+
+        public bool Loop
+        {
+            get
+            {
+                return source.loop;
+            }
+
+            set
+            {
+                source.loop = value;
+            }
+        }
+
+        public bool IsPlaying
+        {
+            get
+            {
+                return Source.isPlaying;
+            }
+        }
+
+        private ISoundService soundServiceField;
+
+        protected ISoundService SoundService
+        {
+            get
+            {
+                if(soundServiceField == null)
+                {
+                    soundServiceField = Application.GetSoundService();
+                }
+
+                return soundServiceField;
+            }
+        }
+
+        [SerializeField]
+        protected SoundChannels channel;
+
+        public SoundChannels Channel { get { return channel; } }
+
+        public event VolumeChanged onVolumeChanged;
+
+        protected override void SJAwake()
+        {
+            IndependentVolume = independentVolume;
+
+            SoundService.onChannelVolumeChanged += OnChannelVolumeChanged;
+            SoundService.onGlobalVolumeChanged += OnGlobalVolumeChanged;
+        }
+
+        protected override void SJStart()
+        {
+            if (playOnStart)
+            {
+                Play();
+            }
+        }
+
+        protected override void SJOnDestroy()
+        {
+            SoundService.onChannelVolumeChanged -= OnChannelVolumeChanged;
+        }
+
+        private void OnChannelVolumeChanged(SoundChannels soundChannel, float independentVolume, float scaledVolume)
+        {
+            if(channel == soundChannel)
+            {
+                UpdateScaledVolume(scaledVolume);
+            }
+        }
+
+        private void OnGlobalVolumeChanged(float volume)
+        {
+            UpdateScaledVolume(SoundService.GetScaledVolumeOfChannel(channel));
+        }
+
+        public void Play()
+        {
+            Source.Play();
+        }
+
+        public void Stop()
+        {
+            Source.Stop();
+        }
+
+        protected void UpdateScaledVolume(float dependencyVolume)
+        {
+            Source.volume = IndependentVolume * dependencyVolume;
+
+            if (onVolumeChanged != null)
+            {
+                onVolumeChanged(IndependentVolume, ScaledVolume);
+            }
         }
     }
 
-    public bool Loop
-    {
-        get
-        {
-            return source.loop;
-        }
-
-        set
-        {
-            source.loop = value;
-        }
-    }
-
-    public bool IsPlaying
-    {
-        get
-        {
-            return Source.isPlaying;
-        }
-    }
-
-    protected SoundManager soundManager;
-
-    [SerializeField]
-    protected SoundManager.SoundChannels channel;
-    protected SoundChannel soundChannel;
-
-    public event ScaledVolumeChanged onVolumeChanged;
-
-    protected ScaledVolumeChanged scaledVolumeChangedDelegate;
-
-    protected override void SJAwake()
-    {
-        soundManager = SoundManager.GetInstance();
-
-        soundChannel = soundManager.Channels[channel];
-
-        IndependentVolume = independentVolume;
-
-        scaledVolumeChangedDelegate = OnChannelVolumeChanged;
-
-        soundChannel.onVolumeChanged += scaledVolumeChangedDelegate;
-
-        soundManager.AddSource(this);
-    }
-
-    protected override void SJStart()
-    {
-        if(playOnStart)
-        {
-            Play();
-        }
-    }
-
-    protected override void SJOnDestroy()
-    {
-        soundChannel.onVolumeChanged -= scaledVolumeChangedDelegate;
-    }
-
-    public void PlayOneShot(AudioClip clip)
-    {
-        Source.PlayOneShot(clip);
-    }
-
-    public void PlayOneShot(AudioClip clip, float volumeScale)
-    {
-        Source.PlayOneShot(clip, volumeScale);
-    }
-
-    public void PlayOneShotAtPosition(Vector3 position, AudioClip clip)
-    {
-        gameObject.transform.position = position;
-
-        Source.PlayOneShot(clip);
-    }
-
-    public void PlayOneShotAtPosition(Vector3 position, AudioClip clip, float volumeScale)
-    {
-        gameObject.transform.position = position;
-
-        Source.PlayOneShot(clip, volumeScale);
-    }
-
-    public void PlayAtPosition(Vector3 position)
-    {
-        gameObject.transform.position = position;
-
-        Source.Play();
-    }
-
-    public void Play()
-    {
-        Source.Play();
-    }
-
-    public void PlayAtPosition(Vector3 position, AudioClip clip)
-    {
-        Clip = clip;
-
-        PlayAtPosition(position);
-    }
-
-    public void ChangeVolume(float volume)
-    {
-        IndependentVolume = volume;
-    }
-
-    private void OnChannelVolumeChanged(float independentVolume, float scaledVolume)
-    {
-        UpdateScaledVolume(scaledVolume);
-    }
-
-    protected void UpdateScaledVolume(float dependencyVolume)
-    {
-        Source.volume = IndependentVolume * dependencyVolume;
-
-        if (onVolumeChanged != null)
-        {
-            onVolumeChanged(IndependentVolume, ScaledVolume);
-        }
-    }
-
-    public float GetVolume()
-    {
-        return IndependentVolume;
-    }
 }
+

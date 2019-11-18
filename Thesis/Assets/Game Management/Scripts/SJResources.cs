@@ -32,7 +32,7 @@ public static class SJResources
         for (int i = 0; i < assetBundles.Count; i++)
         {
             T asset = assetBundles[i].LoadAsset<T>(assetName);
-
+            
             if (asset != null)
             {
                 return asset;
