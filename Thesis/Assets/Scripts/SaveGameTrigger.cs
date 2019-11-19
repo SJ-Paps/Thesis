@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using SJ.Game;
 
 public class SaveGameTrigger : SJBoxCollider2D
 {

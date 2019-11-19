@@ -14,9 +14,11 @@ namespace SJ
         private static ISoundService soundService;
         private static ICoroutineScheduler coroutineScheduler;
 
+        private static ApplicationSettings applicationSettings;
+
         public static void Initialize()
         {
-            ApplicationInfo.Load();
+            applicationSettings = LoadApplicationSettings();
 
             updater = UpdaterFactory.Create();
             translatorService = TranslatorServiceFactory.Create();
@@ -32,6 +34,16 @@ namespace SJ
             soundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.soundsVolume);
 
             SceneManager.LoadScene("Menu");
+        }
+
+        private static ApplicationSettings LoadApplicationSettings()
+        {
+            return SJResources.LoadAsset<ApplicationSettingsAsset>(Reg.APPLICATION_INFO_ASSET_NAME).GetApplicationSettings();
+        }
+
+        public static ApplicationSettings GetApplicationSettings()
+        {
+            return applicationSettings;
         }
 
         public static IUpdater GetUpdater()

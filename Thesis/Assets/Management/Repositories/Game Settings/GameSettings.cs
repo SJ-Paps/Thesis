@@ -15,6 +15,7 @@ namespace SJ
         [SerializeField]
         public string userLanguage;
 
+        [HideInInspector]
         public string lastProfile;
     }
 }

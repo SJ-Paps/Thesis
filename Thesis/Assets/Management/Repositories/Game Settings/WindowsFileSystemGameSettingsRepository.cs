@@ -60,7 +60,7 @@ namespace SJ
 
         private static GameSettings GetDefault()
         {
-            return ApplicationInfo.DefaultGameConfiguration;
+            return Application.GetApplicationSettings().DefaultGameSettings;
         }
 
         public Task SaveSettings()

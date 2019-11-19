@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using SJ.Game;
 
 public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
 {

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using SJ.Profiles;
 using SJ.Coroutines;
-using System.Threading.Tasks;
+using SJ.Game;
 
 namespace SJ.UI
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using SJ.Profiles;
+using SJ.Game;
 
 namespace SJ.UI
 {
