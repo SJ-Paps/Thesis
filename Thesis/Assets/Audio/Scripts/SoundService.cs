@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UniRx;
 
 namespace SJ.Audio
 {
@@ -68,7 +69,7 @@ namespace SJ.Audio
             channels.Add(SoundChannels.Music, new SoundChannel(this));
 
             audioSourcesPool = new List<SJAudioSource>();
-            audioSourcePrefab = SJResources.LoadAsset<GameObject>("SJAudioSourcePrefab").GetComponent<SJAudioSource>();
+            audioSourcePrefab = SJResources.LoadComponentOfGameObject<SJAudioSource>("SJAudioSourcePrefab");
 
             SJMonoBehaviour.onInstantiation += OnObjectInstantiated;
             SJMonoBehaviour.onDestruction += OnObjectDestroyed;

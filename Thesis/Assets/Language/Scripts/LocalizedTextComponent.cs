@@ -28,7 +28,6 @@ namespace SJ.Localization
 
         protected override void SJAwake()
         {
-
             localizedText = new LocalizedText(langTag, option);
 
             localizedText.onTextChanged += OnTextChanged;

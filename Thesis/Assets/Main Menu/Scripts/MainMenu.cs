@@ -1,25 +1,19 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using SJ.Coroutines;
 using SJ.Profiles;
 using SJ.Profiles.Exceptions;
-using System.Threading.Tasks;
-using SJ.Coroutines;
-using System;
-using SJ.Game;
 using UniRx;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace SJ.UI
 {
-    public class MainMenuButtonController : SJMonoBehaviour
+    public class MainMenu : SJMonoBehaviour
     {
-
         [SerializeField]
         private Button newGame, loadGame, resumeGame, options, exitDesktop, exitMainMenu, continueLastProfile;
 
         protected override void SJAwake()
         {
-            MainMenu.GetInstance().onShow += UpdateButtonStates;
-
             //exit desktop button
             exitDesktop.onClick.AddListener(ExitToDesktop);
 
@@ -27,7 +21,7 @@ namespace SJ.UI
             exitMainMenu.onClick.AddListener(ExitToMainMenu);
 
             //resume game button
-            resumeGame.onClick.AddListener(HideMenu);
+            resumeGame.onClick.AddListener(Hide);
 
             //continue button
             continueLastProfile.onClick.AddListener(Continue);
@@ -41,17 +35,24 @@ namespace SJ.UI
 
         private void ExitToDesktop()
         {
-            MainMenu.GetInstance().DisplayConfirmationMenu(Application.TranslatorService.GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper(), UnityEngine.Application.Quit, null);
+            var message = Application.TranslatorService.GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper();
+            ConfirmationPopupProvider.ShowWith(message, UnityEngine.Application.Quit, () => { });
         }
 
         private void ExitToMainMenu()
         {
-            MainMenu.GetInstance().DisplayConfirmationMenu(Application.TranslatorService.GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper(), GoMenu, null);
+            var message = Application.TranslatorService.GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper();
+            ConfirmationPopupProvider.ShowWith(message, GoMenu, () => { });
         }
 
-        private void HideMenu()
+        public void Hide()
         {
-            MainMenu.GetInstance().Hide();
+            gameObject.SetActive(false);
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
         }
 
         private void GoMenu()

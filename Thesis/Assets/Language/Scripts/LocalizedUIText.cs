@@ -1,23 +1,25 @@
-﻿using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine.UI;
 
 namespace SJ.Localization
 {
     public class LocalizedUIText : LocalizedTextComponent
     {
-
+        protected TextMeshProUGUI selfTextMeshPro;
         protected Text selfText;
 
         protected override void SJAwake()
         {
-
             selfText = GetComponent<Text>();
+            selfTextMeshPro = GetComponent<TextMeshProUGUI>();
 
             base.SJAwake();
         }
 
         protected override void OnTextChanged(string text)
         {
-            selfText.text = text;
+            if (selfText != null) selfText.text = text;
+            else if (selfTextMeshPro != null) selfTextMeshPro.text = text;
         }
     }
 }
