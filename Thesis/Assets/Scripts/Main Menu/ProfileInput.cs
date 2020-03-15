@@ -50,7 +50,7 @@ namespace SJ.UI
                         {
                             inputField.text = string.Empty;
                             notificationText.gameObject.SetActive(true);
-                            notificationText.text = Application.GetTranslatorService().GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper();
+                            notificationText.text = Application.TranslatorService.GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper();
                         }
                         else
                         {
@@ -61,7 +61,7 @@ namespace SJ.UI
 
                                     return gameSettingsRepository.SaveSettings();
                                 })
-                                .Subscribe(_ => GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName }));
+                                .Subscribe(_ => Application.GameManager.BeginSessionWithProfile(new ProfileData() { name = profileName }));
                         }
                     });
             }

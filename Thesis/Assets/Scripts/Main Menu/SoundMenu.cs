@@ -14,7 +14,7 @@ namespace SJ.UI
 
         protected override void SJAwake()
         {
-            soundService = Application.GetSoundService();
+            soundService = Application.SoundService;
             gameSettingsRepository = Repositories.GetGameSettingsRepository();
 
             general.onValueChanged += OnGeneralVolumeSliderValueChanged;

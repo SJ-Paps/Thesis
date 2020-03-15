@@ -1,40 +1,23 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Reflection;
+﻿using SJ.Coroutines;
 using SJ.Profiles;
-using SJ.Coroutines;
-using SJ;
 using SJ.Save;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using UniRx;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SJ.Game
 {
     public class GameManager
     {
-
         public class GameSessionSaveData
         {
             public int[] loadedScenesIndexes;
             public bool isBeginning;
             public object[] gameplaySaves;
-        }
-
-        private static GameManager instance;
-
-        public static GameManager GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new GameManager();
-            }
-
-            return instance;
         }
 
         private string ignoreScenesOnSavingSubfix = "_igld";
@@ -62,13 +45,13 @@ namespace SJ.Game
         private ICoroutineScheduler coroutineScheduler;
         private IProfileRepository profileRepository;
 
-        private GameManager()
+        public GameManager()
         {
-            coroutineScheduler = SJ.Application.GetCoroutineScheduler();
+            coroutineScheduler = SJ.Application.CoroutineScheduler;
             profileRepository = Repositories.GetProfileRepository();
 
-            beginScenes = Application.GetApplicationSettings().BeginningScenes;
-            returnSceneOnEndSession = Application.GetApplicationSettings().ReturnSceneOnEndSession;
+            beginScenes = Application.ApplicationSettings.BeginningScenes;
+            returnSceneOnEndSession = Application.ApplicationSettings.ReturnSceneOnEndSession;
 
             saveables = new HashSet<SJMonoBehaviourSaveable>();
 

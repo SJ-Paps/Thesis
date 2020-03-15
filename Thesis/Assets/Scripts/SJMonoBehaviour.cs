@@ -49,11 +49,11 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
     {
         if (EnableUpdate && gameObject.activeSelf && this.enabled)
         {
-            SJ.Application.GetUpdater().Subscribe(this);
+            SJ.Application.Updater.Subscribe(this);
         }
         else
         {
-            SJ.Application.GetUpdater().Unsubscribe(this);
+            SJ.Application.Updater.Unsubscribe(this);
         }
     }
 

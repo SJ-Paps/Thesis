@@ -100,7 +100,7 @@ namespace SJ.Audio
             {
                 if(soundServiceField == null)
                 {
-                    soundServiceField = Application.GetSoundService();
+                    soundServiceField = Application.SoundService;
                 }
 
                 return soundServiceField;

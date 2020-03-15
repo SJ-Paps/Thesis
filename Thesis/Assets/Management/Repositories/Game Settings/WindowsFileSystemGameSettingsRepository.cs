@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using UnityEngine;
-using SJ.Save;
+﻿using SJ.Save;
 using System;
+using System.IO;
 using UniRx;
 
 namespace SJ
@@ -63,7 +61,7 @@ namespace SJ
 
         private static GameSettings GetDefault()
         {
-            return Application.GetApplicationSettings().DefaultGameSettings;
+            return Application.ApplicationSettings.DefaultGameSettings;
         }
 
         public IObservable<Unit> SaveSettings()

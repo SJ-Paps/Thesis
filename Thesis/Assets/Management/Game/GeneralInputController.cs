@@ -10,9 +10,12 @@ namespace SJ.Game
         [RuntimeInitializeOnLoadMethod]
         private static void Initialize()
         {
-            GameManager.GetInstance().onLoadingBegan += DestroyOnQuittingGameOrLoading;
-            GameManager.GetInstance().onLoadingSucceeded += InstantiateInGame;
-            GameManager.GetInstance().onQuitting += DestroyOnQuittingGameOrLoading;
+            Application.OnInitialized += () =>
+            {
+                Application.GameManager.onLoadingBegan += DestroyOnQuittingGameOrLoading;
+                Application.GameManager.onLoadingSucceeded += InstantiateInGame;
+                Application.GameManager.onQuitting += DestroyOnQuittingGameOrLoading;
+            };
         }
 
         private static void DestroyOnQuittingGameOrLoading()

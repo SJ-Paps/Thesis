@@ -16,7 +16,7 @@ namespace SJ.UI
         // Use this for initialization
         protected override void SJAwake()
         {
-            string[] languages = Application.GetTranslatorService().GetLanguages();
+            string[] languages = Application.TranslatorService.GetLanguages();
 
             foreach (string language in languages)
             {

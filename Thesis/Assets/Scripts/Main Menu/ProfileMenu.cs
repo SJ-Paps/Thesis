@@ -94,7 +94,7 @@ namespace SJ.UI
                     gameSettingsRepository.SaveSettings().Subscribe();
                 });
 
-            GameManager.GetInstance().BeginSessionWithProfile(item.ProfileData);
+            Application.GameManager.BeginSessionWithProfile(item.ProfileData);
         }
 
         private void OnDeleteProfile(ProfileInfoItem item)

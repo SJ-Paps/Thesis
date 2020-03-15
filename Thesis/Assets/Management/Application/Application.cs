@@ -4,35 +4,44 @@ using SJ.Audio;
 using SJ.Coroutines;
 using UnityEngine.SceneManagement;
 using UniRx;
+using SJ.Game;
+using UnityEngine;
+using System;
 
 namespace SJ
 {
     public static class Application
     {
-        private static IUpdater updater;
-        private static ITranslatorService translatorService;
-        private static ISoundService soundService;
-        private static ICoroutineScheduler coroutineScheduler;
+        public static IUpdater Updater { get; private set; }
+        public static ITranslatorService TranslatorService { get; private set; }
+        public static ISoundService SoundService { get; private set; }
+        public static ICoroutineScheduler CoroutineScheduler { get; private set; }
+        public static GameManager GameManager { get; private set; }
+        public static ApplicationSettings ApplicationSettings { get; private set; }
 
-        private static ApplicationSettings applicationSettings;
+        public static event Action OnInitialized;
 
         public static void Initialize()
         {
-            applicationSettings = LoadApplicationSettings();
+            ApplicationSettings = LoadApplicationSettings();
 
-            updater = UpdaterFactory.Create();
-            translatorService = TranslatorServiceFactory.Create();
-            soundService = SoundServiceFactory.Create();
-            coroutineScheduler = CoroutineSchedulerFactory.Create();
+            Updater = UpdaterFactory.Create();
+            TranslatorService = TranslatorServiceFactory.Create();
+            SoundService = SoundServiceFactory.Create();
+            CoroutineScheduler = CoroutineSchedulerFactory.Create();
+            GameManager = new GameManager();
 
             Repositories.GetGameSettingsRepository().GetSettings()
+                .ObserveOnMainThread()
                 .Subscribe(gameSettings =>
                 {
-                    translatorService.ChangeLanguage(gameSettings.userLanguage);
+                    TranslatorService.ChangeLanguage(gameSettings.userLanguage);
 
-                    soundService.SetVolume(gameSettings.generalVolume);
-                    soundService.SetVolumeOfChannel(SoundChannels.Music, gameSettings.musicVolume);
-                    soundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.soundsVolume);
+                    SoundService.SetVolume(gameSettings.generalVolume);
+                    SoundService.SetVolumeOfChannel(SoundChannels.Music, gameSettings.musicVolume);
+                    SoundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.soundsVolume);
+
+                    OnInitialized?.Invoke();
 
                     SceneManager.LoadScene("Menu");
                 });
@@ -40,32 +49,7 @@ namespace SJ
 
         private static ApplicationSettings LoadApplicationSettings()
         {
-            return SJResources.LoadAsset<ApplicationSettingsAsset>(Reg.APPLICATION_INFO_ASSET_NAME).GetApplicationSettings();
-        }
-
-        public static ApplicationSettings GetApplicationSettings()
-        {
-            return applicationSettings;
-        }
-
-        public static IUpdater GetUpdater()
-        {
-            return updater;
-        }
-
-        public static ITranslatorService GetTranslatorService()
-        {
-            return translatorService;
-        }
-
-        public static ISoundService GetSoundService()
-        {
-            return soundService;
-        }
-
-        public static ICoroutineScheduler GetCoroutineScheduler()
-        {
-            return coroutineScheduler;
+            return ScriptableObject.Instantiate<ApplicationSettings>(SJResources.LoadAsset<ApplicationSettings>(Reg.APPLICATION_INFO_ASSET_NAME));
         }
 
     }

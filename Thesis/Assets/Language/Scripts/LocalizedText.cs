@@ -45,7 +45,7 @@ namespace SJ.Localization
             this.tag = tag;
             this.option = option;
 
-            translatorService = Application.GetTranslatorService();
+            translatorService = Application.TranslatorService;
 
             translatorService.onLanguageChanged += OnLanguageChanged;
         }

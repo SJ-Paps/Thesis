@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace SJ
 {
-    [Serializable]
-    public class ApplicationSettings
+    [CreateAssetMenu(fileName = "ApplicationSettings", menuName = "Application Settings Asset")]
+    public class ApplicationSettings : ScriptableObject
     {
         [SerializeField]
         private string[] beginningScenes;

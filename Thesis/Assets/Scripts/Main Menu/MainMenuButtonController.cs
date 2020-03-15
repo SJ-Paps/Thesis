@@ -41,12 +41,12 @@ namespace SJ.UI
 
         private void ExitToDesktop()
         {
-            MainMenu.GetInstance().DisplayConfirmationMenu(Application.GetTranslatorService().GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper(), UnityEngine.Application.Quit, null);
+            MainMenu.GetInstance().DisplayConfirmationMenu(Application.TranslatorService.GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper(), UnityEngine.Application.Quit, null);
         }
 
         private void ExitToMainMenu()
         {
-            MainMenu.GetInstance().DisplayConfirmationMenu(Application.GetTranslatorService().GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper(), GoMenu, null);
+            MainMenu.GetInstance().DisplayConfirmationMenu(Application.TranslatorService.GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper(), GoMenu, null);
         }
 
         private void HideMenu()
@@ -56,13 +56,13 @@ namespace SJ.UI
 
         private void GoMenu()
         {
-            GameManager.GetInstance().EndSession();
+            Application.GameManager.EndSession();
         }
 
         private void Continue()
         {
             IProfileRepository profileRepository = Repositories.GetProfileRepository();
-            ICoroutineScheduler coroutineScheduler = Application.GetCoroutineScheduler();
+            ICoroutineScheduler coroutineScheduler = Application.CoroutineScheduler;
             IGameSettingsRepository gameSettingsRepository = Repositories.GetGameSettingsRepository();
 
             gameSettingsRepository.GetSettings()
@@ -77,7 +77,7 @@ namespace SJ.UI
                                 throw new NonExistentProfileException();
                         })
                         .Subscribe(
-                            profileData => GameManager.GetInstance().BeginSessionWithProfile(profileData),
+                            profileData => Application.GameManager.BeginSessionWithProfile(profileData),
                             error => Logger.LogConsole("Profile " + gameSettings.lastProfile + " missing")
                         );
                 });
@@ -85,7 +85,7 @@ namespace SJ.UI
 
         private void UpdateButtonStates()
         {
-            if (GameManager.GetInstance().IsInGame)
+            if (Application.GameManager.IsInGame)
             {
                 exitDesktop.gameObject.SetActive(true);
                 exitMainMenu.gameObject.SetActive(true);

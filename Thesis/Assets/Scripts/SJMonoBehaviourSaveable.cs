@@ -11,7 +11,7 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
 
     protected override void SJAwake()
     {
-        GameManager.GetInstance().SubscribeForSave(this);
+        SJ.Application.GameManager.SubscribeForSave(this);
     }
 
     public object Save()
@@ -28,7 +28,7 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
     {
         if (Application.isEditor == false)
         {
-            GameManager.GetInstance().DesubscribeForSave(this);
+            SJ.Application.GameManager.DesubscribeForSave(this);
         }
     }
 

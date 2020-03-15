@@ -10,7 +10,7 @@ public class TribalClimbingLedgeState : TribalHSMState
 
     public TribalClimbingLedgeState()
     {
-        coroutineScheduler = SJ.Application.GetCoroutineScheduler();
+        coroutineScheduler = SJ.Application.CoroutineScheduler;
 
         climbCoroutine = ClimbCoroutine();
     }

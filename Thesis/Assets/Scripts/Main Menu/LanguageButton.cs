@@ -21,12 +21,12 @@ namespace SJ.UI
 
         protected override void SJOnEnable()
         {
-            Application.GetTranslatorService().onLanguageChanged += OnLanguageChanged;
+            Application.TranslatorService.onLanguageChanged += OnLanguageChanged;
         }
 
         protected override void SJOnDisable()
         {
-            Application.GetTranslatorService().onLanguageChanged -= OnLanguageChanged;
+            Application.TranslatorService.onLanguageChanged -= OnLanguageChanged;
         }
 
         public void SetLanguage(string language)
@@ -38,7 +38,7 @@ namespace SJ.UI
 
         private void ChangeLanguage()
         {
-            Application.GetTranslatorService().ChangeLanguage(language);
+            Application.TranslatorService.ChangeLanguage(language);
 
             Repositories.GetGameSettingsRepository().GetSettings()
                 .Subscribe(gameSettings =>
@@ -51,7 +51,7 @@ namespace SJ.UI
 
         private void UpdateButtonText()
         {
-            text.text = Application.GetTranslatorService().GetLineByTagOfCurrentLanguage("language_name_" + language).FirstLetterToUpper();
+            text.text = Application.TranslatorService.GetLineByTagOfCurrentLanguage("language_name_" + language).FirstLetterToUpper();
         }
 
         private void OnLanguageChanged(string language)
