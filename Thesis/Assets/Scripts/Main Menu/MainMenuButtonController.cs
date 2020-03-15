@@ -68,24 +68,18 @@ namespace SJ.UI
             gameSettingsRepository.GetSettings()
                 .Subscribe(gameSettings =>
                 {
-                    string lastProfile = gameSettings.lastProfile;
-
-                    coroutineScheduler.AwaitTask(profileRepository.Exists(lastProfile),
-                        delegate (bool exists)
+                    profileRepository.Exists(gameSettings.lastProfile)
+                        .SelectMany(exists =>
                         {
                             if (exists)
-                            {
-                                coroutineScheduler.AwaitTask(profileRepository.GetProfileDataFrom(lastProfile),
-                                    delegate (ProfileData profileData)
-                                    {
-                                        GameManager.GetInstance().BeginSessionWithProfile(profileData);
-                                    });
-                            }
+                                return profileRepository.GetProfileDataFrom(gameSettings.lastProfile);
                             else
-                            {
-                                Logger.LogConsole("Profile " + lastProfile + " missing");
-                            }
-                        });
+                                throw new NonExistentProfileException();
+                        })
+                        .Subscribe(
+                            profileData => GameManager.GetInstance().BeginSessionWithProfile(profileData),
+                            error => Logger.LogConsole("Profile " + gameSettings.lastProfile + " missing")
+                        );
                 });
         }
 

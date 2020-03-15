@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using SJ.Profiles;
 using SJ.Game;
 using UniRx;
+using System;
+using System.Linq;
 
 namespace SJ.UI
 {
@@ -30,7 +32,7 @@ namespace SJ.UI
 
         protected override void SJOnEnable()
         {
-            Application.GetCoroutineScheduler().StartCoroutine(WaitLoadProfiles());
+            LoadProfiles();
         }
 
         protected override void SJOnDisable()
@@ -43,29 +45,43 @@ namespace SJ.UI
             }
         }
 
-        private IEnumerator WaitLoadProfiles()
+        private void LoadProfiles()
         {
-            Task<ProfileData[]> taskProfiles = profileRepository.GetAllProfileData();
+            profileRepository.GetAllProfiles()
+                .SelectMany(profileNames => GetProfileDataFrom(profileNames))
+                .Subscribe(profiles => profiles.ForEach(p => InstantiateProfileItem(p)));
+        }
 
-            while (taskProfiles.IsCompleted == false)
+        private IObservable<List<ProfileData>> GetProfileDataFrom(string[] profiles)
+        {
+            return Observable.Create<List<ProfileData>>(observer =>
             {
-                yield return null;
-            }
+                var profileDataList = new List<ProfileData>();
 
-            ProfileData[] profiles = taskProfiles.Result;
+                List<IObservable<ProfileData>> getProfileObservables = new List<IObservable<ProfileData>>(); 
 
-            if (profiles != null && profiles.Length > 0)
-            {
                 for (int i = 0; i < profiles.Length; i++)
-                {
-                    ProfileInfoItem instance = Instantiate(profileInfoItemPrefab, layoutObject);
-                    items.Add(instance);
-                    instance.SetInfo(profiles[i]);
-                    instance.onSelectRequest += OnSelectProfile;
-                    instance.onDeleteRequest += OnDeleteProfile;
-                }
-            }
+                    getProfileObservables.Add(profileRepository.GetProfileDataFrom(profiles[i]));
 
+                Observable.Zip(getProfileObservables)
+                    .Subscribe(profileDataArray =>
+                    {
+                        profileDataList.AddRange(profileDataArray);
+                        observer.OnNext(profileDataList);
+                        observer.OnCompleted();
+                    });
+
+                return Disposable.Empty;
+            });
+        }
+
+        private void InstantiateProfileItem(ProfileData profileData)
+        {
+            ProfileInfoItem instance = Instantiate(profileInfoItemPrefab, layoutObject);
+            items.Add(instance);
+            instance.SetInfo(profileData);
+            instance.onSelectRequest += OnSelectProfile;
+            instance.onDeleteRequest += OnDeleteProfile;
         }
 
         private void OnSelectProfile(ProfileInfoItem item)

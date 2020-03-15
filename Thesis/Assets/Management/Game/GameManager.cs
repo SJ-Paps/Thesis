@@ -10,6 +10,8 @@ using SJ.Profiles;
 using SJ.Coroutines;
 using SJ;
 using SJ.Save;
+using System;
+using UniRx;
 
 namespace SJ.Game
 {
@@ -86,27 +88,37 @@ namespace SJ.Game
 
         public void BeginSessionWithProfile(ProfileData profileData)
         {
-            coroutineScheduler.AwaitTask(profileRepository.Exists(profileData.name),
-                delegate (bool exists)
+            profileRepository.Exists(profileData.name)
+                .Subscribe(exists =>
                 {
                     if (exists == false)
                     {
-                        SaveDefaultProfile(profileData);
+                        CreateDefaultProfile(profileData)
+                            .Subscribe(_ =>
+                            {
+                                CurrentProfile = profileData;
+                                LoadGame();
+                            });
                     }
-
-                    CurrentProfile = profileData;
-
-                    LoadGame();
+                    else
+                    {
+                        CurrentProfile = profileData;
+                        LoadGame();
+                    }
+                    
                 });
         }
 
-        private void SaveDefaultProfile(ProfileData profileData)
+        private IObservable<Unit> CreateDefaultProfile(ProfileData profileData)
         {
-            Task task = profileRepository.SaveProfile(
-                profileData,
-                new SaveData(profileData.name, new GameSessionSaveData() { gameplaySaves = null, isBeginning = true, loadedScenesIndexes = GetScenesIndex(beginScenes) }));
-
-            task.Wait();
+            return profileRepository.CreateProfile(profileData.name, profileData, 
+                new SaveData(profileData.name, new GameSessionSaveData() 
+                { 
+                    gameplaySaves = null, 
+                    isBeginning = true,
+                    loadedScenesIndexes = GetScenesIndex(beginScenes)
+                })
+                );
         }
 
         private int[] GetScenesIndex(string[] scenes)
@@ -176,66 +188,32 @@ namespace SJ.Game
                 isBeginning = false
             };
 
-            Task serializationTask = profileRepository.SaveProfile(CurrentProfile, new SaveData(CurrentProfile.name, sessionData));
-
-            while (serializationTask.IsCompleted == false)
-            {
-                yield return null;
-            }
-
-            if (serializationTask.IsFaulted)
-            {
-                CallOnSavingFailedEvent();
-            }
-            else
-            {
-                CallOnSavingSucceededEvent();
-            }
-
-            serializationTask.Dispose();
+            profileRepository.UpdateProfileData(CurrentProfile.name, CurrentProfile)
+                .Select(_ => profileRepository.SaveOnProfile(CurrentProfile.name, new SaveData(CurrentProfile.name, sessionData)))
+                .Subscribe(_ => CallOnSavingSucceededEvent(), error => CallOnSavingFailedEvent());
         }
 
         public void LoadGame()
         {
             CallOnLoadingBeganEvent();
 
-            coroutineScheduler.StartCoroutine(LoadFromSaveGameCoroutine());
+            LoadFromSaveGame();
         }
 
-        private IEnumerator LoadFromSaveGameCoroutine()
+        private void LoadFromSaveGame()
         {
-            Task<SaveData> saveDeserializationTask = profileRepository.GetSaveDataFromProfile(CurrentProfile.name);
-
-            GameSessionSaveData sessionData = null;
-
-            while (saveDeserializationTask.IsCompleted == false)
-            {
-                yield return null;
-            }
-
-            if (saveDeserializationTask.IsFaulted)
-            {
-                CallOnLoadingFailedEvent();
-                saveDeserializationTask.Dispose();
-                yield break;
-            }
-            else
-            {
-                sessionData = (GameSessionSaveData)saveDeserializationTask.Result.saveObject;
-
-                if (sessionData.isBeginning)
+            profileRepository.GetSaveDataFrom(CurrentProfile.name)
+                .Subscribe(saveData =>
                 {
-                    NewGame(beginScenes);
-                }
-                else
-                {
+                    var sessionData = (GameSessionSaveData)saveData.saveObject;
 
-
-                    yield return coroutineScheduler.AwaitCoroutine(PrepareScene(sessionData));
-
-                    CallOnLoadingSucceededEvent();
-                }
-            }
+                    if (sessionData.isBeginning)
+                        NewGame(beginScenes);
+                    else
+                        Observable.FromCoroutine(() => PrepareScene(sessionData))
+                            .Subscribe(_ => CallOnLoadingSucceededEvent());
+                },
+                error => CallOnLoadingFailedEvent());
         }
 
         private IEnumerator PrepareScene(GameSessionSaveData sessionData)

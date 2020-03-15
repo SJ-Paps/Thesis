@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
-using System.Threading.Tasks;
+﻿using SJ.Save;
 using System;
-using SJ.Profiles.Exceptions;
-using SJ.Save;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UniRx;
 
 namespace SJ.Profiles
 {
@@ -17,78 +15,101 @@ namespace SJ.Profiles
 
         private ISaveSerializer saveSerializer;
 
+        private Dictionary<string, ProfileSaveDataTuple> profiles;
+
+        private bool cached;
+
         public WindowsFileSystemProfileRepository(ISaveSerializer saveSerializer)
         {
             this.saveSerializer = saveSerializer;
+            profiles = new Dictionary<string, ProfileSaveDataTuple>();
         }
 
-        public Task DeleteProfile(string profile)
+        public IObservable<Unit> CreateProfile(string profile, ProfileData profileData, SaveData saveData)
         {
-            return Task.Run(() => InternalDeleteProfile(profile));
+            return LoadProfiles()
+                .Do(_ => profiles.Add(profile, new ProfileSaveDataTuple() { profileData = profileData, saveData = saveData }))
+                .SelectMany(_ => SaveProfile(profile));
         }
 
-        private void InternalDeleteProfile(string profileName)
+        public IObservable<Unit> UpdateProfileData(string profile, ProfileData profileData)
         {
-            if (ProfileExistsAndIsValid(profileName))
+            return LoadProfiles()
+                .Do(_ => profiles[profile].profileData = profileData)
+                .SelectMany(_ => SaveProfile(profile));
+        }
+
+        public IObservable<Unit> SaveOnProfile(string profile, SaveData saveData)
+        {
+            return LoadProfiles()
+                .Do(_ => profiles[profile].saveData = saveData)
+                .SelectMany(_ => SaveProfile(profile));
+        }
+
+        public IObservable<ProfileData> GetProfileDataFrom(string profile)
+        {
+            return LoadProfiles()
+                .Select(_ => profiles[profile].profileData);
+        }
+
+        public IObservable<SaveData> GetSaveDataFrom(string profile)
+        {
+            return LoadProfiles()
+                .Select(_ => profiles[profile].saveData);
+        }
+
+        public IObservable<Unit> DeleteProfile(string profile)
+        {
+            return LoadProfiles()
+                .Do(_ => DeleteProfileAndDirectory(profile));
+        }
+
+        public IObservable<Unit> DeleteAllProfiles()
+        {
+            return LoadProfiles()
+                .Do(_ => DeleteAllProfilesAndDirectories());
+        }
+
+        public IObservable<string[]> GetAllProfiles()
+        {
+            return LoadProfiles()
+                .Select(_ => profiles.Keys.ToArray());
+        }
+
+        public IObservable<bool> Exists(string profile)
+        {
+            return LoadProfiles()
+                .Select(_ => profiles.ContainsKey(profile));
+        }
+
+        private IObservable<Unit> LoadProfiles()
+        {
+            if (cached)
+                return Observable.ReturnUnit();
+
+            return Observable.Create<Unit>(observer =>
             {
-                Directory.Delete(GetProfileDirectory(profileName), true);
-            }
-        }
+                var profileData = LoadProfileData();
+                var saveData = LoadSaveData();
 
-        public Task DeleteAllProfiles()
-        {
-            return Task.Run(() => InternalDeleteAllProfiles());
-        }
-
-        private void InternalDeleteAllProfiles()
-        {
-            string[] allProfileDirectories = GetAllProfileDirectories();
-
-            for (int i = 0; i < allProfileDirectories.Length; i++)
-            {
-                Directory.Delete(allProfileDirectories[i], true);
-            }
-        }
-
-        private string[] GetAllProfileDirectories()
-        {
-            string[] profileArray = null;
-
-            try
-            {
-                profileArray = Directory.GetFiles(profileDirectory, profileFileName, SearchOption.AllDirectories);
-            }
-            catch { }
-
-            if (profileArray != null)
-            {
-                for (int i = 0; i < profileArray.Length; i++)
+                for (int i = 0; i < profileData.Count; i++)
                 {
-                    profileArray[i] = Path.GetDirectoryName(profileArray[i]);
+                    profiles.Add(profileData[i].name, new ProfileSaveDataTuple() { profileData = profileData[i], saveData = saveData[i] });
                 }
-            }
 
-            return profileArray;
+                cached = true;
+
+                observer.OnNext(Unit.Default);
+                observer.OnCompleted();
+
+                return Disposable.Empty;
+            });
         }
 
-        public bool ProfileExistsAndIsValid(string profileName)
-        {
-            string profileDirectory = GetProfileDirectory(profileName);
-
-            string currentProfileFilePath = Path.Combine(profileDirectory, profileFileName);
-            string currentProfileSaveDataFilePath = Path.Combine(profileDirectory, saveFileName);
-
-            return File.Exists(currentProfileFilePath) && File.Exists(currentProfileSaveDataFilePath);
-        }
-
-        public Task<ProfileData[]> GetAllProfileData()
-        {
-            return Task.Run(() => InternalGetAllProfiles());
-        }
-
-        private ProfileData[] InternalGetAllProfiles()
+        private List<ProfileData> LoadProfileData()
         {
             string[] profileFilePaths = null;
+            List<ProfileData> profileData = new List<ProfileData>();
 
             try
             {
@@ -96,113 +117,96 @@ namespace SJ.Profiles
             }
             catch { }
 
-
-            List<ProfileData> profiles = null;
-
             if (profileFilePaths != null)
             {
-                for (int i = 0; i < profileFilePaths.Length; i++)
+                foreach (var profileFile in profileFilePaths)
+                    profileData.Add(LoadProfileDataFrom(profileFile));
+            }
+
+            return profileData;
+        }
+
+        private ProfileData LoadProfileDataFrom(string profileFile)
+        {
+            string serialized = File.ReadAllText(profileFile);
+
+            SaveData[] saves = saveSerializer.Deserialize(serialized);
+
+            return (ProfileData)saves[0].saveObject;
+        }
+
+        private List<SaveData> LoadSaveData()
+        {
+            string[] saveFilePaths = null;
+            List<SaveData> saveData = new List<SaveData>();
+
+            try
+            {
+                saveFilePaths = Directory.GetFiles(profileDirectory, saveFileName, SearchOption.AllDirectories);
+            }
+            catch { }
+
+            if (saveFilePaths != null)
+            {
+                foreach (var saveFile in saveFilePaths)
+                    saveData.Add(LoadSaveDataFrom(saveFile));
+            }
+
+            return saveData;
+        }
+
+        private SaveData LoadSaveDataFrom(string saveFile)
+        {
+            string serialized = File.ReadAllText(saveFile);
+
+            SaveData[] saves = saveSerializer.Deserialize(serialized);
+
+            return saves[0];
+        }
+
+        private IObservable<Unit> SaveProfiles()
+        {
+            return Observable.Create<Unit>(observer =>
+            {
+                foreach (var profile in profiles)
                 {
-                    string profileName = Path.GetFileName(Path.GetDirectoryName(profileFilePaths[i]));
-
-                    if (ProfileExistsAndIsValid(profileName))
-                    {
-                        ProfileData data = InternalGetProfileDataFrom(profileName);
-
-                        if (ProfileData.IsValid(data))
-                        {
-                            if (profiles == null)
-                            {
-                                profiles = new List<ProfileData>();
-                            }
-
-                            profiles.Add(data);
-                        }
-                    }
+                    SaveProfileSynchronously(profile.Key);
                 }
-            }
 
-            if (profiles == null)
+                observer.OnNext(Unit.Default);
+                observer.OnCompleted();
+
+                return Disposable.Empty;
+            });
+        }
+
+        private IObservable<Unit> SaveProfile(string profile)
+        {
+            return Observable.Create<Unit>(observer =>
             {
-                return null;
-            }
-            else
-            {
-                return profiles.ToArray();
-            }
+                SaveProfileSynchronously(profile);
+
+                observer.OnNext(Unit.Default);
+                observer.OnCompleted();
+
+                return Disposable.Empty;
+            });
         }
 
-        public Task<ProfileData> GetProfileDataFrom(string profile)
+        private void SaveProfileSynchronously(string profile)
         {
-            return Task.Run(() => InternalGetProfileDataFrom(profile));
-        }
+            var profileTuple = profiles[profile];
 
-        public ProfileData InternalGetProfileDataFrom(string profileName)
-        {
-            if (ProfileExistsAndIsValid(profileName))
-            {
-                string profileFilePath = GetProfileFilePath(profileName);
+            var profileName = profile;
+            var profileData = profileTuple.profileData;
+            var saveData = profileTuple.saveData;
 
-                string serialized = File.ReadAllText(profileFilePath);
+            var directory = EnsureProfileHasSaveDirectoryAndReturnIt(profileName);
 
-                SaveData[] saves = saveSerializer.Deserialize(serialized);
+            SaveData profileSaveData = new SaveData(profileName, profileData);
 
-                if (saves != null && saves.Length > 0)
-                {
-                    return (ProfileData)saves[0].saveObject;
-                }
-            }
-
-            throw new NonExistentProfileException();
-        }
-
-        public Task<SaveData> GetSaveDataFromProfile(string profile)
-        {
-            return Task.Run(() => InternalGetSaveDataFromProfile(profile));
-        }
-
-        private SaveData InternalGetSaveDataFromProfile(string profileName)
-        {
-            if (ProfileExistsAndIsValid(profileName))
-            {
-                string saveDataFilePath = Path.Combine(GetProfileDirectory(profileName), saveFileName);
-
-                if (File.Exists(saveDataFilePath))
-                {
-                    string serialized = File.ReadAllText(saveDataFilePath);
-
-                    SaveData[] saves = saveSerializer.Deserialize(serialized);
-
-                    if (saves != null && saves.Length > 0)
-                    {
-                        SaveData profileSaveData = saves[0];
-
-                        return profileSaveData;
-                    }
-                }
-            }
-
-            throw new InvalidOperationException("provided profile name does not exists or is invalid");
-        }
-
-        public Task SaveProfile(ProfileData profileData, SaveData saveData)
-        {
-            return Task.Run(() => InternalSaveProfile(profileData, saveData));
-        }
-
-        private void InternalSaveProfile(ProfileData profileData, SaveData saveData)
-        {
-            string currentProfileDirectory = GetProfileDirectory(profileData.name);
-
-            if (Directory.Exists(currentProfileDirectory) == false)
-            {
-                Directory.CreateDirectory(currentProfileDirectory);
-            }
-
-            SaveData profileSaveData = new SaveData(profileData.name, profileData);
-
-            string profileFilePath = Path.Combine(currentProfileDirectory, profileFileName);
-            string saveFilePath = Path.Combine(currentProfileDirectory, saveFileName);
+            string profileFilePath = Path.Combine(directory, profileFileName);
+            string saveFilePath = Path.Combine(directory, saveFileName);
 
             string serializedProfileData = saveSerializer.Serialize(profileSaveData);
             string serializedSaves = saveSerializer.Serialize(saveData);
@@ -211,29 +215,44 @@ namespace SJ.Profiles
             File.WriteAllText(saveFilePath, serializedSaves);
         }
 
+        private string EnsureProfileHasSaveDirectoryAndReturnIt(string profile)
+        {
+            string currentProfileDirectory = GetProfileDirectory(profile);
+
+            if (Directory.Exists(currentProfileDirectory) == false)
+            {
+                Directory.CreateDirectory(currentProfileDirectory);
+            }
+
+            return currentProfileDirectory;
+        }
+
         private string GetProfileDirectory(string profileName)
         {
             return Path.Combine(profileDirectory, profileName);
         }
 
-        private string GetProfileFilePath(string profileName)
+        private void DeleteProfileAndDirectory(string profileName)
         {
-            return Path.Combine(GetProfileDirectory(profileName), profileFileName);
+            Directory.Delete(GetProfileDirectory(profileName), true);
+            profiles.Remove(profileName);
         }
 
-        public Task<bool> Exists(string profile)
+        private void DeleteAllProfilesAndDirectories()
         {
-            return Task.Run(() => InternalExists(profile));
+            var keyValues = profiles.ToArray();
+
+            for (int i = 0; i < keyValues.Length; i++)
+            {
+                DeleteProfileAndDirectory(keyValues[i].Key);
+                i--;
+            }
         }
 
-        private bool InternalExists(string profile)
+        private class ProfileSaveDataTuple
         {
-            string profileDirectory = GetProfileDirectory(profile);
-
-            string currentProfileFilePath = Path.Combine(profileDirectory, profileFileName);
-            string currentProfileSaveDataFilePath = Path.Combine(profileDirectory, saveFileName);
-
-            return File.Exists(currentProfileFilePath) && File.Exists(currentProfileSaveDataFilePath);
+            public ProfileData profileData;
+            public SaveData saveData;
         }
     }
 }

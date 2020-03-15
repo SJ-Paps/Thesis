@@ -4,7 +4,6 @@ using SJ.Audio;
 using SJ.Coroutines;
 using UnityEngine.SceneManagement;
 using UniRx;
-using UnityEngine;
 
 namespace SJ
 {
