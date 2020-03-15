@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using Paps.StateMachines;
+using NaughtyAttributes;
 
 #if UNITY_EDITOR
 using UnityEditor;

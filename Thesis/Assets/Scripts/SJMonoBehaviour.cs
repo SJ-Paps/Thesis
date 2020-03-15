@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using SJ.Updatables;
+using NaughtyAttributes;
 
 public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
 {
