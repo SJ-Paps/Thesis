@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using SJ.Profiles;
 using SJ.Coroutines;
 using SJ.Game;
+using UniRx;
 
 namespace SJ.UI
 {
@@ -54,11 +55,14 @@ namespace SJ.UI
                     }
                     else
                     {
-                        gameSettingsRepository.GetSettingsSynchronously().lastProfile = profileName;
+                        gameSettingsRepository.GetSettings()
+                            .SelectMany(gameSettings => 
+                            {
+                                gameSettings.lastProfile = profileName;
 
-                        gameSettingsRepository.SaveSettingsSynchronously();
-
-                        GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName });
+                                return gameSettingsRepository.SaveSettings();
+                            })
+                            .Subscribe(_ => GameManager.GetInstance().BeginSessionWithProfile(new ProfileData() { name = profileName }));
                     }
                 });
             }

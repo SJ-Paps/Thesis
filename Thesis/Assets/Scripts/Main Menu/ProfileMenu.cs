@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using SJ.Profiles;
 using SJ.Game;
+using UniRx;
 
 namespace SJ.UI
 {
@@ -69,27 +70,33 @@ namespace SJ.UI
 
         private void OnSelectProfile(ProfileInfoItem item)
         {
-            gameSettingsRepository.GetSettingsSynchronously().lastProfile = item.ProfileData.name;
+            gameSettingsRepository.GetSettings()
+                .Subscribe(gameSettings =>
+                {
+                    gameSettings.lastProfile = item.ProfileData.name;
 
-            gameSettingsRepository.SaveSettingsSynchronously();
+                    gameSettingsRepository.SaveSettings().Subscribe();
+                });
 
             GameManager.GetInstance().BeginSessionWithProfile(item.ProfileData);
         }
 
         private void OnDeleteProfile(ProfileInfoItem item)
         {
-            GameSettings gameSettings = gameSettingsRepository.GetSettingsSynchronously();
+            gameSettingsRepository.GetSettings()
+                .Subscribe(gameSettings =>
+                {
+                    profileRepository.DeleteProfile(item.ProfileData.name).Wait();
+                    items.Remove(item);
+                    Destroy(item.gameObject);
 
-            if (gameSettings.lastProfile == item.ProfileData.name)
-            {
-                gameSettings.lastProfile = null;
+                    if (gameSettings.lastProfile == item.ProfileData.name)
+                    {
+                        gameSettings.lastProfile = null;
 
-                gameSettingsRepository.SaveSettingsSynchronously();
-            }
-
-            profileRepository.DeleteProfile(item.ProfileData.name).Wait();
-            items.Remove(item);
-            Destroy(item.gameObject);
+                        gameSettingsRepository.SaveSettings().Subscribe();
+                    }
+                });
         }
 
     }

@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using UnityEngine;
 using SJ.Save;
+using System;
+using UniRx;
 
 namespace SJ
 {
@@ -18,19 +20,20 @@ namespace SJ
             this.saveSerializer = saveSerializer;
         }
 
-        public Task<GameSettings> GetSettings()
+        public IObservable<GameSettings> GetSettings()
         {
-            return Task.Run(
-                delegate()
+            return Observable.Create<GameSettings>(observer =>
+            {
+                if (gameSettings == null)
                 {
-                    if(gameSettings == null)
-                    {
-                        gameSettings = LoadSettings();
-                    }
-
-                    return gameSettings;
+                    gameSettings = LoadSettings();
                 }
-                );
+
+                observer.OnNext(gameSettings);
+                observer.OnCompleted();
+
+                return Disposable.Empty;
+            });
         }
 
         private GameSettings LoadSettings()
@@ -63,9 +66,17 @@ namespace SJ
             return Application.GetApplicationSettings().DefaultGameSettings;
         }
 
-        public Task SaveSettings()
+        public IObservable<Unit> SaveSettings()
         {
-            return SaveSettings(gameSettings);
+            return Observable.Create<Unit>(observer =>
+            {
+                InternalSaveSettings(gameSettings);
+
+                observer.OnNext(Unit.Default);
+                observer.OnCompleted();
+
+                return Disposable.Empty;
+            });
         }
 
         private void InternalSaveSettings(GameSettings settings)
@@ -80,11 +91,6 @@ namespace SJ
             string serialized = saveSerializer.Serialize(new SaveData("config", settings));
 
             File.WriteAllText(configurationFilePath, serialized);
-        }
-
-        public Task SaveSettings(GameSettings settings)
-        {
-            return Task.Run(() => InternalSaveSettings(settings));
         }
     }
 }

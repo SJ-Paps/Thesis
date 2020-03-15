@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using System;
+using UniRx;
 
 namespace SJ
 {
     public interface IGameSettingsRepository
     {
-        Task<GameSettings> GetSettings();
-        Task SaveSettings();
-        Task SaveSettings(GameSettings settings);
+        IObservable<GameSettings> GetSettings();
+        IObservable<Unit> SaveSettings();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UniRx;
 
 namespace SJ.UI
 {
@@ -39,9 +40,13 @@ namespace SJ.UI
         {
             Application.GetTranslatorService().ChangeLanguage(language);
 
-            Repositories.GetGameSettingsRepository().GetSettingsSynchronously().userLanguage = language;
+            Repositories.GetGameSettingsRepository().GetSettings()
+                .Subscribe(gameSettings =>
+                {
+                    gameSettings.userLanguage = language;
 
-            Repositories.GetGameSettingsRepository().SaveSettingsSynchronously();
+                    Repositories.GetGameSettingsRepository().SaveSettings().Subscribe();
+                });
         }
 
         private void UpdateButtonText()

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using SJ.Audio;
-using System.Threading.Tasks;
+using UniRx;
 
 namespace SJ.UI
 {
@@ -38,9 +38,13 @@ namespace SJ.UI
 
         private void OnGeneralVolumeSliderDragEnd()
         {
-            gameSettingsRepository.GetSettingsSynchronously().generalVolume = soundService.GetVolume();
+            gameSettingsRepository.GetSettings()
+                .Subscribe(gameSettings =>
+                {
+                    gameSettings.generalVolume = soundService.GetVolume();
 
-            gameSettingsRepository.SaveSettingsSynchronously();
+                    gameSettingsRepository.SaveSettings().Subscribe();
+                });
         }
 
         private void OnMusicSliderValueChanged(float value)
@@ -50,9 +54,13 @@ namespace SJ.UI
 
         private void OnMusicSliderDragEnd()
         {
-            gameSettingsRepository.GetSettingsSynchronously().generalVolume = soundService.GetVolumeOfChannel(SoundChannels.Music);
+            gameSettingsRepository.GetSettings()
+                .Subscribe(gameSettings =>
+                {
+                    gameSettings.musicVolume = soundService.GetVolumeOfChannel(SoundChannels.Music);
 
-            gameSettingsRepository.SaveSettingsSynchronously();
+                    gameSettingsRepository.SaveSettings().Subscribe();
+                });
         }
 
         private void OnEffectsSliderValueChanged(float value)
@@ -62,9 +70,13 @@ namespace SJ.UI
 
         private void OnEffectsSliderDragEnd()
         {
-            gameSettingsRepository.GetSettingsSynchronously().generalVolume = soundService.GetVolumeOfChannel(SoundChannels.Effects);
+            gameSettingsRepository.GetSettings()
+                .Subscribe(gameSettings =>
+                {
+                    gameSettings.soundsVolume = soundService.GetVolumeOfChannel(SoundChannels.Effects);
 
-            gameSettingsRepository.SaveSettingsSynchronously();
+                    gameSettingsRepository.SaveSettings().Subscribe();
+                });
         }
     }
 }

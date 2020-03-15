@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SJ.Coroutines;
 using System;
 using SJ.Game;
+using UniRx;
 
 namespace SJ.UI
 {
@@ -64,23 +65,27 @@ namespace SJ.UI
             ICoroutineScheduler coroutineScheduler = Application.GetCoroutineScheduler();
             IGameSettingsRepository gameSettingsRepository = Repositories.GetGameSettingsRepository();
 
-            string lastProfile = gameSettingsRepository.GetSettingsSynchronously().lastProfile;
-
-            coroutineScheduler.AwaitTask(profileRepository.Exists(lastProfile),
-                delegate (bool exists)
+            gameSettingsRepository.GetSettings()
+                .Subscribe(gameSettings =>
                 {
-                    if (exists)
-                    {
-                        coroutineScheduler.AwaitTask(profileRepository.GetProfileDataFrom(lastProfile),
-                            delegate (ProfileData profileData)
+                    string lastProfile = gameSettings.lastProfile;
+
+                    coroutineScheduler.AwaitTask(profileRepository.Exists(lastProfile),
+                        delegate (bool exists)
+                        {
+                            if (exists)
                             {
-                                GameManager.GetInstance().BeginSessionWithProfile(profileData);
-                            });
-                    }
-                    else
-                    {
-                        Logger.LogConsole("Profile " + lastProfile + " missing");
-                    }
+                                coroutineScheduler.AwaitTask(profileRepository.GetProfileDataFrom(lastProfile),
+                                    delegate (ProfileData profileData)
+                                    {
+                                        GameManager.GetInstance().BeginSessionWithProfile(profileData);
+                                    });
+                            }
+                            else
+                            {
+                                Logger.LogConsole("Profile " + lastProfile + " missing");
+                            }
+                        });
                 });
         }
 
@@ -98,24 +103,22 @@ namespace SJ.UI
             }
             else
             {
-                exitDesktop.gameObject.SetActive(true);
-                exitMainMenu.gameObject.SetActive(false);
-                newGame.gameObject.SetActive(true);
-                loadGame.gameObject.SetActive(true);
-                resumeGame.gameObject.SetActive(false);
-                options.gameObject.SetActive(true);
+                Repositories.GetGameSettingsRepository().GetSettings()
+                    .Subscribe(gameSettings =>
+                    {
+                        if (string.IsNullOrEmpty(gameSettings.lastProfile))
+                            continueLastProfile.gameObject.SetActive(false);
+                        else
+                            continueLastProfile.gameObject.SetActive(true);
 
-                if (string.IsNullOrEmpty(Repositories.GetGameSettingsRepository().GetSettingsSynchronously().lastProfile) == false)
-                {
-                    continueLastProfile.gameObject.SetActive(true);
-                }
-                else
-                {
-                    continueLastProfile.gameObject.SetActive(false);
-                }
+                        exitDesktop.gameObject.SetActive(true);
+                        exitMainMenu.gameObject.SetActive(false);
+                        newGame.gameObject.SetActive(true);
+                        loadGame.gameObject.SetActive(true);
+                        resumeGame.gameObject.SetActive(false);
+                        options.gameObject.SetActive(true);
+                    });
             }
-
-
         }
     }
 

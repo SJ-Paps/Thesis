@@ -3,7 +3,8 @@ using SJ.Updatables;
 using SJ.Audio;
 using SJ.Coroutines;
 using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
+using UniRx;
+using UnityEngine;
 
 namespace SJ
 {
@@ -25,15 +26,17 @@ namespace SJ
             soundService = SoundServiceFactory.Create();
             coroutineScheduler = CoroutineSchedulerFactory.Create();
 
-            GameSettings gameSettings = Repositories.GetGameSettingsRepository().GetSettingsSynchronously();
+            Repositories.GetGameSettingsRepository().GetSettings()
+                .Subscribe(gameSettings =>
+                {
+                    translatorService.ChangeLanguage(gameSettings.userLanguage);
 
-            translatorService.ChangeLanguage(gameSettings.userLanguage);
+                    soundService.SetVolume(gameSettings.generalVolume);
+                    soundService.SetVolumeOfChannel(SoundChannels.Music, gameSettings.musicVolume);
+                    soundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.soundsVolume);
 
-            soundService.SetVolume(gameSettings.generalVolume);
-            soundService.SetVolumeOfChannel(SoundChannels.Music, gameSettings.musicVolume);
-            soundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.soundsVolume);
-
-            SceneManager.LoadScene("Menu");
+                    SceneManager.LoadScene("Menu");
+                });
         }
 
         private static ApplicationSettings LoadApplicationSettings()
