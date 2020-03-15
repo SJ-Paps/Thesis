@@ -10,7 +10,7 @@ public static class SJResources
     {
         assetBundles = new List<AssetBundle>();
 
-        AssetBundle manifestBundle = AssetBundle.LoadFromFile(Path.Combine(Reg.ASSETBUNDLE_DIRECTORY, "AssetBundles"));
+        AssetBundle manifestBundle = AssetBundle.LoadFromFile(Path.Combine(Reg.AssetBundleDirectory, "AssetBundles"));
 
         AssetBundleManifest manifest = manifestBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
 
@@ -18,7 +18,7 @@ public static class SJResources
 
         for (int i = 0; i < assetBundleNames.Length; i++)
         {
-            AssetBundle assetBundle = AssetBundle.LoadFromFile(Path.Combine(Reg.ASSETBUNDLE_DIRECTORY, assetBundleNames[i]));
+            AssetBundle assetBundle = AssetBundle.LoadFromFile(Path.Combine(Reg.AssetBundleDirectory, assetBundleNames[i]));
 
             if (assetBundle != null)
             {

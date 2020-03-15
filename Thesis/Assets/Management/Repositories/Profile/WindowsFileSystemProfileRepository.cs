@@ -9,7 +9,7 @@ namespace SJ.Profiles
 {
     public class WindowsFileSystemProfileRepository : IProfileRepository
     {
-        private static readonly string profileDirectory = Path.Combine(UnityEngine.Application.dataPath, "../saves/profiles");
+        private static readonly string profileDirectory = Path.Combine(UnityEngine.Application.persistentDataPath, "Saves/Profiles");
         private static readonly string profileFileName = "profile.sj";
         private static readonly string saveFileName = "save.sj";
 

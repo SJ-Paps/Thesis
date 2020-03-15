@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
 
 namespace SJ.Localization
 {
-    [CreateAssetMenu(fileName = "language_info", menuName = nameof(LanguageInfoAsset))]
-    public class LanguageInfoAsset : ScriptableObject
+    [CreateAssetMenu(fileName = Reg.LanguageSettingsAssetName, menuName = "Language Settings Asset")]
+    public class LanguageSettings : ScriptableObject
     {
         [SerializeField]
         private LanguageInfo[] languageInfo;

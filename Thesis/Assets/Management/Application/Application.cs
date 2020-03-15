@@ -49,7 +49,7 @@ namespace SJ
 
         private static ApplicationSettings LoadApplicationSettings()
         {
-            return ScriptableObject.Instantiate<ApplicationSettings>(SJResources.LoadAsset<ApplicationSettings>(Reg.APPLICATION_INFO_ASSET_NAME));
+            return ScriptableObject.Instantiate<ApplicationSettings>(SJResources.LoadAsset<ApplicationSettings>(Reg.ApplicationSettingsAssetName));
         }
 
     }

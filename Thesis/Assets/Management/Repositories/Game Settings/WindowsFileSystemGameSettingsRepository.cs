@@ -7,7 +7,7 @@ namespace SJ
 {
     public class WindowsFileSystemGameSettingsRepository : IGameSettingsRepository
     {
-        private static readonly string configurationFilePath = Path.Combine(UnityEngine.Application.dataPath, "../game_configuration/config.sj");
+        private static readonly string configurationFilePath = Path.Combine(UnityEngine.Application.persistentDataPath, "GameConfiguration/config.sj");
 
         private GameSettings gameSettings;
 

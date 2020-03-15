@@ -7,9 +7,8 @@
 [Tt]emp/
 [Ll]ogs/
 Assets/AssetStoreTools*
-AssetBundles*
-game_configuration*
-saves*
+[Gg]ameConfiguration*
+[Ss]aves*
 
 # Visual Studio 2015 cache directory
 .vs/

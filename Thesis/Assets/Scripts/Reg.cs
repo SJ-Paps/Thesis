@@ -4,13 +4,13 @@ using UnityEngine;
 
 public static class Reg
 {
-    public static readonly string ASSETBUNDLE_DIRECTORY = Path.GetFullPath(Path.Combine(Application.dataPath, "../AssetBundles"));
-    public static readonly string APPLICATION_INFO_ASSET_NAME = "ApplicationSettings";
-    public static readonly string LANGUAGE_INFO_ASSET_NAME = "language_info";
+    public static readonly string AssetBundleDirectory = Path.GetFullPath(Path.Combine(Application.streamingAssetsPath, "AssetBundles"));
+    public const string ApplicationSettingsAssetName = "ApplicationSettings";
+    public const string LanguageSettingsAssetName = "LanguageSettings";
 
 #if UNITY_EDITOR
-    public static readonly string buildPath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Application.productName), Application.productName + ".exe");
-    public static readonly string assetBundleDataPathBuild = Path.GetFullPath(Path.Combine(buildPath, "../AssetBundles"));
+    public static readonly string BuildPath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), Application.productName), Application.productName + ".exe");
+    public static readonly string AssetBundleDataPathBuild = Path.GetFullPath(Path.Combine(BuildPath, "../AssetBundles"));
     
 #endif
 
