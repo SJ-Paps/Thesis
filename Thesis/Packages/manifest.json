@@ -1,16 +1,19 @@
 {
   "dependencies": {
+    "com.dbrizov.naughtyattributes": "2.0.3",
     "com.neuecc.unirx": "7.1.0",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.assetbundlebrowser": "1.7.0",
     "com.unity.ext.nunit": "1.0.0",
+    "com.unity.ide.rider": "1.1.4",
     "com.unity.ide.vscode": "1.1.4",
     "com.unity.render-pipelines.universal": "7.1.8",
     "com.unity.test-framework": "1.1.11",
     "com.unity.textmeshpro": "2.0.1",
     "com.unity.timeline": "1.2.6",
     "com.unity.ugui": "1.0.0",
+    "paps.maybe": "0.0.1-unity",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -41,9 +44,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.dbrizov.naughtyattributes": "2.0.3",
-	"paps.maybe": "0.0.1-unity"
+    "com.unity.modules.xr": "1.0.0"
   },
   "scopedRegistries": [
     {
@@ -55,7 +56,7 @@
         "com.openupm"
       ]
     },
-	{
+    {
       "name": "package.npmjs.org",
       "url": "https://registry.npmjs.org/",
       "scopes": [

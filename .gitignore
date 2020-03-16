@@ -9,6 +9,7 @@
 Assets/AssetStoreTools*
 [Gg]ameConfiguration*
 [Ss]aves*
+.idea/
 
 # Visual Studio 2015 cache directory
 .vs/

@@ -5,62 +5,48 @@ namespace SJ.Editor
 {
     public class CustomBuild
     {
-        private static void Build(BuildOptions options)
+        private static void Build(BuildOptions options, BuildTarget target)
         {
-            BuildAssetBundles();
+            BuildAssetBundles(target);
 
-            BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Reg.BuildPath, BuildTarget.StandaloneWindows, options);
+            BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Reg.BuildPath, target, options);
         }
 
-        [MenuItem("Build/Build AssetBundles")]
-        public static void BuildAssetBundles()
+        [MenuItem("Build/Windows/Production")]
+        private static void WindowsProduction()
         {
-            BuildAssetBundles(Reg.AssetBundleDirectory, BuildTarget.StandaloneWindows);
+            Build(BuildOptions.None, BuildTarget.StandaloneWindows);
         }
 
-        private static void BuildAssetBundles(string path, BuildTarget target)
+        [MenuItem("Build/Windows/Development")]
+        private static void WindowsDevelopment()
         {
-            if (Directory.Exists(path) == false)
+            Build(BuildOptions.Development, BuildTarget.StandaloneWindows);
+        }
+        
+        [MenuItem("Build/MacOS/Production")]
+        private static void MacOSProduction()
+        {
+            Build(BuildOptions.None, BuildTarget.StandaloneOSX);
+        }
+
+        [MenuItem("Build/MacOS/Development")]
+        private static void MacOSDevelopment()
+        {
+            Build(BuildOptions.Development, BuildTarget.StandaloneOSX);
+        }
+
+        private static void BuildAssetBundles(BuildTarget target)
+        {
+            switch (target)
             {
-                Directory.CreateDirectory(path);
+                case BuildTarget.StandaloneWindows:
+                    Editor.BuildAssetBundles.ForWindows();
+                    return;
+                case BuildTarget.StandaloneOSX:
+                    Editor.BuildAssetBundles.ForMacOS();
+                    return;
             }
-
-            BuildPipeline.BuildAssetBundles(path, BuildAssetBundleOptions.ChunkBasedCompression, target);
-        }
-
-        private static void PlusVersion(float plusVersion)
-        {
-            float version = float.Parse(PlayerSettings.bundleVersion, System.Globalization.CultureInfo.InvariantCulture);
-            version += plusVersion;
-
-            PlayerSettings.bundleVersion = version.ToString();
-
-        }
-
-        [MenuItem("Build/SimpleCustomBuild")]
-        private static void SimpleCustomBuild()
-        {
-            Build(BuildOptions.None);
-        }
-
-        [MenuItem("Build/SimpleCustomDevelopmentBuild")]
-        private static void SimpleCustomDevelopmentBuild()
-        {
-            Build(BuildOptions.Development);
-        }
-
-        [MenuItem("Build/AutoVersionBuild")]
-        private static void AutoVersionBuild()
-        {
-            PlusVersion(0.001f);
-            Build(BuildOptions.None);
-        }
-
-        [MenuItem("Build/AutoVersionDevelopment")]
-        private static void AutoVersionDevelopmentBuild()
-        {
-            PlusVersion(0.001f);
-            Build(BuildOptions.Development);
         }
 
     }
