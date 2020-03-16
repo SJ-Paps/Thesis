@@ -1,23 +1,23 @@
-﻿using SJ.Coroutines;
+﻿using Paps.Maybe;
 using SJ.Profiles;
 using SJ.Save;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using UniRx;
 using UnityEngine;
+using System.Linq;
+using UniRx;
 using UnityEngine.SceneManagement;
 
 namespace SJ.Game
 {
-    public class GameManager
+    public class GameManager : IGameManager
     {
         public class GameSessionSaveData
         {
-            public int[] loadedScenesIndexes;
+            public string[] loadedScenes;
             public bool isBeginning;
-            public object[] gameplaySaves;
+            public GameplayObjectSave[] gameplaySaves;
         }
 
         private string ignoreScenesOnSavingSubfix = "_igld";
@@ -26,368 +26,209 @@ namespace SJ.Game
         private string[] beginScenes;
         private string returnSceneOnEndSession;
 
-        public event Action onSavingBegan;
-        public event Action onSavingFailed;
-        public event Action onSavingSucceeded;
+        public event Action OnSaving;
+        public event Action OnSaveFailed;
+        public event Action OnSaveSucceeded;
+        public event Action OnLoading;
+        public event Action OnLoadingFailed;
+        public event Action OnLoadingSucceeded;
+        public event Action OnSessionBegan;
+        public event Action OnSessionFinished;
 
-        public event Action onLoadingBegan;
-        public event Action onLoadingFailed;
-        public event Action onLoadingSucceeded;
+        private HashSet<ISaveable> saveables;
 
-        public event Action onQuitting;
+        public string CurrentProfile => currentProfileData.name;
+        private ProfileData currentProfileData;
 
-        private HashSet<SJMonoBehaviourSaveable> saveables;
-
-        public bool IsInGame { get; private set; }
-
-        public ProfileData CurrentProfile { get; private set; }
-
-        private ICoroutineScheduler coroutineScheduler;
         private IProfileRepository profileRepository;
 
-        public GameManager()
+        public GameManager(IProfileRepository profileRepository, ApplicationSettings applicationSettings)
         {
-            coroutineScheduler = SJ.Application.CoroutineScheduler;
-            profileRepository = Repositories.GetProfileRepository();
+            this.profileRepository = profileRepository;
 
-            beginScenes = Application.ApplicationSettings.BeginningScenes;
-            returnSceneOnEndSession = Application.ApplicationSettings.ReturnSceneOnEndSession;
+            beginScenes = applicationSettings.BeginningScenes;
+            returnSceneOnEndSession = applicationSettings.ReturnSceneOnEndSession;
 
-            saveables = new HashSet<SJMonoBehaviourSaveable>();
-
-            onLoadingSucceeded += SetIsInGameAfterLoading;
-            onQuitting += SetIsNotInGameOnQuitting;
+            saveables = new HashSet<ISaveable>();
         }
 
-        public void SubscribeForSave(SJMonoBehaviourSaveable saveable)
+        public void BeginSessionFor(string profile)
         {
-            saveables.Add(saveable);
-        }
+            Debug.Log("Wants to begin session with profile " + profile);
 
-        public void DesubscribeForSave(SJMonoBehaviourSaveable saveable)
-        {
-            saveables.Remove(saveable);
-        }
-
-        public void BeginSessionWithProfile(ProfileData profileData)
-        {
-            profileRepository.Exists(profileData.name)
-                .Subscribe(exists =>
+            profileRepository.GetProfileDataFrom(profile)
+                .Subscribe(maybeProfile =>
                 {
-                    if (exists == false)
-                    {
-                        CreateDefaultProfile(profileData)
-                            .Subscribe(_ =>
-                            {
-                                CurrentProfile = profileData;
-                                LoadGame();
-                            });
-                    }
+                    if (maybeProfile.IsNothing())
+                        CreateDefaultProfile(profile)
+                            .Do(profileData => currentProfileData = profileData)
+                            .Do(_ => NewGame())
+                            .Subscribe();
                     else
                     {
-                        CurrentProfile = profileData;
+                        currentProfileData = maybeProfile.Value;
                         LoadGame();
                     }
-                    
                 });
         }
 
-        private IObservable<Unit> CreateDefaultProfile(ProfileData profileData)
+        private IObservable<ProfileData> CreateDefaultProfile(string profile)
         {
-            return profileRepository.CreateProfile(profileData.name, profileData, 
-                new SaveData(profileData.name, new GameSessionSaveData() 
-                { 
-                    gameplaySaves = null, 
-                    isBeginning = true,
-                    loadedScenesIndexes = GetScenesIndex(beginScenes)
-                })
-                );
+            var newProfile = new ProfileData() { name = profile };
+
+            return profileRepository.CreateProfile(profile, newProfile,
+                DefaultSaveDataFor(profile)
+            ).Select(_ => newProfile);
         }
 
-        private int[] GetScenesIndex(string[] scenes)
+        private SaveData DefaultSaveDataFor(string profile)
         {
-            int[] indexArray = new int[scenes.Length];
-
-            for (int i = 0, j = 0; i < SceneManager.sceneCount; i++)
+            return new SaveData(profile, new GameSessionSaveData()
             {
-                if (SceneManager.GetSceneByBuildIndex(i).name == scenes[j])
-                {
-                    indexArray[j] = i;
-                    j++;
-                }
-            }
-
-            return indexArray;
+                gameplaySaves = null,
+                isBeginning = true,
+                loadedScenes = beginScenes
+            });
         }
 
         public void EndSession()
         {
-            CallOnQuittingEvent();
-
-            CurrentProfile = default;
+            currentProfileData = default;
+            saveables.Clear();
 
             SceneManager.LoadScene(returnSceneOnEndSession);
         }
 
-        public void SaveGame()
+        public void Save()
         {
-            CallOnSavingBeganEvent();
+            ISaveable[] currentSaveables = saveables.ToArray();
+            GameplayObjectSave[] saves = Array.ConvertAll(currentSaveables, saveable => saveable.Save());
 
-            coroutineScheduler.StartCoroutine(GetAllSavesAndAWaitSerializationCoroutine());
-        }
-
-        private IEnumerator GetAllSavesAndAWaitSerializationCoroutine()
-        {
-            List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
-            List<object> saves = new List<object>();
-
-            currentSaveables.AddRange(saveables);
-
-            for (int i = 0; i < currentSaveables.Count; i++)
-            {
-                saves.Add(currentSaveables[i].Save());
-                yield return null;
-            }
-
-            for (int i = 0; i < currentSaveables.Count; i++)
-            {
-                if (saveables.Contains(currentSaveables[i]) == false)
-                {
-                    currentSaveables.RemoveAt(i);
-                    saves.RemoveAt(i);
-                    i--;
-                }
-            }
-
-            for (int i = 0; i < currentSaveables.Count; i++)
-            {
+            for (int i = 0; i < currentSaveables.Length; i++)
                 currentSaveables[i].PostSaveCallback();
-            }
 
             GameSessionSaveData sessionData = new GameSessionSaveData()
             {
-                loadedScenesIndexes = GetSaveableScenes(),
-                gameplaySaves = saves.ToArray(),
+                loadedScenes = GetSaveableScenes(),
+                gameplaySaves = saves,
                 isBeginning = false
             };
 
-            profileRepository.UpdateProfileData(CurrentProfile.name, CurrentProfile)
-                .Select(_ => profileRepository.SaveOnProfile(CurrentProfile.name, new SaveData(CurrentProfile.name, sessionData)))
-                .Subscribe(_ => CallOnSavingSucceededEvent(), error => CallOnSavingFailedEvent());
+            profileRepository.UpdateProfileData(CurrentProfile, currentProfileData)
+                .Select(_ => profileRepository.SaveOnProfile(CurrentProfile, new SaveData(CurrentProfile, sessionData)))
+                .ObserveOnMainThread()
+                .Subscribe(_ => OnSaveSucceeded?.Invoke(), error => OnSaveFailed?.Invoke());
         }
 
-        public void LoadGame()
+        private void LoadGame()
         {
-            CallOnLoadingBeganEvent();
-
             LoadFromSaveGame();
         }
 
         private void LoadFromSaveGame()
         {
-            profileRepository.GetSaveDataFrom(CurrentProfile.name)
+            profileRepository.GetSaveDataFrom(CurrentProfile)
                 .Subscribe(saveData =>
                 {
-                    var sessionData = (GameSessionSaveData)saveData.saveObject;
+                    var sessionData = (GameSessionSaveData)saveData.Value.saveObject;
 
                     if (sessionData.isBeginning)
-                        NewGame(beginScenes);
+                        NewGame();
                     else
-                        Observable.FromCoroutine(() => PrepareScene(sessionData))
-                            .Subscribe(_ => CallOnLoadingSucceededEvent());
+                        LoadGameplayScenes(sessionData.loadedScenes)
+                            .Select(_ => LoadEntities(sessionData))
+                            .Subscribe(_ => OnLoadingSucceeded?.Invoke());
                 },
-                error => CallOnLoadingFailedEvent());
+                error => OnLoadingFailed?.Invoke());
         }
 
-        private IEnumerator PrepareScene(GameSessionSaveData sessionData)
+        private IObservable<Unit> LoadEntities(GameSessionSaveData sessionData)
         {
-            yield return coroutineScheduler.AwaitCoroutine(LoadGameplayScenes(sessionData.loadedScenesIndexes));
+            GameplayObjectSave[] saves = sessionData.gameplaySaves;
+            IObservable<ISaveable>[] loadEntityPrefabObservables = 
+                Array.ConvertAll(saves, save => SJResources.LoadComponentOfGameObjectAsync<ISaveable>(save.prefabName));
 
-            object[] saves = sessionData.gameplaySaves;
-
-            List<SJMonoBehaviourSaveable> currentSaveables = new List<SJMonoBehaviourSaveable>();
-            List<GameplayObjectSave> gameplayObjectSaves = new List<GameplayObjectSave>();
-
-            for (int i = 0; i < saves.Length; i++)
-            {
-                GameplayObjectSave gameplayObjectSave = saves[i] as GameplayObjectSave;
-
-                if (gameplayObjectSave == null)
+            return Observable.Zip(loadEntityPrefabObservables)
+                .ObserveOnMainThread()
+                .Do(loadedSaveables =>
                 {
-                    continue;
+                    int index = 0;
+                    foreach (var saveable in loadedSaveables)
+                    {
+                        saveable.Load(saves[index]);
+                        index++;
+                    }
+
+                    index = 0;
+                    foreach (var saveable in loadedSaveables)
+                    {
+                        saveable.PostLoadCallback(saves[index]);
+                        index++;
+                    }
                 }
-
-                GameObject gameplayGameObject = SJResources.LoadAsset<GameObject>(gameplayObjectSave.prefabName);
-
-                gameplayGameObject = GameObject.Instantiate(gameplayGameObject);
-
-                SJMonoBehaviourSaveable monoBehaviourSaveable = gameplayGameObject.GetComponent<SJMonoBehaviourSaveable>();
-
-                Type type = typeof(SJMonoBehaviour);
-
-                PropertyInfo propertyInfo = type.GetProperty(nameof(monoBehaviourSaveable.InstanceGUID), BindingFlags.Instance | BindingFlags.Public);
-
-                propertyInfo.SetValue(monoBehaviourSaveable, gameplayObjectSave.instanceGUID);
-
-                monoBehaviourSaveable.Load(gameplayObjectSave.save);
-
-                currentSaveables.Add(monoBehaviourSaveable);
-                gameplayObjectSaves.Add(gameplayObjectSave);
-
-                yield return null;
-            }
-
-            for (int i = 0; i < currentSaveables.Count; i++)
-            {
-                currentSaveables[i].PostLoadCallback(gameplayObjectSaves[i].save);
-
-                yield return null;
-            }
+                ).Select(_ => Unit.Default);
         }
 
-
-        public void NewGame(string[] sceneNames)
+        private void NewGame()
         {
-            coroutineScheduler.StartCoroutine(LoadGameplayScenes(sceneNames, CallOnLoadingSucceededEvent));
+            LoadGameplayScenes(beginScenes)
+                .Subscribe(_ => OnLoadingSucceeded?.Invoke());
         }
 
-        private IEnumerator LoadGameplayScenes(string[] sceneNames, Action onCompletion = null)
+        private IObservable<Unit> LoadGameplayScenes(string[] sceneNames)
+        {
+            return Observable.FromCoroutine(() => LoadBaseScene())
+                .Select(_ =>
+                {
+                    var loadSceneObservables = Array.ConvertAll(sceneNames,
+                        scene => SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive).AsAsyncOperationObservable());
+
+                    return Observable.Zip(loadSceneObservables);
+                })
+                .Select(_ => Unit.Default);
+        }
+
+        private IEnumerator LoadBaseScene()
         {
             SceneManager.LoadScene(baseSceneName, LoadSceneMode.Single);
-
             yield return null;
-
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(baseSceneName));
-
             yield return null;
-
-            for (int i = 0; i < sceneNames.Length; i++)
-            {
-                AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneNames[i], LoadSceneMode.Additive);
-
-                while (loadOperation.isDone == false)
-                {
-                    yield return null;
-                }
-            }
-
-            if (onCompletion != null)
-            {
-                onCompletion();
-            }
         }
 
-        private IEnumerator LoadGameplayScenes(int[] sceneIndexes, Action onCompletion = null)
+        private string[] GetSaveableScenes()
         {
-            SceneManager.LoadScene(baseSceneName, LoadSceneMode.Single);
-
-            yield return null;
-
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName(baseSceneName));
-
-            yield return null;
-
-            for (int i = 0; i < sceneIndexes.Length; i++)
-            {
-                AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneIndexes[i], LoadSceneMode.Additive);
-
-                while (loadOperation.isDone == false)
-                {
-                    yield return null;
-                }
-            }
-
-            if (onCompletion != null)
-            {
-                onCompletion();
-            }
-        }
-
-        private void SetIsInGameAfterLoading()
-        {
-            IsInGame = true;
-        }
-
-        private void SetIsNotInGameOnQuitting()
-        {
-            IsInGame = false;
-        }
-
-        private int[] GetSaveableScenes()
-        {
-            List<int> saveableScenes = new List<int>();
+            List<string> saveableScenes = new List<string>();
 
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 Scene current = SceneManager.GetSceneAt(i);
 
                 if (current.name.HasSubfix(ignoreScenesOnSavingSubfix) == false && current.name != baseSceneName)
-                {
-                    saveableScenes.Add(current.buildIndex);
-                }
+                    saveableScenes.Add(current.name);
             }
 
             return saveableScenes.ToArray();
         }
 
-        private void CallOnQuittingEvent()
+        public bool IsInGame()
         {
-            if (onQuitting != null)
-            {
-                onQuitting();
-            }
+            return string.IsNullOrEmpty(CurrentProfile) == false;
         }
 
-        private void CallOnSavingSucceededEvent()
+        public void Reload()
         {
-            if (onSavingSucceeded != null)
-            {
-                onSavingSucceeded();
-            }
+            LoadGame();
         }
 
-        private void CallOnSavingFailedEvent()
+        public void SubscribeSaveable(ISaveable saveable)
         {
-            if (onSavingFailed != null)
-            {
-                onSavingFailed();
-            }
+            saveables.Add(saveable);
         }
 
-        private void CallOnSavingBeganEvent()
+        public void UnsubscribeSaveable(ISaveable saveable)
         {
-            if (onSavingBegan != null)
-            {
-                onSavingBegan();
-            }
+            saveables.Remove(saveable);
         }
-
-        private void CallOnLoadingBeganEvent()
-        {
-            if (onLoadingBegan != null)
-            {
-                onLoadingBegan();
-            }
-        }
-
-        private void CallOnLoadingFailedEvent()
-        {
-            if (onLoadingFailed != null)
-            {
-                onLoadingFailed();
-            }
-        }
-
-        private void CallOnLoadingSucceededEvent()
-        {
-            if (onLoadingSucceeded != null)
-            {
-                onLoadingSucceeded();
-            }
-        }
-
     }
-
 }
-
-

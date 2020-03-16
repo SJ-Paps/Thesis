@@ -12,20 +12,15 @@ namespace SJ.UI
         [SerializeField]
         private Button newGame, loadGame, resumeGame, options, exitDesktop, exitMainMenu, continueLastProfile;
 
+        [SerializeField]
+        private GameObject firstMenu, optionsMenu, newGameMenu, loadGameMenu;
+
         protected override void SJAwake()
         {
-            //exit desktop button
             exitDesktop.onClick.AddListener(ExitToDesktop);
-
-            //exit main menu button
             exitMainMenu.onClick.AddListener(ExitToMainMenu);
-
-            //resume game button
             resumeGame.onClick.AddListener(Hide);
-
-            //continue button
             continueLastProfile.onClick.AddListener(Continue);
-
         }
 
         protected override void SJOnEnable()
@@ -67,26 +62,14 @@ namespace SJ.UI
             IGameSettingsRepository gameSettingsRepository = Repositories.GetGameSettingsRepository();
 
             gameSettingsRepository.GetSettings()
-                .Subscribe(gameSettings =>
-                {
-                    profileRepository.Exists(gameSettings.lastProfile)
-                        .SelectMany(exists =>
-                        {
-                            if (exists)
-                                return profileRepository.GetProfileDataFrom(gameSettings.lastProfile);
-                            else
-                                throw new NonExistentProfileException();
-                        })
-                        .Subscribe(
-                            profileData => Application.GameManager.BeginSessionWithProfile(profileData),
-                            error => Logger.LogConsole("Profile " + gameSettings.lastProfile + " missing")
-                        );
-                });
+                .Where(gameSettings => string.IsNullOrEmpty(gameSettings.lastProfile) == false)
+                .Do(gameSettings => Application.GameManager.BeginSessionFor(gameSettings.lastProfile))
+                .Subscribe();
         }
 
         private void UpdateButtonStates()
         {
-            if (Application.GameManager.IsInGame)
+            if (Application.GameManager.IsInGame())
             {
                 exitDesktop.gameObject.SetActive(true);
                 exitMainMenu.gameObject.SetActive(true);

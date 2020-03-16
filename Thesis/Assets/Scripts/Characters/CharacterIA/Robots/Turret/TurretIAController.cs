@@ -53,7 +53,7 @@ public class TurretIAController : IAController
 
     protected override object GetSaveData()
     {
-        return new TurretIAControllerSaveData() { slaveGUID = Slave.InstanceGUID };
+        return new TurretIAControllerSaveData() { slaveGUID = Slave.InstanceGuid };
     }
 
     protected override void LoadSaveData(object data)
@@ -61,12 +61,12 @@ public class TurretIAController : IAController
 
     }
 
-    public override void PostSaveCallback()
+    protected override void OnPostSave()
     {
 
     }
 
-    public override void PostLoadCallback(object data)
+    protected override void OnPostLoad(object data)
     {
         TurretIAControllerSaveData saveData = (TurretIAControllerSaveData)data;
 

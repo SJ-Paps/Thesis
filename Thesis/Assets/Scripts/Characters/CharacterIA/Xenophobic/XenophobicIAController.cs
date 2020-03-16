@@ -93,7 +93,7 @@ public class XenophobicIAController : IAController
 
     protected override object GetSaveData()
     {
-        return new XenophobicIAControllerSaveData() { slaveGUID = Slave.InstanceGUID };
+        return new XenophobicIAControllerSaveData() { slaveGUID = Slave.InstanceGuid };
     }
 
     protected override void LoadSaveData(object data)
@@ -101,12 +101,12 @@ public class XenophobicIAController : IAController
 
     }
 
-    public override void PostSaveCallback()
+    protected override void OnPostSave()
     {
 
     }
 
-    public override void PostLoadCallback(object data)
+    protected override void OnPostLoad(object data)
     {
         XenophobicIAControllerSaveData saveData = (XenophobicIAControllerSaveData)data;
 

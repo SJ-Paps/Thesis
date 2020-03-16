@@ -128,12 +128,12 @@ public class Turret : Robot, ISeer, IDamagable
         
     }
 
-    public override void PostSaveCallback()
+    protected override void OnPostSave()
     {
 
     }
 
-    public override void PostLoadCallback(object dataSave)
+    protected override void OnPostLoad(object dataSave)
     {
 
     }

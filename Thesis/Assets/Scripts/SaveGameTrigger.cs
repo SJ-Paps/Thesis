@@ -17,7 +17,7 @@ public class SaveGameTrigger : SJBoxCollider2D
 
     private void SaveOnce(Collider2D collider)
     {
-        SJ.Application.GameManager.SaveGame();
+        SJ.Application.GameManager.Save();
         gameObject.SetActive(false);
         onStayTrigger -= saveOnceDelegate;
     }

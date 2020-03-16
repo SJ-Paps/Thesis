@@ -3,51 +3,46 @@ using System;
 using UnityEngine.UI;
 using TMPro;
 
-public class ConfirmationPopup : SJMonoBehaviour {
-
-    [SerializeField]
-    private TextMeshProUGUI message;
-
-    [SerializeField]
-    private Button acceptButton, cancelButton;
-
-    public bool Active
+namespace SJ.UI
+{
+    public class ConfirmationPopup : SJMonoBehaviour
     {
-        get
+        [SerializeField]
+        private TextMeshProUGUI message;
+
+        [SerializeField]
+        private Button acceptButton, cancelButton;
+
+        protected override void SJAwake()
         {
-            return gameObject.activeSelf;
+            gameObject.SetActive(false);
         }
-    }
 
-    protected override void SJAwake()
-    {
-        gameObject.SetActive(false);
-    }
-
-    public void Show(string message, Action onAccept, Action onCancel)
-    {
-        this.message.text = message;
-
-        acceptButton.onClick.AddListener(() => 
+        public void Show(string message, Action onAccept, Action onCancel)
         {
-            ClearListenersAndDismiss();
-            onAccept();
-        });
+            this.message.text = message;
 
-        cancelButton.onClick.AddListener(() =>
+            acceptButton.onClick.AddListener(() =>
+            {
+                ClearListenersAndDismiss();
+                onAccept();
+            });
+
+            cancelButton.onClick.AddListener(() =>
+            {
+                ClearListenersAndDismiss();
+                onCancel();
+            });
+
+            gameObject.SetActive(true);
+        }
+
+        private void ClearListenersAndDismiss()
         {
-            ClearListenersAndDismiss();
-            onCancel();
-        });
+            acceptButton.onClick.RemoveAllListeners();
+            cancelButton.onClick.RemoveAllListeners();
 
-        gameObject.SetActive(true);
-    }
-
-    private void ClearListenersAndDismiss()
-    {
-        acceptButton.onClick.RemoveAllListeners();
-        cancelButton.onClick.RemoveAllListeners();
-
-        Destroy(gameObject);
+            Destroy(gameObject);
+        }
     }
 }

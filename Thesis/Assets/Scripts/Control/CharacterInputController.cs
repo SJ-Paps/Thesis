@@ -41,7 +41,7 @@ public class CharacterInputController : UnityInputController<Character, Characte
 
     protected override object GetSaveData()
     {
-        return new CharacterInputControllerSaveData() { slaveGUID = Slave.InstanceGUID };
+        return new CharacterInputControllerSaveData() { slaveGUID = Slave.InstanceGuid };
     }
 
     protected override void LoadSaveData(object data)
@@ -49,12 +49,12 @@ public class CharacterInputController : UnityInputController<Character, Characte
         
     }
 
-    public override void PostSaveCallback()
+    protected override void OnPostSave()
     {
         
     }
 
-    public override void PostLoadCallback(object data)
+    protected override void OnPostLoad(object data)
     {
         CharacterInputControllerSaveData saveData = (CharacterInputControllerSaveData)data;
 

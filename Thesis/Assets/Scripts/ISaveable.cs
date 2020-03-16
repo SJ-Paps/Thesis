@@ -1,15 +1,15 @@
-﻿using System;
+﻿using SJ.Game;
 
-public interface ISaveable
+namespace SJ.Save
 {
-    string InstanceGUID { get; }
+    public interface ISaveable : IGameplayEntity
+    {
+        GameplayObjectSave Save();
 
-    object Save();
+        void PostSaveCallback();
 
-    void PostSaveCallback();
+        void Load(GameplayObjectSave save);
 
-    void Load(object data);
-
-    void PostLoadCallback(object dataSave);
-
+        void PostLoadCallback(GameplayObjectSave save);
+    }
 }

@@ -16,7 +16,7 @@ namespace SJ
         public static ITranslatorService TranslatorService { get; private set; }
         public static ISoundService SoundService { get; private set; }
         public static ICoroutineScheduler CoroutineScheduler { get; private set; }
-        public static GameManager GameManager { get; private set; }
+        public static IGameManager GameManager { get; private set; }
         public static ApplicationSettings ApplicationSettings { get; private set; }
 
         public static event Action OnInitialized;
@@ -29,7 +29,7 @@ namespace SJ
             TranslatorService = TranslatorServiceFactory.Create();
             SoundService = SoundServiceFactory.Create();
             CoroutineScheduler = CoroutineSchedulerFactory.Create();
-            GameManager = new GameManager();
+            GameManager = new GameManager(Repositories.GetProfileRepository(), ApplicationSettings);
 
             Repositories.GetGameSettingsRepository().GetSettings()
                 .ObserveOnMainThread()

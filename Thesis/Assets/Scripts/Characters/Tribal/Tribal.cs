@@ -163,12 +163,12 @@ public abstract class Tribal : Character, IDamagable, ISeer
         }
     }
 
-    public override void PostLoadCallback(object data)
+    protected override void OnPostLoad(object data)
     {
 
     }
 
-    public override void PostSaveCallback()
+    protected override void OnPostSave()
     {
         
     }

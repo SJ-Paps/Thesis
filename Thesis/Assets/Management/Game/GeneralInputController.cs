@@ -22,9 +22,9 @@ namespace SJ.Game
 
             Application.OnInitialized += () =>
             {
-                Application.GameManager.onLoadingBegan += DestroyOnQuittingGameOrLoading;
-                Application.GameManager.onLoadingSucceeded += InstantiateInGame;
-                Application.GameManager.onQuitting += DestroyOnQuittingGameOrLoading;
+                Application.GameManager.OnLoading += DestroyOnQuittingGameOrLoading;
+                Application.GameManager.OnLoadingSucceeded += InstantiateInGame;
+                Application.GameManager.OnSessionFinished += DestroyOnQuittingGameOrLoading;
             };
         }
 

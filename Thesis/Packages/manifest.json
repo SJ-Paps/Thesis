@@ -42,7 +42,8 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
-    "com.dbrizov.naughtyattributes": "2.0.3"
+    "com.dbrizov.naughtyattributes": "2.0.3",
+	"paps.maybe": "0.0.1-unity"
   },
   "scopedRegistries": [
     {
@@ -52,6 +53,14 @@
         "com.dbrizov.naughtyattributes",
         "com.neuecc.unirx",
         "com.openupm"
+      ]
+    },
+	{
+      "name": "package.npmjs.org",
+      "url": "https://registry.npmjs.org/",
+      "scopes": [
+        "com.iptech",
+        "paps"
       ]
     }
   ]

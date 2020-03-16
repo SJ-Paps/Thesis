@@ -1,24 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GameplayObjectSave
+﻿namespace SJ.Save
 {
-    public string instanceGUID;
-    public string prefabName;
-
-    public object save;
-
-    public GameplayObjectSave(SJMonoBehaviourSaveable obj, object save)
+    public class GameplayObjectSave
     {
-        instanceGUID = obj.InstanceGUID;
-        prefabName = obj.PrefabName;
+        public string instanceGuid;
+        public string prefabName;
 
-        this.save = save;
-    }
+        public object save;
 
-    public GameplayObjectSave()
-    {
+        public GameplayObjectSave(string instanceGuid, string prefabName, object save)
+        {
+            this.instanceGuid = instanceGuid;
+            this.prefabName = prefabName;
+            this.save = save;
+        }
 
+        public GameplayObjectSave()
+        {
+
+        }
     }
 }

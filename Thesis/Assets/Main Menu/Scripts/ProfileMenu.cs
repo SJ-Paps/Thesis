@@ -7,6 +7,8 @@ using SJ.Game;
 using UniRx;
 using System;
 using System.Linq;
+using Paps.Maybe;
+using System.Linq;
 
 namespace SJ.UI
 {
@@ -57,16 +59,21 @@ namespace SJ.UI
             return Observable.Create<List<ProfileData>>(observer =>
             {
                 var profileDataList = new List<ProfileData>();
-
-                List<IObservable<ProfileData>> getProfileObservables = new List<IObservable<ProfileData>>(); 
+                var getProfileObservables = new List<IObservable<Maybe<ProfileData>>>(); 
 
                 for (int i = 0; i < profiles.Length; i++)
                     getProfileObservables.Add(profileRepository.GetProfileDataFrom(profiles[i]));
 
                 Observable.Zip(getProfileObservables)
-                    .Subscribe(profileDataArray =>
+                    .ObserveOnMainThread()
+                    .Subscribe(profileDataMaybes =>
                     {
-                        profileDataList.AddRange(profileDataArray);
+                        foreach(var maybe in profileDataMaybes)
+                        {
+                            if (maybe.IsSomething())
+                                profileDataList.Add(maybe.Value);
+                        }
+
                         observer.OnNext(profileDataList);
                         observer.OnCompleted();
                     });
@@ -94,7 +101,7 @@ namespace SJ.UI
                     gameSettingsRepository.SaveSettings().Subscribe();
                 });
 
-            Application.GameManager.BeginSessionWithProfile(item.ProfileData);
+            Application.GameManager.BeginSessionFor(item.ProfileData.name);
         }
 
         private void OnDeleteProfile(ProfileInfoItem item)

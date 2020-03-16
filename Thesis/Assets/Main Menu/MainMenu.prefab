@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -2855282874576831408}
   - component: {fileID: 5030158740580637315}
   m_Layer: 5
-  m_Name: NewGameCanvas
+  m_Name: NewGameMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1340006c31103c042b2051381ab3d566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: f09797d3-edae-4459-89aa-e0948a8df250
+  instanceGUID: 6b31a640-14ee-4626-bd58-42ebe5c6f30e
   enableUpdate: 1
 --- !u!1 &-7575221088330287339
 GameObject:
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e414b3a541b9cb4c9d361f865dcf867, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: e05d0b3f-6a64-4fce-9717-aa370db58c96
+  instanceGUID: 4756c947-9901-4850-8979-5b1f2b49cb22
   enableUpdate: 1
   profileInfoItemPrefab: {fileID: 2672195720871449947, guid: fb86d8512db17544d9732c758bc8822c,
     type: 3}
@@ -512,7 +512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a1c5165defbf845947c378e2f7709f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 0b7bbf44-2a8c-4102-84d3-fd1fb978993e
+  instanceGUID: e3572c47-9d71-46a7-8dab-0f21a158340b
   enableUpdate: 1
   inputField: {fileID: -4331248858698680420}
   submitButton: {fileID: -3012482711191307386}
@@ -591,7 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e20fe70c931a743a74ec34cc51372c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: c1826874-8c7a-42cf-a1c8-26ca30827e35
+  instanceGUID: e28aa8fb-9368-438f-906a-6730280470a4
   enableUpdate: 1
   languageButtonPrefab: {fileID: 114028936818567454, guid: b33373514cc657344a7e95e03a792267,
     type: 3}
@@ -686,7 +686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 9846e451-97b6-4000-80f8-b703e61f583f
+  instanceGUID: 067e3cc5-52dc-4791-a11c-fd0d06df90b2
   enableUpdate: 1
   langTag: menu_button_accept
   option: 3
@@ -1231,7 +1231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: d0650644-3164-40ce-a08a-58bec6877258
+  instanceGUID: b1c3a788-af82-4efe-8eca-ea2c7c1d358a
   enableUpdate: 1
   langTag: menu_back
   option: 3
@@ -1871,7 +1871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: c5c79306-e946-4c0a-8ca3-7d939ddc4fd5
+  instanceGUID: f81ee22d-34be-4681-bc24-cf6120de5975
   enableUpdate: 1
   langTag: options_menu_text_language
   option: 3
@@ -1952,7 +1952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118a59a16e424f74fba276ab8585a3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 5fb802b4-07fb-4f45-819b-31c3441c91dc
+  instanceGUID: 4c739c50-bd1c-4e63-a993-ba1468943ff1
   enableUpdate: 1
   general: {fileID: 4063012609598230884}
   music: {fileID: 3857142369276030994}
@@ -2047,7 +2047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: b8c8d751-328c-4005-a510-8c52c00c8520
+  instanceGUID: 902c0f6e-8f35-4001-8f3d-f74ecd339657
   enableUpdate: 1
   langTag: menu_button_exit
   option: 3
@@ -2348,7 +2348,7 @@ GameObject:
   - component: {fileID: 82025312568843519}
   - component: {fileID: 435898064361010475}
   m_Layer: 5
-  m_Name: OptionsCanvas
+  m_Name: OptionsMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2526,7 +2526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 8ce69c37-7c9f-4bab-924d-3b3b2b6c7f97
+  instanceGUID: 47972bef-b7ea-4654-b264-5cf34f9babac
   enableUpdate: 1
   langTag: menu_back
   option: 3
@@ -2620,7 +2620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 98307937-ce59-4c15-9c7a-879280e6ca15
+  instanceGUID: 763bc2bb-60e9-4f0e-9620-fd426921be0a
   enableUpdate: 1
   langTag: menu_back
   option: 3
@@ -2714,7 +2714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 652b48ce-ccb2-480e-b01b-845a207e8469
+  instanceGUID: 28d93c68-92f5-44fd-92fe-4a52b4c267e6
   enableUpdate: 1
   langTag: menu_button_resume_game
   option: 3
@@ -2885,7 +2885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 5bf7199b-2f77-4a72-b421-5b65889912eb
+  instanceGUID: 43bf90ef-d06e-4be3-bf1b-0093bab79e0e
   enableUpdate: 1
   langTag: menu_button_exit_main_menu
   option: 3
@@ -2967,7 +2967,7 @@ GameObject:
   - component: {fileID: 1326976807573704002}
   - component: {fileID: -4291456084117843124}
   m_Layer: 5
-  m_Name: LoadGameCanvas
+  m_Name: LoadGameMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3256,7 +3256,7 @@ GameObject:
   - component: {fileID: -6039235479900286350}
   - component: {fileID: -6548125714623641233}
   m_Layer: 5
-  m_Name: MainCanvas
+  m_Name: FirstMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3441,7 +3441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: fcc264b3-f9cc-488d-a484-e2aba19726c8
+  instanceGUID: 4c255d9e-149a-4e04-b597-c9093d70a55b
   enableUpdate: 1
   langTag: menu_load_game_choose_profile
   option: 3
@@ -3599,7 +3599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ca396920c45a34cab2966d1f94cfe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 404a9448-8ba8-4b0d-abcf-05119e60f64d
+  instanceGUID: c9e1d008-0dcf-42d4-9176-6e245604f810
   enableUpdate: 1
   newGame: {fileID: -4380905780799953551}
   loadGame: {fileID: 8243930786260251603}
@@ -3608,6 +3608,10 @@ MonoBehaviour:
   exitDesktop: {fileID: -4859464126809413980}
   exitMainMenu: {fileID: -5849715352335808567}
   continueLastProfile: {fileID: 7321391248464134044}
+  firstMenu: {fileID: 0}
+  optionsMenu: {fileID: 0}
+  newGameMenu: {fileID: 0}
+  loadGameMenu: {fileID: 0}
 --- !u!1 &4843795328193952319
 GameObject:
   m_ObjectHideFlags: 0
@@ -3805,7 +3809,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: 5e60bedc-0ecd-48a2-a258-c61766c1bcc3
+  instanceGUID: 7598f35c-60c5-4367-85c2-5b4e5169ebb2
   enableUpdate: 1
   langTag: menu_button_load_game
   option: 3
@@ -3899,7 +3903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: d4b123b4-1b70-46c3-8824-10b86ec702be
+  instanceGUID: 59fab55c-64eb-4eed-8be6-a56748ef9866
   enableUpdate: 1
   langTag: menu_new_game_enter_profile
   option: 3
@@ -4154,7 +4158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: aa4c80b6-4810-4a18-8ec7-d057f17b3008
+  instanceGUID: b723f619-3e0c-4c43-bb1c-05b99fef7564
   enableUpdate: 1
   langTag: menu_button_new_game
   option: 3
@@ -4248,7 +4252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: d3d73c97-e3c7-4a72-83eb-76e4ffe5069a
+  instanceGUID: 700499e9-a12f-4bd2-9dfb-441d8765a7b3
   enableUpdate: 1
   langTag: options_menu_text_sound
   option: 3
@@ -4342,7 +4346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: b83bcee7-1788-464c-99db-adf4f780e392
+  instanceGUID: fdff7d8d-56f5-40e0-8253-3ab032396554
   enableUpdate: 1
   langTag: menu_button_options
   option: 3
@@ -4561,7 +4565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7b012054843584aae2aea0545044e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instanceGUID: b624498f-f885-4cbb-8893-0496c6efc988
+  instanceGUID: 6a7c1c6d-5c1c-491d-9918-50f9dc7640ef
   enableUpdate: 1
   langTag: menu_button_continue
   option: 3
@@ -4975,12 +4979,12 @@ PrefabInstance:
     - target: {fileID: 114220225808738774, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: ae9ec592-eb98-470a-a46d-66b5db01ae92
+      value: 5ec23325-800c-41ed-bfa0-7ec20f76d289
       objectReference: {fileID: 0}
     - target: {fileID: 114901708110309218, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: 981acfbb-7454-48e5-8957-dc5eda8551ff
+      value: 35554e87-6580-449c-9af7-1611db985af2
       objectReference: {fileID: 0}
     - target: {fileID: 114901708110309218, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
@@ -5110,7 +5114,7 @@ PrefabInstance:
     - target: {fileID: 6437995480592020655, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: 89661570-f36b-4b8a-b307-3c4f74022399
+      value: a2e3e812-ded3-405d-8d10-9d4a88822974
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 018260ba6d83530448a83b2879c01bdd, type: 3}
@@ -5146,12 +5150,12 @@ PrefabInstance:
     - target: {fileID: 114220225808738774, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: 0d4ecbd4-550e-432b-b02d-0b26726920bf
+      value: d190dc74-22e5-4a01-8b35-2e613827c766
       objectReference: {fileID: 0}
     - target: {fileID: 114901708110309218, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: 196a9c36-1af8-43e7-98a0-586d15231941
+      value: 91651a38-8b99-4cfb-b509-8a06555c4bde
       objectReference: {fileID: 0}
     - target: {fileID: 114901708110309218, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
@@ -5281,7 +5285,7 @@ PrefabInstance:
     - target: {fileID: 6437995480592020655, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: bb0bc484-cbc2-483e-ba17-7d5ee087e48a
+      value: bdce4c1e-0f31-4dad-b639-94343238f068
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 018260ba6d83530448a83b2879c01bdd, type: 3}
@@ -5317,12 +5321,12 @@ PrefabInstance:
     - target: {fileID: 114220225808738774, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: dc31d2b0-6e43-46dd-bad8-ae9ede723ec7
+      value: 54b54a9d-cb70-44cf-89ed-86543d39ba42
       objectReference: {fileID: 0}
     - target: {fileID: 114901708110309218, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: 3789d95b-ea43-4895-b0cd-f7e0318e5560
+      value: 719d197b-44f4-473f-ad3e-545e527f8e19
       objectReference: {fileID: 0}
     - target: {fileID: 114901708110309218, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
@@ -5452,7 +5456,7 @@ PrefabInstance:
     - target: {fileID: 6437995480592020655, guid: 018260ba6d83530448a83b2879c01bdd,
         type: 3}
       propertyPath: instanceGUID
-      value: b72a785a-780e-4aca-8eb0-0f628dc54a5b
+      value: 2b222af8-fc16-402e-be50-7f040cd56ad0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 018260ba6d83530448a83b2879c01bdd, type: 3}

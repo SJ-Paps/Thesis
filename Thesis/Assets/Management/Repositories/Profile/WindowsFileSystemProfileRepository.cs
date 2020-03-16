@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UniRx;
+using Paps.Maybe;
 
 namespace SJ.Profiles
 {
@@ -46,16 +47,28 @@ namespace SJ.Profiles
                 .SelectMany(_ => SaveProfile(profile));
         }
 
-        public IObservable<ProfileData> GetProfileDataFrom(string profile)
+        public IObservable<Maybe<ProfileData>> GetProfileDataFrom(string profile)
         {
             return LoadProfiles()
-                .Select(_ => profiles[profile].profileData);
+                .Select(_ => 
+                {
+                    if (profiles.ContainsKey(profile))
+                        return profiles[profile].profileData.ToMaybe();
+                    else
+                        return Maybe<ProfileData>.Nothing;
+                });
         }
 
-        public IObservable<SaveData> GetSaveDataFrom(string profile)
+        public IObservable<Maybe<SaveData>> GetSaveDataFrom(string profile)
         {
             return LoadProfiles()
-                .Select(_ => profiles[profile].saveData);
+                .Select(_ =>
+                {
+                    if (profiles.ContainsKey(profile))
+                        return profiles[profile].saveData.ToMaybe();
+                    else
+                        return Maybe<SaveData>.Nothing;
+                });
         }
 
         public IObservable<Unit> DeleteProfile(string profile)
@@ -87,7 +100,7 @@ namespace SJ.Profiles
             if (cached)
                 return Observable.ReturnUnit();
 
-            return Observable.Create<Unit>(observer =>
+            return Observable.Start(() =>
             {
                 var profileData = LoadProfileData();
                 var saveData = LoadSaveData();
@@ -98,11 +111,6 @@ namespace SJ.Profiles
                 }
 
                 cached = true;
-
-                observer.OnNext(Unit.Default);
-                observer.OnCompleted();
-
-                return Disposable.Empty;
             });
         }
 
@@ -164,33 +172,9 @@ namespace SJ.Profiles
             return saves[0];
         }
 
-        private IObservable<Unit> SaveProfiles()
-        {
-            return Observable.Create<Unit>(observer =>
-            {
-                foreach (var profile in profiles)
-                {
-                    SaveProfileSynchronously(profile.Key);
-                }
-
-                observer.OnNext(Unit.Default);
-                observer.OnCompleted();
-
-                return Disposable.Empty;
-            });
-        }
-
         private IObservable<Unit> SaveProfile(string profile)
         {
-            return Observable.Create<Unit>(observer =>
-            {
-                SaveProfileSynchronously(profile);
-
-                observer.OnNext(Unit.Default);
-                observer.OnCompleted();
-
-                return Disposable.Empty;
-            });
+            return Observable.Start(() => SaveProfileSynchronously(profile));
         }
 
         private void SaveProfileSynchronously(string profile)

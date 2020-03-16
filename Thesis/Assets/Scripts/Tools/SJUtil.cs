@@ -108,7 +108,7 @@ public static class SJUtil
         {
             SJMonoBehaviour current = allSaveables[i];
 
-            if (current.InstanceGUID == guid)
+            if (current.InstanceGuid == guid)
             {
                 return current;
             }
@@ -137,7 +137,7 @@ public static class SJUtil
         {
             SJMonoBehaviour current = allSaveables[i];
 
-            if (current.InstanceGUID == guid)
+            if (current.InstanceGuid == guid)
             {
                 return current;
             }

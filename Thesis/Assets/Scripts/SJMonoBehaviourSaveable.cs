@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using SJ.Game;
-using NaughtyAttributes;
+﻿using NaughtyAttributes;
+using SJ.Save;
+using UnityEngine;
 
 public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
 {
@@ -12,33 +12,41 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
 
     protected override void SJAwake()
     {
-        SJ.Application.GameManager.SubscribeForSave(this);
+        SJ.Application.GameManager.SubscribeSaveable(this);
     }
 
-    public object Save()
+    public GameplayObjectSave Save()
     {
-        return new GameplayObjectSave(this, GetSaveData());
+        return new GameplayObjectSave(InstanceGuid, PrefabName, GetSaveData());
     }
 
-    public void Load(object data)
+    public void Load(GameplayObjectSave data)
     {
-        LoadSaveData(data);
+        LoadSaveData(data.save);
+    }
+
+    public void PostSaveCallback()
+    {
+        OnPostSave();
+    }
+
+    public void PostLoadCallback(GameplayObjectSave data)
+    {
+        OnPostLoad(data.save);
     }
 
     protected override void SJOnDestroy()
     {
         if (Application.isEditor == false)
         {
-            SJ.Application.GameManager.DesubscribeForSave(this);
+            SJ.Application.GameManager.UnsubscribeSaveable(this);
         }
     }
 
     protected abstract object GetSaveData();
     protected abstract void LoadSaveData(object data);
-
-    public abstract void PostSaveCallback();
-
-    public abstract void PostLoadCallback(object dataSave);
+    protected abstract void OnPostSave();
+    protected abstract void OnPostLoad(object data);
 
 #if UNITY_EDITOR
 
@@ -53,8 +61,6 @@ public abstract class SJMonoBehaviourSaveable : SJMonoBehaviour, ISaveable
             prefabName = prefab.name;
         }
     }
-
-    
 
 #endif
 }

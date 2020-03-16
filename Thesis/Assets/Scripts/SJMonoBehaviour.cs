@@ -2,8 +2,9 @@
 using System;
 using SJ.Updatables;
 using NaughtyAttributes;
+using SJ.Game;
 
-public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
+public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable, IGameplayEntity
 {
     public static event Action<SJMonoBehaviour> onInstantiation;
     public static event Action<SJMonoBehaviour> onDestruction;
@@ -12,7 +13,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
     [ReadOnly]
     private string instanceGUID;
 
-    public string InstanceGUID
+    public string InstanceGuid
     {
         get
         {
@@ -66,9 +67,9 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
             onInstantiation(this);
         }
 
-        if (string.IsNullOrEmpty(InstanceGUID))
+        if (string.IsNullOrEmpty(InstanceGuid))
         {
-            InstanceGUID = Guid.NewGuid().ToString();
+            InstanceGuid = Guid.NewGuid().ToString();
         }
 
         SJAwake();
@@ -162,7 +163,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
 
     protected virtual void OnValidate()
     {
-        InstanceGUID = Guid.NewGuid().ToString();
+        InstanceGuid = Guid.NewGuid().ToString();
     }
 
 #endif

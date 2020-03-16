@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
-public class BuildVersion : SJMonoBehaviour {
-    
-	protected override void SJAwake()
+namespace SJ.UI
+{
+    [RequireComponent(typeof(Text))]
+    public class BuildVersion : SJMonoBehaviour
     {
-        GetComponent<Text>().text = "v" + Application.version;
+        protected override void SJAwake()
+        {
+            GetComponent<Text>().text = "v" + UnityEngine.Application.version;
+        }
     }
 }

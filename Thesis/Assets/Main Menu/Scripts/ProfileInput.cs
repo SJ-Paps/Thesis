@@ -61,7 +61,7 @@ namespace SJ.UI
 
                                     return gameSettingsRepository.SaveSettings();
                                 })
-                                .Subscribe(_ => Application.GameManager.BeginSessionWithProfile(new ProfileData() { name = profileName }));
+                                .Subscribe(_ => Application.GameManager.BeginSessionFor(profileName));
                         }
                     });
             }
