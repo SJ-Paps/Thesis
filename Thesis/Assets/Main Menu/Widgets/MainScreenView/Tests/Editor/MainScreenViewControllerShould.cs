@@ -5,6 +5,7 @@ using NSubstitute;
 using System;
 using UniRx;
 using UnityEngine.Events;
+using SJ.Localization;
 
 namespace SJ.Tests
 {
@@ -12,10 +13,13 @@ namespace SJ.Tests
     {
         private const string LastProfile = "SomeProfile";
 
+        private const string ExitConfirmationMessageTag = "confirmation_menu_message_exit", ExitConfirmationMessageTranslation = "Exit Confirmation";
+
         private IMainScreenView view;
         private IGameManager gameManager;
         private IGameSettingsRepository gameSettingsRepository;
         private IMainMenu mainMenu;
+        private ITranslatorService translatorService;
 
         private MainScreenViewController controller;
 
@@ -26,8 +30,11 @@ namespace SJ.Tests
             gameManager = Substitute.For<IGameManager>();
             gameSettingsRepository = Substitute.For<IGameSettingsRepository>();
             mainMenu = Substitute.For<IMainMenu>();
+            translatorService = Substitute.For<ITranslatorService>();
 
-            controller = new MainScreenViewController(view, gameManager, gameSettingsRepository, mainMenu);
+            translatorService.GetLineByTagOfCurrentLanguage(ExitConfirmationMessageTag).Returns(ExitConfirmationMessageTranslation);
+
+            controller = new MainScreenViewController(view, gameManager, gameSettingsRepository, mainMenu, translatorService);
         }
 
         [Test]
@@ -130,6 +137,70 @@ namespace SJ.Tests
             view.OnResumeGameClicked += Raise.Event<UnityAction>();
 
             mainMenu.Received(1).Hide();
+        }
+
+        [Test]
+        public void Continue_Last_Profile_Game()
+        {
+            gameSettingsRepository.GetSettings().Returns(Observable.Return(new GameSettings() { lastProfile = LastProfile }));
+
+            gameSettingsRepository.ClearReceivedCalls();
+
+            view.OnContinueClicked += Raise.Event<UnityAction>();
+
+            gameSettingsRepository.Received(1).GetSettings();
+
+            gameManager.Received(1).BeginSessionFor(LastProfile);
+        }
+
+        [Test]
+        public void Show_Confirmation_Popup_If_User_Clicks_Exit_To_Main_Menu()
+        {
+            view.OnExitToMainMenuClicked += Raise.Event<UnityAction>();
+
+            mainMenu.Received(1).ShowConfirmationPopup(Arg.Any<string>(), Arg.Any<Action>(), Arg.Any<Action>());
+        }
+
+        [Test]
+        public void Show_Confirmation_Popup_If_User_Clicks_Exit_To_Desktop()
+        {
+            view.OnExitToDesktopClicked += Raise.Event<UnityAction>();
+
+            mainMenu.Received(1).ShowConfirmationPopup(Arg.Any<string>(), Arg.Any<Action>(), Arg.Any<Action>());
+        }
+
+        [Test]
+        public void Localize_Confirmation_Popup_On_Exit_To_Main_Menu()
+        {
+            view.OnExitToMainMenuClicked += Raise.Event<UnityAction>();
+
+            mainMenu.Received(1).ShowConfirmationPopup(ExitConfirmationMessageTranslation, Arg.Any<Action>(), Arg.Any<Action>());
+        }
+
+        [Test]
+        public void Localize_Confirmation_Popup_On_Exit_To_Desktop()
+        {
+            view.OnExitToDesktopClicked += Raise.Event<UnityAction>();
+
+            mainMenu.Received(1).ShowConfirmationPopup(ExitConfirmationMessageTranslation, Arg.Any<Action>(), Arg.Any<Action>());
+        }
+
+        [Test]
+        public void Go_To_Main_Menu_If_User_Accepts()
+        {
+            GivenAConfirmationPopupThatWillBeAccepted();
+
+            view.OnExitToMainMenuClicked += Raise.Event<UnityAction>();
+
+            gameManager.Received(1).EndSession();
+        }
+
+        private void GivenAConfirmationPopupThatWillBeAccepted()
+        {
+            int acceptArgumentIndex = 1;
+
+            mainMenu.When(m => m.ShowConfirmationPopup(Arg.Any<string>(), Arg.Any<Action>(), Arg.Any<Action>()))
+                .Do(callback => callback.ArgAt<Action>(acceptArgumentIndex).Invoke());
         }
     }
 }

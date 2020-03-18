@@ -14,7 +14,7 @@ namespace SJ.UI
             base.SJAwake();
 
             mainScreenController = new MainScreenViewController(GetComponent<IMainScreenView>(), Application.GameManager, 
-                Repositories.GetGameSettingsRepository(), mainMenu);
+                Repositories.GetGameSettingsRepository(), mainMenu, Application.TranslatorService);
         }
     }
 }

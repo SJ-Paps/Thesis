@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace SJ.UI
 {
@@ -18,6 +19,8 @@ namespace SJ.UI
             screens[2] = newGameScreen;
             screens[3] = loadGameScreen;
         }
+
+        public void ShowConfirmationPopup(string message, Action onAccept, Action onCancel) => ConfirmationPopupProvider.ShowWith(message, onAccept, onCancel);
 
         public void Hide() => gameObject.SetActive(false);
 
@@ -41,49 +44,5 @@ namespace SJ.UI
                     screens[i].SetActive(false);
             }
         }
-
-        /*protected override void SJOnEnable()
-        {
-
-        }
-
-        private void ExitToDesktop()
-        {
-            var message = Application.TranslatorService.GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper();
-            ConfirmationPopupProvider.ShowWith(message, UnityEngine.Application.Quit, () => { });
-        }
-
-        private void ExitToMainMenu()
-        {
-            var message = Application.TranslatorService.GetLineByTagOfCurrentLanguage("confirmation_menu_message_exit").FirstLetterToUpper();
-            ConfirmationPopupProvider.ShowWith(message, GoMenu, () => { });
-        }
-
-        public void Hide()
-        {
-            gameObject.SetActive(false);
-        }
-
-        public void Show()
-        {
-            gameObject.SetActive(true);
-        }
-
-        private void GoMenu()
-        {
-            Application.GameManager.EndSession();
-        }
-
-        private void Continue()
-        {
-            IProfileRepository profileRepository = Repositories.GetProfileRepository();
-            ICoroutineScheduler coroutineScheduler = Application.CoroutineScheduler;
-            IGameSettingsRepository gameSettingsRepository = Repositories.GetGameSettingsRepository();
-
-            gameSettingsRepository.GetSettings()
-                .Where(gameSettings => string.IsNullOrEmpty(gameSettings.lastProfile) == false)
-                .Do(gameSettings => Application.GameManager.BeginSessionFor(gameSettings.lastProfile))
-                .Subscribe();
-        }*/
     }
 }

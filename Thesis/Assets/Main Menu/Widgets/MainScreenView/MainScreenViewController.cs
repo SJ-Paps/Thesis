@@ -1,21 +1,26 @@
-﻿using SJ.Management;
+﻿using SJ.Localization;
+using SJ.Management;
 using UniRx;
 
 namespace SJ.UI
 {
     public class MainScreenViewController
     {
+        private const string ExitConfirmationMessageTag = "confirmation_menu_message_exit";
+
         private IMainScreenView view;
         private IGameManager gameManager;
         private IGameSettingsRepository gameSettingsRepository;
         private IMainMenu mainMenu;
+        private ITranslatorService translatorService;
 
-        public MainScreenViewController(IMainScreenView view, IGameManager gameManager, IGameSettingsRepository gameSettingsRepository, IMainMenu mainMenu)
+        public MainScreenViewController(IMainScreenView view, IGameManager gameManager, IGameSettingsRepository gameSettingsRepository, IMainMenu mainMenu, ITranslatorService translatorService)
         {
             this.view = view;
             this.gameManager = gameManager;
             this.gameSettingsRepository = gameSettingsRepository;
             this.mainMenu = mainMenu;
+            this.translatorService = translatorService;
 
             SubscribeToEvents();
         }
@@ -28,6 +33,9 @@ namespace SJ.UI
             view.OnLoadGameClicked += mainMenu.FocusLoadGameScreen;
             view.OnOptionsClicked += mainMenu.FocusOptionsScreen;
             view.OnResumeGameClicked += mainMenu.Hide;
+            view.OnContinueClicked += Continue;
+            view.OnExitToMainMenuClicked += ExitToMainMenu;
+            view.OnExitToDesktopClicked += ExitToDesktop;
         }
 
         private void ShowButtonsDependingOnApplicationState()
@@ -48,6 +56,31 @@ namespace SJ.UI
                 else
                     view.ShowContinueButton();
             }
+        }
+
+        private void Continue()
+        {
+            gameSettingsRepository.GetSettings()
+                .Where(gameSettings => string.IsNullOrEmpty(gameSettings.lastProfile) == false)
+                .Do(gameSettings => gameManager.BeginSessionFor(gameSettings.lastProfile))
+                .Subscribe();
+        }
+
+        private void ExitToDesktop()
+        {
+            var message = translatorService.GetLineByTagOfCurrentLanguage(ExitConfirmationMessageTag).FirstLetterToUpper();
+            mainMenu.ShowConfirmationPopup(message, UnityEngine.Application.Quit, () => { });
+        }
+
+        private void ExitToMainMenu()
+        {
+            var message = translatorService.GetLineByTagOfCurrentLanguage(ExitConfirmationMessageTag).FirstLetterToUpper();
+            mainMenu.ShowConfirmationPopup(message, GoMenu, () => { });
+        }
+
+        private void GoMenu()
+        {
+            gameManager.EndSession();
         }
     }
 }

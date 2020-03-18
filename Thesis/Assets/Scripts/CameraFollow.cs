@@ -7,6 +7,8 @@ public class CameraFollow : SJMonoBehaviour {
 
     protected override void SJStart() {
 
+        EnableUpdate = true;
+
         z = transform.position.z;
 	}
 

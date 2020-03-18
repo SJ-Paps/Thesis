@@ -40,6 +40,7 @@ namespace SJ.Management
         private static void InstantiateInGame()
         {
             instance = new GameObject(nameof(GeneralInput)).AddComponent<GeneralInput>();
+            instance.EnableUpdate = true;
             mainMenuInstance = Instantiate(mainMenuPrefab);
             mainMenuInstance.gameObject.SetActive(false);
 

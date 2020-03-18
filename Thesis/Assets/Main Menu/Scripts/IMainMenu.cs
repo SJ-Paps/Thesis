@@ -1,4 +1,6 @@
-﻿namespace SJ.UI
+﻿using System;
+
+namespace SJ.UI
 {
     public interface IMainMenu
     {
@@ -8,5 +10,6 @@
         void FocusLoadGameScreen();
         void Hide();
         void Show();
+        void ShowConfirmationPopup(string message, Action onAccept, Action onCancel);
     }
 }

@@ -62,6 +62,7 @@ namespace SJ.Management
                     if (maybeProfile.IsNothing())
                         CreateDefaultProfile(profile)
                             .Do(profileData => currentProfileData = profileData)
+                            .Do(_ => OnSessionBegan?.Invoke())
                             .Do(_ => NewGame())
                             .Subscribe();
                     else
@@ -69,7 +70,8 @@ namespace SJ.Management
                         currentProfileData = maybeProfile.Value;
                         LoadGame();
                     }
-                });
+                },
+                error => Debug.LogError(error.Message));
         }
 
         private IObservable<ProfileData> CreateDefaultProfile(string profile)
@@ -96,6 +98,8 @@ namespace SJ.Management
             currentProfileData = default;
             saveables.Clear();
 
+            OnSessionFinished?.Invoke();
+
             SceneManager.LoadScene(returnSceneOnEndSession);
         }
 
@@ -114,6 +118,8 @@ namespace SJ.Management
                 isBeginning = false
             };
 
+            OnSaving?.Invoke();
+
             profileRepository.UpdateProfileData(CurrentProfile, currentProfileData)
                 .Select(_ => profileRepository.SaveOnProfile(CurrentProfile, new SaveData(CurrentProfile, sessionData)))
                 .ObserveOnMainThread()
@@ -122,6 +128,8 @@ namespace SJ.Management
 
         private void LoadGame()
         {
+            OnLoading?.Invoke();
+
             LoadFromSaveGame();
         }
 
@@ -171,6 +179,8 @@ namespace SJ.Management
 
         private void NewGame()
         {
+            OnLoading?.Invoke();
+
             LoadGameplayScenes(beginScenes)
                 .Subscribe(_ => OnLoadingSucceeded?.Invoke());
         }
