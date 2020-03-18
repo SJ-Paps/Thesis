@@ -1,30 +1,11 @@
 ﻿using UnityEngine;
 using System;
 using SJ.Updatables;
-using NaughtyAttributes;
-using SJ.Management;
 
-public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable, IGameplayEntity
+public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
 {
     public static event Action<SJMonoBehaviour> onInstantiation;
     public static event Action<SJMonoBehaviour> onDestruction;
-
-    [SerializeField]
-    [ReadOnly]
-    private string instanceGUID;
-
-    public string InstanceGuid
-    {
-        get
-        {
-            return instanceGUID;
-        }
-
-        private set
-        {
-            instanceGUID = value;
-        }
-    }
 
     [SerializeField]
     private bool enableUpdate = false;
@@ -64,10 +45,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable, IGameplayEnti
     {
         onInstantiation?.Invoke(this);
 
-        if (string.IsNullOrEmpty(InstanceGuid))
-        {
-            InstanceGuid = Guid.NewGuid().ToString();
-        }
+        
 
         SJAwake();
     }
@@ -155,16 +133,6 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable, IGameplayEnti
     {
 
     }
-
-#if UNITY_EDITOR
-
-    protected virtual void OnValidate()
-    {
-        InstanceGuid = Guid.NewGuid().ToString();
-    }
-
-#endif
-
 
 }
 

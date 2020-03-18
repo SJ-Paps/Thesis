@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SJ.GameEntities;
+using UnityEngine;
 
 public delegate void ChangeControlDelegate<TSlave, TOrder>(TSlave previousSlave, TSlave newSlave) where TSlave : IControllable<TOrder> where TOrder : struct;
 
@@ -8,7 +9,7 @@ public interface IController<TSlave, TOrder> where TSlave : IControllable<TOrder
     void SetSlave(TSlave slave);
 }
 
-public abstract class UnityController<TSlave, TOrder> : SJMonoBehaviourSaveable, IController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
+public abstract class UnityController<TSlave, TOrder> : SaveableGameEntity, IController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
 {
     public event ChangeControlDelegate<TSlave, TOrder> onSlaveChanged;
 

@@ -53,7 +53,7 @@ public class TurretIAController : IAController
 
     protected override object GetSaveData()
     {
-        return new TurretIAControllerSaveData() { slaveGUID = Slave.InstanceGuid };
+        return new TurretIAControllerSaveData() { slaveGUID = Slave.EntityGUID };
     }
 
     protected override void LoadSaveData(object data)
@@ -70,6 +70,6 @@ public class TurretIAController : IAController
     {
         TurretIAControllerSaveData saveData = (TurretIAControllerSaveData)data;
 
-        SetSlave(SJUtil.FindSJMonoBehaviourByInstanceGUID<Character>(saveData.slaveGUID));
+        SetSlave(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.slaveGUID));
     }
 }

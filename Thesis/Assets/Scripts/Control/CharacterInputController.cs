@@ -41,7 +41,7 @@ public class CharacterInputController : UnityInputController<Character, Characte
 
     protected override object GetSaveData()
     {
-        return new CharacterInputControllerSaveData() { slaveGUID = Slave.InstanceGuid };
+        return new CharacterInputControllerSaveData() { slaveGUID = Slave.EntityGUID };
     }
 
     protected override void LoadSaveData(object data)
@@ -58,6 +58,6 @@ public class CharacterInputController : UnityInputController<Character, Characte
     {
         CharacterInputControllerSaveData saveData = (CharacterInputControllerSaveData)data;
 
-        SetSlave(SJUtil.FindSJMonoBehaviourByInstanceGUID<Character>(saveData.slaveGUID));
+        SetSlave(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.slaveGUID));
     }
 }

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Paps.StateMachines;
+using SJ.GameEntities;
 
-public abstract class Character : SJMonoBehaviourSaveable, IControllable<Character.Order>
+public abstract class Character : SaveableGameEntity, IControllable<Character.Order>
 {
     public enum Order : byte
     {

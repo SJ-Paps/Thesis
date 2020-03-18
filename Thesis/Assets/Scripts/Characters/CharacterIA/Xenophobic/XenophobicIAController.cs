@@ -93,7 +93,7 @@ public class XenophobicIAController : IAController
 
     protected override object GetSaveData()
     {
-        return new XenophobicIAControllerSaveData() { slaveGUID = Slave.InstanceGuid };
+        return new XenophobicIAControllerSaveData() { slaveGUID = Slave.EntityGUID };
     }
 
     protected override void LoadSaveData(object data)
@@ -110,6 +110,6 @@ public class XenophobicIAController : IAController
     {
         XenophobicIAControllerSaveData saveData = (XenophobicIAControllerSaveData)data;
 
-        SetSlave(SJUtil.FindSJMonoBehaviourByInstanceGUID<Character>(saveData.slaveGUID));
+        SetSlave(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.slaveGUID));
     }
 }

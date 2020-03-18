@@ -1,4 +1,4 @@
-﻿using SJ.Save;
+﻿using SJ.GameEntities;
 using System;
 
 namespace SJ.Management
@@ -25,7 +25,7 @@ namespace SJ.Management
         void Reload();
         void Save();
 
-        void SubscribeSaveable(ISaveable saveable);
-        void UnsubscribeSaveable(ISaveable saveable);
+        void SubscribeSaveable(ISaveableGameEntity saveable);
+        void UnsubscribeSaveable(ISaveableGameEntity saveable);
     }
 }

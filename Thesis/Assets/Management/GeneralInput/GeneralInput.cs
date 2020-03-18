@@ -56,6 +56,11 @@ namespace SJ.Management
                 else
                     mainMenuInstance.Show();
             }
+
+            if (Input.GetKeyDown(KeyCode.F5))
+                Application.GameManager.Save();
+            else if (Input.GetKeyDown(KeyCode.F6))
+                Application.GameManager.Reload();
         }
     }
 

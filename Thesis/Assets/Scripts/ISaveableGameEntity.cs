@@ -1,8 +1,8 @@
 ﻿using SJ.Management;
 
-namespace SJ.Save
+namespace SJ.GameEntities
 {
-    public interface ISaveable : IGameplayEntity
+    public interface ISaveableGameEntity : IGameEntity
     {
         GameplayObjectSave Save();
 

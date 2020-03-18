@@ -6,6 +6,8 @@ namespace Paps.Unity
 {
     public static class UnityUtil
     {
+        //CREAR FIND OBJECT OF TYPE QUE PERMITA PONER INTERFACES
+
         private static List<Object> dontDestroyOnLoadObjects = new List<Object>();
 
         public static void DontDestroyOnLoad(Object obj)
@@ -60,6 +62,64 @@ namespace Paps.Unity
             }
 
             return default;
+        }
+
+        public static T FindObjectOfType<T>() where T : class
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene current = SceneManager.GetSceneAt(i);
+
+                GameObject[] rootObjects = current.GetRootGameObjects();
+
+                for (int j = 0; j < rootObjects.Length; j++)
+                {
+                    T obj = rootObjects[j].GetComponentInChildren<T>(false);
+
+                    if (obj != null)
+                    {
+                        return obj;
+                    }
+                }
+            }
+
+            return FindDontDestroyOnLoadObjectOfType<T>();
+        }
+
+        public static T[] FindObjectsOfType<T>() where T : class
+        {
+            List<T> objectList = null;
+
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene current = SceneManager.GetSceneAt(i);
+
+                GameObject[] rootObjects = current.GetRootGameObjects();
+
+                for (int j = 0; j < rootObjects.Length; j++)
+                {
+                    T[] objects = rootObjects[j].GetComponentsInChildren<T>(false);
+
+                    if (objects != null)
+                    {
+                        if (objectList == null)
+                        {
+                            objectList = new List<T>();
+                        }
+
+                        objectList.AddRange(objects);
+                    }
+                }
+            }
+
+            if (objectList != null)
+            {
+                return objectList.ToArray();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static T FindObjectOfTypeIncludingInactive<T>() where T : class

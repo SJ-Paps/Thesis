@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Paps.Unity;
+using SJ.Management;
 
 public static class SJUtil
 {
@@ -88,9 +89,9 @@ public static class SJUtil
         }
     }
 
-    public static T FindSJMonoBehaviourByInstanceGUIDIncludingInactive<T>(string guid) where T : class
+    public static T FindGameEntityByEntityGUIDIncludingInactive<T>(string guid) where T : class
     {
-        SJMonoBehaviour saveable = FindSJMonoBehaviourByInstanceGUIDIncludingInactive(guid);
+        IGameEntity saveable = FindGameEntityByEntityGUIDIncludingInactive(guid);
 
         if (saveable != null && saveable is T)
         {
@@ -100,15 +101,15 @@ public static class SJUtil
         return null;
     }
 
-    public static SJMonoBehaviour FindSJMonoBehaviourByInstanceGUIDIncludingInactive(string guid)
+    public static IGameEntity FindGameEntityByEntityGUIDIncludingInactive(string guid)
     {
-        SJMonoBehaviour[] allSaveables = UnityUtil.FindObjectsOfTypeIncludingInactive<SJMonoBehaviour>();
+        IGameEntity[] allSaveables = UnityUtil.FindObjectsOfTypeIncludingInactive<IGameEntity>();
 
         for (int i = 0; i < allSaveables.Length; i++)
         {
-            SJMonoBehaviour current = allSaveables[i];
+            IGameEntity current = allSaveables[i];
 
-            if (current.InstanceGuid == guid)
+            if (current.EntityGUID == guid)
             {
                 return current;
             }
@@ -117,9 +118,9 @@ public static class SJUtil
         return null;
     }
 
-    public static T FindSJMonoBehaviourByInstanceGUID<T>(string guid) where T : class
+    public static T FindGameEntityByEntityGUID<T>(string guid) where T : class
     {
-        SJMonoBehaviour saveable = FindSJMonoBehaviourByInstanceGUID(guid);
+        IGameEntity saveable = FindGameEntityByEntityGUID(guid);
 
         if (saveable != null && saveable is T)
         {
@@ -129,15 +130,15 @@ public static class SJUtil
         return null;
     }
 
-    public static SJMonoBehaviour FindSJMonoBehaviourByInstanceGUID(string guid)
+    public static IGameEntity FindGameEntityByEntityGUID(string guid)
     {
-        SJMonoBehaviour[] allSaveables = GameObject.FindObjectsOfType<SJMonoBehaviour>();
+        IGameEntity[] allSaveables = UnityUtil.FindObjectsOfType<IGameEntity>();
 
         for (int i = 0; i < allSaveables.Length; i++)
         {
-            SJMonoBehaviour current = allSaveables[i];
+            IGameEntity current = allSaveables[i];
 
-            if (current.InstanceGuid == guid)
+            if (current.EntityGUID == guid)
             {
                 return current;
             }

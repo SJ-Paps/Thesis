@@ -8,6 +8,7 @@ using UnityEngine;
 using System.Linq;
 using UniRx;
 using UnityEngine.SceneManagement;
+using SJ.GameEntities;
 
 namespace SJ.Management
 {
@@ -35,7 +36,7 @@ namespace SJ.Management
         public event Action OnSessionBegan;
         public event Action OnSessionFinished;
 
-        private HashSet<ISaveable> saveables;
+        private HashSet<ISaveableGameEntity> saveables;
 
         public string CurrentProfile => currentProfileData.name;
         private ProfileData currentProfileData;
@@ -49,7 +50,7 @@ namespace SJ.Management
             beginScenes = applicationSettings.BeginningScenes;
             returnSceneOnEndSession = applicationSettings.ReturnSceneOnEndSession;
 
-            saveables = new HashSet<ISaveable>();
+            saveables = new HashSet<ISaveableGameEntity>();
         }
 
         public void BeginSessionFor(string profile)
@@ -57,6 +58,7 @@ namespace SJ.Management
             Debug.Log("Wants to begin session with profile " + profile);
 
             profileRepository.GetProfileDataFrom(profile)
+                .ObserveOnMainThread()
                 .Subscribe(maybeProfile =>
                 {
                     if (maybeProfile.IsNothing())
@@ -105,7 +107,9 @@ namespace SJ.Management
 
         public void Save()
         {
-            ISaveable[] currentSaveables = saveables.ToArray();
+            Debug.Log("Save");
+
+            ISaveableGameEntity[] currentSaveables = saveables.ToArray();
             GameplayObjectSave[] saves = Array.ConvertAll(currentSaveables, saveable => saveable.Save());
 
             for (int i = 0; i < currentSaveables.Length; i++)
@@ -121,9 +125,9 @@ namespace SJ.Management
             OnSaving?.Invoke();
 
             profileRepository.UpdateProfileData(CurrentProfile, currentProfileData)
-                .Select(_ => profileRepository.SaveOnProfile(CurrentProfile, new SaveData(CurrentProfile, sessionData)))
+                .ContinueWith(profileRepository.SaveOnProfile(CurrentProfile, new SaveData(CurrentProfile, sessionData)))
                 .ObserveOnMainThread()
-                .Subscribe(_ => OnSaveSucceeded?.Invoke(), error => OnSaveFailed?.Invoke());
+                .Subscribe(_ => OnSaveSucceeded?.Invoke(), error => { OnSaveFailed?.Invoke(); Debug.LogError(error.Message); });
         }
 
         private void LoadGame()
@@ -144,7 +148,7 @@ namespace SJ.Management
                         NewGame();
                     else
                         LoadGameplayScenes(sessionData.loadedScenes)
-                            .Select(_ => LoadEntities(sessionData))
+                            .ContinueWith(LoadEntities(sessionData))
                             .Subscribe(_ => OnLoadingSucceeded?.Invoke());
                 },
                 error => OnLoadingFailed?.Invoke());
@@ -153,22 +157,25 @@ namespace SJ.Management
         private IObservable<Unit> LoadEntities(GameSessionSaveData sessionData)
         {
             GameplayObjectSave[] saves = sessionData.gameplaySaves;
-            IObservable<ISaveable>[] loadEntityPrefabObservables = 
-                Array.ConvertAll(saves, save => SJResources.LoadComponentOfGameObjectAsync<ISaveable>(save.prefabName));
+            IObservable<GameObject>[] loadEntityPrefabObservables = 
+                Array.ConvertAll(saves, save => SJResources.LoadAssetAsync<GameObject>(save.PrefabName));
 
             return Observable.Zip(loadEntityPrefabObservables)
                 .ObserveOnMainThread()
                 .Do(loadedSaveables =>
                 {
+                    var saveablesArray = Array.ConvertAll(loadedSaveables.ToArray(), 
+                        saveable => GameObject.Instantiate<GameObject>(saveable).GetComponent<ISaveableGameEntity>());
+
                     int index = 0;
-                    foreach (var saveable in loadedSaveables)
+                    foreach (var saveable in saveablesArray)
                     {
                         saveable.Load(saves[index]);
                         index++;
                     }
 
                     index = 0;
-                    foreach (var saveable in loadedSaveables)
+                    foreach (var saveable in saveablesArray)
                     {
                         saveable.PostLoadCallback(saves[index]);
                         index++;
@@ -228,15 +235,17 @@ namespace SJ.Management
 
         public void Reload()
         {
+            Debug.Log("Reload");
+
             LoadGame();
         }
 
-        public void SubscribeSaveable(ISaveable saveable)
+        public void SubscribeSaveable(ISaveableGameEntity saveable)
         {
             saveables.Add(saveable);
         }
 
-        public void UnsubscribeSaveable(ISaveable saveable)
+        public void UnsubscribeSaveable(ISaveableGameEntity saveable)
         {
             saveables.Remove(saveable);
         }
