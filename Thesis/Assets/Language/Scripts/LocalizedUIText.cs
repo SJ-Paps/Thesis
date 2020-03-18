@@ -10,6 +10,8 @@ namespace SJ.Localization
 
         protected override void SJAwake()
         {
+            EnableUpdate = false;
+
             selfText = GetComponent<Text>();
             selfTextMeshPro = GetComponent<TextMeshProUGUI>();
 

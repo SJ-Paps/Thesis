@@ -3,11 +3,11 @@ using SJ.UI;
 using UnityEngine;
 using UniRx;
 
-namespace SJ.Game
+namespace SJ.Management
 {
-    public class GeneralInputController : SJMonoBehaviour
+    public class GeneralInput : SJMonoBehaviour
     {
-        private static GeneralInputController instance;
+        private static GeneralInput instance;
 
         private static MainMenu mainMenuPrefab;
         private const string MainMenuPrefabName = "MainMenu";
@@ -39,7 +39,7 @@ namespace SJ.Game
 
         private static void InstantiateInGame()
         {
-            instance = new GameObject(nameof(GeneralInputController)).AddComponent<GeneralInputController>();
+            instance = new GameObject(nameof(GeneralInput)).AddComponent<GeneralInput>();
             mainMenuInstance = Instantiate(mainMenuPrefab);
             mainMenuInstance.gameObject.SetActive(false);
 
@@ -51,13 +51,9 @@ namespace SJ.Game
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (mainMenuInstance.gameObject.activeSelf)
-                {
                     mainMenuInstance.Hide();
-                }
                 else
-                {
                     mainMenuInstance.Show();
-                }
             }
         }
     }

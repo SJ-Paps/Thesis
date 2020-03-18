@@ -9,7 +9,7 @@ using System.Linq;
 using UniRx;
 using UnityEngine.SceneManagement;
 
-namespace SJ.Game
+namespace SJ.Management
 {
     public class GameManager : IGameManager
     {

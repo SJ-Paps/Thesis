@@ -1,4 +1,4 @@
-﻿namespace SJ.Game
+﻿namespace SJ.Management
 {
     public interface IGameplayEntity
     {

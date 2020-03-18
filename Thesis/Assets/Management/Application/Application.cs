@@ -4,7 +4,7 @@ using SJ.Audio;
 using SJ.Coroutines;
 using UnityEngine.SceneManagement;
 using UniRx;
-using SJ.Game;
+using SJ.Management;
 using UnityEngine;
 using System;
 

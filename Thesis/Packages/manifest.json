@@ -44,7 +44,8 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "com.newtonsoft.json": "1.0.1"
   },
   "scopedRegistries": [
     {
@@ -53,6 +54,7 @@
       "scopes": [
         "com.dbrizov.naughtyattributes",
         "com.neuecc.unirx",
+        "com.newtonsoft.json",
         "com.openupm"
       ]
     },

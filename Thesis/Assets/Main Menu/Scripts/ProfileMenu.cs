@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Threading.Tasks;
+﻿using Paps.Maybe;
 using SJ.Profiles;
-using SJ.Game;
-using UniRx;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Paps.Maybe;
-using System.Linq;
+using UniRx;
+using UnityEngine;
 
 namespace SJ.UI
 {

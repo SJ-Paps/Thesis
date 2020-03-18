@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using SJ.Profiles;
 using SJ.Coroutines;
-using SJ.Game;
+using SJ.Management;
 using UniRx;
 
 namespace SJ.UI

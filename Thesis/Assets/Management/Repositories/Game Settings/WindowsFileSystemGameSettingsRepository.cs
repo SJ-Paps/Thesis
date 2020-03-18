@@ -20,17 +20,13 @@ namespace SJ
 
         public IObservable<GameSettings> GetSettings()
         {
-            return Observable.Create<GameSettings>(observer =>
+            if (gameSettings != null)
+                return Observable.Return(gameSettings);
+
+            return Observable.Start(() =>
             {
-                if (gameSettings == null)
-                {
-                    gameSettings = LoadSettings();
-                }
-
-                observer.OnNext(gameSettings);
-                observer.OnCompleted();
-
-                return Disposable.Empty;
+                gameSettings = LoadSettings();
+                return gameSettings;
             });
         }
 
@@ -66,15 +62,8 @@ namespace SJ
 
         public IObservable<Unit> SaveSettings()
         {
-            return Observable.Create<Unit>(observer =>
-            {
-                InternalSaveSettings(gameSettings);
-
-                observer.OnNext(Unit.Default);
-                observer.OnCompleted();
-
-                return Disposable.Empty;
-            });
+            return GetSettings()
+                .SelectMany(gameSettings => Observable.Start(() => InternalSaveSettings(gameSettings)));
         }
 
         private void InternalSaveSettings(GameSettings settings)

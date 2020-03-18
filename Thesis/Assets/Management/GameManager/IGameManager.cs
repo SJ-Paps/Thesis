@@ -1,7 +1,7 @@
 ﻿using SJ.Save;
 using System;
 
-namespace SJ.Game
+namespace SJ.Management
 {
     public interface IGameManager
     {

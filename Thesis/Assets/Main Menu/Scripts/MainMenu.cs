@@ -1,31 +1,50 @@
-﻿using SJ.Coroutines;
-using SJ.Profiles;
-using SJ.Profiles.Exceptions;
-using UniRx;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace SJ.UI
 {
-    public class MainMenu : SJMonoBehaviour
+    public class MainMenu : SJMonoBehaviour, IMainMenu
     {
         [SerializeField]
-        private Button newGame, loadGame, resumeGame, options, exitDesktop, exitMainMenu, continueLastProfile;
+        private GameObject mainScreen, optionsScreen, newGameScreen, loadGameScreen;
 
-        [SerializeField]
-        private GameObject firstMenu, optionsMenu, newGameMenu, loadGameMenu;
+        private GameObject[] screens;
 
         protected override void SJAwake()
         {
-            exitDesktop.onClick.AddListener(ExitToDesktop);
-            exitMainMenu.onClick.AddListener(ExitToMainMenu);
-            resumeGame.onClick.AddListener(Hide);
-            continueLastProfile.onClick.AddListener(Continue);
+            screens = new GameObject[4];
+
+            screens[0] = mainScreen;
+            screens[1] = optionsScreen;
+            screens[2] = newGameScreen;
+            screens[3] = loadGameScreen;
         }
 
-        protected override void SJOnEnable()
+        public void Hide() => gameObject.SetActive(false);
+
+        public void Show() => gameObject.SetActive(true);
+
+        public void FocusMainScreen() => FocusScreen(mainScreen);
+
+        public void FocusOptionsScreen() => FocusScreen(optionsScreen);
+
+        public void FocusNewGameScreen() => FocusScreen(newGameScreen);
+
+        public void FocusLoadGameScreen() => FocusScreen(loadGameScreen);
+
+        private void FocusScreen(GameObject screen)
         {
-            UpdateButtonStates();
+            screen.SetActive(true);
+
+            for (int i = 0; i < screens.Length; i++)
+            {
+                if (screens[i] != screen)
+                    screens[i].SetActive(false);
+            }
+        }
+
+        /*protected override void SJOnEnable()
+        {
+
         }
 
         private void ExitToDesktop()
@@ -65,40 +84,6 @@ namespace SJ.UI
                 .Where(gameSettings => string.IsNullOrEmpty(gameSettings.lastProfile) == false)
                 .Do(gameSettings => Application.GameManager.BeginSessionFor(gameSettings.lastProfile))
                 .Subscribe();
-        }
-
-        private void UpdateButtonStates()
-        {
-            if (Application.GameManager.IsInGame())
-            {
-                exitDesktop.gameObject.SetActive(true);
-                exitMainMenu.gameObject.SetActive(true);
-                newGame.gameObject.SetActive(false);
-                loadGame.gameObject.SetActive(true);
-                resumeGame.gameObject.SetActive(true);
-                options.gameObject.SetActive(true);
-                continueLastProfile.gameObject.SetActive(false);
-            }
-            else
-            {
-                Repositories.GetGameSettingsRepository().GetSettings()
-                    .Subscribe(gameSettings =>
-                    {
-                        if (string.IsNullOrEmpty(gameSettings.lastProfile))
-                            continueLastProfile.gameObject.SetActive(false);
-                        else
-                            continueLastProfile.gameObject.SetActive(true);
-
-                        exitDesktop.gameObject.SetActive(true);
-                        exitMainMenu.gameObject.SetActive(false);
-                        newGame.gameObject.SetActive(true);
-                        loadGame.gameObject.SetActive(true);
-                        resumeGame.gameObject.SetActive(false);
-                        options.gameObject.SetActive(true);
-                    });
-            }
-        }
+        }*/
     }
-
 }
-

@@ -2,7 +2,7 @@
 using System;
 using SJ.Updatables;
 using NaughtyAttributes;
-using SJ.Game;
+using SJ.Management;
 
 public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable, IGameplayEntity
 {
@@ -27,7 +27,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable, IGameplayEnti
     }
 
     [SerializeField]
-    private bool enableUpdate = true;
+    private bool enableUpdate = false;
 
     public bool EnableUpdate
     {
@@ -62,10 +62,7 @@ public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable, IGameplayEnti
 
     private void Awake()
     {
-        if(onInstantiation != null)
-        {
-            onInstantiation(this);
-        }
+        onInstantiation?.Invoke(this);
 
         if (string.IsNullOrEmpty(InstanceGuid))
         {
