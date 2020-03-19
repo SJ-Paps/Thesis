@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SJ
 {
@@ -8,6 +7,7 @@ namespace SJ
     {
         void Awake()
         {
+            Application.OnInitialized += () => SceneManager.LoadScene("Menu");
             Application.Initialize();
         }
     }

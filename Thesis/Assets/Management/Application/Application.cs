@@ -1,12 +1,10 @@
-﻿using SJ.Localization;
-using SJ.Updatables;
-using SJ.Audio;
+﻿using SJ.Audio;
 using SJ.Coroutines;
-using UnityEngine.SceneManagement;
-using UniRx;
+using SJ.Localization;
 using SJ.Management;
-using UnityEngine;
+using SJ.Updatables;
 using System;
+using UniRx;
 
 namespace SJ
 {
@@ -43,11 +41,9 @@ namespace SJ
                     SoundService.SetVolumeOfChannel(SoundChannels.Music, gameSettings.musicVolume);
                     SoundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.effectsVolume);
 
-                    OnInitialized?.Invoke();
-
                     IsInitialized = true;
 
-                    SceneManager.LoadScene("Menu");
+                    OnInitialized?.Invoke();
                 });
         }
 
