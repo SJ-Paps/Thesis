@@ -27,12 +27,14 @@ namespace SJ.Menu
 
         private void ProcessProfileInput(string profile)
         {
+            view.HideErrorMessage();
+
             if (IsValidProfileName(profile) == false)
             {
                 view.ShowErrorMessage(translatorService.GetLineByTagOfCurrentLanguage("notification_profile_invalid_name").FirstLetterToUpper());
                 return;
             }
-            else if (IsUnique(profile) == false)
+            else if (IsInUse(profile))
             {
                 view.ShowErrorMessage(translatorService.GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper());
                 return;
@@ -50,9 +52,9 @@ namespace SJ.Menu
                             .Subscribe();
         }
 
-        private bool IsUnique(string profile)
+        private bool IsInUse(string profile)
         {
-            return profileRepository.Exists(profile).Wait() == false;
+            return profileRepository.Exists(profile).Wait();
         }
 
         private bool IsValidProfileName(string profile)
