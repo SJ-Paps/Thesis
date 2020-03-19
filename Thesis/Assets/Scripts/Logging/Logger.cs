@@ -1,6 +1,5 @@
-﻿using UnityEngine.Analytics;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
 
 public static partial class Logger
 {

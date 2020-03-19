@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using UniRx;
 using Paps.Maybe;
-using UnityEngine;
 
 namespace SJ.Profiles
 {
@@ -45,7 +44,7 @@ namespace SJ.Profiles
         {
             return LoadProfiles()
                 .Do(_ => profiles[profile].saveData = saveData)
-                .DoOnError(error => Debug.LogError(error.Message))
+                .DoOnError(error => Logger.LogError(error.Message))
                 .SelectMany(_ => SaveProfile(profile));
         }
 

@@ -9,13 +9,15 @@ namespace SJ
     {
         private static readonly string configurationFilePath = Path.Combine(UnityEngine.Application.persistentDataPath, "GameConfiguration/config.sj");
 
+        private GameSettings defaultGameSettings;
         private GameSettings gameSettings;
 
         private ISaveSerializer saveSerializer;
 
-        public WindowsFileSystemGameSettingsRepository(ISaveSerializer saveSerializer)
+        public WindowsFileSystemGameSettingsRepository(ISaveSerializer saveSerializer, GameSettings defaultGameSettings)
         {
             this.saveSerializer = saveSerializer;
+            this.defaultGameSettings = defaultGameSettings;
         }
 
         public IObservable<GameSettings> GetSettings()
@@ -55,9 +57,9 @@ namespace SJ
             }
         }
 
-        private static GameSettings GetDefault()
+        private GameSettings GetDefault()
         {
-            return Application.ApplicationSettings.DefaultGameSettings;
+            return defaultGameSettings;
         }
 
         public IObservable<Unit> SaveSettings()

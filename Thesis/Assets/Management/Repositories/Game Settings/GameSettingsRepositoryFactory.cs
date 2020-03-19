@@ -8,7 +8,7 @@ namespace SJ
     {
         public static IGameSettingsRepository Create()
         {
-            return new WindowsFileSystemGameSettingsRepository(Serializers.GetSaveSerializer());
+            return new WindowsFileSystemGameSettingsRepository(Serializers.GetSaveSerializer(), Application.ApplicationSettings.DefaultGameSettings);
         }
     }
 }
