@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SJ.UI
+namespace SJ.Menu
 {
     public interface IMainMenu
     {

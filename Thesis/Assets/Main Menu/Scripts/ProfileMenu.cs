@@ -6,7 +6,7 @@ using System.Linq;
 using UniRx;
 using UnityEngine;
 
-namespace SJ.UI
+namespace SJ.Menu
 {
     public class ProfileMenu : SJMonoBehaviour
     {

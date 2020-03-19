@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SJ.UI
+namespace SJ.Menu
 {
     public class MainMenu : SJMonoBehaviour, IMainMenu
     {

@@ -1,5 +1,5 @@
 ﻿using Paps.Unity;
-using SJ.UI;
+using SJ.Menu;
 using UnityEngine;
 using UniRx;
 

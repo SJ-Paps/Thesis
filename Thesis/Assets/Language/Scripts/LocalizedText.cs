@@ -8,6 +8,7 @@ namespace SJ.Localization
         None,
         ToUpper,
         ToLower,
+        TitleCase,
         FirstLetterToUpper
     }
 
@@ -16,20 +17,7 @@ namespace SJ.Localization
     {
         public string tag;
 
-        private string text;
-
-        public string Text
-        {
-            get
-            {
-                return text;
-            }
-
-            private set
-            {
-                text = value;
-            }
-        }
+        public string Text { get; private set; }
 
         private ITranslatorService translatorService;
 
@@ -88,6 +76,12 @@ namespace SJ.Localization
                 case TextOptions.ToUpper:
 
                     Text = translatorService.GetLineByTagOfCurrentLanguage(tag).ToUpper();
+
+                    break;
+
+                case TextOptions.TitleCase:
+
+                    Text = translatorService.GetLineByTagOfCurrentLanguage(tag).ToTitleCase();
 
                     break;
 

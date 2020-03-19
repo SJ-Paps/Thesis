@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 
-namespace SJ.UI
+namespace SJ.Menu
 {
     public class SoundSliderHandle : SJMonoBehaviour, IPointerUpHandler
     {

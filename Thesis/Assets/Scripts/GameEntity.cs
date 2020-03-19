@@ -36,7 +36,8 @@ namespace SJ.GameEntities
 
         protected virtual void OnValidate()
         {
-            EntityGUID = Guid.NewGuid().ToString();
+            if(string.IsNullOrEmpty(EntityGUID))
+                EntityGUID = Guid.NewGuid().ToString();
         }
 
 #endif

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using SJ.Profiles;
 
-namespace SJ.UI
+namespace SJ.Menu
 {
     public class ProfileInfoItem : SJMonoBehaviour
     {

@@ -5,7 +5,7 @@ using SJ.Coroutines;
 using SJ.Management;
 using UniRx;
 
-namespace SJ.UI
+namespace SJ.Menu
 {
     public class ProfileInput : SJMonoBehaviour
     {
@@ -50,7 +50,7 @@ namespace SJ.UI
                         {
                             inputField.text = string.Empty;
                             notificationText.gameObject.SetActive(true);
-                            notificationText.text = Application.TranslatorService.GetLineByTagOfCurrentLanguage("notification_profile_in_use").FirstLetterToUpper();
+                            notificationText.text = Application.TranslatorService.GetLineByTagOfCurrentLanguage("notification_profile_in_use").ToTitleCase();
                         }
                         else
                         {

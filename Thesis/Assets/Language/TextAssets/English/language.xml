@@ -6,11 +6,11 @@
   <lines>
 
     <line tag="menu_button_options">options</line>
-    <line tag="menu_button_exit">exit to desktop</line>
-    <line tag="menu_button_exit_main_menu">exit to main menu</line>
+    <line tag="menu_button_exit_to_desktop">exit to desktop</line>
+    <line tag="menu_button_exit_to_main_menu">exit to main menu</line>
     <line tag="menu_button_new_game">new game</line>
     <line tag="menu_button_load_game">load game</line>
-    <line tag="menu_button_resume_game">resume game</line>
+    <line tag="menu_button_resume">resume game</line>
     <line tag="menu_back">back</line>
     <line tag="menu_button_accept">accept</line>
     <line tag="menu_button_select">select</line>

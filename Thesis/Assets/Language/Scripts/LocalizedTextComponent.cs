@@ -2,14 +2,8 @@
 
 namespace SJ.Localization
 {
-    //Opciones para mostrar el texto de diferentes maneras
-
-
-    //Clase que modifica el texto del componente Text del objeto por un texto localizado
     public abstract class LocalizedTextComponent : SJMonoBehaviour
     {
-
-        //nombre del atributo "tag" del XML con texto localizado
         [SerializeField]
         protected string langTag;
 
@@ -23,6 +17,17 @@ namespace SJ.Localization
             get
             {
                 return localizedText.ToString();
+            }
+        }
+
+        public string LanguageTag
+        {
+            get => localizedText.tag;
+            set
+            {
+                localizedText.tag = langTag;
+
+                localizedText.UpdateText();
             }
         }
 

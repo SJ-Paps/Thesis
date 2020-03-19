@@ -43,9 +43,9 @@ namespace SJ.Localization
                     return lines[tag];
                 }
 
-                Logger.LogConsole("TAG NOT FOUND! REMEMBER BUILD ASSETBUNDLES!");
+                Logger.LogConsole("TAG " + tag + " NOT FOUND! REMEMBER BUILD ASSETBUNDLES!");
 
-                return string.Empty;
+                return tag;
             }
         }
 

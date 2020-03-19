@@ -2,7 +2,7 @@
 using SJ.Audio;
 using UniRx;
 
-namespace SJ.UI
+namespace SJ.Menu
 {
     public class SoundMenu : SJMonoBehaviour
     {

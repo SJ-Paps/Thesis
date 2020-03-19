@@ -1,12 +1,16 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-public static class SJUtilEditor
+namespace SJ.Editor
 {
-    [MenuItem("GameObject/Create Organizational", priority = 0)]
-    public static void CreateOrganizational()
+    public static class SJUtilEditor
     {
-        GameObject go = new GameObject("-----------------------------");
-        go.hideFlags = HideFlags.DontSaveInBuild;
+        [MenuItem("GameObject/Create Organizational", priority = 0)]
+        public static void CreateOrganizational()
+        {
+            GameObject go = new GameObject("-----------------------------");
+            go.hideFlags = HideFlags.DontSaveInBuild;
+        }
     }
+
 }
