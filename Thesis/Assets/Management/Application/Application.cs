@@ -41,7 +41,7 @@ namespace SJ
 
                     SoundService.SetVolume(gameSettings.generalVolume);
                     SoundService.SetVolumeOfChannel(SoundChannels.Music, gameSettings.musicVolume);
-                    SoundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.soundsVolume);
+                    SoundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.effectsVolume);
 
                     OnInitialized?.Invoke();
 

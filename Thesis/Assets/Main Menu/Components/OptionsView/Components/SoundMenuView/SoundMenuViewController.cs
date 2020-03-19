@@ -28,7 +28,7 @@ namespace SJ.Menu
             view.OnMusicSoundValueConfirmed += value => SaveSettings(gameSettings => gameSettings.musicVolume = value);
 
             view.OnEffectsSoundValueChanged += value => soundService.SetVolumeOfChannel(SoundChannels.Effects, value);
-            view.OnEffectsSoundValueConfirmed += value => SaveSettings(gameSettings => gameSettings.soundsVolume = value);
+            view.OnEffectsSoundValueConfirmed += value => SaveSettings(gameSettings => gameSettings.effectsVolume = value);
 
             view.SetGeneralSoundValue(soundService.GetVolume());
             view.SetMusicSoundValue(soundService.GetVolumeOfChannel(SoundChannels.Music));

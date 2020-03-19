@@ -5,9 +5,9 @@ using UniRx;
 
 namespace SJ.Management
 {
-    public class GeneralInput : SJMonoBehaviour
+    public class GlobalInGameInput : SJMonoBehaviour
     {
-        private static GeneralInput instance;
+        private static GlobalInGameInput instance;
 
         private static MainMenu mainMenuPrefab;
         private const string MainMenuPrefabName = "MainMenu";
@@ -39,7 +39,7 @@ namespace SJ.Management
 
         private static void InstantiateInGame()
         {
-            instance = new GameObject(nameof(GeneralInput)).AddComponent<GeneralInput>();
+            instance = new GameObject(nameof(GlobalInGameInput)).AddComponent<GlobalInGameInput>();
             instance.EnableUpdate = true;
             mainMenuInstance = Instantiate(mainMenuPrefab);
             mainMenuInstance.gameObject.SetActive(false);
@@ -57,10 +57,12 @@ namespace SJ.Management
                     mainMenuInstance.Show();
             }
 
+#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.F5))
                 Application.GameManager.Save();
             else if (Input.GetKeyDown(KeyCode.F6))
                 Application.GameManager.Reload();
+#endif
         }
     }
 
