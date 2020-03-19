@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using Paps.StateMachines.HSM;
+using SJ;
 
 public abstract class SJHSMStateAsset : HSMStateAsset<byte, byte>
 {

@@ -8,13 +8,13 @@ namespace SJ.Menu
 {
     public class SoundSliderHandle : SJMonoBehaviour, IPointerUpHandler
     {
-        public event Action onDragEnd;
+        public event Action OnDragEnd;
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if(onDragEnd != null)
+            if(OnDragEnd != null)
             {
-                onDragEnd();
+                OnDragEnd();
             }
         }
     }

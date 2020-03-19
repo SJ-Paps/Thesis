@@ -21,6 +21,8 @@ namespace SJ
 
         public static event Action OnInitialized;
 
+        public static bool IsInitialized { get; private set; }
+
         public static void Initialize()
         {
             ApplicationSettings = LoadApplicationSettings();
@@ -42,6 +44,8 @@ namespace SJ
                     SoundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.soundsVolume);
 
                     OnInitialized?.Invoke();
+
+                    IsInitialized = true;
 
                     SceneManager.LoadScene("Menu");
                 });

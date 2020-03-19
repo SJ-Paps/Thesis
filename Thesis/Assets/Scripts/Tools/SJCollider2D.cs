@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SJ;
+using System;
 using UnityEngine;
 
 public abstract class SJCollider2D : SJMonoBehaviour {

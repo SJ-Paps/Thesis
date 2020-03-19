@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Paps.StateMachines;
 using Paps.StateMachines.HSM;
+using SJ;
 
 public abstract class SJHSMState : HSMState<byte, byte>, IOwnable<SJMonoBehaviour>
 {

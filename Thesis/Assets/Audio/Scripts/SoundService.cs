@@ -71,8 +71,8 @@ namespace SJ.Audio
             audioSourcesPool = new List<SJAudioSource>();
             audioSourcePrefab = SJResources.LoadComponentOfGameObject<SJAudioSource>("SJAudioSourcePrefab");
 
-            SJMonoBehaviour.onInstantiation += OnObjectInstantiated;
-            SJMonoBehaviour.onDestruction += OnObjectDestroyed;
+            SJMonoBehaviour.OnInstantiation += OnObjectInstantiated;
+            SJMonoBehaviour.OnDestruction += OnObjectDestroyed;
         }
 
         private void OnObjectInstantiated(SJMonoBehaviour obj)

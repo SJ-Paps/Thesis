@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SJ;
+using UnityEngine;
 
 public enum DamageType : byte
 {

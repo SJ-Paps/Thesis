@@ -2,137 +2,137 @@
 using System;
 using SJ.Updatables;
 
-public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
+namespace SJ
 {
-    public static event Action<SJMonoBehaviour> onInstantiation;
-    public static event Action<SJMonoBehaviour> onDestruction;
-
-    [SerializeField]
-    private bool enableUpdate = false;
-
-    public bool EnableUpdate
+    public abstract class SJMonoBehaviour : MonoBehaviour, IUpdatable
     {
-        get
-        {
-            return enableUpdate;
-        }
+        public static event Action<SJMonoBehaviour> OnInstantiation;
+        public static event Action<SJMonoBehaviour> OnDestruction;
 
-        set
+        [SerializeField]
+        private bool enableUpdate = false;
+
+        public bool EnableUpdate
         {
-            if (enableUpdate != value)
+            get
             {
-                enableUpdate = value;
+                return enableUpdate;
+            }
 
-                UpdateEnableUpdateSubscription();
+            set
+            {
+                if (enableUpdate != value)
+                {
+                    enableUpdate = value;
+
+                    UpdateEnableUpdateSubscription();
+                }
             }
         }
-    }
 
-    private void UpdateEnableUpdateSubscription()
-    {
-        if (EnableUpdate && gameObject.activeSelf && this.enabled)
+        protected SJMonoBehaviour()
         {
-            SJ.Application.Updater.Subscribe(this);
-        }
-        else
-        {
-            SJ.Application.Updater.Unsubscribe(this);
-        }
-    }
-
-
-    private void Awake()
-    {
-        onInstantiation?.Invoke(this);
-
-        
-
-        SJAwake();
-    }
-
-    protected virtual void SJAwake()
-    {
-
-    }
-
-    private void Start()
-    {
-        SJStart();
-    }
-
-    protected virtual void SJStart()
-    {
-
-    }
-
-    private void OnEnable()
-    {
-        UpdateEnableUpdateSubscription();
-
-        SJOnEnable();
-    }
-
-    protected virtual void SJOnEnable()
-    {
-
-    }
-
-    private void OnDisable()
-    {
-        UpdateEnableUpdateSubscription();
-
-        SJOnDisable();
-    }
-
-    protected virtual void SJOnDisable()
-    {
-
-    }
-
-    private void OnDestroy()
-    {
-        if(onDestruction != null)
-        {
-            onDestruction(this);
+            if (Application.IsInitialized)
+                OnInstantiation?.Invoke(this);
         }
 
-        SJOnDestroy();
+        private void Awake()
+        {
+            SJAwake();
+        }
+
+        protected virtual void SJAwake()
+        {
+
+        }
+
+        private void Start()
+        {
+            SJStart();
+        }
+
+        protected virtual void SJStart()
+        {
+
+        }
+
+        private void UpdateEnableUpdateSubscription()
+        {
+            if (EnableUpdate && gameObject.activeSelf && this.enabled)
+            {
+                SJ.Application.Updater.Subscribe(this);
+            }
+            else
+            {
+                SJ.Application.Updater.Unsubscribe(this);
+            }
+        }
+
+        private void OnEnable()
+        {
+            UpdateEnableUpdateSubscription();
+
+            SJOnEnable();
+        }
+
+        protected virtual void SJOnEnable()
+        {
+
+        }
+
+        private void OnDisable()
+        {
+            UpdateEnableUpdateSubscription();
+
+            SJOnDisable();
+        }
+
+        protected virtual void SJOnDisable()
+        {
+
+        }
+
+        private void OnDestroy()
+        {
+            OnDestruction?.Invoke(this);
+
+            SJOnDestroy();
+        }
+
+        protected virtual void SJOnDestroy()
+        {
+
+        }
+
+        public void DoUpdate()
+        {
+            SJUpdate();
+        }
+
+        protected virtual void SJUpdate()
+        {
+
+        }
+
+        public void DoLateUpdate()
+        {
+            SJLateUpdate();
+        }
+
+        protected virtual void SJLateUpdate()
+        {
+
+        }
+
+        public void DoFixedUpdate()
+        {
+            SJFixedUpdate();
+        }
+
+        protected virtual void SJFixedUpdate()
+        {
+
+        }
+
     }
-
-    protected virtual void SJOnDestroy()
-    {
-
-    }
-
-    public void DoUpdate()
-    {
-        SJUpdate();
-    }
-
-    protected virtual void SJUpdate()
-    {
-
-    }
-
-    public void DoLateUpdate()
-    {
-        SJLateUpdate();
-    }
-
-    protected virtual void SJLateUpdate()
-    {
-
-    }
-
-    public void DoFixedUpdate()
-    {
-        SJFixedUpdate();
-    }
-
-    protected virtual void SJFixedUpdate()
-    {
-
-    }
-
 }
-
