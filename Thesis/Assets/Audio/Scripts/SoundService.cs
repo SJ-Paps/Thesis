@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Paps.Unity;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UniRx;
 
 namespace SJ.Audio
 {
@@ -38,7 +37,7 @@ namespace SJ.Audio
             {
                 this.soundManager = soundManager;
 
-                soundManager.onGlobalVolumeChanged += UpdateScaledVolume;
+                soundManager.OnGlobalVolumeChanged += UpdateScaledVolume;
 
                 UpdateScaledVolume(soundManager.GetVolume());
             }
@@ -53,13 +52,14 @@ namespace SJ.Audio
         private float volume = 1;
 
         private SJAudioSource audioSourcePrefab;
-        private List<SJAudioSource> audioSourcesPool;
-
+        private Dictionary<string, SJAudioSource> audioSourcesPool;
 
         private Dictionary<SoundChannels, SoundChannel> channels;
 
-        public event Action<float> onGlobalVolumeChanged;
-        public event ChannelVolumeChanged onChannelVolumeChanged;
+        private SJAudioSource playOneShotSource;
+
+        public event Action<float> OnGlobalVolumeChanged;
+        public event ChannelVolumeChanged OnChannelVolumeChanged;
 
         public SoundService(float generalVolume, float musicVolume, float effectsVolume)
         {
@@ -72,46 +72,39 @@ namespace SJ.Audio
             SetVolumeOfChannel(SoundChannels.Music, musicVolume);
             SetVolumeOfChannel(SoundChannels.Effects, effectsVolume);
 
-            audioSourcesPool = new List<SJAudioSource>();
+            audioSourcesPool = new Dictionary<string, SJAudioSource>();
             audioSourcePrefab = SJResources.LoadComponentOfGameObject<SJAudioSource>("SJAudioSourcePrefab");
-
-            SJMonoBehaviour.OnInstantiation += OnObjectInstantiated;
-            SJMonoBehaviour.OnDestruction += OnObjectDestroyed;
         }
 
-        private void OnObjectInstantiated(SJMonoBehaviour obj)
+        public void AddAudioSource(SJAudioSource source)
         {
-            if (obj is SJAudioSource audioSource)
+            AddAudioSource(source, out string _);
+        }
+
+        private void AddAudioSource(SJAudioSource source, out string guid)
+        {
+            guid = null;
+
+            if (audioSourcesPool.Values.Contains(source) == false)
             {
-                AddSource(audioSource);
+                guid = Guid.NewGuid().ToString();
+                audioSourcesPool.Add(guid, source);
             }
         }
 
-        private void OnObjectDestroyed(SJMonoBehaviour obj)
+        public void RemoveAudioSource(SJAudioSource source)
         {
-            if (obj is SJAudioSource audioSource)
+            foreach(var audioSource in audioSourcesPool)
             {
-                RemoveSource(audioSource);
+                if (audioSource.Value == source)
+                {
+                    audioSourcesPool.Remove(audioSource.Key);
+                    return;
+                }
             }
         }
 
-        private void AddSource(SJAudioSource source)
-        {
-            if (audioSourcesPool.Contains(source) == false)
-            {
-                audioSourcesPool.Add(source);
-            }
-        }
-
-        private void RemoveSource(SJAudioSource source)
-        {
-            audioSourcesPool.Remove(source);
-        }
-
-        public float GetVolume()
-        {
-            return volume;
-        }
+        public float GetVolume() => volume;
 
         public void SetVolume(float value)
         {
@@ -128,59 +121,65 @@ namespace SJ.Audio
                     volume = 1;
                 }
 
-                if (onGlobalVolumeChanged != null)
-                {
-                    onGlobalVolumeChanged(volume);
-                }
+                OnGlobalVolumeChanged?.Invoke(volume);
             }
         }
 
-        private SJAudioSource GetFirstAvailable()
+        private string GetFirstAvailable()
         {
-            for (int i = 0; i < audioSourcesPool.Count; i++)
+            foreach(var audioSource in audioSourcesPool)
             {
-                if (audioSourcesPool[i].IsPlaying == false)
-                {
-                    return audioSourcesPool[i];
-                }
+                if (audioSource.Value.IsPlaying == false)
+                    return audioSource.Key;
             }
 
             SJAudioSource newSource = GameObject.Instantiate<SJAudioSource>(audioSourcePrefab);
 
-            audioSourcesPool.Add(newSource);
+            AddAudioSource(newSource, out string guid);
 
-            return newSource;
+            return guid;
         }
 
-        public int Play(AudioClip audioClip)
+        public void PlayOneShot(AudioClip audioClip)
         {
-            SJAudioSource audioSource = GetFirstAvailable();
+            if (playOneShotSource == null)
+                InstantiatePlayOneShotAudioSource();
 
-            int id = audioSourcesPool.IndexOf(audioSource);
+            playOneShotSource.PlayOneShot(audioClip);
+        }
+
+        public string Play(AudioClip audioClip)
+        {
+            var guid = GetFirstAvailable();
+
+            var audioSource = audioSourcesPool[guid];
 
             audioSource.Clip = audioClip;
 
             audioSource.Play();
 
-            return id;
+            return guid;
         }
 
-        public int PlayAtPosition(Vector3 position, AudioClip audioClip)
+        public string PlayAtPosition(Vector3 position, AudioClip audioClip)
         {
-            return Play(audioClip);
+            var guid = GetFirstAvailable();
+
+            var audioSource = audioSourcesPool[guid];
+
+            audioSource.Clip = audioClip;
+
+            audioSource.gameObject.transform.position = position;
+
+            audioSource.Play();
+
+            return guid;
         }
 
-        public void Stop(int id)
+        public void Stop(string guid)
         {
-            if(ContainsIndex(id))
-            {
-                audioSourcesPool[id].Stop();
-            }
-        }
-
-        private bool ContainsIndex(int index)
-        {
-            return index > -1 && index < audioSourcesPool.Count;
+            if (audioSourcesPool.ContainsKey(guid))
+                audioSourcesPool[guid].Stop();
         }
 
         public void SetVolumeOfChannel(SoundChannels soundChannel, float volume)
@@ -191,10 +190,7 @@ namespace SJ.Audio
             {
                 channelObject.IndependentVolume = volume;
 
-                if(onChannelVolumeChanged != null)
-                {
-                    onChannelVolumeChanged(soundChannel, channelObject.IndependentVolume, channelObject.ScaledVolume);
-                }
+                OnChannelVolumeChanged?.Invoke(soundChannel, channelObject.IndependentVolume, channelObject.ScaledVolume);
             }
         }
 
@@ -207,11 +203,11 @@ namespace SJ.Audio
         {
             return channels[soundChannel].ScaledVolume;
         }
+
+        private void InstantiatePlayOneShotAudioSource()
+        {
+            playOneShotSource = GameObject.Instantiate(audioSourcePrefab);
+            UnityUtil.DontDestroyOnLoad(playOneShotSource);
+        }
     }
-
-    
 }
-
-
-
-

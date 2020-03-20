@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SAM.Timers;
+using SJ;
 
 public class TribalCheckingLedgesState : TribalHSMState
 {

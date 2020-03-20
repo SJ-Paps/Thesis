@@ -17,8 +17,6 @@ namespace SJ
         public static IGameManager GameManager { get; private set; }
         public static ApplicationSettings ApplicationSettings { get; private set; }
 
-        public static event Action OnInitialized;
-
         public static bool IsInitialized { get; private set; }
 
         public static void Initialize(LoadAction[] loadActions)
@@ -37,11 +35,7 @@ namespace SJ
         {
             Observable.Zip(loadActions)
                 .ObserveOnMainThread()
-                .Subscribe(_ =>
-                {
-                    IsInitialized = true;
-                    OnInitialized?.Invoke();
-                });
+                .Subscribe();
         }
 
         private static void InitializeMandatoryObjects()
@@ -51,6 +45,8 @@ namespace SJ
             SoundService = SoundServiceFactory.Create();
             CoroutineScheduler = CoroutineSchedulerFactory.Create();
             GameManager = new GameManager(Repositories.GetProfileRepository(), ApplicationSettings);
+
+            IsInitialized = true;
         }
 
         private static IObservable<ApplicationSettings> LoadApplicationSettings()

@@ -33,7 +33,20 @@ namespace SJ
         protected SJMonoBehaviour()
         {
             if (Application.IsInitialized)
+            {
                 OnInstantiation?.Invoke(this);
+                Initialize();
+            }
+        }
+
+        private void Initialize()
+        {
+            SJInitialize();
+        }
+
+        protected virtual void SJInitialize()
+        {
+
         }
 
         private void Awake()

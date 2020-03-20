@@ -1,4 +1,4 @@
-﻿using SAM.Timers;
+﻿using SJ;
 using UnityEngine;
 
 public class XenophobicIAPatrollingState : XenophobicIAState

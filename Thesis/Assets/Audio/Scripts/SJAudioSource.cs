@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace SJ.Audio
 {
@@ -8,45 +8,30 @@ namespace SJ.Audio
     {
         public delegate void VolumeChanged(float independentVolume, float scaledVolume);
 
-        [SerializeField]
-        protected AudioSource source;
+        [Range(0f, 1f)]
         [SerializeField]
         private float independentVolume = 1;
         [SerializeField]
         private bool playOnStart;
 
-        public AudioSource Source
+        private AudioSource innerSource;
+
+        private AudioSource InnerSource
         {
             get
             {
-                return source;
-            }
+                if (innerSource == null)
+                    innerSource = GetComponent<AudioSource>();
 
-            protected set
-            {
-                source = value;
+                return innerSource;
             }
         }
 
-        public AudioClip Clip
-        {
-            get
-            {
-                return source.clip;
-            }
-
-            set
-            {
-                source.clip = value;
-            }
-        }
+        public AudioClip Clip { get => InnerSource.clip; set => InnerSource.clip = value; }
 
         public float IndependentVolume
         {
-            get
-            {
-                return independentVolume;
-            }
+            get => independentVolume;
 
             set
             {
@@ -57,82 +42,49 @@ namespace SJ.Audio
                     UpdateScaledVolume(SoundService.GetScaledVolumeOfChannel(channel));
                 }
                 else
-                {
-                    Logger.LogConsole("El valor del volumen debe ser entre 0 y 1");
-                }
+                    Logger.LogConsole("value must be between 0 and 1");
             }
         }
 
-        public float ScaledVolume
-        {
-            get
-            {
-                return source.volume;
-            }
-        }
+        public float ScaledVolume => InnerSource.volume;
 
-        public bool Loop
-        {
-            get
-            {
-                return source.loop;
-            }
+        public bool Loop { get => InnerSource.loop; set => InnerSource.loop = value; }
 
-            set
-            {
-                source.loop = value;
-            }
-        }
+        public bool IsPlaying => InnerSource.isPlaying;
 
-        public bool IsPlaying
-        {
-            get
-            {
-                return Source.isPlaying;
-            }
-        }
-
-        private ISoundService soundServiceField;
-
-        protected ISoundService SoundService
-        {
-            get
-            {
-                if(soundServiceField == null)
-                {
-                    soundServiceField = Application.SoundService;
-                }
-
-                return soundServiceField;
-            }
-        }
+        protected ISoundService SoundService => Application.SoundService;
 
         [SerializeField]
         protected SoundChannels channel;
 
         public SoundChannels Channel { get { return channel; } }
 
-        public event VolumeChanged onVolumeChanged;
+        public event VolumeChanged OnVolumeChanged;
+
+        protected override void SJInitialize()
+        {
+            SoundService.AddAudioSource(this);
+        }
 
         protected override void SJAwake()
         {
-            IndependentVolume = independentVolume;
+            UpdateScaledVolume(SoundService.GetScaledVolumeOfChannel(channel));
 
-            SoundService.onChannelVolumeChanged += OnChannelVolumeChanged;
-            SoundService.onGlobalVolumeChanged += OnGlobalVolumeChanged;
+            SoundService.OnChannelVolumeChanged += OnChannelVolumeChanged;
+            SoundService.OnGlobalVolumeChanged += OnGlobalVolumeChanged;
         }
 
         protected override void SJStart()
         {
             if (playOnStart)
-            {
                 Play();
-            }
         }
 
         protected override void SJOnDestroy()
         {
-            SoundService.onChannelVolumeChanged -= OnChannelVolumeChanged;
+            SoundService.RemoveAudioSource(this);
+
+            SoundService.OnChannelVolumeChanged -= OnChannelVolumeChanged;
         }
 
         private void OnChannelVolumeChanged(SoundChannels soundChannel, float independentVolume, float scaledVolume)
@@ -150,24 +102,25 @@ namespace SJ.Audio
 
         public void Play()
         {
-            Source.Play();
+            InnerSource.Play();
         }
 
         public void Stop()
         {
-            Source.Stop();
+            InnerSource.Stop();
+        }
+
+        public void PlayOneShot(AudioClip clip)
+        {
+            InnerSource.PlayOneShot(clip);
         }
 
         protected void UpdateScaledVolume(float dependencyVolume)
         {
-            Source.volume = IndependentVolume * dependencyVolume;
+            InnerSource.volume = IndependentVolume * dependencyVolume;
 
-            if (onVolumeChanged != null)
-            {
-                onVolumeChanged(IndependentVolume, ScaledVolume);
-            }
+            OnVolumeChanged?.Invoke(IndependentVolume, ScaledVolume);
         }
     }
-
 }
 

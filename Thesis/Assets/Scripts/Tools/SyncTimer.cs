@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SAM.Timers
+namespace SJ
 {
     public class SyncTimer
     {

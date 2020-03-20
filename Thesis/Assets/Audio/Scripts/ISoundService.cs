@@ -9,13 +9,18 @@ namespace SJ.Audio
 
     public interface ISoundService
     {
-        event Action<float> onGlobalVolumeChanged;
-        event ChannelVolumeChanged onChannelVolumeChanged;
+        event Action<float> OnGlobalVolumeChanged;
+        event ChannelVolumeChanged OnChannelVolumeChanged;
 
-        int Play(AudioClip audioClip);
-        void Stop(int id);
+        void AddAudioSource(SJAudioSource audioSource);
+        void RemoveAudioSource(SJAudioSource audioSource);
 
-        int PlayAtPosition(Vector3 position, AudioClip clip);
+        string Play(AudioClip audioClip);
+        void Stop(string guid);
+
+        void PlayOneShot(AudioClip audioClip);
+
+        string PlayAtPosition(Vector3 position, AudioClip clip);
 
         void SetVolume(float volume);
         void SetVolumeOfChannel(SoundChannels soundChannel, float volume);
