@@ -1,14 +1,17 @@
-﻿using UnityEngine;
+﻿using SJ.Management;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SJ
 {
     public class ApplicationInitializer : MonoBehaviour
     {
+        [SerializeField]
+        private LoadAction[] loadActions;
+
         void Awake()
         {
-            Application.OnInitialized += () => SceneManager.LoadScene("Menu");
-            Application.Initialize();
+            Application.Initialize(loadActions);
         }
     }
 }

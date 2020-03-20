@@ -61,12 +61,16 @@ namespace SJ.Audio
         public event Action<float> onGlobalVolumeChanged;
         public event ChannelVolumeChanged onChannelVolumeChanged;
 
-        public SoundService()
+        public SoundService(float generalVolume, float musicVolume, float effectsVolume)
         {
             channels = new Dictionary<SoundChannels, SoundChannel>();
 
             channels.Add(SoundChannels.Effects, new SoundChannel(this));
             channels.Add(SoundChannels.Music, new SoundChannel(this));
+
+            SetVolume(generalVolume);
+            SetVolumeOfChannel(SoundChannels.Music, musicVolume);
+            SetVolumeOfChannel(SoundChannels.Effects, effectsVolume);
 
             audioSourcesPool = new List<SJAudioSource>();
             audioSourcePrefab = SJResources.LoadComponentOfGameObject<SJAudioSource>("SJAudioSourcePrefab");

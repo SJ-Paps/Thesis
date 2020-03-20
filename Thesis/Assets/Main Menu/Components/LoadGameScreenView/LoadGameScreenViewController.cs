@@ -34,7 +34,6 @@ namespace SJ.Menu
         private void UpdateProfiles()
         {
             profileRepository.GetAllProfiles()
-                .ObserveOnMainThread()
                 .Subscribe(profiles => view.ShowProfiles(profiles));
         }
 
@@ -43,7 +42,8 @@ namespace SJ.Menu
             gameSettingsRepository.GetSettings()
                 .Do(gameSettings => gameSettings.lastProfile = profile)
                 .ContinueWith(_ => gameSettingsRepository.SaveSettings())
-                .Do(_ => gameManager.BeginSessionFor(profile));
+                .Do(_ => gameManager.BeginSessionFor(profile))
+                .Subscribe();
         }
 
         private void DeleteProfile(string profile)
@@ -51,7 +51,8 @@ namespace SJ.Menu
             gameSettingsRepository.GetSettings()
                 .Do(gameSettings => ClearLastProfileIfMatches(profile, gameSettings))
                 .ContinueWith(_ => profileRepository.DeleteProfile(profile))
-                .Do(_ => UpdateProfiles());
+                .Do(_ => UpdateProfiles())
+                .Subscribe();
         }
 
         private static void ClearLastProfileIfMatches(string profile, GameSettings gameSettings)

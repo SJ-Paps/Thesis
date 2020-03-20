@@ -21,35 +21,41 @@ namespace SJ
 
         public static bool IsInitialized { get; private set; }
 
-        public static void Initialize()
+        public static void Initialize(LoadAction[] loadActions)
         {
-            ApplicationSettings = LoadApplicationSettings();
+            LoadApplicationSettings()
+                .Do(applicationsSettings => ApplicationSettings = applicationsSettings)
+                .Do(_ =>
+                {
+                    InitializeMandatoryObjects();
+                    ExecuteLoadActions(loadActions);
+                })
+                .Subscribe();
+        }
 
+        private static void ExecuteLoadActions(LoadAction[] loadActions)
+        {
+            Observable.Zip(loadActions)
+                .ObserveOnMainThread()
+                .Subscribe(_ =>
+                {
+                    IsInitialized = true;
+                    OnInitialized?.Invoke();
+                });
+        }
+
+        private static void InitializeMandatoryObjects()
+        {
             Updater = UpdaterFactory.Create();
             TranslatorService = TranslatorServiceFactory.Create();
             SoundService = SoundServiceFactory.Create();
             CoroutineScheduler = CoroutineSchedulerFactory.Create();
             GameManager = new GameManager(Repositories.GetProfileRepository(), ApplicationSettings);
-
-            Repositories.GetGameSettingsRepository().GetSettings()
-                .ObserveOnMainThread()
-                .Subscribe(gameSettings =>
-                {
-                    TranslatorService.ChangeLanguage(gameSettings.userLanguage);
-
-                    SoundService.SetVolume(gameSettings.generalVolume);
-                    SoundService.SetVolumeOfChannel(SoundChannels.Music, gameSettings.musicVolume);
-                    SoundService.SetVolumeOfChannel(SoundChannels.Effects, gameSettings.effectsVolume);
-
-                    IsInitialized = true;
-
-                    OnInitialized?.Invoke();
-                });
         }
 
-        private static ApplicationSettings LoadApplicationSettings()
+        private static IObservable<ApplicationSettings> LoadApplicationSettings()
         {
-            return SJResources.LoadAsset<ApplicationSettings>(Reg.ApplicationSettingsAssetName);
+            return SJResources.LoadAssetAsync<ApplicationSettings>(Reg.ApplicationSettingsAssetName);
         }
 
     }

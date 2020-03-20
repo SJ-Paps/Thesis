@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UniRx;
 
 namespace SJ.Audio
 {
@@ -8,7 +6,11 @@ namespace SJ.Audio
     {
         public static ISoundService Create()
         {
-            return new SoundService();
+            var gameSettings = Repositories.GetGameSettingsRepository()
+                .GetSettings()
+                .Wait();
+
+            return new SoundService(gameSettings.generalVolume, gameSettings.musicVolume, gameSettings.effectsVolume);
         }
     }
 
