@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6991404102758268299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6991404102758268296}
+  - component: {fileID: 6991404102758268297}
+  m_Layer: 0
+  m_Name: GlobalInput
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6991404102758268296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6991404102758268299}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 516.4004, y: 387.83096, z: -83}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6991404102758268297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6991404102758268299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38be3df650e978345b3f3c12b55e88ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableUpdate: 1
+  actions:
+  - action:
+      m_Name: Action
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 2d6a3ffc-6a81-437d-a99a-063bf31ea6aa
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: Jump
+        m_Id: 1264075c-75aa-48cb-bb62-0d1d8cd49214
+        m_Path: 1DAxis(minValue=0,whichSideWins=1)
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Action
+        m_Flags: 4
+      - m_Name: positive
+        m_Id: 5b7cdcb3-c9ef-4925-a4ab-70519ea0c2ea
+        m_Path: <Keyboard>/space
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Action
+        m_Flags: 8

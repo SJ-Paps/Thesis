@@ -9,7 +9,7 @@
         base.OnConstructionFinished();
 
         Owner = (IAController)base.Owner;
-        Slave = Owner.Slave;
+        Slave = Owner.Controllable;
         Blackboard = Owner.Blackboard;
     }
 }

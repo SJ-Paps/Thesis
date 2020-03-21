@@ -1,8 +1,8 @@
 ﻿using System;
 
-public interface IControllable<TOrder> where TOrder : struct
+public interface IControllable<TOrder>
 {
-    event Action<TOrder> onOrderReceived;
+    event Action<TOrder> OnOrderReceived;
 
     bool Enslaved
     {

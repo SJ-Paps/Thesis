@@ -1,4 +1,4 @@
-﻿public abstract class IAController : UnityController<Character, Character.Order>
+﻿public abstract class IAController : UnityController<Character, Character.OrderEvent>
 {
     public Blackboard Blackboard { get; protected set; }
 

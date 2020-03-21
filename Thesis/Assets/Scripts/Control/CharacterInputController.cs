@@ -1,63 +1,72 @@
-﻿using UnityEngine;
+﻿using SJ.GameInput;
 using System;
+using UnityEngine;
 
-public class CharacterInputController : UnityInputController<Character, Character.Order> {
-
-    [Serializable]
-    protected struct KeyOrder
+namespace SJ.GameEntities.Controllers
+{
+    public class CharacterInputController : UnityController<Character, Character.OrderEvent>
     {
-        [SerializeField]
-        public MultiKey key;
-        [SerializeField]
-        public Character.Order[] orders;
-    }
-
-    [SerializeField]
-    private KeyOrder[] keyOrders;
-
-    protected override void SJUpdate()
-    {
-        Control();
-    }
-
-    public class CharacterInputControllerSaveData
-    {
-        public string slaveGUID;
-    }
-
-    public override void Control()
-    {
-        for (int i = 0; i < keyOrders.Length; i++)
+        [Serializable]
+        private struct ActionOrder
         {
-            if (keyOrders[i].key.WasTriggered())
+            [SerializeField]
+            public CharacterInputAction action;
+            [SerializeField]
+            public Character.Order[] orders;
+        }
+
+        [SerializeField]
+        private ActionOrder[] keyOrders;
+
+        protected override void SJAwake()
+        {
+            for (int i = 0; i < keyOrders.Length; i++)
+                keyOrders[i].action = Instantiate(keyOrders[i].action);
+        }
+
+        protected override void SJUpdate()
+        {
+            for (int i = 0; i < keyOrders.Length; i++)
             {
-                foreach(Character.Order order in keyOrders[i].orders)
+                keyOrders[i].action.UpdateStatus();
+
+                if (keyOrders[i].action.WasTriggeredThisFrame)
                 {
-                    slave.SendOrder(order);
+                    var orders = keyOrders[i].orders;
+
+                    for (int j = 0; j < orders.Length; j++)
+                    {
+                        controllable.SendOrder(new Character.OrderEvent(orders[j], keyOrders[i].action.AxisValue));
+                    }
                 }
             }
         }
-    }
 
-    protected override object GetSaveData()
-    {
-        return new CharacterInputControllerSaveData() { slaveGUID = Slave.EntityGUID };
-    }
+        public class CharacterInputControllerSaveData
+        {
+            public string controllableGUID;
+        }
 
-    protected override void LoadSaveData(object data)
-    {
-        
-    }
+        protected override object GetSaveData()
+        {
+            return new CharacterInputControllerSaveData() { controllableGUID = Controllable.EntityGUID };
+        }
 
-    protected override void OnPostSave()
-    {
-        
-    }
+        protected override void LoadSaveData(object data)
+        {
 
-    protected override void OnPostLoad(object data)
-    {
-        CharacterInputControllerSaveData saveData = (CharacterInputControllerSaveData)data;
+        }
 
-        SetSlave(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.slaveGUID));
+        protected override void OnPostSave()
+        {
+
+        }
+
+        protected override void OnPostLoad(object data)
+        {
+            CharacterInputControllerSaveData saveData = (CharacterInputControllerSaveData)data;
+
+            SetControllable(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.controllableGUID));
+        }
     }
 }

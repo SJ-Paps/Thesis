@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 public static class Extensions
@@ -66,6 +67,17 @@ public static class Extensions
                 value = TValue;
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    public static bool ContainsType(this IEnumerable<object> enumerable, Type type)
+    {
+        foreach (object obj in enumerable)
+        {
+            if (type.IsAssignableFrom(obj.GetType()))
+                return true;
         }
 
         return false;

@@ -80,20 +80,20 @@ public class XenophobicIAController : IAController
 
     protected override void SJUpdate()
     {
-        if(Slave != null)
+        if(Controllable != null)
         {
             Control();
         }
     }
 
-    public override void Control()
+    private void Control()
     {
         hsm.Update();
     }
 
     protected override object GetSaveData()
     {
-        return new XenophobicIAControllerSaveData() { slaveGUID = Slave.EntityGUID };
+        return new XenophobicIAControllerSaveData() { slaveGUID = Controllable.EntityGUID };
     }
 
     protected override void LoadSaveData(object data)
@@ -110,6 +110,6 @@ public class XenophobicIAController : IAController
     {
         XenophobicIAControllerSaveData saveData = (XenophobicIAControllerSaveData)data;
 
-        SetSlave(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.slaveGUID));
+        SetControllable(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.slaveGUID));
     }
 }

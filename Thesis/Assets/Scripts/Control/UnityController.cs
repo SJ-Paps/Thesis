@@ -1,47 +1,27 @@
 ﻿using SJ.GameEntities;
 using UnityEngine;
 
-public delegate void ChangeControlDelegate<TSlave, TOrder>(TSlave previousSlave, TSlave newSlave) where TSlave : IControllable<TOrder> where TOrder : struct;
+public delegate void ChangeControlDelegate<TSlave, TOrder>(TSlave previousSlave, TSlave newSlave) where TSlave : IControllable<TOrder>;
 
-public interface IController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
+public interface IController<TControllable, TOrder> where TControllable : IControllable<TOrder>
 {
-    void Control();
-    void SetSlave(TSlave slave);
+    event ChangeControlDelegate<TControllable, TOrder> OnControllableChanged;
+    void SetControllable(TControllable controllable);
 }
 
-public abstract class UnityController<TSlave, TOrder> : SaveableGameEntity, IController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
+public abstract class UnityController<TControllable, TOrder> : SaveableGameEntity, IController<TControllable, TOrder> where TControllable : IControllable<TOrder>
 {
-    public event ChangeControlDelegate<TSlave, TOrder> onSlaveChanged;
+    public event ChangeControlDelegate<TControllable, TOrder> OnControllableChanged;
 
     [SerializeField]
-    protected TSlave slave;
+    protected TControllable controllable;
 
-    public TSlave Slave
+    public TControllable Controllable => controllable;
+
+    public void SetControllable(TControllable controllable)
     {
-        get
-        {
-            return slave;
-        }
-    }
-
-    public abstract void Control();
-
-    public void SetSlave(TSlave slave)
-    {
-        TSlave previous = this.slave;
-
-        this.slave = slave;
-
-        if(onSlaveChanged != null)
-        {
-            onSlaveChanged(previous, slave);
-        }
+        TControllable previous = this.controllable;
+        this.controllable = controllable;
+        OnControllableChanged?.Invoke(previous, controllable);
     }
 }
-
-public abstract class UnityInputController<TSlave, TOrder> : UnityController<TSlave, TOrder> where TSlave : IControllable<TOrder> where TOrder : struct
-{
-
-}
-
-

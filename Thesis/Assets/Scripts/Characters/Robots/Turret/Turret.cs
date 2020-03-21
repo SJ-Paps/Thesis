@@ -14,7 +14,7 @@ public class Turret : Robot, ISeer, IDamagable
         Attacking
     }
 
-    public event Action onDead;
+    public event Action OnDead;
 
     [SerializeField]
     protected Rigidbody2D head, body;

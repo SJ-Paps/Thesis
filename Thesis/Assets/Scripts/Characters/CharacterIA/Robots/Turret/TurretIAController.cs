@@ -46,14 +46,14 @@ public class TurretIAController : IAController
         Control();
     }
 
-    public override void Control()
+    private void Control()
     {
         hsm.Update();
     }
 
     protected override object GetSaveData()
     {
-        return new TurretIAControllerSaveData() { slaveGUID = Slave.EntityGUID };
+        return new TurretIAControllerSaveData() { slaveGUID = Controllable.EntityGUID };
     }
 
     protected override void LoadSaveData(object data)
@@ -70,6 +70,6 @@ public class TurretIAController : IAController
     {
         TurretIAControllerSaveData saveData = (TurretIAControllerSaveData)data;
 
-        SetSlave(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.slaveGUID));
+        SetControllable(SJUtil.FindGameEntityByEntityGUID<Character>(saveData.slaveGUID));
     }
 }
