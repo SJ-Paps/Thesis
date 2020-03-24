@@ -15,6 +15,7 @@ MonoBehaviour:
   bindingName: MoveMain
   positive: 100
   negative: 97
-  gravity: 1
+  gravity: 2
   sensitivity: 1
   deadZone: 0.5
+  snap: 1

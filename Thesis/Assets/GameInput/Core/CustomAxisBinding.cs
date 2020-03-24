@@ -3,7 +3,7 @@
 namespace SJ.GameInput
 {
     [CreateAssetMenu(menuName = "SJ/Game Input/Input Bindings/Custom Axis Binding")]
-    public class CustomAxisBinding : AxisBinding
+    public class CustomAxisBinding : AxisBinding, ISerializationCallbackReceiver
     {
         [SerializeField]
         private KeyCode positive, negative;
@@ -11,17 +11,41 @@ namespace SJ.GameInput
         [SerializeField]
         private float gravity, sensitivity, deadZone;
 
-        public KeyCode Positive { get => positive; set => positive = value; }
-        public KeyCode Negative { get => negative; set => negative = value; }
+        [SerializeField]
+        private bool snap;
+
+        public KeyCode Positive { get; set; }
+        public KeyCode Negative { get; set; }
+
+        public void OnAfterDeserialize()
+        {
+            Positive = positive;
+            Negative = negative;
+        }
+
+        public void OnBeforeSerialize()
+        {
+            
+        }
 
         protected override float UpdateAxisValue()
         {
             float newValue = 0;
 
             if (Input.GetKey(Positive))
-                newValue = AxisValue + (sensitivity * Time.deltaTime);
+            {
+                if (snap && AxisValue < 0)
+                    newValue = (sensitivity * Time.deltaTime);
+                else
+                    newValue = AxisValue + (sensitivity * Time.deltaTime);
+            }
             else if (Input.GetKey(Negative))
-                newValue = AxisValue - (sensitivity * Time.deltaTime);
+            {
+                if(snap && AxisValue > 0)
+                    newValue = (sensitivity * Time.deltaTime) * -1;
+                else
+                    newValue = AxisValue - (sensitivity * Time.deltaTime);
+            }
             else
             {
                 if (AxisValue > 0)
@@ -30,7 +54,7 @@ namespace SJ.GameInput
                     else
                     {
                         newValue = AxisValue - (gravity * Time.deltaTime);
-                        if (AxisValue < deadZone)
+                        if (newValue < deadZone)
                             newValue = 0;
                     }
                 else if (AxisValue < 0)
@@ -39,7 +63,7 @@ namespace SJ.GameInput
                     else
                     {
                         newValue = AxisValue + (gravity * Time.deltaTime);
-                        if (AxisValue > -deadZone)
+                        if (newValue > -deadZone)
                             newValue = 0;
                     }
             }

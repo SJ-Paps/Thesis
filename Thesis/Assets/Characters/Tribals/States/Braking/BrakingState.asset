@@ -9,13 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 558f2d88318d71243ac64722e69d432a, type: 3}
-  m_Name: MoveAlternativeBinding
+  m_Script: {fileID: 11500000, guid: 06918ea549a17494d9c80dabb1d063d5, type: 3}
+  m_Name: BrakingState
   m_EditorClassIdentifier: 
-  bindingName: MoveAlternative
-  positive: 275
-  negative: 276
-  gravity: 2
-  sensitivity: 1
-  deadZone: 0.5
-  snap: 1
+  _debugName: Braking
+  brakeForce: 0.5

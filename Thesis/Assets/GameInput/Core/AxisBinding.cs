@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace SJ.GameInput
+﻿namespace SJ.GameInput
 {
     public abstract class AxisBinding : InputBinding
     {

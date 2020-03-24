@@ -9,13 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 558f2d88318d71243ac64722e69d432a, type: 3}
-  m_Name: MoveAlternativeBinding
+  m_Script: {fileID: 11500000, guid: c4adaf1e98751dd419708796f7a1770f, type: 3}
+  m_Name: RunningState
   m_EditorClassIdentifier: 
-  bindingName: MoveAlternative
-  positive: 275
-  negative: 276
-  gravity: 2
-  sensitivity: 1
-  deadZone: 0.5
-  snap: 1
+  _debugName: Running

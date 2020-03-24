@@ -30,7 +30,8 @@ namespace SJ.GameEntities.Characters.Tribals
             Hidden,
             Pushing,
             Pulling,
-            ChoiceOnAir
+            ChoiceOnAir,
+            Braking,
         }
 
         public enum Trigger
@@ -71,17 +72,24 @@ namespace SJ.GameEntities.Characters.Tribals
             }
         }
 
-        public const string LastTriggerBlackboardKey = "LastTrigger";
+        public static class BlackboardKeys
+        {
+            public const string LastTrigger = "LastTrigger";
+            public const string MovingInitialDirectionAndForce = "MovingInitialDirectionAndForce";
+        }
 
-        public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
-        public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
-        public static readonly AnimatorParameterId WalkAnimatorTrigger = new AnimatorParameterId("Move");
-        public static readonly AnimatorParameterId IdleAnimatorTrigger = new AnimatorParameterId("Idle");
-        public static readonly AnimatorParameterId GroundAnimatorTrigger = new AnimatorParameterId("Ground");
-        public static readonly AnimatorParameterId FallAnimatorTrigger = new AnimatorParameterId("Fall");
-        public static readonly AnimatorParameterId JumpAnimatorTrigger = new AnimatorParameterId("Jump");
-        public static readonly AnimatorParameterId HideAnimatorTrigger = new AnimatorParameterId("Idle");
-        public static readonly AnimatorParameterId ClimbLedgeAnimatorTrigger = new AnimatorParameterId("ClimbLedge");
+        public static class AnimatorTriggers
+        {
+            public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
+            public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
+            public static readonly AnimatorParameterId WalkAnimatorTrigger = new AnimatorParameterId("Move");
+            public static readonly AnimatorParameterId IdleAnimatorTrigger = new AnimatorParameterId("Idle");
+            public static readonly AnimatorParameterId GroundAnimatorTrigger = new AnimatorParameterId("Ground");
+            public static readonly AnimatorParameterId FallAnimatorTrigger = new AnimatorParameterId("Fall");
+            public static readonly AnimatorParameterId JumpAnimatorTrigger = new AnimatorParameterId("Jump");
+            public static readonly AnimatorParameterId HideAnimatorTrigger = new AnimatorParameterId("Idle");
+            public static readonly AnimatorParameterId ClimbLedgeAnimatorTrigger = new AnimatorParameterId("ClimbLedge");
+        }
 
         public PercentageReversibleNumber MaxMovementVelocity { get; protected set; }
         public PercentageReversibleNumber MovementAcceleration { get; protected set; }
@@ -143,7 +151,7 @@ namespace SJ.GameEntities.Characters.Tribals
 
         private void SaveLastTrigger(Trigger trigger)
         {
-            blackboard.SetItem(LastTriggerBlackboardKey, trigger);
+            blackboard.SetItem(BlackboardKeys.LastTrigger, trigger);
         }
 
         protected override void SJLateUpdate()
@@ -186,13 +194,25 @@ namespace SJ.GameEntities.Characters.Tribals
         {
             ApplyForceOnDirection(direction, MovementAcceleration * extraForceMultiplier);
 
-            if (IsOverMaximumVelocity())
-                ClampVelocity(direction == FaceDirection.Left ? FaceDirection.Right : FaceDirection.Left, extraForceMultiplier);
+            ClampVelocityIfIsOverLimit();
         }
 
-        private bool IsOverMaximumVelocity()
+        public void Brake(float force)
         {
-            return RigidBody2D.velocity.x > MaxMovementVelocity || RigidBody2D.velocity.x < MaxMovementVelocity * -1;
+            if (CurrentVelocity.x > 0)
+            {
+                ApplyForceOnDirection(FaceDirection.Left, force);
+
+                if (CurrentVelocity.x < 0)
+                    StopCompletely();
+            }
+            else if(CurrentVelocity.x < 0)
+            {
+                ApplyForceOnDirection(FaceDirection.Right, force);
+
+                if (CurrentVelocity.x > 0)
+                    StopCompletely();
+            }
         }
 
         private void ApplyForceOnDirection(FaceDirection direction, float force)
@@ -200,9 +220,17 @@ namespace SJ.GameEntities.Characters.Tribals
             RigidBody2D.AddForce(new Vector2((int)direction * force, 0), ForceMode2D.Impulse);
         }
 
-        private void ClampVelocity(FaceDirection oppositeDirection, float extraForceMultiplier)
+        private void ClampVelocityIfIsOverLimit()
         {
-            ApplyForceOnDirection(oppositeDirection, MovementAcceleration * extraForceMultiplier);
+            if (RigidBody2D.velocity.x > MaxMovementVelocity)
+                RigidBody2D.velocity = new Vector2(MaxMovementVelocity, RigidBody2D.velocity.y);
+            else if(RigidBody2D.velocity.x < MaxMovementVelocity * -1)
+                RigidBody2D.velocity = new Vector2(MaxMovementVelocity * -1, RigidBody2D.velocity.y);
+        }
+
+        public void StopCompletely()
+        {
+            RigidBody2D.velocity = Vector2.zero;
         }
     }
 }

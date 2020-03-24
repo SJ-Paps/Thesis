@@ -4,7 +4,7 @@
     {
         protected override void OnEnter()
         {
-            var triggerToNextState = Blackboard.GetItemOf<Tribal.Trigger>(Tribal.LastTriggerBlackboardKey);
+            var triggerToNextState = Blackboard.GetItemOf<Tribal.Trigger>(Tribal.BlackboardKeys.LastTrigger);
 
             StateMachine.Trigger(triggerToNextState);
         }

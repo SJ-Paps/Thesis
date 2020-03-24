@@ -6,37 +6,30 @@ namespace SJ.GameEntities.Characters.Tribals.States
 {
     public class MovingState : TribalState, IUpdatable
     {
-        private const float VelocityDeadZone = 0.0002f;
-
         private bool shouldMove;
         private Character.FaceDirection moveDirection;
         private float moveForceMultiplier;
-
-        private bool isFirstUpdate;
+        private bool isMovingByWill;
 
         protected override void OnEnter()
         {
             Owner.SubscribeToFixedUpdate(this);
 
-            isFirstUpdate = true;
+            isMovingByWill = true;
         }
 
         protected override void OnUpdate()
         {
-            if(isFirstUpdate)
-            {
-                isFirstUpdate = false;
-                Move();
-                return;
-            }
-
-            if (IsInVelocityDeadZone())
+            if (isMovingByWill == false)
                 Trigger(Tribal.Trigger.Stop);
+                
+            isMovingByWill = false;
         }
 
         protected override void OnExit()
         {
             shouldMove = false;
+            isMovingByWill = false;
 
             Owner.UnsubscribeFromFixedUpdate(this);
         }
@@ -50,9 +43,17 @@ namespace SJ.GameEntities.Characters.Tribals.States
                     moveForceMultiplier = Math.Abs(ev.weight);
 
                     shouldMove = true;
+                    isMovingByWill = true;
+                    return true;
+
+                case Character.OrderType.Run:
+                    Trigger(Tribal.Trigger.Run);
+                    return true;
+
+                case Character.OrderType.Walk:
+                    Trigger(Tribal.Trigger.Walk);
                     return true;
             }
-
             
             return false;
         }
@@ -60,14 +61,12 @@ namespace SJ.GameEntities.Characters.Tribals.States
         public void DoFixedUpdate()
         {
             if (shouldMove)
+            {
+                Owner.Face(moveDirection);
                 Move();
+            }
 
             shouldMove = false;
-        }
-
-        private bool IsInVelocityDeadZone()
-        {
-            return Owner.CurrentVelocity.x > (VelocityDeadZone * -1) && Owner.CurrentVelocity.x < VelocityDeadZone;
         }
         
         private void Move()

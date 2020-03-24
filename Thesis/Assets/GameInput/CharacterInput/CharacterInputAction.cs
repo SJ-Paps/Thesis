@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace SJ.GameInput
 {
-    public class CharacterInputAction : InputAction
+    public class CharacterInputAction : InputAction, ISerializationCallbackReceiver
     {
         [SerializeField]
         private CustomAxisBinding mainKeyBinding, alternativeKeyBinding;
@@ -25,6 +26,7 @@ namespace SJ.GameInput
             }
         }
 
+        [NonSerialized]
         private AxisBinding lastTriggerd;
 
         private AxisBinding LastTriggered
@@ -70,6 +72,16 @@ namespace SJ.GameInput
             }
 
             return false;
+        }
+
+        public void OnBeforeSerialize()
+        {
+            
+        }
+
+        public void OnAfterDeserialize()
+        {
+            
         }
     }
 }

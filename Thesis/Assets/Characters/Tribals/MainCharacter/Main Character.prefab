@@ -936,8 +936,8 @@ MonoBehaviour:
   enableFixedUpdate: 1
   entityGUID: 036c6a5d-4fd3-45ff-ae42-a9f578b177a6
   prefabName: Main Character
-  maxMovementVelocity: 4
-  movementAcceleration: 0.5
+  maxMovementVelocity: 3
+  movementAcceleration: 1
   jumpMaxHeight: 0
   jumpAcceleration: 0
   hsmBuilder: {fileID: 11400000, guid: d17cde24881972249bc5d0ed44976893, type: 2}
