@@ -1,4 +1,5 @@
-﻿using NaughtyAttributes;
+﻿using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace SJ.GameEntities
@@ -11,20 +12,30 @@ namespace SJ.GameEntities
 
         public string PrefabName { get { return prefabName; } }
 
+        private List<ISaveProcessor> saveProcessors = new List<ISaveProcessor>();
+
         protected override void SJAwake()
         {
-            SJ.Application.GameManager.SubscribeSaveable(this);
+            Application.GameManager.SubscribeSaveable(this);
         }
 
         public GameplayObjectSave Save()
         {
-            return new GameplayObjectSave(EntityGUID, PrefabName, GetSaveData());
+            var save = GetSaveData();
+
+            for (int i = 0; i < saveProcessors.Count; i++)
+                saveProcessors[i].Save(save);
+
+            return new GameplayObjectSave(EntityGUID, PrefabName, save);
         }
 
         public void Load(GameplayObjectSave data)
         {
             EntityGUID = data.EntityGuid;
             LoadSaveData(data.Save);
+
+            for (int i = 0; i < saveProcessors.Count; i++)
+                saveProcessors[i].Load(data.Save);
         }
 
         public void PostSaveCallback()
@@ -37,6 +48,17 @@ namespace SJ.GameEntities
             OnPostLoad(data.Save);
         }
 
+        public void AddSaveProcessor(ISaveProcessor saveProcessor)
+        {
+            if (saveProcessors.Contains(saveProcessor) == false)
+                saveProcessors.Add(saveProcessor);
+        }
+
+        public bool RemoveSaveProcessor(ISaveProcessor saveProcessor)
+        {
+            return saveProcessors.Remove(saveProcessor);
+        }
+
         protected override void SJOnDestroy()
         {
             if (UnityEngine.Application.isEditor == false)
@@ -47,8 +69,9 @@ namespace SJ.GameEntities
 
         protected abstract object GetSaveData();
         protected abstract void LoadSaveData(object data);
-        protected abstract void OnPostSave();
-        protected abstract void OnPostLoad(object data);
+
+        protected virtual void OnPostSave() { }
+        protected virtual void OnPostLoad(object data) { }
 
 #if UNITY_EDITOR
 
@@ -56,6 +79,11 @@ namespace SJ.GameEntities
         {
             base.OnValidate();
 
+            SavePrefabName();
+        }
+
+        public void SavePrefabName()
+        {
             GameObject prefab = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource<GameObject>(gameObject);
 
             if (prefab != null)
@@ -63,7 +91,6 @@ namespace SJ.GameEntities
                 prefabName = prefab.name;
             }
         }
-
 #endif
     }
 }

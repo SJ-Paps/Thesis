@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SJ.GameEntities.Characters;
+using UnityEngine;
 using UnityEngine.Animations;
 
 public abstract class CollectableObject : ActivableObject<Character>, IInventoriable {

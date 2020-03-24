@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SJ.GameEntities.Characters;
+using UnityEngine;
 
 public class MovableObject : ActivableObject<Character> {
     

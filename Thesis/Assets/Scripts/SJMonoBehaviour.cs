@@ -11,14 +11,11 @@ namespace SJ
         public static event Action<SJMonoBehaviour> OnDestruction;
 
         [SerializeField]
-        private bool enableUpdate = false;
+        private bool enableUpdate = false, enableLateUpdate = false, enableFixedUpdate = false;
 
         public bool EnableUpdate
         {
-            get
-            {
-                return enableUpdate;
-            }
+            get => enableUpdate;
 
             set
             {
@@ -26,7 +23,37 @@ namespace SJ
                 {
                     enableUpdate = value;
 
-                    UpdateEnableUpdateSubscription();
+                    UpdateUpdaterSubscriptions();
+                }
+            }
+        }
+
+        public bool EnableLateUpdate
+        {
+            get => enableLateUpdate;
+
+            set
+            {
+                if(enableLateUpdate != value)
+                {
+                    enableLateUpdate = value;
+
+                    UpdateUpdaterSubscriptions();
+                }
+            }
+        }
+
+        public bool EnableFixedUpdate
+        {
+            get => enableFixedUpdate;
+
+            set
+            {
+                if(enableFixedUpdate != value)
+                {
+                    enableFixedUpdate = value;
+
+                    UpdateUpdaterSubscriptions();
                 }
             }
         }
@@ -78,21 +105,27 @@ namespace SJ
 
         }
 
-        private void UpdateEnableUpdateSubscription()
+        private void UpdateUpdaterSubscriptions()
         {
-            if (EnableUpdate && gameObject.activeSelf && this.enabled)
-            {
-                SJ.Application.Updater.Subscribe(this);
-            }
+            if (EnableUpdate && gameObject.activeSelf && enabled)
+                Application.Updater.SubscribeToUpdate(this);
             else
-            {
-                SJ.Application.Updater.Unsubscribe(this);
-            }
+                Application.Updater.UnsubscribeFromUpdate(this);
+
+            if (EnableLateUpdate && gameObject.activeSelf && enabled)
+                Application.Updater.SubscribeToLateUpdate(this);
+            else
+                Application.Updater.UnsubscribeFromLateUpdate(this);
+
+            if (EnableFixedUpdate && gameObject.activeSelf && enabled)
+                Application.Updater.SubscribeToFixedUpdate(this);
+            else
+                Application.Updater.UnsubscribeFromFixedUpdate(this);
         }
 
         private void OnEnable()
         {
-            UpdateEnableUpdateSubscription();
+            UpdateUpdaterSubscriptions();
 
             SJOnEnable();
         }
@@ -104,7 +137,7 @@ namespace SJ
 
         private void OnDisable()
         {
-            UpdateEnableUpdateSubscription();
+            UpdateUpdaterSubscriptions();
 
             SJOnDisable();
         }
@@ -118,7 +151,9 @@ namespace SJ
         {
             OnDestruction?.Invoke(this);
 
-            Application.Updater.Unsubscribe(this);
+            Application.Updater.UnsubscribeFromUpdate(this);
+            Application.Updater.UnsubscribeFromLateUpdate(this);
+            Application.Updater.UnsubscribeFromFixedUpdate(this);
 
             SJOnDestroy();
         }
@@ -164,7 +199,7 @@ namespace SJ
 
             for(fixedUpdateListenersCurrentIndex = 0; fixedUpdateListenersCurrentIndex < fixedUpdateListeners.Count; fixedUpdateListenersCurrentIndex++)
             {
-                lateUpdateListeners[fixedUpdateListenersCurrentIndex].DoFixedUpdate();
+                fixedUpdateListeners[fixedUpdateListenersCurrentIndex].DoFixedUpdate();
             }
         }
 
@@ -191,19 +226,28 @@ namespace SJ
         public void UnsubscribeFromUpdate(IUpdatable updatable)
         {
             if (updateListeners.Remove(updatable))
-                updateListenersCurrentIndex--;
+            {
+                if(updateListenersCurrentIndex > 0)
+                    updateListenersCurrentIndex--;
+            }
         }
 
         public void UnsubscribeFromLateUpdate(IUpdatable updatable)
         {
             if (lateUpdateListeners.Remove(updatable))
-                lateUpdateListenersCurrentIndex--;
+            {
+                if(lateUpdateListenersCurrentIndex > 0)
+                    lateUpdateListenersCurrentIndex--;
+            }
         }
 
         public void UnsubscribeFromFixedUpdate(IUpdatable updatable)
         {
             if (fixedUpdateListeners.Remove(updatable))
-                fixedUpdateListenersCurrentIndex--;
+            {
+                if(fixedUpdateListenersCurrentIndex > 0)
+                    fixedUpdateListenersCurrentIndex--;
+            } 
         }
     }
 }

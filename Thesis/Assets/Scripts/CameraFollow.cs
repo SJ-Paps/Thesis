@@ -1,4 +1,6 @@
 ﻿using SJ;
+using SJ.GameEntities.Characters;
+using SJ.GameEntities.Characters.Tribals;
 using UnityEngine;
 
 public class CameraFollow : SJMonoBehaviour {

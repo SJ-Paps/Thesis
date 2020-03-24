@@ -1,4 +1,6 @@
-﻿public class ContextualActivable : ActivableObject<Character>
+﻿using SJ.GameEntities.Characters;
+
+public class ContextualActivable : ActivableObject<Character>
 {
     public override bool Activate(Character user)
     {

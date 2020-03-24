@@ -31,11 +31,15 @@ namespace SJ.Updatables
             }
         }
 
-        private List<IUpdatable> updateables;
+        private int updateListenersCurrentIndex = 0;
+        private int lateUpdateListenersCurrentIndex = 0;
+        private int fixedUpdateListenersCurrentIndex = 0;
+
+        private List<IUpdatable> updateListeners = new List<IUpdatable>();
+        private List<IUpdatable> lateUpdateListeners = new List<IUpdatable>();
+        private List<IUpdatable> fixedUpdateListeners = new List<IUpdatable>();
 
         private UpdateManagerObject objectInstance;
-
-        private int currentIndex = 0;
 
         public bool IsActive
         {
@@ -47,8 +51,6 @@ namespace SJ.Updatables
 
         public UpdateManager()
         {
-            updateables = new List<IUpdatable>();
-
             GameObject gameObject = new GameObject(nameof(UpdateManagerObject));
 
             objectInstance = gameObject.AddComponent<UpdateManagerObject>();
@@ -58,18 +60,50 @@ namespace SJ.Updatables
             objectInstance.SetUpdateManager(this);
         }
 
-        public void Subscribe(IUpdatable updateable)
+        public void SubscribeToUpdate(IUpdatable updateable)
         {
-            updateables.Add(updateable);
+            updateListeners.Add(updateable);
         }
 
-        public void Unsubscribe(IUpdatable updateable)
+        public void UnsubscribeFromUpdate(IUpdatable updateable)
         {
-            if (updateables.Remove(updateable))
+            if (updateListeners.Remove(updateable))
             {
-                if (currentIndex > 0)
+                if (updateListenersCurrentIndex > 0)
                 {
-                    currentIndex--;
+                    updateListenersCurrentIndex--;
+                }
+            }
+        }
+
+        public void SubscribeToLateUpdate(IUpdatable updateable)
+        {
+            lateUpdateListeners.Add(updateable);
+        }
+
+        public void UnsubscribeFromLateUpdate(IUpdatable updateable)
+        {
+            if (lateUpdateListeners.Remove(updateable))
+            {
+                if (lateUpdateListenersCurrentIndex > 0)
+                {
+                    lateUpdateListenersCurrentIndex--;
+                }
+            }
+        }
+
+        public void SubscribeToFixedUpdate(IUpdatable updateable)
+        {
+            fixedUpdateListeners.Add(updateable);
+        }
+
+        public void UnsubscribeFromFixedUpdate(IUpdatable updateable)
+        {
+            if (fixedUpdateListeners.Remove(updateable))
+            {
+                if (fixedUpdateListenersCurrentIndex > 0)
+                {
+                    fixedUpdateListenersCurrentIndex--;
                 }
             }
         }
@@ -86,53 +120,53 @@ namespace SJ.Updatables
 
         private void ExecuteUpdates()
         {
-            for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
+            for (updateListenersCurrentIndex = 0; updateListenersCurrentIndex < updateListeners.Count; updateListenersCurrentIndex++)
             {
                 if (IsActive == false)
                 {
                     break;
                 }
 
-                IUpdatable updateableItem = updateables[currentIndex];
+                IUpdatable updateableItem = updateListeners[updateListenersCurrentIndex];
 
                 updateableItem.DoUpdate();
             }
 
-            currentIndex = 0;
+            updateListenersCurrentIndex = 0;
         }
 
         private void ExecuteLateUpdates()
         {
-            for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
+            for (lateUpdateListenersCurrentIndex = 0; lateUpdateListenersCurrentIndex < lateUpdateListeners.Count; lateUpdateListenersCurrentIndex++)
             {
                 if (IsActive == false)
                 {
                     break;
                 }
 
-                IUpdatable updateableItem = updateables[currentIndex];
+                IUpdatable updateableItem = lateUpdateListeners[lateUpdateListenersCurrentIndex];
 
                 updateableItem.DoLateUpdate();
             }
 
-            currentIndex = 0;
+            lateUpdateListenersCurrentIndex = 0;
         }
 
         private void ExecuteFixedUpdates()
         {
-            for (currentIndex = 0; currentIndex < updateables.Count; currentIndex++)
+            for (fixedUpdateListenersCurrentIndex = 0; fixedUpdateListenersCurrentIndex < fixedUpdateListeners.Count; fixedUpdateListenersCurrentIndex++)
             {
                 if (IsActive == false)
                 {
                     break;
                 }
 
-                IUpdatable updateableItem = updateables[currentIndex];
+                IUpdatable updateableItem = fixedUpdateListeners[fixedUpdateListenersCurrentIndex];
 
                 updateableItem.DoFixedUpdate();
             }
 
-            currentIndex = 0;
+            fixedUpdateListenersCurrentIndex = 0;
         }
     }
 }

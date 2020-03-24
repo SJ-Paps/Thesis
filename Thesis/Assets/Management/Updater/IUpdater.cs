@@ -1,15 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace SJ.Updatables
+﻿namespace SJ.Updatables
 {
     public interface IUpdater
     {
         bool IsActive { get; }
 
-        void Subscribe(IUpdatable updatable);
-        void Unsubscribe(IUpdatable updateable);
+        void SubscribeToUpdate(IUpdatable updatable);
+        void UnsubscribeFromUpdate(IUpdatable updateable);
+        void SubscribeToLateUpdate(IUpdatable updatable);
+        void UnsubscribeFromLateUpdate(IUpdatable updateable);
+        void SubscribeToFixedUpdate(IUpdatable updatable);
+        void UnsubscribeFromFixedUpdate(IUpdatable updateable);
         void Enable();
         void Disable();
     }
