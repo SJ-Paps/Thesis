@@ -2,7 +2,7 @@
 using Paps.Unity;
 using UnityEngine;
 
-namespace SJ.Updatables
+namespace SJ.Management
 {
     public class UpdateManager : IUpdater
     {
@@ -35,9 +35,9 @@ namespace SJ.Updatables
         private int lateUpdateListenersCurrentIndex = 0;
         private int fixedUpdateListenersCurrentIndex = 0;
 
-        private List<IUpdatable> updateListeners = new List<IUpdatable>();
-        private List<IUpdatable> lateUpdateListeners = new List<IUpdatable>();
-        private List<IUpdatable> fixedUpdateListeners = new List<IUpdatable>();
+        private List<IUpdateListener> updateListeners = new List<IUpdateListener>();
+        private List<ILateUpdateListener> lateUpdateListeners = new List<ILateUpdateListener>();
+        private List<IFixedUpdateListener> fixedUpdateListeners = new List<IFixedUpdateListener>();
 
         private UpdateManagerObject objectInstance;
 
@@ -60,12 +60,12 @@ namespace SJ.Updatables
             objectInstance.SetUpdateManager(this);
         }
 
-        public void SubscribeToUpdate(IUpdatable updateable)
+        public void SubscribeToUpdate(IUpdateListener updateable)
         {
             updateListeners.Add(updateable);
         }
 
-        public void UnsubscribeFromUpdate(IUpdatable updateable)
+        public void UnsubscribeFromUpdate(IUpdateListener updateable)
         {
             if (updateListeners.Remove(updateable))
             {
@@ -76,12 +76,12 @@ namespace SJ.Updatables
             }
         }
 
-        public void SubscribeToLateUpdate(IUpdatable updateable)
+        public void SubscribeToLateUpdate(ILateUpdateListener updateable)
         {
             lateUpdateListeners.Add(updateable);
         }
 
-        public void UnsubscribeFromLateUpdate(IUpdatable updateable)
+        public void UnsubscribeFromLateUpdate(ILateUpdateListener updateable)
         {
             if (lateUpdateListeners.Remove(updateable))
             {
@@ -92,12 +92,12 @@ namespace SJ.Updatables
             }
         }
 
-        public void SubscribeToFixedUpdate(IUpdatable updateable)
+        public void SubscribeToFixedUpdate(IFixedUpdateListener updateable)
         {
             fixedUpdateListeners.Add(updateable);
         }
 
-        public void UnsubscribeFromFixedUpdate(IUpdatable updateable)
+        public void UnsubscribeFromFixedUpdate(IFixedUpdateListener updateable)
         {
             if (fixedUpdateListeners.Remove(updateable))
             {
@@ -127,7 +127,7 @@ namespace SJ.Updatables
                     break;
                 }
 
-                IUpdatable updateableItem = updateListeners[updateListenersCurrentIndex];
+                var updateableItem = updateListeners[updateListenersCurrentIndex];
 
                 updateableItem.DoUpdate();
             }
@@ -144,7 +144,7 @@ namespace SJ.Updatables
                     break;
                 }
 
-                IUpdatable updateableItem = lateUpdateListeners[lateUpdateListenersCurrentIndex];
+                var updateableItem = lateUpdateListeners[lateUpdateListenersCurrentIndex];
 
                 updateableItem.DoLateUpdate();
             }
@@ -161,7 +161,7 @@ namespace SJ.Updatables
                     break;
                 }
 
-                IUpdatable updateableItem = fixedUpdateListeners[fixedUpdateListenersCurrentIndex];
+                var updateableItem = fixedUpdateListeners[fixedUpdateListenersCurrentIndex];
 
                 updateableItem.DoFixedUpdate();
             }

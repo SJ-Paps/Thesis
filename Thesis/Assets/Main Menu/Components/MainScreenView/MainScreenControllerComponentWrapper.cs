@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using SJ.Management;
+using UnityEngine;
+using Application = SJ.Management.Application;
 
 namespace SJ.Menu
 {

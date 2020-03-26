@@ -6,7 +6,9 @@ public static class Reg
 {
     public static readonly string AssetBundleMainFileName = "AssetBundles";
     private static readonly string AssetBundleDirectoryBase = Path.Combine(Application.streamingAssetsPath, "AssetBundles");
-    
+
+    public static readonly string ConfigurationFilesPath = Path.Combine(Application.persistentDataPath, "GameConfiguration");
+
     public static readonly string AssetBundleDirectoryBuildWindows = Path.Combine(AssetBundleDirectoryBase, "Windows", AssetBundleMainFileName);
     public static readonly string AssetBundleDirectoryBuildMacOS = Path.Combine(AssetBundleDirectoryBase, "MacOS", AssetBundleMainFileName);
     
@@ -20,6 +22,9 @@ public static class Reg
     
     public const string ApplicationSettingsAssetName = "ApplicationSettings";
     public const string LanguageSettingsAssetName = "LanguageSettings";
+    public const string DefaultGameSettingsAssetName = "DefaultGameSettings";
+    public const string DefaultGameInputSettingsAssetName = "DefaultGameInputSettings";
+    
 
 #if UNITY_EDITOR
     public static readonly string BuildPath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), Application.productName), Application.productName + ".exe");

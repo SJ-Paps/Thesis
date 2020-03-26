@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using SJ.Management;
+using Application = SJ.Management.Application;
 
 public class SaveGameTrigger : SJBoxCollider2D
 {
@@ -17,7 +17,7 @@ public class SaveGameTrigger : SJBoxCollider2D
 
     private void SaveOnce(Collider2D collider)
     {
-        SJ.Application.GameManager.Save();
+        Application.GameManager.Save();
         gameObject.SetActive(false);
         onStayTrigger -= saveOnceDelegate;
     }

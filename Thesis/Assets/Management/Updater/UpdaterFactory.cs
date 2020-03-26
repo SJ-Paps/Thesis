@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace SJ.Updatables
+﻿namespace SJ.Management
 {
     public static class UpdaterFactory
     {

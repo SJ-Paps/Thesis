@@ -1,15 +1,15 @@
-﻿namespace SJ.Updatables
+﻿namespace SJ.Management
 {
     public interface IUpdater
     {
         bool IsActive { get; }
 
-        void SubscribeToUpdate(IUpdatable updatable);
-        void UnsubscribeFromUpdate(IUpdatable updateable);
-        void SubscribeToLateUpdate(IUpdatable updatable);
-        void UnsubscribeFromLateUpdate(IUpdatable updateable);
-        void SubscribeToFixedUpdate(IUpdatable updatable);
-        void UnsubscribeFromFixedUpdate(IUpdatable updateable);
+        void SubscribeToUpdate(IUpdateListener updatable);
+        void UnsubscribeFromUpdate(IUpdateListener updateable);
+        void SubscribeToLateUpdate(ILateUpdateListener updatable);
+        void UnsubscribeFromLateUpdate(ILateUpdateListener updateable);
+        void SubscribeToFixedUpdate(IFixedUpdateListener updatable);
+        void UnsubscribeFromFixedUpdate(IFixedUpdateListener updateable);
         void Enable();
         void Disable();
     }

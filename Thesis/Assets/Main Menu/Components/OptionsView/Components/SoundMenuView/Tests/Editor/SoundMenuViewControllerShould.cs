@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
 using SJ.Audio;
+using SJ.Management;
 using SJ.Menu;
 using System;
 using UniRx;

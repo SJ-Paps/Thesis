@@ -19,38 +19,14 @@ namespace SJ.GameEntities.Characters
 
         public enum OrderType
         {
-            Die,
-            Ground,
             Jump,
-            Fall,
             Hide,
-            Attack,
-            StopAttacking,
-            StopMoving,
-            StopHiding,
-            StopPushing,
-            Push,
-            Grapple,
-            StandUp,
-            Duck,
+            GetUp,
+            GetDown,
             Move,
             Walk,
-            Trot,
             Run,
-            ClimbUp,
-            ClimbDown,
-            HangLedge,
-            HangRope,
-            HangLadder,
-            StopHanging,
             Activate,
-            Throw,
-            Shock,
-            Drop,
-            SwitchActivables,
-            Collect,
-            FinishAction,
-            HangWall,
         }
 
         public enum FaceDirection
@@ -81,6 +57,7 @@ namespace SJ.GameEntities.Characters
 
         public void SendOrder(Order order)
         {
+            Debug.Log("ORDER: " + order.type);
             OnOrderReceived?.Invoke(order);
 
             OnSendOrder(order);

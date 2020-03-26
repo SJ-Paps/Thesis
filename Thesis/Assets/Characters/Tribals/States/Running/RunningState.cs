@@ -22,5 +22,16 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
             Owner.MaxMovementVelocity.RemovePercentageConstraint(velocityConstraintId);
         }
+
+        protected override bool OnHandleEvent(Character.Order ev)
+        {
+            if (ev.type == Character.OrderType.Run)
+            {
+                Trigger(Tribal.Trigger.Trot);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

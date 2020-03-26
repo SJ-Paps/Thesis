@@ -1,14 +1,12 @@
 ﻿using Paps.Maybe;
-using SJ.Profiles;
-using SJ.Save;
+using SJ.GameEntities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
 using UniRx;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using SJ.GameEntities;
 
 namespace SJ.Management
 {
@@ -64,7 +62,6 @@ namespace SJ.Management
                     if (maybeProfile.IsNothing())
                         CreateDefaultProfile(profile)
                             .Do(profileData => currentProfileData = profileData)
-                            .Do(_ => OnSessionBegan?.Invoke())
                             .Do(_ => NewGame())
                             .Subscribe();
                     else
@@ -107,8 +104,6 @@ namespace SJ.Management
 
         public void Save()
         {
-            Debug.Log("Save");
-
             ISaveableGameEntity[] currentSaveables = saveables.ToArray();
             GameplayObjectSave[] saves = Array.ConvertAll(currentSaveables, saveable => saveable.Save());
 
@@ -149,7 +144,9 @@ namespace SJ.Management
                     else
                         LoadGameplayScenes(sessionData.loadedScenes)
                             .ContinueWith(LoadEntities(sessionData))
-                            .Subscribe(_ => OnLoadingSucceeded?.Invoke());
+                            .Do(_ => OnLoadingSucceeded?.Invoke())
+                            .Do(_ => OnSessionBegan?.Invoke())
+                            .Subscribe();
                 },
                 error => OnLoadingFailed?.Invoke());
         }
@@ -189,7 +186,9 @@ namespace SJ.Management
             OnLoading?.Invoke();
 
             LoadGameplayScenes(beginScenes)
-                .Subscribe(_ => OnLoadingSucceeded?.Invoke());
+                .Do(_ => OnLoadingSucceeded?.Invoke())
+                .Do(_ => OnSessionBegan?.Invoke())
+                .Subscribe();
         }
 
         private IObservable<Unit> LoadGameplayScenes(string[] sceneNames)
@@ -235,8 +234,6 @@ namespace SJ.Management
 
         public void Reload()
         {
-            Debug.Log("Reload");
-
             LoadGame();
         }
 

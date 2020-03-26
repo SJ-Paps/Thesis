@@ -1,4 +1,4 @@
-﻿using UniRx;
+﻿using SJ.Management;
 
 namespace SJ.Localization
 {

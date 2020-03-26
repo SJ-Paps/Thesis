@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Application = SJ.Management.Application;
 
 namespace SJ.Localization
 {

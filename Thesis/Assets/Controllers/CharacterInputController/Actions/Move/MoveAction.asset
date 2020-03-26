@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00ba53d6ff9f3974ead155472ff09361, type: 3}
+  m_Script: {fileID: 11500000, guid: 558f2d88318d71243ac64722e69d432a, type: 3}
   m_Name: MoveAction
   m_EditorClassIdentifier: 
   actionName: Move
-  mainKeyBinding: {fileID: 11400000, guid: 8679f703d4ca4d44d952230c62afbc14, type: 2}
-  alternativeKeyBinding: {fileID: 11400000, guid: ec1304c5fde9fec4399cbbc000bc4a7b,
-    type: 2}
-  joystickBinding: {fileID: 0}
+  defaultPositives: 1301000064000000
+  defaultNegatives: 1401000061000000
+  gravity: 2
+  sensitivity: 1
+  deadZone: 0.5
+  snap: 1

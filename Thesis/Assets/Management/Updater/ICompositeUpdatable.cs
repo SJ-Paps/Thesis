@@ -1,14 +1,14 @@
-﻿namespace SJ.Updatables
+﻿namespace SJ.Management
 {
-    public interface ICompositeUpdatable : IUpdatable
+    public interface ICompositeUpdatable : IUpdateListener, ILateUpdateListener, IFixedUpdateListener
     {
-        void SubscribeToUpdate(IUpdatable updatable);
-        void SubscribeToLateUpdate(IUpdatable updatable);
-        void SubscribeToFixedUpdate(IUpdatable updatable);
+        void SubscribeToUpdate(IUpdateListener updatable);
+        void SubscribeToLateUpdate(ILateUpdateListener updatable);
+        void SubscribeToFixedUpdate(IFixedUpdateListener updatable);
 
-        void UnsubscribeFromUpdate(IUpdatable updatable);
-        void UnsubscribeFromLateUpdate(IUpdatable updatable);
-        void UnsubscribeFromFixedUpdate(IUpdatable updatable);
+        void UnsubscribeFromUpdate(IUpdateListener updatable);
+        void UnsubscribeFromLateUpdate(ILateUpdateListener updatable);
+        void UnsubscribeFromFixedUpdate(IFixedUpdateListener updatable);
     }
 }
 

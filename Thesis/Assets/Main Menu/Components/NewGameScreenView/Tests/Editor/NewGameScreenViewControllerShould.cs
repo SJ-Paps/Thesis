@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SJ.Localization;
 using SJ.Management;
 using SJ.Menu;
-using SJ.Profiles;
 using System;
 using UniRx;
 

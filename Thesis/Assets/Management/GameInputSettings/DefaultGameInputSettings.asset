@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 370126bb050a1cd4692f35826eeed180, type: 3}
+  m_Name: DefaultGameInputSettings
+  m_EditorClassIdentifier: 
+  holdDuckKey: 1
+  holdWalkKey: 1
+  keyGroups:
+  - name: MoveLeft
+    main: 97
+    alternative: 276
+  - name: MoveRight
+    main: 100
+    alternative: 275
+  - name: Walk
+    main: 308
+    alternative: 0
+  - name: Run
+    main: 304
+    alternative: 0

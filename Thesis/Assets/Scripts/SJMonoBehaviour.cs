@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using SJ.Management;
 using System;
-using SJ.Updatables;
 using System.Collections.Generic;
+using UnityEngine;
+using Application = SJ.Management.Application;
 
 namespace SJ
 {
@@ -62,9 +63,9 @@ namespace SJ
         private int lateUpdateListenersCurrentIndex = 0;
         private int fixedUpdateListenersCurrentIndex = 0;
 
-        private List<IUpdatable> updateListeners = new List<IUpdatable>();
-        private List<IUpdatable> lateUpdateListeners = new List<IUpdatable>();
-        private List<IUpdatable> fixedUpdateListeners = new List<IUpdatable>();
+        private List<IUpdateListener> updateListeners = new List<IUpdateListener>();
+        private List<ILateUpdateListener> lateUpdateListeners = new List<ILateUpdateListener>();
+        private List<IFixedUpdateListener> fixedUpdateListeners = new List<IFixedUpdateListener>();
 
         protected SJMonoBehaviour()
         {
@@ -208,22 +209,22 @@ namespace SJ
 
         }
 
-        public void SubscribeToUpdate(IUpdatable updatable)
+        public void SubscribeToUpdate(IUpdateListener updatable)
         {
             updateListeners.Add(updatable);
         }
 
-        public void SubscribeToLateUpdate(IUpdatable updatable)
+        public void SubscribeToLateUpdate(ILateUpdateListener updatable)
         {
             lateUpdateListeners.Add(updatable);
         }
 
-        public void SubscribeToFixedUpdate(IUpdatable updatable)
+        public void SubscribeToFixedUpdate(IFixedUpdateListener updatable)
         {
             fixedUpdateListeners.Add(updatable);
         }
 
-        public void UnsubscribeFromUpdate(IUpdatable updatable)
+        public void UnsubscribeFromUpdate(IUpdateListener updatable)
         {
             if (updateListeners.Remove(updatable))
             {
@@ -232,7 +233,7 @@ namespace SJ
             }
         }
 
-        public void UnsubscribeFromLateUpdate(IUpdatable updatable)
+        public void UnsubscribeFromLateUpdate(ILateUpdateListener updatable)
         {
             if (lateUpdateListeners.Remove(updatable))
             {
@@ -241,7 +242,7 @@ namespace SJ
             }
         }
 
-        public void UnsubscribeFromFixedUpdate(IUpdatable updatable)
+        public void UnsubscribeFromFixedUpdate(IFixedUpdateListener updatable)
         {
             if (fixedUpdateListeners.Remove(updatable))
             {

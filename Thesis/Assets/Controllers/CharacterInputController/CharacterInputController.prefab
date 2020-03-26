@@ -49,6 +49,6 @@ MonoBehaviour:
   entityGUID: 915a3128-fbbf-4f10-a2a6-a9dbfd086569
   prefabName: CharacterInputController
   controllable: {fileID: 0}
-  keyOrders:
-  - action: {fileID: 11400000, guid: 881a9798f9bbd6644822ac1bf53d8b89, type: 2}
-    orders: 0e000000
+  moveAction: {fileID: 11400000, guid: 881a9798f9bbd6644822ac1bf53d8b89, type: 2}
+  walkAction: {fileID: 11400000, guid: eaf7afdc485d64f48b9679aa23b16898, type: 2}
+  runAction: {fileID: 11400000, guid: 5e13088c646d5684fa777401aa4e4833, type: 2}

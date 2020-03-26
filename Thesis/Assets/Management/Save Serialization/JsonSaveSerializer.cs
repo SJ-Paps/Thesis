@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SJ.Save
+namespace SJ.Management
 {
     public class JsonSaveSerializer : ISaveSerializer
     {

@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: RunningState
   m_EditorClassIdentifier: 
   _debugName: Running
+  _instantiateThis: 1
+  velocityConstraintPercentage: 180

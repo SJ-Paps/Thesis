@@ -1,9 +1,9 @@
-﻿using SJ.Updatables;
+﻿using SJ.Management;
 using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class BrakingState : TribalState, IUpdatable
+    public class BrakingState : TribalState, IFixedUpdateListener
     {
         [SerializeField]
         private float brakeForce;
@@ -41,9 +41,5 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
             return false;
         }
-
-        public void DoLateUpdate() { }
-
-        public void DoUpdate() { }
     }
 }

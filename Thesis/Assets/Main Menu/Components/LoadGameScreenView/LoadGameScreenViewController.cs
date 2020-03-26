@@ -1,5 +1,4 @@
 ﻿using SJ.Management;
-using SJ.Profiles;
 using UniRx;
 
 namespace SJ.Menu

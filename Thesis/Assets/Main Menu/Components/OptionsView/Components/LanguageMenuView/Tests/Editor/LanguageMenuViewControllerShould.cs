@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
 using SJ.Localization;
+using SJ.Management;
 using SJ.Menu;
 using System;
 using System.Collections.Generic;

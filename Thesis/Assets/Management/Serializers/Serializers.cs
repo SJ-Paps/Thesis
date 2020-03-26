@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using SJ.Save;
-
-namespace SJ
+﻿namespace SJ.Management
 {
     public static class Serializers
     {
@@ -12,9 +7,7 @@ namespace SJ
         public static ISaveSerializer GetSaveSerializer()
         {
             if(saveSerializer == null)
-            {
                 saveSerializer = new JsonSaveSerializer();
-            }
 
             return saveSerializer;
         }

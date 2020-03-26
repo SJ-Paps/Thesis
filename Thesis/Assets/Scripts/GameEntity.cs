@@ -34,10 +34,17 @@ namespace SJ.GameEntities
 
 #if UNITY_EDITOR
 
-        protected virtual void OnValidate()
+        private void OnValidate()
         {
             if(string.IsNullOrEmpty(EntityGUID))
                 EntityGUID = Guid.NewGuid().ToString();
+
+            SJValidate();
+        }
+
+        protected virtual void SJValidate()
+        {
+
         }
 
 #endif

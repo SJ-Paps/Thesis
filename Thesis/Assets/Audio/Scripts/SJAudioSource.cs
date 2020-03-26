@@ -1,5 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using Application = SJ.Management.Application;
 
 namespace SJ.Audio
 {

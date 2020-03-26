@@ -665,18 +665,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93ed46ad27ded2242b25fa273b79edb5, type: 3}
---- !u!114 &182080690 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 157407283385696697, guid: 93ed46ad27ded2242b25fa273b79edb5,
-    type: 3}
-  m_PrefabInstance: {fileID: 182080689}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33ca396920c45a34cab2966d1f94cfe5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,16 +907,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6991404102758268297, guid: e8add2735bec2cb44bfe7352484c456c,
-        type: 3}
-      propertyPath: actions.Array.data[0].action.m_SingletonActionBindings.Array.data[0].m_Processors
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6991404102758268297, guid: e8add2735bec2cb44bfe7352484c456c,
-        type: 3}
-      propertyPath: mainMenuPrefab
-      value: 
-      objectReference: {fileID: 182080690}
     - target: {fileID: 6991404102758268299, guid: e8add2735bec2cb44bfe7352484c456c,
         type: 3}
       propertyPath: m_Name

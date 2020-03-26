@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace SJ
+namespace SJ.Management
 {
     [CreateAssetMenu(fileName = "ApplicationSettings", menuName = "Application Settings Asset")]
     public class ApplicationSettings : ScriptableObject
@@ -10,12 +9,9 @@ namespace SJ
         private string[] beginningScenes;
         [SerializeField]
         private string returnSceneOnEndSession;
-        [SerializeField]
-        private GameSettings defaultGameSettings;
 
         public string[] BeginningScenes { get => beginningScenes; }
         public string ReturnSceneOnEndSession { get => returnSceneOnEndSession; }
-        public GameSettings DefaultGameSettings { get => defaultGameSettings; }
     }
 
 }

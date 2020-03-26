@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using Application = SJ.Management.Application;
 
 namespace SJ.GameEntities
 {
@@ -75,10 +76,8 @@ namespace SJ.GameEntities
 
 #if UNITY_EDITOR
 
-        protected override void OnValidate()
+        protected override void SJValidate()
         {
-            base.OnValidate();
-
             SavePrefabName();
         }
 

@@ -1,4 +1,6 @@
-﻿namespace SJ.Menu
+﻿using SJ.Management;
+
+namespace SJ.Menu
 {
     public class LanguageMenuViewControllerComponentWrapper : SJMonoBehaviour
     {

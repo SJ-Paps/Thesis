@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace SJ.Save
+﻿namespace SJ.Management
 {
     public interface ISaveSerializer
     {

@@ -1,12 +1,10 @@
 ﻿using SJ.Audio;
 using SJ.Coroutines;
 using SJ.Localization;
-using SJ.Management;
-using SJ.Updatables;
 using System;
 using UniRx;
 
-namespace SJ
+namespace SJ.Management
 {
     public static class Application
     {

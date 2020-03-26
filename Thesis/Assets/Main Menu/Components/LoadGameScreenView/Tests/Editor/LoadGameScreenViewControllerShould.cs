@@ -2,10 +2,9 @@
 using NUnit.Framework;
 using SJ.Management;
 using SJ.Menu;
-using SJ.Profiles;
 using System;
-using UniRx;
 using System.Linq;
+using UniRx;
 
 namespace SJ.Tests
 {

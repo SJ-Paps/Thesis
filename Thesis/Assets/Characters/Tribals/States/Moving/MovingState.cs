@@ -1,10 +1,9 @@
-﻿using SJ.Updatables;
+﻿using SJ.Management;
 using System;
-using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class MovingState : TribalState, IUpdatable
+    public class MovingState : TribalState, IFixedUpdateListener
     {
         private bool shouldMove;
         private Character.FaceDirection moveDirection;
@@ -73,9 +72,5 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             Owner.Move(moveDirection, moveForceMultiplier);
         }
-
-        public void DoLateUpdate() { }
-
-        public void DoUpdate() { }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using SJ.Localization;
-using SJ.Profiles;
-using UniRx;
 using SJ.Management;
+using UniRx;
 
 namespace SJ.Menu
 {

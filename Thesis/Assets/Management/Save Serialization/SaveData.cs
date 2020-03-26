@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SJ.Save
+namespace SJ.Management
 {
     public struct SaveData
     {

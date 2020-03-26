@@ -1,8 +1,6 @@
-﻿using SJ.Management;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
-namespace SJ
+namespace SJ.Management
 {
     public class ApplicationInitializer : MonoBehaviour
     {
