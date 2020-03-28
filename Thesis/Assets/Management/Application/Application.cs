@@ -1,5 +1,5 @@
-﻿using SJ.Audio;
-using SJ.Localization;
+﻿using SJ.Management.Audio;
+using SJ.Management.Localization;
 using System;
 using UniRx;
 

@@ -1,4 +1,7 @@
-﻿public abstract class BlackboardItem
+﻿namespace SJ.Tools
 {
-    public abstract object GetValueObject();
+    public abstract class BlackboardItem
+    {
+        public abstract object GetValueObject();
+    }
 }

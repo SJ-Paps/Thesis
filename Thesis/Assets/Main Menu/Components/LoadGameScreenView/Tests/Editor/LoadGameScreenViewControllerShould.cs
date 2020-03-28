@@ -5,6 +5,7 @@ using SJ.Menu;
 using System;
 using System.Linq;
 using UniRx;
+using UnityEngine.Events;
 
 namespace SJ.Tests
 {
@@ -119,6 +120,16 @@ namespace SJ.Tests
             view.OnProfileDeleteClicked += Raise.Event<Action<string>>(Profile1);
 
             view.Received(1).ShowProfiles(Arg.Is<string[]>(array => array.Contains(Profile1) == false && array.Contains(Profile2)));
+        }
+
+        [Test]
+        public void Return_To_Main_Screen_When_Back_Button_Is_Clicked()
+        {
+            GivenAController();
+
+            view.OnBackButtonClicked += Raise.Event<UnityAction>();
+
+            mainMenu.Received(1).FocusMainScreen();
         }
 
         private void GivenAController()

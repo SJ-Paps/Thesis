@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Paps.Unity
+namespace SJ.Tools
 {
     public static class UnityUtil
     {

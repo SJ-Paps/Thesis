@@ -1,4 +1,4 @@
-﻿using SJ.Localization;
+﻿using SJ.Management.Localization;
 using SJ.Management;
 using UniRx;
 

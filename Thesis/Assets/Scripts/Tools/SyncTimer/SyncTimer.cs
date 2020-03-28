@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SJ
+namespace SJ.Tools
 {
     public class SyncTimer
     {

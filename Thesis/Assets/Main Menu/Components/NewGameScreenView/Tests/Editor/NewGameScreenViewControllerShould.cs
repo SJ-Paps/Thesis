@@ -1,10 +1,12 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
-using SJ.Localization;
+using SJ.Management.Localization;
 using SJ.Management;
 using SJ.Menu;
 using System;
 using UniRx;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace SJ.Tests
 {
@@ -69,6 +71,10 @@ namespace SJ.Tests
         [Test]
         public void Hide_Error_Message_When_Starts_Processing_Input()
         {
+            var gameSettings = ScriptableObject.CreateInstance<GameSettings>();
+
+            gameSettingsRepository.GetSettings().Returns(Observable.Return(gameSettings));
+
             view.OnNewProfileSubmitted += Raise.Event<Action<string>>(NewProfile);
 
             view.Received(1).HideErrorMessage();
@@ -99,6 +105,14 @@ namespace SJ.Tests
             view.OnNewProfileSubmitted += Raise.Event<Action<string>>(NewProfile);
 
             gameManager.Received(1).BeginSessionFor(NewProfile);
+        }
+
+        [Test]
+        public void Return_To_Main_Screen_When_Back_Button_Is_Clicked()
+        {
+            view.OnBackButtonClicked += Raise.Event<UnityAction>();
+
+            mainMenu.Received(1).FocusMainScreen();
         }
     }
 }

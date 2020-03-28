@@ -1,30 +1,33 @@
 ﻿using System;
 
-public class BlackboardItem<T> : BlackboardItem
+namespace SJ.Tools
 {
-    public event Action<T> OnValueChanged;
-
-    private T value;
-
-    public BlackboardItem(T value)
+    public class BlackboardItem<T> : BlackboardItem
     {
-        this.value = value;
-    }
+        public event Action<T> OnValueChanged;
 
-    public void SetValue(T value)
-    {
-        this.value = value;
+        private T value;
 
-        OnValueChanged?.Invoke(this.value);
-    }
+        public BlackboardItem(T value)
+        {
+            this.value = value;
+        }
 
-    public T GetValue()
-    {
-        return value;
-    }
+        public void SetValue(T value)
+        {
+            this.value = value;
 
-    public override object GetValueObject()
-    {
-        return value;
+            OnValueChanged?.Invoke(this.value);
+        }
+
+        public T GetValue()
+        {
+            return value;
+        }
+
+        public override object GetValueObject()
+        {
+            return value;
+        }
     }
 }

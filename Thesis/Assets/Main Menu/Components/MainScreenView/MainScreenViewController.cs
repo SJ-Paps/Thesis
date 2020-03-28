@@ -1,4 +1,4 @@
-﻿using SJ.Localization;
+﻿using SJ.Management.Localization;
 using SJ.Management;
 using UniRx;
 
@@ -22,10 +22,10 @@ namespace SJ.Menu
             this.mainMenu = mainMenu;
             this.translatorService = translatorService;
 
-            SubscribeToEvents();
+            Initialize();
         }
 
-        private void SubscribeToEvents()
+        private void Initialize()
         {
             view.OnAppeared += ShowButtonsDependingOnApplicationState;
 

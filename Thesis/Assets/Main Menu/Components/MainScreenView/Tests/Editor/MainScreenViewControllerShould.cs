@@ -5,7 +5,8 @@ using NSubstitute;
 using System;
 using UniRx;
 using UnityEngine.Events;
-using SJ.Localization;
+using SJ.Management.Localization;
+using UnityEngine;
 
 namespace SJ.Tests
 {
@@ -59,6 +60,10 @@ namespace SJ.Tests
         public void Show_In_Menu_If_Is_Not_In_Game()
         {
             gameManager.IsInGame().Returns(false);
+
+            var gameSettings = ScriptableObject.CreateInstance<GameSettings>();
+
+            gameSettingsRepository.GetSettings().Returns(Observable.Return(gameSettings));
 
             view.OnAppeared += Raise.Event<Action>();
 
