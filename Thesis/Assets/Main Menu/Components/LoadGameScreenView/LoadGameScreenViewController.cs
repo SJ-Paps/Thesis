@@ -9,23 +9,26 @@ namespace SJ.Menu
         private IProfileRepository profileRepository;
         private IGameSettingsRepository gameSettingsRepository;
         private IGameManager gameManager;
+        private IMainMenu mainMenu;
 
         public LoadGameScreenViewController(ILoadGameScreenView view, IProfileRepository profileRepository,
-            IGameSettingsRepository gameSettingsRepository, IGameManager gameManager)
+            IGameSettingsRepository gameSettingsRepository, IGameManager gameManager, IMainMenu mainMenu)
         {
             this.view = view;
             this.profileRepository = profileRepository;
             this.gameSettingsRepository = gameSettingsRepository;
             this.gameManager = gameManager;
+            this.mainMenu = mainMenu;
 
-            SubscribeToEvents();
+            Initialize();
         }
 
-        private void SubscribeToEvents()
+        private void Initialize()
         {
             view.OnAppeared += UpdateProfiles;
             view.OnProfileSelectClicked += BeginSessionFor;
             view.OnProfileDeleteClicked += DeleteProfile;
+            view.OnBackButtonClicked += mainMenu.FocusMainScreen;
 
             UpdateProfiles();
         }

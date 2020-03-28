@@ -48,10 +48,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
                 case Character.OrderType.Run:
                     Trigger(Tribal.Trigger.Run);
                     return true;
-
-                case Character.OrderType.Walk:
-                    Trigger(Tribal.Trigger.Walk);
-                    return true;
             }
             
             return false;

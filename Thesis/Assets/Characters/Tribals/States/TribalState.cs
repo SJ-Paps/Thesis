@@ -1,5 +1,6 @@
 ﻿using Paps.HierarchicalStateMachine_ToolsForUnity;
 using Paps.StateMachines;
+using SJ.Tools;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {

@@ -16,6 +16,7 @@ namespace SJ.Tests
         private IProfileRepository profileRepository;
         private IGameSettingsRepository gameSettingsRepository;
         private IGameManager gameManager;
+        private IMainMenu mainMenu;
 
         private LoadGameScreenViewController controller;
 
@@ -28,6 +29,7 @@ namespace SJ.Tests
             profileRepository = Substitute.For<IProfileRepository>();
             gameSettingsRepository = Substitute.For<IGameSettingsRepository>();
             gameManager = Substitute.For<IGameManager>();
+            mainMenu = Substitute.For<IMainMenu>();
         }
 
         [Test]
@@ -121,7 +123,7 @@ namespace SJ.Tests
 
         private void GivenAController()
         {
-            controller = new LoadGameScreenViewController(view, profileRepository, gameSettingsRepository, gameManager);
+            controller = new LoadGameScreenViewController(view, profileRepository, gameSettingsRepository, gameManager, mainMenu);
         }
 
         private void GivenTheseSavedProfiles(params string[] profiles)

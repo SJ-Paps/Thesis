@@ -59,6 +59,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableUpdate: 1
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
   langTag: menu_button_accept
   option: 3
 --- !u!114 &3272632708621023620
@@ -638,8 +640,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
   inputField: {fileID: 4591727612648307089}
   submitButton: {fileID: 8319898061775074190}
+  backButton: {fileID: 2334140248312717474}
   notificationText: {fileID: 5706787309878949888}
 --- !u!114 &8757676564332647840
 MonoBehaviour:
@@ -654,6 +659,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
+  mainMenu: {fileID: 0}
 --- !u!1 &4567217535306373414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,6 +1033,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
   langTag: menu_new_game_enter_profile
   option: 4
 --- !u!114 &6760745389556312115
@@ -1282,3 +1292,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5557431993755486000}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2334140248312717474 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7889038553885239186, guid: 0519a93af7ac6c447a45b61c943cb720,
+    type: 3}
+  m_PrefabInstance: {fileID: 5557431993755486000}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

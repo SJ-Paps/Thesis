@@ -11,17 +11,25 @@ namespace SJ.Menu
         private IGameSettingsRepository gameSettingsRepository;
         private ITranslatorService translatorService;
         private IGameManager gameManager;
+        private IMainMenu mainMenu;
 
         public NewGameScreenViewController(INewGameScreenView view, IProfileRepository profileRepository, 
-            IGameSettingsRepository gameSettingsRepository, ITranslatorService translatorService, IGameManager gameManager)
+            IGameSettingsRepository gameSettingsRepository, ITranslatorService translatorService, IGameManager gameManager, IMainMenu mainMenu)
         {
             this.view = view;
             this.profileRepository = profileRepository;
             this.gameSettingsRepository = gameSettingsRepository;
             this.translatorService = translatorService;
             this.gameManager = gameManager;
+            this.mainMenu = mainMenu;
 
-            this.view.OnNewProfileSubmitted += ProcessProfileInput;
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            view.OnNewProfileSubmitted += ProcessProfileInput;
+            view.OnBackButtonClicked += mainMenu.FocusMainScreen;
         }
 
         private void ProcessProfileInput(string profile)

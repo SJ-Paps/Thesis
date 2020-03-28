@@ -167,3 +167,4 @@ MonoBehaviour:
   loadActions:
   - {fileID: 11400000, guid: 4384cd244b86bad409c54e16431733ee, type: 2}
   - {fileID: 11400000, guid: 45920c78d13476a4d83e4903891f1d64, type: 2}
+  - {fileID: 11400000, guid: 60c43a0e19b89f44ca2ca7873ff68ba3, type: 2}

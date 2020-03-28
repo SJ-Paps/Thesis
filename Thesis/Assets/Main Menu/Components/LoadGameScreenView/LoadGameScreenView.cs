@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace SJ.Menu
 {
@@ -12,11 +14,20 @@ namespace SJ.Menu
         [SerializeField]
         private Transform profileInfoItemLayout;
 
+        [SerializeField]
+        private Button backButton;
+
         private List<ProfileInfoItem> items = new List<ProfileInfoItem>();
 
         public event Action OnAppeared;
         public event Action<string> OnProfileSelectClicked;
         public event Action<string> OnProfileDeleteClicked;
+
+        public event UnityAction OnBackButtonClicked
+        {
+            add { backButton.onClick.AddListener(value); }
+            remove { backButton.onClick.RemoveListener(value); }
+        }
 
         protected override void SJOnEnable()
         {

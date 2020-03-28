@@ -20,9 +20,15 @@
     <line tag="menu_load_game_choose_profile">choose a profile</line>
     <line tag="menu_new_game_enter_profile">enter new profile</line>
 
-    <line tag="options_menu_text_language">language settings</line>
-    <line tag="options_menu_text_sound">sound settings</line>
-    
+    <line tag="options_menu_language_settings">language settings</line>
+    <line tag="options_menu_sound_settings">sound settings</line>
+    <line tag="options_menu_game_input_settings">control settings</line>
+
+    <line tag="game_input_settings_menu_hold_duck_key">hold crouch key</line>
+    <line tag="game_input_settings_menu_hold_walk_key">hold walk key</line>
+    <line tag="game_input_settings_menu_keyboard_mapping">map keyboard</line>
+    <line tag="game_input_settings_menu_joystick_mapping">gamepad controls</line>
+    <line tag="game_input_settings_menu_save_configuration">save configuration</line>
 
     <line tag="soundchannel_general">general volume</line>
     <line tag="soundchannel_music">music volume</line>
@@ -32,6 +38,7 @@
     <line tag="confirmation_menu_cancel">cancel</line>
 
     <line tag="confirmation_menu_message_exit">are you sure you want to quit?</line>
+    <line tag="confirmation_menu_message_save_settings">do you want to save configuration?</line>
 
     <line tag="loading">loading</line>
 

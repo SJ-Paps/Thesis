@@ -19,9 +19,16 @@
 
     <line tag="menu_load_game_choose_profile">elija un perfil</line>
     <line tag="menu_new_game_enter_profile">ingrese un nombre de perfil</line>
-    
-    <line tag="options_menu_text_language">idioma</line>
-    <line tag="options_menu_text_sound">configuracion de sonido</line>
+
+    <line tag="options_menu_language_settings">configuración de idioma</line>
+    <line tag="options_menu_sound_settings">configuración de sonido</line>
+    <line tag="options_menu_game_input_settings">configuración de controles</line>
+
+    <line tag="game_input_settings_menu_hold_duck_key">mantener apretado "agacharse"</line>
+    <line tag="game_input_settings_menu_hold_walk_key">mantener apretado "caminar"</line>
+    <line tag="game_input_settings_menu_keyboard_mapping">configurar controles de teclado</line>
+    <line tag="game_input_settings_menu_joystick_mapping">controles de gamepad</line>
+    <line tag="game_input_settings_menu_save_configuration">guardar configuración</line>
     
     <line tag="soundchannel_general">volumen general</line>
     <line tag="soundchannel_music">volumen de música</line>
@@ -31,6 +38,7 @@
     <line tag="confirmation_menu_cancel">cancelar</line>
     
     <line tag="confirmation_menu_message_exit">¿esta seguro de que desea salir?</line>
+    <line tag="confirmation_menu_message_save_settings">¿desea guardar la configuracion?</line>
     
     <line tag="loading">cargando</line>
 

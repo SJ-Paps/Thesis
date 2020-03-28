@@ -14,7 +14,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
             Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.WalkAnimatorTrigger);
 
             velocityConstraintId = Owner.MaxMovementVelocity.AddPercentageConstraint(velocityConstraintPercentage);
-
         }
 
         protected override void OnExit()
@@ -22,17 +21,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
             Owner.Animator.ResetTrigger(Tribal.AnimatorTriggers.WalkAnimatorTrigger);
 
             Owner.MaxMovementVelocity.RemovePercentageConstraint(velocityConstraintId);
-        }
-
-        protected override bool OnHandleEvent(Character.Order ev)
-        {
-            if(ev.type == Character.OrderType.Walk)
-            {
-                Trigger(Tribal.Trigger.Trot);
-                return true;
-            }
-
-            return false;
         }
     }
 }

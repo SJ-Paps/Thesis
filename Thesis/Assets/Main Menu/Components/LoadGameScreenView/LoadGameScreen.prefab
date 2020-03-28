@@ -202,9 +202,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
   profileInfoItemPrefab: {fileID: 2672195720871449947, guid: fb86d8512db17544d9732c758bc8822c,
     type: 3}
   profileInfoItemLayout: {fileID: 6111381763008016157}
+  backButton: {fileID: 2614708436845100013}
 --- !u!114 &4307977196173185997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +221,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
+  mainMenu: {fileID: 0}
 --- !u!1 &2335057599545966240
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,6 +359,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
   langTag: menu_load_game_choose_profile
   option: 4
 --- !u!114 &2305665940956177380
@@ -963,3 +971,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5274332797646838911}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2614708436845100013 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7889038553885239186, guid: 0519a93af7ac6c447a45b61c943cb720,
+    type: 3}
+  m_PrefabInstance: {fileID: 5274332797646838911}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

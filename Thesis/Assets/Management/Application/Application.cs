@@ -1,5 +1,4 @@
 ﻿using SJ.Audio;
-using SJ.Coroutines;
 using SJ.Localization;
 using System;
 using UniRx;
@@ -11,7 +10,6 @@ namespace SJ.Management
         public static IUpdater Updater { get; private set; }
         public static ITranslatorService TranslatorService { get; private set; }
         public static ISoundService SoundService { get; private set; }
-        public static ICoroutineScheduler CoroutineScheduler { get; private set; }
         public static IGameManager GameManager { get; private set; }
         public static ApplicationSettings ApplicationSettings { get; private set; }
 
@@ -41,7 +39,6 @@ namespace SJ.Management
             Updater = UpdaterFactory.Create();
             TranslatorService = TranslatorServiceFactory.Create();
             SoundService = SoundServiceFactory.Create();
-            CoroutineScheduler = CoroutineSchedulerFactory.Create();
             GameManager = new GameManager(Repositories.GetProfileRepository(), ApplicationSettings);
 
             IsInitialized = true;

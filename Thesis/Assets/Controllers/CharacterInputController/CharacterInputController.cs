@@ -134,11 +134,6 @@ namespace SJ.GameEntities.Controllers
 
         }
 
-        protected override void OnPostSave()
-        {
-
-        }
-
         protected override void OnPostLoad(object data)
         {
             CharacterInputControllerSaveData saveData = (CharacterInputControllerSaveData)data;

@@ -1,6 +1,7 @@
 ﻿using Paps.HierarchicalStateMachine_ToolsForUnity;
 using Paps.StateMachines;
 using SJ.GameEntities.Characters.Tribals.States;
+using SJ.Tools;
 using System;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ namespace SJ.GameEntities.Characters.Tribals
             Pulling,
             ChoiceOnAir,
             Braking,
+            ChoiceMoving
         }
 
         public enum Trigger
@@ -76,6 +78,7 @@ namespace SJ.GameEntities.Characters.Tribals
         {
             public const string LastTrigger = "LastTrigger";
             public const string MovingInitialDirectionAndForce = "MovingInitialDirectionAndForce";
+            public const string WalkMode = "WalkMode";
         }
 
         public static class AnimatorTriggers
@@ -91,16 +94,16 @@ namespace SJ.GameEntities.Characters.Tribals
             public static readonly AnimatorParameterId ClimbLedgeAnimatorTrigger = new AnimatorParameterId("ClimbLedge");
         }
 
+        public Animator Animator { get; protected set; }
+        public Rigidbody2D RigidBody2D { get; protected set; }
+        public SJCapsuleCollider2D Collider { get; protected set; }
+
         public PercentageReversibleNumber MaxMovementVelocity { get; protected set; }
         public PercentageReversibleNumber MovementAcceleration { get; protected set; }
         public PercentageReversibleNumber JumpMaxHeight { get; protected set; }
         public PercentageReversibleNumber JumpAcceleration { get; protected set; }
 
         public Vector2 CurrentVelocity => RigidBody2D.velocity;
-
-        public Animator Animator { get; protected set; }
-        public Rigidbody2D RigidBody2D { get; protected set; }
-        public SJCapsuleCollider2D Collider { get; protected set; }
 
         public event Action OnDead;
 

@@ -20,6 +20,7 @@ namespace SJ.Tests
         private IGameSettingsRepository gameSettingsRepository;
         private ITranslatorService translatorService;
         private IGameManager gameManager;
+        private IMainMenu mainMenu;
 
         private NewGameScreenViewController controller;
 
@@ -31,11 +32,12 @@ namespace SJ.Tests
             gameSettingsRepository = Substitute.For<IGameSettingsRepository>();
             translatorService = Substitute.For<ITranslatorService>();
             gameManager = Substitute.For<IGameManager>();
+            mainMenu = Substitute.For<IMainMenu>();
 
             translatorService.GetLineByTagOfCurrentLanguage(InvalidProfileNameLanguageTag).Returns(InvalidProfileNameTranslation);
             translatorService.GetLineByTagOfCurrentLanguage(ProfileInUseLanguageTag).Returns(ProfileInUseTranslation);
 
-            controller = new NewGameScreenViewController(view, profileRepository, gameSettingsRepository, translatorService, gameManager);
+            controller = new NewGameScreenViewController(view, profileRepository, gameSettingsRepository, translatorService, gameManager, mainMenu);
         }
 
         [Test]

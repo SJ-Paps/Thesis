@@ -61,7 +61,7 @@ namespace SJ.Management
         public IObservable<Unit> SaveSettings()
         {
             return GetSettings()
-                .SelectMany(gameSettings => Observable.Start(() => SaveSettings(gameSettings)));
+                .SelectMany(gameSettings => Observable.Start(() => SaveSettings(gameSettings), Scheduler.Immediate));
         }
 
         private void SaveSettings(GameInputSettings settings)

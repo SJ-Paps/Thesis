@@ -57,7 +57,6 @@ namespace SJ.GameEntities.Characters
 
         public void SendOrder(Order order)
         {
-            Debug.Log("ORDER: " + order.type);
             OnOrderReceived?.Invoke(order);
 
             OnSendOrder(order);

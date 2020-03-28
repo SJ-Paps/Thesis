@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace SJ.Menu
@@ -11,12 +12,18 @@ namespace SJ.Menu
         private TMP_InputField inputField;
 
         [SerializeField]
-        private Button submitButton;
+        private Button submitButton, backButton;
 
         [SerializeField]
         private TextMeshProUGUI notificationText;
 
         public event Action<string> OnNewProfileSubmitted;
+
+        public event UnityAction OnBackButtonClicked
+        {
+            add { backButton.onClick.AddListener(value); }
+            remove { backButton.onClick.RemoveListener(value); }
+        }
 
         protected override void SJAwake()
         {
