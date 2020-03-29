@@ -7,5 +7,6 @@ namespace SJ.Management
     {
         IObservable<GameInputSettings> GetSettings();
         IObservable<Unit> SaveSettings();
+        IObservable<Unit> ResetDefaults();
     }
 }

@@ -14,6 +14,7 @@ namespace SJ.Menu
         }
 
         private const string SaveConfirmationMessageLanguageTag = "confirmation_menu_message_save_settings";
+        private const string ResetDefaultConfirmationMessageLanguageTag = "confirmation_menu_message_reset_defaults";
 
         private IGameInputSettingsScreenView view;
         private IGameInputSettingsRepository gameInputSettingsRepository;
@@ -47,6 +48,8 @@ namespace SJ.Menu
 
             view.OnGoToKeyboardMappingClicked += view.FocusKeyboardMappingScreen;
             view.OnGoToJoystickMappingClicked += view.FocusJoystickMappingScreen;
+
+            view.OnResetDefaultsButtonClicked += ShowResetDefaultsConfirmationPopup;
 
             RefreshSettings();
         }
@@ -124,6 +127,18 @@ namespace SJ.Menu
         private void GoBack()
         {
             optionsScreenView.FocusMainScreen();
+        }
+
+        private void ShowResetDefaultsConfirmationPopup()
+        {
+            view.ShowApplyConfirmationPopup(translatorService.GetLineByTagOfCurrentLanguage(ResetDefaultConfirmationMessageLanguageTag), ResetDefaults, () => { });
+        }
+
+        private void ResetDefaults()
+        {
+            gameInputSettingsRepository.ResetDefaults()
+                .Do(_ => RefreshSettings())
+                .Subscribe();
         }
     }
 }

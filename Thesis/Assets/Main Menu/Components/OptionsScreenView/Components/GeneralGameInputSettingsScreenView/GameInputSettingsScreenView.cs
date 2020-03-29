@@ -11,7 +11,7 @@ namespace SJ.Menu
         private Toggle holdDuckKeyToggle, holdWalkKeyToggle;
 
         [SerializeField]
-        private Button goToKeyboardMappingButton, goToJoystickMapButton, saveButton, backButton;
+        private Button goToKeyboardMappingButton, goToJoystickMapButton, saveButton, backButton, resetDefaultsButton;
 
         [SerializeField]
         private GameObject mainScreen, keyboardMappingScreen, joystickMapScreen;
@@ -45,6 +45,11 @@ namespace SJ.Menu
         {
             add { backButton.onClick.AddListener(value); }
             remove { backButton.onClick.RemoveListener(value); }
+        }
+        public event UnityAction OnResetDefaultsButtonClicked
+        {
+            add { resetDefaultsButton.onClick.AddListener(value); }
+            remove { resetDefaultsButton.onClick.RemoveListener(value); }
         }
 
         public event Action OnAppeared;

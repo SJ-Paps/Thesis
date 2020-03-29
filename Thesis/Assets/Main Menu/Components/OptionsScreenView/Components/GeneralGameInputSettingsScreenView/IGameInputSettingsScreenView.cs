@@ -11,6 +11,7 @@ namespace SJ.Menu
         event UnityAction OnGoToJoystickMappingClicked;
         event UnityAction OnSaveButtonClicked;
         event UnityAction OnBackButtonClicked;
+        event UnityAction OnResetDefaultsButtonClicked;
         event Action OnAppeared;
 
         void FocusKeyboardMappingScreen();

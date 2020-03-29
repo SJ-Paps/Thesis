@@ -29,6 +29,13 @@
     <line tag="game_input_settings_menu_keyboard_mapping">map keyboard</line>
     <line tag="game_input_settings_menu_joystick_mapping">gamepad controls</line>
     <line tag="game_input_settings_menu_save_configuration">save configuration</line>
+    <line tag="game_input_settings_menu_reset_defaults">reset default settings</line>
+    
+    <line tag="keyboard_mapping_menu_reset_settings">reset</line>
+    <line tag="keyboard_mapping_menu_save_configuration">save configuration</line>
+    <line tag="keyboard_mapping_menu_action_column">action</line>
+    <line tag="keyboard_mapping_menu_main_key_column">main</line>
+    <line tag="keyboard_mapping_menu_alternative_key_column">alternative</line>
 
     <line tag="soundchannel_general">general volume</line>
     <line tag="soundchannel_music">music volume</line>
@@ -39,6 +46,8 @@
 
     <line tag="confirmation_menu_message_exit">are you sure you want to quit?</line>
     <line tag="confirmation_menu_message_save_settings">do you want to save configuration?</line>
+    <line tag="confirmation_menu_message_reset_settings">are you sure you want to cancel changes?</line>
+    <line tag="confirmation_menu_message_reset_defaults">are you sure you want to reset to default settings?</line>
 
     <line tag="loading">loading</line>
 

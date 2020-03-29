@@ -96,5 +96,12 @@ namespace SJ.Management
                 return null;
             }
         }
+
+        public IObservable<Unit> ResetDefaults()
+        {
+            gameInputSettings = defaultGameInputSettings.Instantiate();
+
+            return SaveSettings();
+        }
     }
 }
