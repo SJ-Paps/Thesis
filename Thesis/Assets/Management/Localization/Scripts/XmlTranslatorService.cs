@@ -106,7 +106,7 @@ namespace SJ.Management.Localization
 
         public string GetLineByTagOfCurrentLanguage(string tag)
         {
-            return localizedTextContainers[CurrentLanguage].GetLineByTagAttribute(tag);
+            return localizedTextContainers[CurrentLanguage].GetLineByTagAttribute(tag.ToLower());
         }
 
         public string GetLineByTagOfLanguage(string language, string tag)

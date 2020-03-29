@@ -62,11 +62,11 @@ namespace SJ.Menu
             OnAppeared?.Invoke();
         }
 
-        public void CreateInputKeyGroupControl(string name, KeyCode main, KeyCode alternative, string mainDisplayName, string alternativeDisplayName)
+        public void CreateInputKeyGroupControl(string name, string displayName, KeyCode main, KeyCode alternative, string mainDisplayName, string alternativeDisplayName)
         {
             var newControl = inputKeyGroupControlPrefab.Instantiate(inputKeyGroupControlsLayout);
 
-            newControl.SetInfo(name, main, alternative, mainDisplayName, alternativeDisplayName);
+            newControl.SetInfo(name, displayName, main, alternative, mainDisplayName, alternativeDisplayName);
             newControl.OnRequestedMainKeyRebind += CallOnRequestedMainKeyRebind;
             newControl.OnRequestedAlternativeKeyRebind += CallOnRequestedAlternativeKeyRebind;
 

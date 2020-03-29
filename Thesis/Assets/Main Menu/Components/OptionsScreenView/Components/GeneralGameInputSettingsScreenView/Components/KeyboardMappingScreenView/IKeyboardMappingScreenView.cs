@@ -14,7 +14,7 @@ namespace SJ.Menu
         event UnityAction OnBackButtonClicked;
         event Action OnAppeared;
 
-        void CreateInputKeyGroupControl(string name, KeyCode main, KeyCode alternative, string mainDisplayName, string alternativeDisplayName);
+        void CreateInputKeyGroupControl(string name, string displayName, KeyCode main, KeyCode alternative, string mainDisplayName, string alternativeDisplayName);
         void UpdateMainKeyOf(string name, KeyCode main, string displayName);
         void UpdateAlternativeKeyOf(string name, KeyCode alternative, string displayName);
         void ShowAsModifiableMainOf(string name);

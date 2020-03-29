@@ -17,7 +17,7 @@ namespace SJ.Menu
         [SerializeField]
         private Image mainModifiableImageFeedback, alternativeModifiableImageFeedback;
 
-        public string GroupName => nameText.text;
+        public string GroupName { get; private set; }
 
         public KeyCode Main { get; private set; }
         public KeyCode Alternative { get; private set; }
@@ -31,9 +31,10 @@ namespace SJ.Menu
             alternativeKeyDoubleClickGraphic.OnTriggered += OnAlternativeKeyDoubleClick;
         }
 
-        public void SetInfo(string name, KeyCode main, KeyCode alternative, string mainDisplayName, string alternativeDisplayName)
+        public void SetInfo(string name, string displayName, KeyCode main, KeyCode alternative, string mainDisplayName, string alternativeDisplayName)
         {
-            nameText.text = name;
+            GroupName = name;
+            nameText.text = displayName;
             Main = main;
             Alternative = alternative;
             mainKeyText.text = mainDisplayName;

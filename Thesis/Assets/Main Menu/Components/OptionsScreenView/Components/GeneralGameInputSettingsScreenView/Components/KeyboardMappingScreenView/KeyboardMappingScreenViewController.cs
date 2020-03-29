@@ -22,6 +22,7 @@ namespace SJ.Menu
             }
         }
 
+        private const string ActionNameLanguageTagPrefix = "input_action_";
         private const string ResetMessageLanguageTag = "confirmation_menu_message_reset_settings", SaveConfigurationMessageLanguageTag = "confirmation_menu_message_save_settings";
 
         private IKeyboardMappingScreenView view;
@@ -71,7 +72,7 @@ namespace SJ.Menu
 
                     foreach (var inputKeyGroup in inputKeyGroups)
                     {
-                        view.CreateInputKeyGroupControl(inputKeyGroup.name, inputKeyGroup.main, inputKeyGroup.alternative,
+                        view.CreateInputKeyGroupControl(inputKeyGroup.name, GetDisplayNameFor(inputKeyGroup.name), inputKeyGroup.main, inputKeyGroup.alternative,
                             GetDisplayNameFor(inputKeyGroup.main), GetDisplayNameFor(inputKeyGroup.alternative));
 
                         backupInputKeyGroups.Add(new BackupInputKeyGroup(inputKeyGroup.name, inputKeyGroup.main, inputKeyGroup.alternative));
@@ -85,6 +86,9 @@ namespace SJ.Menu
         {
             return keyCode.ToString();
         }
+
+        private string GetDisplayNameFor(string groupName) 
+            => translatorService.GetLineByTagOfCurrentLanguage((ActionNameLanguageTagPrefix + groupName).ToLower(), TextOptions.FirstLetterToUpper);
 
         private void BeginListenForMainKeyRebindOf(string groupName)
         {

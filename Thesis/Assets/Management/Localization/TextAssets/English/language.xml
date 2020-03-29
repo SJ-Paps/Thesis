@@ -36,6 +36,11 @@
     <line tag="keyboard_mapping_menu_action_column">action</line>
     <line tag="keyboard_mapping_menu_main_key_column">main</line>
     <line tag="keyboard_mapping_menu_alternative_key_column">alternative</line>
+    
+    <line tag="input_action_moveleft">left</line>
+    <line tag="input_action_moveright">right</line>
+    <line tag="input_action_walk">walk</line>
+    <line tag="input_action_run">run</line>
 
     <line tag="soundchannel_general">general volume</line>
     <line tag="soundchannel_music">music volume</line>
