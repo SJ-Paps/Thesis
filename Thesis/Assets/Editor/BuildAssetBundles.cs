@@ -19,7 +19,7 @@ namespace SJ.Editor
         }
 
         [MenuItem("Build/AssetBundles/For Current Target")]
-        public static void ForCurrentTarget()
+        public static void ForCurrentBuildTarget()
         {
             switch(EditorUserBuildSettings.activeBuildTarget)
             {

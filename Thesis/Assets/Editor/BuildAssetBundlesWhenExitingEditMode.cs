@@ -16,7 +16,7 @@ namespace SJ.Editor
         private static void BuildAssetBundlesIfExitingEditMode(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.ExitingEditMode)
-                BuildAssetBundles.ForCurrentTarget();
+                BuildAssetBundles.ForCurrentBuildTarget();
         }
     }
 }
