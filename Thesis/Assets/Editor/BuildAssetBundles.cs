@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using UnityEditor;
+using UnityEngine;
 
 namespace SJ.Editor
 {
@@ -15,6 +16,23 @@ namespace SJ.Editor
         public static void ForMacOS()
         {
             For(Reg.AssetBundleDirectoryBuildMacOS, BuildTarget.StandaloneOSX);
+        }
+
+        [MenuItem("Build/AssetBundles/For Current Target")]
+        public static void ForCurrentTarget()
+        {
+            switch(EditorUserBuildSettings.activeBuildTarget)
+            {
+                case BuildTarget.StandaloneWindows:
+                    ForWindows();
+                    break;
+                case BuildTarget.StandaloneOSX:
+                    ForMacOS();
+                    break;
+                default:
+                    Debug.LogWarning("NO SUITABLE ASSET BUNDLE BUILD TARGET FOUND");
+                    break;
+            }
         }
         
         private static void For(string path, BuildTarget target)
