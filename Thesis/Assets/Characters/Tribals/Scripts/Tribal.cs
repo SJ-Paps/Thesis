@@ -103,8 +103,6 @@ namespace SJ.GameEntities.Characters.Tribals
         public PercentageReversibleNumber JumpMaxHeight { get; protected set; }
         public PercentageReversibleNumber JumpAcceleration { get; protected set; }
 
-        public Vector2 CurrentVelocity => RigidBody2D.velocity;
-
         public event Action OnDead;
 
         [SerializeField]

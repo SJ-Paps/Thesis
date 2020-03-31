@@ -11,6 +11,5 @@ namespace SJ.GameEntities.Characters.Tribals
         PercentageReversibleNumber MovementAcceleration { get; }
         PercentageReversibleNumber JumpMaxHeight { get; }
         PercentageReversibleNumber JumpAcceleration { get; }
-        Vector2 CurrentVelocity { get; }
     }
 }

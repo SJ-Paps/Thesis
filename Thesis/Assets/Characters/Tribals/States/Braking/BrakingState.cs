@@ -15,7 +15,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnUpdate()
         {
-            if (Owner.CurrentVelocity.x == 0)
+            if (Owner.RigidBody2D.velocity.x == 0)
                 Trigger(Tribal.Trigger.Stop);
         }
 
@@ -44,18 +44,20 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void Brake(float force)
         {
-            if (Owner.CurrentVelocity.x > 0)
+            var velocity = Owner.RigidBody2D.velocity;
+
+            if (velocity.x > 0)
             {
                 ApplyForceOnDirection(FaceDirection.Left, force);
 
-                if (Owner.CurrentVelocity.x < 0)
+                if (velocity.x < 0)
                     StopCompletely();
             }
-            else if (Owner.CurrentVelocity.x < 0)
+            else if (velocity.x < 0)
             {
                 ApplyForceOnDirection(FaceDirection.Right, force);
 
-                if (Owner.CurrentVelocity.x > 0)
+                if (velocity.x > 0)
                     StopCompletely();
             }
         }
