@@ -39,7 +39,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4436836404301262335}
-  - component: {fileID: 4436836404301262334}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -64,30 +63,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4436836404301262334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4436836404301262332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3438be6bad4e2d49bfcefa9727d96d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabName: 
-  blockFacing: 0
-  hsmAsset: {fileID: 11400000, guid: f0053f4fe490f3a42926f12ad0362fe4, type: 2}
-  head: {fileID: 4437911121285590460}
-  body: {fileID: 4436836403836067947}
-  chargeTimeBase: 1
-  shootDistance: 10
-  shootDamageBase: 0
-  gunPoint: {fileID: 4432171356744394706}
-  bulletPrefab: {fileID: 1667125946478642, guid: 815cc48826883124283b96cab2949f8e,
-    type: 3}
-  accelerationBase: 0.5
 --- !u!1 &4437409160403559570
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +135,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c137c811ec22141af0ab0ab28f6740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
 --- !u!114 &4324654064059290028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9453e8602f270b449afcf84214fecd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
   eyePoint: {fileID: 4432583636878001168}
 --- !u!1 &4437911121285590450
 GameObject:
@@ -226,6 +205,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -237,6 +217,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -343,7 +324,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c137c811ec22141af0ab0ab28f6740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  enableUpdate: 0
+  enableLateUpdate: 0
+  enableFixedUpdate: 0
 --- !u!1 &4437969735893557352
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,6 +375,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -403,6 +387,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -518,6 +503,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -529,6 +515,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -598,6 +585,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -609,6 +597,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

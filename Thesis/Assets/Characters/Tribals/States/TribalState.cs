@@ -6,13 +6,13 @@ namespace SJ.GameEntities.Characters.Tribals.States
 {
     public abstract class TribalState : ScriptableState
     {
-        protected Tribal Owner { get; private set; }
+        protected ITribal Owner { get; private set; }
         protected IHierarchicalStateMachine<Tribal.State, Tribal.Trigger> StateMachine { get; private set; }
         protected IBlackboard Blackboard { get; private set; }
 
         private bool isInitialized = false;
 
-        public void InitializeWith(Tribal owner, IHierarchicalStateMachine<Tribal.State, Tribal.Trigger> stateMachine, IBlackboard blackboard)
+        public void InitializeWith(ITribal owner, IHierarchicalStateMachine<Tribal.State, Tribal.Trigger> stateMachine, IBlackboard blackboard)
         {
             if (isInitialized)
                 return;

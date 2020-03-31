@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Characters
 {
-    public abstract class Character : SaveableGameEntity, IControllable<Character.Order>
+    public abstract class Character : SaveableGameEntity, ICharacter
     {
         public readonly struct Order
         {
@@ -29,12 +29,6 @@ namespace SJ.GameEntities.Characters
             Activate,
         }
 
-        public enum FaceDirection
-        {
-            Left = -1,
-            Right = 1
-        }
-
         public event Action<Order> OnOrderReceived;
 
         public FaceDirection FacingDirection
@@ -42,18 +36,13 @@ namespace SJ.GameEntities.Characters
             get
             {
                 if (transform.right.x > 0)
-                {
                     return FaceDirection.Right;
-                }
                 else
-                {
                     return FaceDirection.Left;
-                }
             }
         }
 
-        [NonSerialized]
-        public bool BlockFacing;
+        public bool BlockFacing { get; set; }
 
         public void SendOrder(Order order)
         {
@@ -70,11 +59,6 @@ namespace SJ.GameEntities.Characters
                 return;
 
             transform.Rotate(Vector3.up, 180);
-        }
-
-        protected virtual void OnFacingChanged()
-        {
-
         }
     }
 }

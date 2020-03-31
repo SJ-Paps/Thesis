@@ -26,7 +26,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void DoFixedUpdate()
         {
-            Owner.Brake(brakeForce);
+            Brake(brakeForce);
         }
 
         protected override bool OnHandleEvent(Character.Order ev)
@@ -40,6 +40,34 @@ namespace SJ.GameEntities.Characters.Tribals.States
             }
 
             return false;
+        }
+
+        public void Brake(float force)
+        {
+            if (Owner.CurrentVelocity.x > 0)
+            {
+                ApplyForceOnDirection(FaceDirection.Left, force);
+
+                if (Owner.CurrentVelocity.x < 0)
+                    StopCompletely();
+            }
+            else if (Owner.CurrentVelocity.x < 0)
+            {
+                ApplyForceOnDirection(FaceDirection.Right, force);
+
+                if (Owner.CurrentVelocity.x > 0)
+                    StopCompletely();
+            }
+        }
+
+        private void ApplyForceOnDirection(FaceDirection direction, float force)
+        {
+            Owner.RigidBody2D.AddForce(new Vector2((int)direction * force, 0), ForceMode2D.Impulse);
+        }
+
+        public void StopCompletely()
+        {
+            Owner.RigidBody2D.velocity = Vector2.zero;
         }
     }
 }

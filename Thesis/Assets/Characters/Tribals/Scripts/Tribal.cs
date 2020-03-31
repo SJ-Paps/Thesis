@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals
 {
-    public abstract class Tribal : Character, IDamagable
+    public abstract class Tribal : Character, ITribal
     {
         public enum State
         {
@@ -95,7 +95,7 @@ namespace SJ.GameEntities.Characters.Tribals
         }
 
         public Animator Animator { get; protected set; }
-        public Rigidbody2D RigidBody2D { get; protected set; }
+        public IRigidbody2D RigidBody2D { get; protected set; }
         public SJCapsuleCollider2D Collider { get; protected set; }
 
         public PercentageReversibleNumber MaxMovementVelocity { get; protected set; }
@@ -120,7 +120,7 @@ namespace SJ.GameEntities.Characters.Tribals
         protected override void SJAwake()
         {
             Animator = GetComponent<Animator>();
-            RigidBody2D = GetComponent<Rigidbody2D>();
+            RigidBody2D = GetComponent<IRigidbody2D>();
             Collider = GetComponent<SJCapsuleCollider2D>();
 
             MaxMovementVelocity = new PercentageReversibleNumber(maxMovementVelocity);
@@ -191,49 +191,6 @@ namespace SJ.GameEntities.Characters.Tribals
             TribalSaveData saveData = (TribalSaveData)data;
 
             transform.position = new Vector2(saveData.x, saveData.y);
-        }
-
-        public void Move(FaceDirection direction, float extraForceMultiplier = 1)
-        {
-            ApplyForceOnDirection(direction, MovementAcceleration * extraForceMultiplier);
-
-            ClampVelocityIfIsOverLimit();
-        }
-
-        public void Brake(float force)
-        {
-            if (CurrentVelocity.x > 0)
-            {
-                ApplyForceOnDirection(FaceDirection.Left, force);
-
-                if (CurrentVelocity.x < 0)
-                    StopCompletely();
-            }
-            else if(CurrentVelocity.x < 0)
-            {
-                ApplyForceOnDirection(FaceDirection.Right, force);
-
-                if (CurrentVelocity.x > 0)
-                    StopCompletely();
-            }
-        }
-
-        private void ApplyForceOnDirection(FaceDirection direction, float force)
-        {
-            RigidBody2D.AddForce(new Vector2((int)direction * force, 0), ForceMode2D.Impulse);
-        }
-
-        private void ClampVelocityIfIsOverLimit()
-        {
-            if (RigidBody2D.velocity.x > MaxMovementVelocity)
-                RigidBody2D.velocity = new Vector2(MaxMovementVelocity, RigidBody2D.velocity.y);
-            else if(RigidBody2D.velocity.x < MaxMovementVelocity * -1)
-                RigidBody2D.velocity = new Vector2(MaxMovementVelocity * -1, RigidBody2D.velocity.y);
-        }
-
-        public void StopCompletely()
-        {
-            RigidBody2D.velocity = Vector2.zero;
         }
     }
 }
