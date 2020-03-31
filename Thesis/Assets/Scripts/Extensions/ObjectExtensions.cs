@@ -29,4 +29,18 @@
                 .GetValue(obj);
         }
     }
+
+    public static void Execute(this object obj, string methodName, params object[] parameters)
+    {
+        obj.GetType()
+            .GetMethod(methodName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            .Invoke(obj, parameters);
+    }
+
+    public static T Execute<T>(this object obj, string methodName, params object[] parameters)
+    {
+        return (T)obj.GetType()
+            .GetMethod(methodName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            .Invoke(obj, parameters);
+    }
 }
