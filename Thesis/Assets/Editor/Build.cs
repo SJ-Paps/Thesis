@@ -2,7 +2,7 @@
 
 namespace SJ.Editor
 {
-    public class CustomBuild
+    public class Build
     {
         private static void For(BuildOptions options, BuildTarget target)
         {
@@ -40,10 +40,10 @@ namespace SJ.Editor
             switch (target)
             {
                 case BuildTarget.StandaloneWindows:
-                    Editor.BuildAssetBundles.ForWindows();
+                    BuildAssetBundles.ForWindows();
                     return;
                 case BuildTarget.StandaloneOSX:
-                    Editor.BuildAssetBundles.ForMacOS();
+                    BuildAssetBundles.ForMacOS();
                     return;
             }
         }
