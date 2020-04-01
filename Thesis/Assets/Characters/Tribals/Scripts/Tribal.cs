@@ -29,11 +29,13 @@ namespace SJ.GameEntities.Characters.Tribals
             DuckingWalking,
             Running,
             Hidden,
-            Pushing,
+            Grappling,
             Pulling,
             ChoiceOnAir,
             Braking,
-            ChoiceMoving
+            ChoiceMoving,
+            PullingIdle,
+            PullingMoving
         }
 
         public enum Trigger
@@ -49,8 +51,8 @@ namespace SJ.GameEntities.Characters.Tribals
             Walk,
             Run,
             Hide,
-            Push,
-            Pull
+            Move,
+            Pull,
         }
 
         public class TribalSaveData
