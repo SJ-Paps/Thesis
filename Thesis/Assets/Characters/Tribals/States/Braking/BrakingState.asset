@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: BrakingState
   m_EditorClassIdentifier: 
   _debugName: Braking
+  _instantiateThis: 1
   brakeForce: 0.5
+  velocityDeadZone: 0.1

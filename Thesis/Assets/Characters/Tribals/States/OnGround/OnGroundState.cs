@@ -46,7 +46,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override bool OnHandleEvent(Character.Order order)
         {
-            if (order.type == Character.OrderType.Jump && groundingTimer.Active == false)
+            if (order.type == Character.OrderType.Jump && groundingTimer.Active == false && HasCeilingTooClose() == false)
             {
                 Trigger(Tribal.Trigger.Jump);
                 return true;
@@ -71,6 +71,24 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
             return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
                 Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
+        }
+
+        private bool HasCeilingTooClose()
+        {
+            int layerMask = Reg.walkableLayerMask;
+
+            Bounds bounds = Owner.Collider.bounds;
+            float height = 0.05f;
+            float checkFloorNegativeOffsetX = -0.1f;
+
+            Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x - checkFloorNegativeOffsetX, bounds.center.y + bounds.extents.y);
+            Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x + checkFloorNegativeOffsetX, bounds.center.y + bounds.extents.y);
+
+            Logger.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
+            Logger.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
+
+            return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y + height), layerMask) ||
+                Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y + height), layerMask);
         }
     }
 }

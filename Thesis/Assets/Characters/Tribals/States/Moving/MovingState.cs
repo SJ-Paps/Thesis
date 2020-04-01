@@ -6,6 +6,9 @@ namespace SJ.GameEntities.Characters.Tribals.States
 {
     public class MovingState : TribalState, IFixedUpdateListener
     {
+        [SerializeField]
+        private float velocityDeadZone;
+
         private bool shouldMove;
         private FaceDirection moveDirection;
         private float moveForce;
@@ -13,6 +16,8 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnEnter()
         {
+            moveDirection = Owner.FacingDirection;
+
             Owner.SubscribeToFixedUpdate(this);
 
             isMovingByWill = true;
@@ -20,7 +25,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnUpdate()
         {
-            if (isMovingByWill == false)
+            if (isMovingByWill == false || (IsOnVelocityDeadZone() && HasWallTooClose(moveDirection)))
                 Trigger(Tribal.Trigger.Stop);
                 
             isMovingByWill = false;
@@ -91,6 +96,31 @@ namespace SJ.GameEntities.Characters.Tribals.States
                 Owner.RigidBody2D.velocity = new Vector2(maxMovementVelocity, velocity.y);
             else if (velocity.x < maxMovementVelocity * -1)
                 Owner.RigidBody2D.velocity = new Vector2(maxMovementVelocity * -1, velocity.y);
+        }
+
+        private bool IsOnVelocityDeadZone()
+        {
+            return Owner.RigidBody2D.velocity.x > velocityDeadZone * -1 && Owner.RigidBody2D.velocity.x < velocityDeadZone;
+        }
+
+        private bool HasWallTooClose(FaceDirection faceDirection)
+        {
+            int layerMask = Reg.walkableLayerMask;
+
+            Bounds bounds = Owner.Collider.bounds;
+            float width = 0.05f;
+            float offset = -0.01f;
+
+            int direction = (int)faceDirection;
+
+            var upperPoint = new Vector2(bounds.center.x + ((bounds.extents.x - offset) * direction), bounds.center.y + bounds.extents.y);
+            var lowerPoint = new Vector2(bounds.center.x + ((bounds.extents.x - offset) * direction), bounds.center.y - bounds.extents.y);
+
+            Logger.DrawLine(upperPoint, new Vector2(upperPoint.x + (width * direction), lowerPoint.y), Color.green);
+            Logger.DrawLine(lowerPoint, new Vector2(lowerPoint.x + (width * direction), upperPoint.y), Color.green);
+
+            return Physics2D.Linecast(upperPoint, new Vector2(upperPoint.x + (width * direction), lowerPoint.y), layerMask) ||
+                Physics2D.Linecast(lowerPoint, new Vector2(lowerPoint.x + (width * direction), upperPoint.y), layerMask);
         }
     }
 }

@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: MovingState
   m_EditorClassIdentifier: 
   _debugName: Moving
+  _instantiateThis: 1
+  velocityDeadZone: 0.2

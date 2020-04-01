@@ -6,7 +6,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
     public class BrakingState : TribalState, IFixedUpdateListener
     {
         [SerializeField]
-        private float brakeForce;
+        private float brakeForce, velocityDeadZone;
 
         protected override void OnEnter()
         {
@@ -15,8 +15,11 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnUpdate()
         {
-            if (Owner.RigidBody2D.velocity.x == 0)
+            if (Owner.RigidBody2D.velocity.x > velocityDeadZone * 1 || Owner.RigidBody2D.velocity.x < velocityDeadZone)
+            {
+                StopCompletely();
                 Trigger(Tribal.Trigger.Stop);
+            }  
         }
 
         protected override void OnExit()
