@@ -8,7 +8,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
     {
         private bool shouldMove;
         private FaceDirection moveDirection;
-        private float moveForceMultiplier;
+        private float moveForce;
         private bool isMovingByWill;
 
         protected override void OnEnter()
@@ -40,7 +40,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
             {
                 case Character.OrderType.Move:
                     moveDirection = ev.weight >= 0 ? FaceDirection.Right : FaceDirection.Left;
-                    moveForceMultiplier = Math.Abs(ev.weight);
+                    moveForce = Math.Abs(ev.weight);
 
                     shouldMove = true;
                     isMovingByWill = true;
@@ -67,7 +67,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
         
         private void Move()
         {
-            Move(moveDirection, moveForceMultiplier);
+            Move(moveDirection, moveForce);
         }
 
         public void Move(FaceDirection direction, float extraForceMultiplier = 1)
@@ -84,10 +84,13 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private void ClampVelocityIfIsOverLimit()
         {
-            if (Owner.RigidBody2D.velocity.x > Owner.MaxMovementVelocity)
-                Owner.RigidBody2D.velocity = new Vector2(Owner.MaxMovementVelocity, Owner.RigidBody2D.velocity.y);
-            else if (Owner.RigidBody2D.velocity.x < Owner.MaxMovementVelocity * -1)
-                Owner.RigidBody2D.velocity = new Vector2(Owner.MaxMovementVelocity * -1, Owner.RigidBody2D.velocity.y);
+            var velocity = Owner.RigidBody2D.velocity;
+            float maxMovementVelocity = Owner.MaxMovementVelocity;
+
+            if (velocity.x > maxMovementVelocity)
+                Owner.RigidBody2D.velocity = new Vector2(maxMovementVelocity, velocity.y);
+            else if (velocity.x < maxMovementVelocity * -1)
+                Owner.RigidBody2D.velocity = new Vector2(maxMovementVelocity * -1, velocity.y);
         }
     }
 }

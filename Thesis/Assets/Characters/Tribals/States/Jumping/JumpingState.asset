@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: JumpingState
   m_EditorClassIdentifier: 
   _debugName: Jumping
+  _instantiateThis: 1
+  jumpForce: 1
+  velocityDeadZone: 0.002

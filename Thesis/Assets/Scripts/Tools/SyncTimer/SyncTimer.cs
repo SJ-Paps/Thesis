@@ -20,7 +20,7 @@ namespace SJ.Tools
         }
         public bool Paused { get; private set; }
 
-        public event Action<SyncTimer> onTick;
+        public event Action<SyncTimer> OnTick;
 
         public SyncTimer()
         {
@@ -51,9 +51,9 @@ namespace SJ.Tools
                         currentTime = 0;
                     }
 
-                    if (onTick != null)
+                    if (OnTick != null)
                     {
-                        onTick(this);
+                        OnTick(this);
                     }
                 }
             }

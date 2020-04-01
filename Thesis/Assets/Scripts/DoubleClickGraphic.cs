@@ -16,7 +16,7 @@ namespace SJ.Tools
         protected override void SJAwake()
         {
             timer.Loop = false;
-            timer.onTick += _ => ResetTimer();
+            timer.OnTick += _ => ResetTimer();
         }
 
         public void OnPointerClick(PointerEventData eventData)

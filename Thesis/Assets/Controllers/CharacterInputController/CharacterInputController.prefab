@@ -52,3 +52,4 @@ MonoBehaviour:
   moveAction: {fileID: 11400000, guid: 881a9798f9bbd6644822ac1bf53d8b89, type: 2}
   walkAction: {fileID: 11400000, guid: eaf7afdc485d64f48b9679aa23b16898, type: 2}
   runAction: {fileID: 11400000, guid: 5e13088c646d5684fa777401aa4e4833, type: 2}
+  jumpAction: {fileID: 11400000, guid: 968df094838814640991e4725fd8188f, type: 2}

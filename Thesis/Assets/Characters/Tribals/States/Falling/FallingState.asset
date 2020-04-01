@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: FallingState
   m_EditorClassIdentifier: 
   _debugName: Falling
+  _instantiateThis: 1
+  velocityDeadZone: -0.002

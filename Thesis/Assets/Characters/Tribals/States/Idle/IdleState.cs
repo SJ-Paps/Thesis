@@ -4,16 +4,12 @@
     {
         protected override void OnEnter()
         {
-            base.OnEnter();
-
-            Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.IdleAnimatorTrigger);
+            Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.Idle);
         }
 
         protected override void OnExit()
         {
-            base.OnExit();
-
-            Owner.Animator.ResetTrigger(Tribal.AnimatorTriggers.IdleAnimatorTrigger);
+            Owner.Animator.ResetTrigger(Tribal.AnimatorTriggers.Idle);
         }
 
         protected override bool OnHandleEvent(Character.Order ev)

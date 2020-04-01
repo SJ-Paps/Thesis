@@ -37,6 +37,7 @@ namespace SJ.GameEntities.Controllers
         private const string MoveRightKeyGroupName = "MoveRight";
         private const string WalkKeyGroupName = "Walk";
         private const string RunKeyGroupName = "Run";
+        private const string JumpKeyGroupName = "Jump";
 
         [Header("Input Actions")]
         [Space]
@@ -50,6 +51,10 @@ namespace SJ.GameEntities.Controllers
         [Space]
         [SerializeField]
         private ToggleHoldKeyAction runAction;
+
+        [Space]
+        [SerializeField]
+        private SimpleKeyAction jumpAction;
 
         private List<AxisActionWithOrder> axisActions = new List<AxisActionWithOrder>();
         private List<InputActionWithOrder> nonAxisActions = new List<InputActionWithOrder>();
@@ -68,6 +73,7 @@ namespace SJ.GameEntities.Controllers
             //Other Actions
             nonAxisActions.Add(new InputActionWithOrder(walkAction, Character.OrderType.Walk));
             nonAxisActions.Add(new InputActionWithOrder(runAction, Character.OrderType.Run));
+            nonAxisActions.Add(new InputActionWithOrder(jumpAction, Character.OrderType.Jump));
         }
 
         private void LoadInputActions()
@@ -102,6 +108,11 @@ namespace SJ.GameEntities.Controllers
             runAction.SetKeys(
                 keyGroups[RunKeyGroupName].main,
                 keyGroups[RunKeyGroupName].alternative
+                );
+
+            jumpAction.SetKeys(
+                keyGroups[JumpKeyGroupName].main,
+                keyGroups[JumpKeyGroupName].alternative
                 );
         }
 

@@ -11,14 +11,14 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnEnter()
         {
-            Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.WalkAnimatorTrigger);
+            Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.Walk);
 
             velocityConstraintId = Owner.MaxMovementVelocity.AddPercentageConstraint(velocityConstraintPercentage);
         }
 
         protected override void OnExit()
         {
-            Owner.Animator.ResetTrigger(Tribal.AnimatorTriggers.WalkAnimatorTrigger);
+            Owner.Animator.ResetTrigger(Tribal.AnimatorTriggers.Walk);
 
             Owner.MaxMovementVelocity.RemovePercentageConstraint(velocityConstraintId);
         }

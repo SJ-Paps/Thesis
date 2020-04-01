@@ -83,30 +83,33 @@ namespace SJ.GameEntities.Characters.Tribals
 
         public static class AnimatorTriggers
         {
-            public static readonly AnimatorParameterId TrotAnimatorTrigger = new AnimatorParameterId("Move");
-            public static readonly AnimatorParameterId RunAnimatorTrigger = new AnimatorParameterId("Move");
-            public static readonly AnimatorParameterId WalkAnimatorTrigger = new AnimatorParameterId("Move");
-            public static readonly AnimatorParameterId IdleAnimatorTrigger = new AnimatorParameterId("Idle");
-            public static readonly AnimatorParameterId GroundAnimatorTrigger = new AnimatorParameterId("Ground");
-            public static readonly AnimatorParameterId FallAnimatorTrigger = new AnimatorParameterId("Fall");
-            public static readonly AnimatorParameterId JumpAnimatorTrigger = new AnimatorParameterId("Jump");
-            public static readonly AnimatorParameterId HideAnimatorTrigger = new AnimatorParameterId("Idle");
-            public static readonly AnimatorParameterId ClimbLedgeAnimatorTrigger = new AnimatorParameterId("ClimbLedge");
+            public static readonly AnimatorParameterId Trot = new AnimatorParameterId("Move");
+            public static readonly AnimatorParameterId Run = new AnimatorParameterId("Move");
+            public static readonly AnimatorParameterId Walk = new AnimatorParameterId("Move");
+            public static readonly AnimatorParameterId Idle = new AnimatorParameterId("Idle");
+            public static readonly AnimatorParameterId Ground = new AnimatorParameterId("Ground");
+            public static readonly AnimatorParameterId Fall = new AnimatorParameterId("Fall");
+            public static readonly AnimatorParameterId Jump = new AnimatorParameterId("Jump");
+            public static readonly AnimatorParameterId Hidden = new AnimatorParameterId("Idle");
+            public static readonly AnimatorParameterId ClimbLedge = new AnimatorParameterId("ClimbLedge");
         }
 
-        public Animator Animator { get; protected set; }
+        public IAnimator Animator { get; protected set; }
         public IRigidbody2D RigidBody2D { get; protected set; }
-        public SJCapsuleCollider2D Collider { get; protected set; }
+        public new ITransform transform { get; protected set; }
+        public ICapsuleCollider2D Collider { get; protected set; }
 
         public PercentageReversibleNumber MaxMovementVelocity { get; protected set; }
         public PercentageReversibleNumber MovementAcceleration { get; protected set; }
-        public PercentageReversibleNumber JumpMaxHeight { get; protected set; }
         public PercentageReversibleNumber JumpAcceleration { get; protected set; }
+        public PercentageReversibleNumber JumpMaxTime { get; protected set; }
 
         public event Action OnDead;
 
+        private CompositeCollisionTrigger2DCallbackCaller collisionCallbackCaller;
+
         [SerializeField]
-        private float maxMovementVelocity, movementAcceleration, jumpMaxHeight, jumpAcceleration;
+        private float maxMovementVelocity, movementAcceleration, jumpAcceleration, jumpMaxTime;
 
         [SerializeField]
         private HierarchicalStateMachineBuilder hsmBuilder;
@@ -117,14 +120,17 @@ namespace SJ.GameEntities.Characters.Tribals
 
         protected override void SJAwake()
         {
-            Animator = GetComponent<Animator>();
+            Animator = GetComponent<IAnimator>();
             RigidBody2D = GetComponent<IRigidbody2D>();
-            Collider = GetComponent<SJCapsuleCollider2D>();
+            transform = GetComponent<ITransform>();
+            Collider = GetComponent<ICapsuleCollider2D>();
+
+            collisionCallbackCaller = GetComponent<CompositeCollisionTrigger2DCallbackCaller>();
 
             MaxMovementVelocity = new PercentageReversibleNumber(maxMovementVelocity);
             MovementAcceleration = new PercentageReversibleNumber(movementAcceleration);
-            JumpMaxHeight = new PercentageReversibleNumber(jumpMaxHeight);
             JumpAcceleration = new PercentageReversibleNumber(jumpAcceleration);
+            JumpMaxTime = new PercentageReversibleNumber(jumpMaxTime);
 
             hsm = (HierarchicalStateMachine<State, Trigger>)hsmBuilder.Build();
 
@@ -189,6 +195,16 @@ namespace SJ.GameEntities.Characters.Tribals
             TribalSaveData saveData = (TribalSaveData)data;
 
             transform.position = new Vector2(saveData.x, saveData.y);
+        }
+
+        public void SubscribeToOnCollisionEnter(IOnCollisionEnter2DListener listener)
+        {
+            collisionCallbackCaller.SubscribeToOnCollisionEnter(listener);
+        }
+
+        public void UnsubscribeFromOnCollisionEnter(IOnCollisionEnter2DListener listener)
+        {
+            collisionCallbackCaller.UnsubscribeFromOnCollisionEnter(listener);
         }
     }
 }

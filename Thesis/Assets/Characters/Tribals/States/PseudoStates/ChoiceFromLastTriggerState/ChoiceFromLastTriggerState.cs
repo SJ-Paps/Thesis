@@ -1,4 +1,6 @@
-﻿namespace SJ.GameEntities.Characters.Tribals.States
+﻿using UnityEngine;
+
+namespace SJ.GameEntities.Characters.Tribals.States
 {
     public class ChoiceFromLastTriggerState : TribalState
     {
@@ -6,7 +8,7 @@
         {
             var triggerToNextState = Blackboard.GetItemOf<Tribal.Trigger>(Tribal.BlackboardKeys.LastTrigger);
 
-            StateMachine.Trigger(triggerToNextState);
+            Trigger(triggerToNextState);
         }
     }
 }

@@ -27,3 +27,6 @@ MonoBehaviour:
   - name: Run
     main: 304
     alternative: 0
+  - name: Jump
+    main: 32
+    alternative: 0

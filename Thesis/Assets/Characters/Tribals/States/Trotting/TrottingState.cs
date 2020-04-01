@@ -4,16 +4,12 @@
     {
         protected override void OnEnter()
         {
-            base.OnEnter();
-
-            Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.TrotAnimatorTrigger);
+            Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.Trot);
         }
 
         protected override void OnExit()
         {
-            base.OnExit();
-
-            Owner.Animator.ResetTrigger(Tribal.AnimatorTriggers.TrotAnimatorTrigger);
+            Owner.Animator.ResetTrigger(Tribal.AnimatorTriggers.Trot);
         }
     }
 }

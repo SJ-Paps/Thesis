@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: OnGroundState
   m_EditorClassIdentifier: 
   _debugName: OnGround
+  _instantiateThis: 1
+  velocityDeadZone: -2
+  intervalBetweenGroundAndNextJump: 0.2

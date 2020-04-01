@@ -44,20 +44,18 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void Brake(float force)
         {
-            var velocity = Owner.RigidBody2D.velocity;
-
-            if (velocity.x > 0)
+            if (Owner.RigidBody2D.velocity.x > 0)
             {
                 ApplyForceOnDirection(FaceDirection.Left, force);
 
-                if (velocity.x < 0)
+                if (Owner.RigidBody2D.velocity.x < 0)
                     StopCompletely();
             }
-            else if (velocity.x < 0)
+            else if (Owner.RigidBody2D.velocity.x < 0)
             {
                 ApplyForceOnDirection(FaceDirection.Right, force);
 
-                if (velocity.x > 0)
+                if (Owner.RigidBody2D.velocity.x < 0)
                     StopCompletely();
             }
         }
