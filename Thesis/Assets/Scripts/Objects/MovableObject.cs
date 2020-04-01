@@ -1,26 +1,22 @@
 ﻿using SJ.GameEntities.Characters;
+using SJ;
+using SJ.Tools;
 using UnityEngine;
 
-public class MovableObject : ActivableObject<Character> {
-    
-    private new Rigidbody2D rigidbody2D;
-
-    public Rigidbody2D Rigidbody2D
+namespace SJ.GameEntities
+{
+    public interface IMovableObject
     {
-        get
-        {
-            if(rigidbody2D == null)
-            {
-                rigidbody2D = GetComponent<Rigidbody2D>();
-            }
+        void Connect(IRigidbody2D rigidbody2D);
+    }
 
-            return rigidbody2D;
+    public class MovableObject : SJMonoBehaviour, IMovableObject
+    {
+        private new Rigidbody2D rigidbody2D;
+
+        public void Connect(IRigidbody2D rigidbody2D)
+        {
+            
         }
     }
-
-    public override bool Activate(Character user)
-    {
-        return true;
-    }
-
 }
