@@ -1,4 +1,5 @@
 ﻿using SJ.Management;
+using SJ.Tools;
 using System;
 using UnityEngine;
 
@@ -14,17 +15,32 @@ namespace SJ.GameEntities.Characters.Tribals.States
         private float moveForce;
         private bool isMovingByWill;
 
+        private SyncTimer checkMovableObjectsTimer = new SyncTimer();
+
+        protected override void Initialize()
+        {
+            InitializeMovableObjectsTimer();
+        }
+
+        private void InitializeMovableObjectsTimer()
+        {
+            checkMovableObjectsTimer.Interval = 0.2f;
+            checkMovableObjectsTimer.Loop = true;
+            checkMovableObjectsTimer.OnTick += _ => SearchMovableObjects();
+        }
+
         protected override void OnEnter()
         {
             moveDirection = Owner.FacingDirection;
-
             Owner.SubscribeToFixedUpdate(this);
-
             isMovingByWill = true;
+            checkMovableObjectsTimer.Start();
         }
 
         protected override void OnUpdate()
         {
+            checkMovableObjectsTimer.Update(Time.deltaTime);
+
             if (isMovingByWill == false || (IsOnVelocityDeadZone() && HasWallTooClose(moveDirection)))
                 Trigger(Tribal.Trigger.Stop);
                 
@@ -33,6 +49,8 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnExit()
         {
+            checkMovableObjectsTimer.Stop();
+
             shouldMove = false;
             isMovingByWill = false;
 
@@ -121,6 +139,25 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
             return Physics2D.Linecast(upperPoint, new Vector2(upperPoint.x + (width * direction), lowerPoint.y), layerMask) ||
                 Physics2D.Linecast(lowerPoint, new Vector2(lowerPoint.x + (width * direction), upperPoint.y), layerMask);
+        }
+
+        private void SearchMovableObjects()
+        {
+            float checkMovableObjectDistanceX = 0.2f;
+
+            int xDirection = (int)Owner.FacingDirection;
+
+            var bounds = Owner.Collider.bounds;
+
+            var center = new Vector2(bounds.center.x + (bounds.extents.x * xDirection), bounds.center.y - bounds.extents.y / 3);
+            var size = new Vector2(checkMovableObjectDistanceX, bounds.extents.y);
+
+            var movableObject = SJUtil.FindMovableObject(center, size, Owner.transform.eulerAngles.z);
+
+            if(movableObject != null)
+            {
+                Trigger(Tribal.Trigger.Pull);
+            }
         }
     }
 }

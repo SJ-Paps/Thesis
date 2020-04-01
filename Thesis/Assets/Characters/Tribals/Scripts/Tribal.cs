@@ -7,6 +7,10 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals
 {
+    [RequireComponent(typeof(Rigidbody2DWrapper), typeof(TransformWrapper), typeof(AnimatorWrapper))]
+    [RequireComponent(typeof(CapsuleCollider2DWrapper), typeof(CompositeCollisionTrigger2DCallbackCaller))]
+    [DisallowMultipleComponent]
+    [SelectionBase]
     public abstract class Tribal : Character, ITribal
     {
         public enum State
@@ -53,6 +57,7 @@ namespace SJ.GameEntities.Characters.Tribals
             Hide,
             Move,
             Pull,
+            Release
         }
 
         public class TribalSaveData
@@ -81,6 +86,7 @@ namespace SJ.GameEntities.Characters.Tribals
             public const string LastTrigger = "LastTrigger";
             public const string MovingInitialDirectionAndForce = "MovingInitialDirectionAndForce";
             public const string WalkMode = "WalkMode";
+            public const string MovableObject = "MovableObject";
         }
 
         public static class AnimatorTriggers
