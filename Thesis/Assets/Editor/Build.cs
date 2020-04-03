@@ -4,35 +4,36 @@ namespace SJ.Editor
 {
     public class Build
     {
-        private static void For(BuildOptions options, BuildTarget target)
+        private static void For(BuildTarget target, BuildOptions options = BuildOptions.None)
         {
+            SJUtilEditor.UpdatePrefabNameOfSaveableGameEntities();
             BuildAssetBundlesFor(target);
 
             BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Reg.BuildPath, target, options);
         }
 
         [MenuItem("Build/Windows/Production")]
-        public static void WindowsProduction()
+        public static void ForWindowsProduction()
         {
-            For(BuildOptions.None, BuildTarget.StandaloneWindows);
+            For(BuildTarget.StandaloneWindows);
         }
 
         [MenuItem("Build/Windows/Development")]
-        public static void WindowsDevelopment()
+        public static void ForWindowsDevelopment()
         {
-            For(BuildOptions.Development, BuildTarget.StandaloneWindows);
+            For(BuildTarget.StandaloneWindows, BuildOptions.Development);
         }
         
         [MenuItem("Build/MacOS/Production")]
-        public static void MacOSProduction()
+        public static void ForMacOSProduction()
         {
-            For(BuildOptions.None, BuildTarget.StandaloneOSX);
+            For(BuildTarget.StandaloneOSX);
         }
 
         [MenuItem("Build/MacOS/Development")]
-        public static void MacOSDevelopment()
+        public static void ForMacOSDevelopment()
         {
-            For(BuildOptions.Development, BuildTarget.StandaloneOSX);
+            For(BuildTarget.StandaloneOSX, BuildOptions.Development);
         }
 
         private static void BuildAssetBundlesFor(BuildTarget target)

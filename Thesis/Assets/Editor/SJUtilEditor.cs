@@ -8,7 +8,7 @@ namespace SJ.Editor
 {
     public static class SJUtilEditor
     {
-        [MenuItem("GameObject/Create Organizational", priority = 0)]
+        [MenuItem("GameObject/SJ/Create Organizational", priority = 0)]
         public static void CreateOrganizational()
         {
             GameObject go = new GameObject("-----------------------------");
@@ -18,11 +18,9 @@ namespace SJ.Editor
         [MenuItem("SJ Utils/Update Prefab Name of Saveable Game Entities")]
         public static void UpdatePrefabNameOfSaveableGameEntities()
         {
-            var assetGuids = AssetDatabase.FindAssets("t: GameObject");
-
-            var assetPaths = assetGuids.Select(guid => AssetDatabase.GUIDToAssetPath(guid));
-
-            var saveableGameObjects = assetPaths.Select(path => AssetDatabase.LoadAssetAtPath<GameObject>(path))
+            var saveableGameObjects = AssetDatabase.FindAssets("t: GameObject")
+                .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
+                .Select(path => AssetDatabase.LoadAssetAtPath<GameObject>(path))
                 .Where(gameObject => gameObject.ParentOrChildContainsComponent<SaveableGameEntity>())
                 .ToList();
 
