@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using SJ.Management.Localization;
+using Paps.EventBus;
 
 namespace SJ.Menu
 {
@@ -29,7 +30,7 @@ namespace SJ.Menu
         private IGameInputSettingsRepository gameInputSettingsRepository;
         private ITranslatorService translatorService;
         private IGameInputSettingsScreenView gameInputSettingsScreenView;
-
+        private IEventBus eventBus;
         private string listeningGroup;
         private bool listeningMain;
 
@@ -38,13 +39,13 @@ namespace SJ.Menu
         private List<BackupInputKeyGroup> backupInputKeyGroups = new List<BackupInputKeyGroup>();
 
         public KeyboardMappingScreenViewController(IKeyboardMappingScreenView view, IGameInputSettingsRepository gameInputSettingsRepository,
-            ITranslatorService translatorService, IGameInputSettingsScreenView gameInputSettingsScreenView)
+            ITranslatorService translatorService, IGameInputSettingsScreenView gameInputSettingsScreenView, IEventBus eventBus)
         {
             this.view = view;
             this.gameInputSettingsRepository = gameInputSettingsRepository;
             this.translatorService = translatorService;
             this.gameInputSettingsScreenView = gameInputSettingsScreenView;
-
+            this.eventBus = eventBus;
             Initialize();
         }
 
@@ -218,6 +219,7 @@ namespace SJ.Menu
                     }
                 })
                 .ContinueWith(_ => gameInputSettingsRepository.SaveSettings())
+                .Do(_ => eventBus.Publish(ApplicationEvents.GameInputSettingsChanged))
                 .Do(_ => ResetAndRefresh())
                 .Subscribe();
         }

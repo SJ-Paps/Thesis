@@ -2,6 +2,7 @@
 using UniRx;
 using System;
 using SJ.Management.Localization;
+using Paps.EventBus;
 
 namespace SJ.Menu
 {
@@ -19,6 +20,7 @@ namespace SJ.Menu
         private IGameInputSettingsScreenView view;
         private IGameInputSettingsRepository gameInputSettingsRepository;
         private IOptionsScreenView optionsScreenView;
+        private IEventBus eventBus;
         private ITranslatorService translatorService;
 
         private MutableSettings mutableSettings;
@@ -26,13 +28,13 @@ namespace SJ.Menu
         private bool settingsDirtyFlag;
 
         public GameInputSettingsScreenViewController(IGameInputSettingsScreenView view, IGameInputSettingsRepository gameInputSettingsRepository,
-            ITranslatorService translatorService, IOptionsScreenView optionsScreenView)
+            ITranslatorService translatorService, IOptionsScreenView optionsScreenView, IEventBus eventBus)
         {
             this.view = view;
             this.gameInputSettingsRepository = gameInputSettingsRepository;
             this.translatorService = translatorService;
             this.optionsScreenView = optionsScreenView;
-
+            this.eventBus = eventBus;
             Initialize();
         }
 
@@ -119,6 +121,8 @@ namespace SJ.Menu
                     settings.holdWalkKey = mutableSettings.holdWalkKey;
 
                     settingsDirtyFlag = false;
+
+                    eventBus.Publish(ApplicationEvents.GameInputSettingsChanged);
                 })
                 .ContinueWith(_ => gameInputSettingsRepository.SaveSettings())
                 .Subscribe();

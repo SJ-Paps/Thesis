@@ -62,6 +62,7 @@ namespace SJ.GameEntities.Controllers
 
         protected override void SJAwake()
         {
+            Management.Application.EventBus.Subscribe(ApplicationEvents.GameInputSettingsChanged, LoadInputActions);
             GroupInputActions();
             LoadInputActions();
         }
@@ -115,6 +116,8 @@ namespace SJ.GameEntities.Controllers
                 keyGroups[JumpKeyGroupName].main,
                 keyGroups[JumpKeyGroupName].alternative
                 );
+
+            Debug.Log("Actions updated!");
         }
 
         protected override void SJUpdate()

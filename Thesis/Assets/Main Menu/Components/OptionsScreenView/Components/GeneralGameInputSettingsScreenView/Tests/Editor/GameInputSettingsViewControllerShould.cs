@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
+using Paps.EventBus;
 using SJ.Management;
 using SJ.Management.Localization;
 using SJ.Menu;
@@ -19,6 +20,7 @@ namespace SJ.Tests
         private IGameInputSettingsRepository gameInputSettingsRepository;
         private ITranslatorService translatorService;
         private IOptionsScreenView optionsScreenView;
+        private IEventBus eventBus;
 
         private GameInputSettings gameInputSettings;
 
@@ -31,6 +33,7 @@ namespace SJ.Tests
             gameInputSettingsRepository = Substitute.For<IGameInputSettingsRepository>();
             translatorService = Substitute.For<ITranslatorService>();
             optionsScreenView = Substitute.For<IOptionsScreenView>();
+            eventBus = Substitute.For<IEventBus>();
 
             gameInputSettings = ScriptableObject.CreateInstance<GameInputSettings>();
 
@@ -207,9 +210,21 @@ namespace SJ.Tests
             view.Received(1).FocusJoystickMappingScreen();
         }
 
+        [Test]
+        public void Publish_Game_Input_Settings_Changed_Event_When_Configuration_Is_Changed()
+        {
+            GivenAController();
+
+            view.OnHoldDuckKeyToggleChanged += Raise.Event<UnityAction<bool>>(true);
+
+            view.OnSaveButtonClicked += Raise.Event<UnityAction>();
+
+            eventBus.Received(1).Publish(ApplicationEvents.GameInputSettingsChanged);
+        }
+
         private void GivenAController()
         {
-            controller = new GameInputSettingsScreenViewController(view, gameInputSettingsRepository, translatorService, optionsScreenView);
+            controller = new GameInputSettingsScreenViewController(view, gameInputSettingsRepository, translatorService, optionsScreenView, eventBus);
         }
 
         private void GivenAConfirmationPopupThatWillBeAccepted()

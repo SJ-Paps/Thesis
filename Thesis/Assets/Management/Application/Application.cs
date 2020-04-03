@@ -1,4 +1,5 @@
-﻿using SJ.Management.Audio;
+﻿using Paps.EventBus;
+using SJ.Management.Audio;
 using SJ.Management.Localization;
 using System;
 using UniRx;
@@ -11,6 +12,7 @@ namespace SJ.Management
         public static ITranslatorService TranslatorService { get; private set; }
         public static ISoundService SoundService { get; private set; }
         public static IGameManager GameManager { get; private set; }
+        public static IEventBus EventBus { get; private set; }
         public static ApplicationSettings ApplicationSettings { get; private set; }
 
         public static bool IsInitialized { get; private set; }
@@ -40,6 +42,7 @@ namespace SJ.Management
             TranslatorService = TranslatorServiceFactory.Create();
             SoundService = SoundServiceFactory.Create();
             GameManager = new GameManager(Repositories.GetProfileRepository(), ApplicationSettings);
+            EventBus = new EventBus();
 
             IsInitialized = true;
         }

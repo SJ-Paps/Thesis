@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
+using Paps.EventBus;
 using SJ.Management;
 using SJ.Management.Localization;
 using SJ.Menu;
@@ -32,6 +33,7 @@ namespace SJ.Tests
         private ITranslatorService translatorService;
         private IGameInputSettingsRepository gameInputSettingsRepository;
         private IGameInputSettingsScreenView gameInputSettingsScreenView;
+        private IEventBus eventBus;
 
         private KeyboardMappingScreenViewController controller;
 
@@ -42,6 +44,7 @@ namespace SJ.Tests
             translatorService = Substitute.For<ITranslatorService>();
             gameInputSettingsRepository = Substitute.For<IGameInputSettingsRepository>();
             gameInputSettingsScreenView = Substitute.For<IGameInputSettingsScreenView>();
+            eventBus = Substitute.For<IEventBus>();
 
             translatorService.GetLineByTagOfCurrentLanguage(KeyGroupNameLanguageTag.ToLower()).Returns(KeyGroupNameTranslation);
             translatorService.GetLineByTagOfCurrentLanguage(ResetMessageLanguageTag).Returns(ResetMessageTranslation);
@@ -370,6 +373,23 @@ namespace SJ.Tests
             gameInputSettingsScreenView.Received(1).FocusMainScreen();
         }
 
+        [Test]
+        public void Publish_Game_Input_Settings_Changed_Event_When_Configuration_Is_Changed()
+        {
+            GivenAKeyGroup();
+            GivenAController();
+
+            view.ClearReceivedCalls();
+
+            view.OnRequestedMainKeyRebind += Raise.Event<Action<string>>(KeyGroupName);
+
+            view.OnKeyListened += Raise.Event<Action<KeyCode>>(ValidRebindKey);
+
+            view.OnSaveButtonClicked += Raise.Event<UnityAction>();
+
+            eventBus.Received(1).Publish(ApplicationEvents.GameInputSettingsChanged);
+        }
+
         private void GivenAKeyGroup()
         {
             gameInputSettings = ScriptableObject.CreateInstance<GameInputSettings>();
@@ -382,7 +402,7 @@ namespace SJ.Tests
 
         private void GivenAController()
         {
-            controller = new KeyboardMappingScreenViewController(view, gameInputSettingsRepository, translatorService, gameInputSettingsScreenView);
+            controller = new KeyboardMappingScreenViewController(view, gameInputSettingsRepository, translatorService, gameInputSettingsScreenView, eventBus);
         }
 
         private void GivenAConfirmationPopupThatWillBeAccepted()

@@ -14,6 +14,9 @@ namespace SJ
         [SerializeField]
         private bool enableUpdate = false, enableLateUpdate = false, enableFixedUpdate = false;
 
+        [SerializeField]
+        private bool disableAfterAwake;
+
         public bool EnableUpdate
         {
             get => enableUpdate;
@@ -67,28 +70,13 @@ namespace SJ
         private List<ILateUpdateListener> lateUpdateListeners = new List<ILateUpdateListener>();
         private List<IFixedUpdateListener> fixedUpdateListeners = new List<IFixedUpdateListener>();
 
-        protected SJMonoBehaviour()
-        {
-            if (Application.IsInitialized)
-            {
-                OnInstantiation?.Invoke(this);
-                Initialize();
-            }
-        }
-
-        private void Initialize()
-        {
-            SJInitialize();
-        }
-
-        protected virtual void SJInitialize()
-        {
-
-        }
-
         private void Awake()
         {
+            OnInstantiation?.Invoke(this);
             SJAwake();
+
+            if (disableAfterAwake)
+                gameObject.SetActive(false);
         }
 
         protected virtual void SJAwake()

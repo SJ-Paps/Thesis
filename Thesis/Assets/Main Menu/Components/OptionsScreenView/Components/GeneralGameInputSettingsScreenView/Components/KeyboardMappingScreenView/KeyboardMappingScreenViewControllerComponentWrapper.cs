@@ -14,7 +14,7 @@ namespace SJ.Menu
         {
             controller = new KeyboardMappingScreenViewController(
                 GetComponent<IKeyboardMappingScreenView>(), Repositories.GetGameInputSettingsRepository(),
-                Management.Application.TranslatorService, gameInputSettingsScreenView);
+                Management.Application.TranslatorService, gameInputSettingsScreenView, Management.Application.EventBus);
         }
     }
 }

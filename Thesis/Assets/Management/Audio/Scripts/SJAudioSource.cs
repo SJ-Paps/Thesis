@@ -61,13 +61,9 @@ namespace SJ.Management.Audio
 
         public event VolumeChanged OnVolumeChanged;
 
-        protected override void SJInitialize()
-        {
-            SoundService.AddAudioSource(this);
-        }
-
         protected override void SJAwake()
         {
+            SoundService.AddAudioSource(this);
             UpdateScaledVolume(SoundService.GetScaledVolumeOfChannel(channel));
 
             SoundService.OnChannelVolumeChanged += OnChannelVolumeChanged;
