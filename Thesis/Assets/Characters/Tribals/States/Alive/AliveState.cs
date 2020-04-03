@@ -1,6 +1,6 @@
 ﻿namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class AliveState : TribalState
+    public class AliveState : TribalSimpleState
     {
         private bool isInWalkingMode;
 

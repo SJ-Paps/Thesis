@@ -128,25 +128,40 @@ namespace SJ.GameEntities.Characters.Tribals
 
         protected override void SJAwake()
         {
+            CacheComponents();
+            InitializeConfigurationProperties();
+            InitializeStateMachine();
+
+            base.SJAwake();
+        }
+
+        private void InitializeStateMachine()
+        {
+            hsm = (HierarchicalStateMachine<State, Trigger>)hsmBuilder.Build();
+
+            InitializeStates();
+            InitializeGuardConditions();
+            hsm.OnBeforeActiveHierarchyPathChanges += SaveLastTrigger;
+
+            hsm.Start();
+        }
+
+        private void InitializeConfigurationProperties()
+        {
+            MaxMovementVelocity = new PercentageReversibleNumber(maxMovementVelocity);
+            MovementAcceleration = new PercentageReversibleNumber(movementAcceleration);
+            JumpAcceleration = new PercentageReversibleNumber(jumpAcceleration);
+            JumpMaxTime = new PercentageReversibleNumber(jumpMaxTime);
+        }
+
+        private void CacheComponents()
+        {
             Animator = GetComponent<IAnimator>();
             RigidBody2D = GetComponent<IRigidbody2D>();
             transform = GetComponent<ITransform>();
             Collider = GetComponent<ICapsuleCollider2D>();
 
             collisionCallbackCaller = GetComponent<CompositeCollisionTrigger2DCallbackCaller>();
-
-            MaxMovementVelocity = new PercentageReversibleNumber(maxMovementVelocity);
-            MovementAcceleration = new PercentageReversibleNumber(movementAcceleration);
-            JumpAcceleration = new PercentageReversibleNumber(jumpAcceleration);
-            JumpMaxTime = new PercentageReversibleNumber(jumpMaxTime);
-
-            hsm = (HierarchicalStateMachine<State, Trigger>)hsmBuilder.Build();
-
-            InitializeStates();
-
-            hsm.Start();
-
-            base.SJAwake();
         }
 
         private void InitializeStates()
@@ -157,11 +172,28 @@ namespace SJ.GameEntities.Characters.Tribals
             {
                 var stateObject = hsm.GetStateById(state);
 
-                if (stateObject is TribalState tribalState)
-                    tribalState.InitializeWith(this, hsm, blackboard);
+                if (stateObject is ITribalStateMachineElement stateMachineElement)
+                    stateMachineElement.InitializeWith(this, hsm, blackboard);
             }
+        }
 
-            hsm.OnBeforeActiveHierarchyPathChanges += SaveLastTrigger;
+        private void InitializeGuardConditions()
+        {
+            var transitions = hsm.GetTransitions();
+
+            foreach (var transition in transitions)
+            {
+                var guardConditions = hsm.GetGuardConditionsOf(transition);
+
+                if(guardConditions != null)
+                {
+                    foreach (var guardCondition in guardConditions)
+                    {
+                        if (guardCondition is ITribalStateMachineElement stateMachineElement)
+                            stateMachineElement.InitializeWith(this, hsm, blackboard);
+                    }
+                }
+            }
         }
 
         private void SaveLastTrigger(Trigger trigger)

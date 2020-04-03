@@ -1,6 +1,6 @@
 ﻿namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class ChoiceMovingState : TribalState
+    public class ChoiceMovingState : TribalSimpleState
     {
         protected override void OnEnter()
         {

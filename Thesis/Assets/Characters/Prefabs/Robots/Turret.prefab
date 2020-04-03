@@ -74,7 +74,6 @@ GameObject:
   - component: {fileID: 4439546763901998208}
   - component: {fileID: 4416655179465996970}
   - component: {fileID: 4326493926331596724}
-  - component: {fileID: 4324654064059290028}
   m_Layer: 16
   m_Name: Eyes
   m_TagString: Untagged
@@ -138,22 +137,6 @@ MonoBehaviour:
   enableUpdate: 0
   enableLateUpdate: 0
   enableFixedUpdate: 0
---- !u!114 &4324654064059290028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4437409160403559570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9453e8602f270b449afcf84214fecd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableUpdate: 0
-  enableLateUpdate: 0
-  enableFixedUpdate: 0
-  eyePoint: {fileID: 4432583636878001168}
 --- !u!1 &4437911121285590450
 GameObject:
   m_ObjectHideFlags: 0

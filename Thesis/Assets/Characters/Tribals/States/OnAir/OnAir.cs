@@ -1,6 +1,6 @@
 ﻿namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class OnAir : TribalState
+    public class OnAir : TribalSimpleState
     {
 
     }

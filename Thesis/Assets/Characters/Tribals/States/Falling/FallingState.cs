@@ -2,7 +2,7 @@
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class FallingState : TribalState
+    public class FallingState : TribalSimpleState
     {
         [SerializeField]
         private float velocityDeadZone;

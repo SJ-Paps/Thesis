@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class BrakingState : TribalState, IFixedUpdateListener
+    public class BrakingState : TribalSimpleState, IFixedUpdateListener
     {
         [SerializeField]
         private float brakeForce, velocityDeadZone;

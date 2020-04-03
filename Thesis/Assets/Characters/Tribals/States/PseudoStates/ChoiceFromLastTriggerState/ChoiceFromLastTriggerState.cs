@@ -2,7 +2,7 @@
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class ChoiceFromLastTriggerState : TribalState
+    public class ChoiceFromLastTriggerState : TribalSimpleState
     {
         protected override void OnEnter()
         {

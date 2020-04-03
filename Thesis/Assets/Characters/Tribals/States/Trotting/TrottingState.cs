@@ -1,6 +1,6 @@
 ﻿namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class TrottingState : TribalState
+    public class TrottingState : TribalSimpleState
     {
         protected override void OnEnter()
         {

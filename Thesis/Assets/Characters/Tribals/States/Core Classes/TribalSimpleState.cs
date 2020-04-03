@@ -4,7 +4,7 @@ using SJ.Tools;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public abstract class TribalState : ScriptableState
+    public abstract class TribalSimpleState : ScriptableState, ITribalStateMachineElement
     {
         protected ITribal Owner { get; private set; }
         protected IHierarchicalStateMachine<Tribal.State, Tribal.Trigger> StateMachine { get; private set; }
@@ -33,7 +33,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
             StateMachine.Trigger(trigger);
         }
 
-        public override bool HandleEvent(IEvent ev)
+        public override sealed bool HandleEvent(IEvent ev)
         {
             var orderEvent = ((Tribal.TribalStateEvent)ev).eventData;
 

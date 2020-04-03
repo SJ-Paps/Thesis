@@ -76,11 +76,6 @@ namespace SJ.GameEntities
 
 #if UNITY_EDITOR
 
-        protected override void SJValidate()
-        {
-            SavePrefabName();
-        }
-
         public void SavePrefabName()
         {
             GameObject prefab = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource<GameObject>(gameObject);

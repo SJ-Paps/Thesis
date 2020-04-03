@@ -2,7 +2,7 @@
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class WalkingState : TribalState
+    public class WalkingState : TribalSimpleState
     {
         [SerializeField]
         private float velocityConstraintPercentage;

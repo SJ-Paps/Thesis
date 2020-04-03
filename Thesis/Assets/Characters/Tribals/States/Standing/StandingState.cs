@@ -1,6 +1,6 @@
 ﻿namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class StandingState : TribalState
+    public class StandingState : TribalSimpleState
     {
 
     }

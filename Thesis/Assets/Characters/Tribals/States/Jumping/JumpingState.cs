@@ -1,11 +1,10 @@
 ﻿using SJ.Management;
 using SJ.Tools;
-using System;
 using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class JumpingState : TribalState, IFixedUpdateListener
+    public class JumpingState : TribalSimpleState, IFixedUpdateListener
     {
         [SerializeField]
         private float jumpForce, velocityDeadZone;

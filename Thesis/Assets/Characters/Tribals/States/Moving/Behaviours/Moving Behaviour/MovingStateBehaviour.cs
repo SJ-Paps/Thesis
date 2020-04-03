@@ -1,11 +1,10 @@
 ﻿using SJ.Management;
-using SJ.Tools;
 using System;
 using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class MovingState : TribalState, IFixedUpdateListener
+    public class MovingStateBehaviour : TribalStateBehaviour, IFixedUpdateListener
     {
         [SerializeField]
         private float velocityDeadZone;
@@ -15,42 +14,30 @@ namespace SJ.GameEntities.Characters.Tribals.States
         private float moveForce;
         private bool isMovingByWill;
 
-        private SyncTimer checkMovableObjectsTimer = new SyncTimer();
-
-        protected override void Initialize()
-        {
-            InitializeMovableObjectsTimer();
-        }
-
-        private void InitializeMovableObjectsTimer()
-        {
-            checkMovableObjectsTimer.Interval = 0.2f;
-            checkMovableObjectsTimer.Loop = true;
-            checkMovableObjectsTimer.OnTick += _ => SearchMovableObjects();
-        }
-
-        protected override void OnEnter()
+        public override void OnEnter()
         {
             moveDirection = Owner.FacingDirection;
+
             Owner.SubscribeToFixedUpdate(this);
+
             isMovingByWill = true;
-            checkMovableObjectsTimer.Start();
         }
 
-        protected override void OnUpdate()
+        public override void OnUpdate()
         {
-            checkMovableObjectsTimer.Update(Time.deltaTime);
-
-            if (isMovingByWill == false || (IsOnVelocityDeadZone() && HasWallTooClose(moveDirection)))
+            if (ShouldStop())
                 Trigger(Tribal.Trigger.Stop);
-                
+
             isMovingByWill = false;
         }
 
-        protected override void OnExit()
+        private bool ShouldStop()
         {
-            checkMovableObjectsTimer.Stop();
+            return isMovingByWill == false || (IsOnVelocityDeadZone() && HasWallTooClose(moveDirection));
+        }
 
+        public override void OnExit()
+        {
             shouldMove = false;
             isMovingByWill = false;
 
@@ -59,9 +46,10 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override bool OnHandleEvent(Character.Order ev)
         {
-            switch(ev.type)
+            switch (ev.type)
             {
                 case Character.OrderType.Move:
+
                     moveDirection = ev.weight >= 0 ? FaceDirection.Right : FaceDirection.Left;
                     moveForce = Math.Abs(ev.weight);
 
@@ -70,10 +58,11 @@ namespace SJ.GameEntities.Characters.Tribals.States
                     return true;
 
                 case Character.OrderType.Run:
+
                     Trigger(Tribal.Trigger.Run);
                     return true;
             }
-            
+
             return false;
         }
 
@@ -87,7 +76,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
             shouldMove = false;
         }
-        
+
         private void Move()
         {
             Move(moveDirection, moveForce);
@@ -139,25 +128,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
             return Physics2D.Linecast(upperPoint, new Vector2(upperPoint.x + (width * direction), lowerPoint.y), layerMask) ||
                 Physics2D.Linecast(lowerPoint, new Vector2(lowerPoint.x + (width * direction), upperPoint.y), layerMask);
-        }
-
-        private void SearchMovableObjects()
-        {
-            float checkMovableObjectDistanceX = 0.2f;
-
-            int xDirection = (int)Owner.FacingDirection;
-
-            var bounds = Owner.Collider.bounds;
-
-            var center = new Vector2(bounds.center.x + (bounds.extents.x * xDirection), bounds.center.y - bounds.extents.y / 3);
-            var size = new Vector2(checkMovableObjectDistanceX, bounds.extents.y);
-
-            var movableObject = SJUtil.FindMovableObject(center, size, Owner.transform.eulerAngles.z);
-
-            if(movableObject != null)
-            {
-                Trigger(Tribal.Trigger.Pull);
-            }
         }
     }
 }

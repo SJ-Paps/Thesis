@@ -2,7 +2,7 @@
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class PullingState : TribalState
+    public class PullingState : TribalSimpleState
     {
         
     }

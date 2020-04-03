@@ -2,7 +2,7 @@
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class IdleState : TribalState
+    public class IdleState : TribalSimpleState
     {
         protected override void OnEnter()
         {

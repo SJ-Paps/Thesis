@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class OnGroundState : TribalState
+    public class OnGroundState : TribalSimpleState
     {
         [SerializeField]
         private float velocityDeadZone, intervalBetweenGroundAndNextJump;
