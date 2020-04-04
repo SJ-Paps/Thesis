@@ -24,14 +24,14 @@ namespace SJ.GameEntities.Characters.Tribals
             Falling,
             Standing,
             Ducking,
-            StandingIdle,
-            DuckingIdle,
-            StandingMoving,
-            DuckingMoving,
-            StandingTrotting,
-            DuckingTrotting,
-            StandingWalking,
-            DuckingWalking,
+            IdleStanding,
+            IdleDucking,
+            MovingStanding,
+            MovingDucking,
+            TrottingStanding,
+            TrottingDucking,
+            WalkingStanding,
+            WalkingDucking,
             Running,
             Hidden,
             Grappling,
@@ -39,8 +39,8 @@ namespace SJ.GameEntities.Characters.Tribals
             ChoiceOnAir,
             Braking,
             ChoiceMoving,
-            PullingIdle,
-            PullingMoving
+            IdlePulling,
+            MovingPulling,
         }
 
         public enum Trigger

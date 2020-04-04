@@ -5,6 +5,9 @@ namespace SJ.GameEntities.Characters.Tribals.States
 {
     public class IdleState : TribalSimpleState
     {
+        [SerializeField]
+        private bool applyFacing;
+
         protected override void OnEnter()
         {
             Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.Idle);
@@ -26,12 +29,13 @@ namespace SJ.GameEntities.Characters.Tribals.States
                 else
                     desiredDirection = FaceDirection.Left;
 
-                Owner.Face(desiredDirection);
+                if(applyFacing)
+                    Owner.Face(desiredDirection);
 
                 if (HasWallTooClose(desiredDirection) == false)
                 {
                     Blackboard.SetItem(Tribal.BlackboardKeys.MovingInitialDirectionAndForce, ev.weight);
-                    Trigger(Tribal.Trigger.Trot);
+                    Trigger(Tribal.Trigger.Move);
                     return true;
                 }
             }
@@ -41,7 +45,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private bool HasWallTooClose(FaceDirection faceDirection)
         {
-            int layerMask = Layers.Walkable;
+            int layerMask = Layers.Floor;
 
             int direction = (int)faceDirection;
 

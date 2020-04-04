@@ -11,18 +11,18 @@ namespace SJ.Tools
             items = new Dictionary<string, BlackboardItem>();
         }
 
-        public T GetItemOf<T>(string identifier)
+        public T GetItem<T>(string identifier)
         {
             var item = (BlackboardItem<T>)items[identifier];
 
             return item.GetValue();
         }
 
-        public bool TryGetItemOf<T>(string identifier, out T value)
+        public bool TryGetItem<T>(string identifier, out T value)
         {
             if (ContainsItem(identifier))
             {
-                value = GetItemOf<T>(identifier);
+                value = GetItem<T>(identifier);
                 return true;
             }
             else

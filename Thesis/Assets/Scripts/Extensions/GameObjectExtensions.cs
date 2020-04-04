@@ -37,4 +37,9 @@ public static class GameObjectExtensions
     {
         gameObject.SetActive(!gameObject.activeSelf);
     }
+
+    public static TBase AddComponent<TDerived, TBase>(this GameObject gameObject) where TDerived : Component, TBase where TBase : class
+    {
+        return gameObject.AddComponent<TDerived>() as TBase;
+    }
 }

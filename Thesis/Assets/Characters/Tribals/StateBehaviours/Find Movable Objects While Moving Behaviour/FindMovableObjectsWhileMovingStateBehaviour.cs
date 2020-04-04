@@ -49,6 +49,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
             if (movableObject != null)
             {
+                Blackboard.SetItem(Tribal.BlackboardKeys.MovableObject, movableObject);
                 Trigger(Tribal.Trigger.Pull);
             }
         }

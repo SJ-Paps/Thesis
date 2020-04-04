@@ -10,6 +10,9 @@ namespace SJ.GameEntities.Characters.Tribals.States
         [SerializeField]
         private float velocityDeadZone;
 
+        [SerializeField]
+        private bool applyFacing;
+
         private bool shouldMove;
         private FaceDirection moveDirection;
         private float moveForce;
@@ -71,7 +74,9 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             if (shouldMove)
             {
-                Owner.Face(moveDirection);
+                if(applyFacing)
+                    Owner.Face(moveDirection);
+
                 Move();
             }
 
@@ -113,7 +118,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private bool HasWallTooClose(FaceDirection faceDirection)
         {
-            int layerMask = Layers.Walkable;
+            int layerMask = Layers.Floor;
 
             int direction = (int)faceDirection;
 

@@ -25,8 +25,11 @@ MonoBehaviour:
   - _serializedStateId: OnGround
     _stateObject: {fileID: 11400000, guid: 75a71fd70be465a498f6200061e9a22c, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: ChoiceOnAir
-    _stateObject: {fileID: 11400000, guid: 522dc9165af725942969e1e34b67e247, type: 2}
+  - _serializedStateId: Ducking
+    _stateObject: {fileID: 11400000, guid: 53d7008ad77e6654f9992cbdf0ab6057, type: 2}
+    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
+  - _serializedStateId: Standing
+    _stateObject: {fileID: 11400000, guid: a7fc3ac02cf3e2143b787b342eb20ca8, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
   - _serializedStateId: Jumping
     _stateObject: {fileID: 11400000, guid: 720d4dde25cdd674caa7d04b4058adbf, type: 2}
@@ -34,25 +37,19 @@ MonoBehaviour:
   - _serializedStateId: Falling
     _stateObject: {fileID: 11400000, guid: b8c968687687079498d1de641c535003, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: Standing
-    _stateObject: {fileID: 11400000, guid: a7fc3ac02cf3e2143b787b342eb20ca8, type: 2}
+  - _serializedStateId: ChoiceOnAir
+    _stateObject: {fileID: 11400000, guid: 522dc9165af725942969e1e34b67e247, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: Ducking
-    _stateObject: {fileID: 11400000, guid: 53d7008ad77e6654f9992cbdf0ab6057, type: 2}
-    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: StandingIdle
+  - _serializedStateId: IdleStanding
     _stateObject: {fileID: 11400000, guid: b6b8e233d7c06f64a9869d0ba1d6ce49, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: StandingMoving
+  - _serializedStateId: MovingStanding
     _stateObject: {fileID: 11400000, guid: 93aeaefb0cc46a94caca8dcd047aa277, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: Braking
-    _stateObject: {fileID: 11400000, guid: 1222f76c09b46854b8829c164e5cb331, type: 2}
-    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: StandingTrotting
+  - _serializedStateId: TrottingStanding
     _stateObject: {fileID: 11400000, guid: 3b875e518fc58be4c86d94a3cc1b0f12, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: StandingWalking
+  - _serializedStateId: WalkingStanding
     _stateObject: {fileID: 11400000, guid: d4424b6593e0ec44b8c8e7a088e67db3, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
   - _serializedStateId: Running
@@ -61,14 +58,17 @@ MonoBehaviour:
   - _serializedStateId: ChoiceMoving
     _stateObject: {fileID: 11400000, guid: f4ed4539a7fe05d49bbec571d5e2c294, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
+  - _serializedStateId: Braking
+    _stateObject: {fileID: 11400000, guid: 1222f76c09b46854b8829c164e5cb331, type: 2}
+    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
   - _serializedStateId: Pulling
     _stateObject: {fileID: 11400000, guid: b7ca15b30690fd147af420702c7ac4c4, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: PullingIdle
-    _stateObject: {fileID: 0}
+  - _serializedStateId: IdlePulling
+    _stateObject: {fileID: 11400000, guid: 8d825705972aceb4dae55483f061bb5e, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedStateId: PullingMoving
-    _stateObject: {fileID: 0}
+  - _serializedStateId: MovingPulling
+    _stateObject: {fileID: 11400000, guid: 4f8a2c16630653945a190db531fc5cbf, type: 2}
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
   _transitions:
   - _serializedStateFrom: Alive
@@ -78,13 +78,13 @@ MonoBehaviour:
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
   - _serializedStateFrom: OnGround
-    _serializedTrigger: Jump
+    _serializedTrigger: Fall
     _serializedStateTo: OnAir
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
   - _serializedStateFrom: OnGround
-    _serializedTrigger: Fall
+    _serializedTrigger: Jump
     _serializedStateTo: OnAir
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
@@ -125,13 +125,13 @@ MonoBehaviour:
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
-  - _serializedStateFrom: StandingIdle
-    _serializedTrigger: Trot
-    _serializedStateTo: StandingMoving
+  - _serializedStateFrom: IdleStanding
+    _serializedTrigger: Move
+    _serializedStateTo: MovingStanding
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
-  - _serializedStateFrom: StandingMoving
+  - _serializedStateFrom: MovingStanding
     _serializedTrigger: Stop
     _serializedStateTo: Braking
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
@@ -139,17 +139,41 @@ MonoBehaviour:
     _guardConditions: []
   - _serializedStateFrom: Braking
     _serializedTrigger: Stop
-    _serializedStateTo: StandingIdle
+    _serializedStateTo: IdleStanding
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
-  - _serializedStateFrom: StandingTrotting
+  - _serializedStateFrom: ChoiceMoving
     _serializedTrigger: Walk
-    _serializedStateTo: StandingWalking
+    _serializedStateTo: WalkingStanding
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
-  - _serializedStateFrom: StandingTrotting
+  - _serializedStateFrom: ChoiceMoving
+    _serializedTrigger: Trot
+    _serializedStateTo: TrottingStanding
+    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
+    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
+    _guardConditions: []
+  - _serializedStateFrom: ChoiceMoving
+    _serializedTrigger: Run
+    _serializedStateTo: Running
+    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
+    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
+    _guardConditions: []
+  - _serializedStateFrom: WalkingStanding
+    _serializedTrigger: Trot
+    _serializedStateTo: TrottingStanding
+    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
+    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
+    _guardConditions: []
+  - _serializedStateFrom: TrottingStanding
+    _serializedTrigger: Walk
+    _serializedStateTo: WalkingStanding
+    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
+    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
+    _guardConditions: []
+  - _serializedStateFrom: TrottingStanding
     _serializedTrigger: Run
     _serializedStateTo: Running
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
@@ -157,53 +181,17 @@ MonoBehaviour:
     _guardConditions: []
   - _serializedStateFrom: Running
     _serializedTrigger: Trot
-    _serializedStateTo: StandingTrotting
+    _serializedStateTo: TrottingStanding
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
-  - _serializedStateFrom: StandingWalking
-    _serializedTrigger: Trot
-    _serializedStateTo: StandingTrotting
-    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
-    _guardConditions: []
-  - _serializedStateFrom: ChoiceMoving
-    _serializedTrigger: Walk
-    _serializedStateTo: StandingWalking
-    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
-    _guardConditions: []
-  - _serializedStateFrom: ChoiceMoving
-    _serializedTrigger: Trot
-    _serializedStateTo: StandingTrotting
-    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
-    _guardConditions: []
-  - _serializedStateFrom: ChoiceMoving
-    _serializedTrigger: Run
-    _serializedStateTo: Running
-    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
-    _guardConditions: []
-  - _serializedStateFrom: PullingIdle
-    _serializedTrigger: Move
-    _serializedStateTo: PullingMoving
-    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
-    _guardConditions: []
-  - _serializedStateFrom: PullingMoving
-    _serializedTrigger: Stop
-    _serializedStateTo: PullingIdle
-    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
-    _guardConditions: []
-  - _serializedStateFrom: StandingIdle
+  - _serializedStateFrom: MovingStanding
     _serializedTrigger: Pull
     _serializedStateTo: Pulling
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
-  - _serializedStateFrom: StandingMoving
+  - _serializedStateFrom: IdleStanding
     _serializedTrigger: Pull
     _serializedStateTo: Pulling
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
@@ -211,7 +199,19 @@ MonoBehaviour:
     _guardConditions: []
   - _serializedStateFrom: Pulling
     _serializedTrigger: Release
-    _serializedStateTo: StandingIdle
+    _serializedStateTo: IdleStanding
+    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
+    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
+    _guardConditions: []
+  - _serializedStateFrom: IdlePulling
+    _serializedTrigger: Move
+    _serializedStateTo: MovingPulling
+    _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
+    _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
+    _guardConditions: []
+  - _serializedStateFrom: MovingPulling
+    _serializedTrigger: Stop
+    _serializedStateTo: IdlePulling
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
     _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
     _guardConditions: []
@@ -236,30 +236,30 @@ MonoBehaviour:
     - Ducking
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
   - _serializedParentStateId: Standing
-    _serializedInitialChildId: StandingIdle
+    _serializedInitialChildId: IdleStanding
     _serializedChildStateIds:
-    - StandingIdle
-    - StandingMoving
-    - Braking
+    - IdleStanding
+    - MovingStanding
     - Pulling
+    - Braking
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
-  - _serializedParentStateId: StandingMoving
+  - _serializedParentStateId: MovingStanding
     _serializedInitialChildId: ChoiceMoving
     _serializedChildStateIds:
-    - StandingTrotting
-    - StandingWalking
+    - TrottingStanding
+    - WalkingStanding
     - Running
     - ChoiceMoving
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
   - _serializedParentStateId: Pulling
-    _serializedInitialChildId: PullingIdle
+    _serializedInitialChildId: IdlePulling
     _serializedChildStateIds:
-    - PullingIdle
-    - PullingMoving
+    - IdlePulling
+    - MovingPulling
     _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
   _stateIdTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+State
   _triggerTypeFullName: SJ.GameEntities.Characters.Tribals.Tribal+Trigger
   _metadata:
   - Key: PLAIN_STATE_MACHINE_BUILDER_METADATA
-    Value: '{"StateNodesMetadata":[{"_position":{"x":-570.0,"y":-603.0},"_serializedStateId":"Alive","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-283.0,"y":-600.0},"_serializedStateId":"Dead","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-649.0,"y":-351.0},"_serializedStateId":"OnAir","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-269.0,"y":-346.0},"_serializedStateId":"OnGround","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-908.0,"y":-153.0},"_serializedStateId":"ChoiceOnAir","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-440.0,"y":-123.0},"_serializedStateId":"Jumping","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-675.0,"y":-33.0},"_serializedStateId":"Falling","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":123.0,"y":-120.0},"_serializedStateId":"Standing","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-204.0,"y":-124.0},"_serializedStateId":"Ducking","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":84.0,"y":160.0},"_serializedStateId":"StandingIdle","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":410.0,"y":334.0},"_serializedStateId":"StandingMoving","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":563.0,"y":-54.0},"_serializedStateId":"Braking","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":412.0,"y":715.0},"_serializedStateId":"StandingTrotting","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":112.0,"y":714.0},"_serializedStateId":"StandingWalking","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":696.0,"y":708.0},"_serializedStateId":"Running","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":91.0,"y":476.0},"_serializedStateId":"ChoiceMoving","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":861.0,"y":144.0},"_serializedStateId":"Pulling","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":950.0,"y":548.0},"_serializedStateId":"PullingIdle","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":1222.0,"y":548.0},"_serializedStateId":"PullingMoving","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"}]}'
+    Value: '{"StateNodesMetadata":[{"_position":{"x":-940.0,"y":-650.0},"_serializedStateId":"Alive","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-677.0,"y":-647.0},"_serializedStateId":"Dead","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-958.0,"y":-353.0},"_serializedStateId":"OnAir","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-669.0,"y":-353.0},"_serializedStateId":"OnGround","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-690.0,"y":-74.0},"_serializedStateId":"Ducking","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-424.0,"y":-80.0},"_serializedStateId":"Standing","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-957.0,"y":-75.0},"_serializedStateId":"Jumping","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-1208.0,"y":-70.0},"_serializedStateId":"Falling","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-1273.0,"y":-286.0},"_serializedStateId":"ChoiceOnAir","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-455.0,"y":193.0},"_serializedStateId":"IdleStanding","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-119.0,"y":284.0},"_serializedStateId":"MovingStanding","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-127.0,"y":609.0},"_serializedStateId":"TrottingStanding","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-368.0,"y":610.0},"_serializedStateId":"WalkingStanding","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":119.0,"y":604.0},"_serializedStateId":"Running","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-514.0,"y":421.0},"_serializedStateId":"ChoiceMoving","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":-41.0,"y":-64.0},"_serializedStateId":"Braking","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":295.0,"y":136.0},"_serializedStateId":"Pulling","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":374.0,"y":406.0},"_serializedStateId":"IdlePulling","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"},{"_position":{"x":637.0,"y":409.0},"_serializedStateId":"MovingPulling","_stateIdTypeFullName":"SJ.GameEntities.Characters.Tribals.Tribal+State"}]}'
   _serializedInitialStateId: Alive

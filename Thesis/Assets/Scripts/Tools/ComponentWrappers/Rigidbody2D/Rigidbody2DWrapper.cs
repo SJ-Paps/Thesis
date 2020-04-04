@@ -20,6 +20,8 @@ namespace SJ.Tools
 
         public Vector2 velocity { get => Rigidbody2D.velocity; set => Rigidbody2D.velocity = value; }
 
+        public Rigidbody2D InnerComponent => Rigidbody2D;
+
         public void AddForce(Vector2 force, ForceMode2D mode = ForceMode2D.Force)
         {
             Rigidbody2D.AddForce(force, mode);

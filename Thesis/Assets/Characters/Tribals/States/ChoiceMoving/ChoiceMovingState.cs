@@ -4,7 +4,7 @@
     {
         protected override void OnEnter()
         {
-            Blackboard.TryGetItemOf(Tribal.BlackboardKeys.WalkMode, out bool shouldWalk);
+            Blackboard.TryGetItem(Tribal.BlackboardKeys.WalkMode, out bool shouldWalk);
 
             if (shouldWalk)
                 Trigger(Tribal.Trigger.Walk);

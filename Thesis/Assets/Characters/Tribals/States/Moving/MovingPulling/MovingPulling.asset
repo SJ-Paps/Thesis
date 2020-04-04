@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5b27e9e0c33a0e4a85b552f253a439d, type: 3}
-  m_Name: MovingState
+  m_Name: MovingPulling
   m_EditorClassIdentifier: 
-  _debugName: Moving
+  _debugName: MovingPulling
   _instantiateThis: 1
   behaviours:
-  - {fileID: 11400000, guid: fba21885fe4141a40977cc9f971be446, type: 2}
-  - {fileID: 11400000, guid: 8a7999ed5861a2a4f82b436439eabb11, type: 2}
+  - {fileID: 11400000, guid: 50f0d9e902e18f8478c8df3747d045bb, type: 2}

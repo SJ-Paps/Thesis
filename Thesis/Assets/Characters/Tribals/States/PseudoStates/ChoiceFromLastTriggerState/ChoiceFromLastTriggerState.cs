@@ -6,7 +6,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
     {
         protected override void OnEnter()
         {
-            var triggerToNextState = Blackboard.GetItemOf<Tribal.Trigger>(Tribal.BlackboardKeys.LastTrigger);
+            var triggerToNextState = Blackboard.GetItem<Tribal.Trigger>(Tribal.BlackboardKeys.LastTrigger);
 
             Trigger(triggerToNextState);
         }
