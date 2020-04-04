@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using SJ.GameEntities;
-using Boo.Lang;
+using System.Collections.Generic;
 
 namespace SJ.Editor
 {

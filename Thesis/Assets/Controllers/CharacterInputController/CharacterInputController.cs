@@ -1,10 +1,10 @@
-﻿using Boo.Lang;
-using SJ.GameEntities.Characters;
+﻿using SJ.GameEntities.Characters;
 using SJ.GameInput;
 using SJ.Management;
 using SJ.Tools;
 using UniRx;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace SJ.GameEntities.Controllers
 {
