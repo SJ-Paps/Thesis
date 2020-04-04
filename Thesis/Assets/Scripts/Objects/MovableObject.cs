@@ -11,5 +11,10 @@ namespace SJ.GameEntities
         {
             
         }
+
+        public void Disconnect(IRigidbody2D rigidbody2D)
+        {
+            
+        }
     }
 }

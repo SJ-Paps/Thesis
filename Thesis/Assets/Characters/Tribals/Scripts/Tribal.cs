@@ -117,8 +117,15 @@ namespace SJ.GameEntities.Characters.Tribals
 
         private CompositeCollisionTrigger2DCallbackCaller collisionCallbackCaller;
 
+        [Header("Tribal Configuration")]
         [SerializeField]
-        private float maxMovementVelocity, movementAcceleration, jumpAcceleration, jumpMaxTime;
+        private float maxMovementVelocity;
+        [SerializeField]
+        private float movementAcceleration;
+        [SerializeField]
+        private float jumpAcceleration;
+        [SerializeField]
+        private float jumpMaxTime;
 
         [SerializeField]
         private HierarchicalStateMachineBuilder hsmBuilder;

@@ -11,8 +11,13 @@ namespace SJ
         public static event Action<SJMonoBehaviour> OnInstantiation;
         public static event Action<SJMonoBehaviour> OnDestruction;
 
+        [Header("SJ Monobehaviour Options")]
         [SerializeField]
-        private bool enableUpdate = false, enableLateUpdate = false, enableFixedUpdate = false;
+        private bool enableUpdate = false;
+        [SerializeField]
+        private bool enableLateUpdate = false;
+        [SerializeField]
+        private bool enableFixedUpdate = false;
 
         [SerializeField]
         private bool disableAfterAwake;
