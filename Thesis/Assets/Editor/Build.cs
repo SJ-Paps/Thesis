@@ -10,6 +10,8 @@ namespace SJ.Editor
             BuildAssetBundlesFor(target);
 
             BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Reg.BuildPath, target, options);
+
+            EditorUtility.RevealInFinder(Reg.BuildPath);
         }
 
         [MenuItem("Build/Windows/Production")]

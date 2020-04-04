@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
 
 public static class Reg
@@ -18,35 +17,14 @@ public static class Reg
     public static readonly string AssetBundleDirectory = AssetBundleDirectoryBuildMacOS;
     #endif
     
-    
-    
     public const string ApplicationSettingsAssetName = "ApplicationSettings";
     public const string LanguageSettingsAssetName = "LanguageSettings";
     public const string DefaultGameSettingsAssetName = "DefaultGameSettings";
     public const string DefaultGameInputSettingsAssetName = "DefaultGameInputSettings";
-    
 
 #if UNITY_EDITOR
-    public static readonly string BuildPath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), Application.productName), Application.productName + ".exe");
-    public static readonly string AssetBundleDataPathBuild = Path.GetFullPath(Path.Combine(BuildPath, "../AssetBundles"));
-    
+    public static readonly string ProjectPath = Application.dataPath.Replace("/Assets", "");
+    public static readonly string BuildFolderPath = Path.Combine(ProjectPath, "Builds");
+    public static readonly string BuildPath = Path.Combine(Path.Combine(BuildFolderPath, Application.productName), Application.productName + ".exe");
 #endif
-
-    public static readonly int playerLayer = LayerMask.NameToLayer("Player");
-    public static readonly int hostileLayer = LayerMask.NameToLayer("Hostile");
-    public static readonly int nonHostileLayer = LayerMask.NameToLayer("NonHostile");
-    public static readonly int hostileDeadlyLayer = LayerMask.NameToLayer("HostileDeadly");
-    public static readonly int generalDeadlyLayer = LayerMask.NameToLayer("GeneralDeadly");
-	public static readonly int floorLayer = LayerMask.NameToLayer("Floor");
-    public static readonly int activableObjectLayer = LayerMask.NameToLayer("ActivableObject");
-    public static readonly int movableObjectLayer = LayerMask.NameToLayer("MovableObject");
-    public static readonly int playerDetectionLayer = LayerMask.NameToLayer("PlayerDetection");
-    public static readonly int itemLayer = LayerMask.NameToLayer("Item");
-    public static readonly int hiddenLayer = LayerMask.NameToLayer("Hidden");
-
-    public static readonly int walkableLayerMask = (1 << floorLayer) | (1 << movableObjectLayer);
-    public static readonly int activableLayerMask = (1 << movableObjectLayer) | (1 << activableObjectLayer);
-
-    
-    
 }

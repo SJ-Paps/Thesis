@@ -116,8 +116,6 @@ namespace SJ.GameEntities.Controllers
                 keyGroups[JumpKeyGroupName].main,
                 keyGroups[JumpKeyGroupName].alternative
                 );
-
-            Debug.Log("Actions updated!");
         }
 
         protected override void SJUpdate()

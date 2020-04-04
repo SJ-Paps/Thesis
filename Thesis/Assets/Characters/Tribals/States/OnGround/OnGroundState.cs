@@ -26,10 +26,8 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             groundingTimer.Update(Time.deltaTime);
 
-            if (IsBelowVelocityDeadZone() && IsOnFloor() == false)
-            {
+            if (IsBelowVelocityDeadZone() && IsTouchingFloor() == false)
                 Trigger(Tribal.Trigger.Fall);
-            }
         }
 
         private bool IsBelowVelocityDeadZone()
@@ -55,40 +53,32 @@ namespace SJ.GameEntities.Characters.Tribals.States
             return false;
         }
 
-        private bool IsOnFloor()
+        private bool IsTouchingFloor()
         {
-            int layerMask = Reg.walkableLayerMask;
+            int layerMask = Layers.Walkable;
 
             Bounds bounds = Owner.Collider.bounds;
-            float height = 0.05f;
-            float checkFloorNegativeOffsetX = -0.1f;
+            float heightExtents = 0.05f;
+            float widthNegativeOffset = 0.2f;
 
-            Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x - checkFloorNegativeOffsetX, bounds.center.y - bounds.extents.y);
-            Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x + checkFloorNegativeOffsetX, bounds.center.y - bounds.extents.y);
+            var lowerPoint = new Vector2(bounds.center.x, bounds.center.y - bounds.extents.y - heightExtents);
+            var size = new Vector2(bounds.size.x - widthNegativeOffset, heightExtents * 2);
 
-            Logger.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
-            Logger.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
-
-            return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y - height), layerMask) ||
-                Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y - height), layerMask);
+            return Physics2D.OverlapBox(lowerPoint, size, Owner.transform.eulerAngles.z, layerMask) != null;
         }
 
         private bool HasCeilingTooClose()
         {
-            int layerMask = Reg.walkableLayerMask;
+            int layerMask = Layers.Walkable;
 
             Bounds bounds = Owner.Collider.bounds;
-            float height = 0.05f;
-            float checkFloorNegativeOffsetX = -0.1f;
+            float heightExtents = 0.05f;
+            float widthNegativeOffset = 0.1f;
 
-            Vector2 leftPoint = new Vector2(bounds.center.x - bounds.extents.x - checkFloorNegativeOffsetX, bounds.center.y + bounds.extents.y);
-            Vector2 rightPoint = new Vector2(bounds.center.x + bounds.extents.x + checkFloorNegativeOffsetX, bounds.center.y + bounds.extents.y);
+            var upperPoint = new Vector2(bounds.center.x, bounds.center.y + bounds.extents.y + heightExtents);
+            var size = new Vector2(bounds.size.x - widthNegativeOffset, heightExtents * 2);
 
-            Logger.DrawLine(leftPoint, new Vector3(rightPoint.x, rightPoint.y - height), Color.green);
-            Logger.DrawLine(rightPoint, new Vector3(leftPoint.x, leftPoint.y - height), Color.green);
-
-            return Physics2D.Linecast(leftPoint, new Vector2(rightPoint.x, rightPoint.y + height), layerMask) ||
-                Physics2D.Linecast(rightPoint, new Vector2(leftPoint.x, leftPoint.y + height), layerMask);
+            return Physics2D.OverlapBox(upperPoint, size, Owner.transform.eulerAngles.z, layerMask) != null;
         }
     }
 }

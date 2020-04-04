@@ -8,7 +8,7 @@ namespace SJ.Tools
     {
         public static IMovableObject FindMovableObject(Vector2 center, Vector2 size, float angle)
         {
-            Collider2D movableCollider = Physics2D.OverlapBox(center, size, angle, Reg.activableLayerMask);
+            Collider2D movableCollider = Physics2D.OverlapBox(center, size, angle, Layers.MovableObject);
 
             if(movableCollider != null)
             {

@@ -1,4 +1,5 @@
 ﻿using SJ.Management;
+using SJ.Tools;
 using System;
 using UnityEngine;
 
@@ -112,22 +113,18 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private bool HasWallTooClose(FaceDirection faceDirection)
         {
-            int layerMask = Reg.walkableLayerMask;
-
-            Bounds bounds = Owner.Collider.bounds;
-            float width = 0.05f;
-            float offset = -0.01f;
+            int layerMask = Layers.Walkable;
 
             int direction = (int)faceDirection;
 
-            var upperPoint = new Vector2(bounds.center.x + ((bounds.extents.x - offset) * direction), bounds.center.y + bounds.extents.y);
-            var lowerPoint = new Vector2(bounds.center.x + ((bounds.extents.x - offset) * direction), bounds.center.y - bounds.extents.y);
+            Bounds bounds = Owner.Collider.bounds;
+            float widthExtents = 0.02f;
+            float heightNegativeOffset = 0.1f;
 
-            Logger.DrawLine(upperPoint, new Vector2(upperPoint.x + (width * direction), lowerPoint.y), Color.green);
-            Logger.DrawLine(lowerPoint, new Vector2(lowerPoint.x + (width * direction), upperPoint.y), Color.green);
+            var frontPoint = new Vector2(bounds.center.x + ((bounds.extents.x + widthExtents) * direction), bounds.center.y);
+            var size = new Vector2(widthExtents * 2, bounds.size.y - heightNegativeOffset);
 
-            return Physics2D.Linecast(upperPoint, new Vector2(upperPoint.x + (width * direction), lowerPoint.y), layerMask) ||
-                Physics2D.Linecast(lowerPoint, new Vector2(lowerPoint.x + (width * direction), upperPoint.y), layerMask);
+            return Physics2D.OverlapBox(frontPoint, size, Owner.transform.eulerAngles.z, layerMask) != null;
         }
     }
 }
