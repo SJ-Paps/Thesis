@@ -2,7 +2,7 @@
 {
     public interface IUpdater
     {
-        bool IsActive { get; }
+        bool IsEnabled { get; }
 
         void SubscribeToUpdate(IUpdateListener updatable);
         void UnsubscribeFromUpdate(IUpdateListener updateable);

@@ -9,7 +9,7 @@ namespace SJ.Management
         {
             return Repositories.GetGameSettingsRepository()
                 .GetSettings()
-                .Do(settings => Application.TranslatorService.ChangeLanguage(settings.userLanguage))
+                .Do(settings => Application.Instance.TranslatorService().ChangeLanguage(settings.userLanguage))
                 .AsUnitObservable();
         }
     }

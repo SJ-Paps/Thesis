@@ -9,7 +9,7 @@ namespace SJ.Management
 
         void Awake()
         {
-            Application.Initialize(loadActions);
+            Application.Instance.Initialize(loadActions);
         }
     }
 }

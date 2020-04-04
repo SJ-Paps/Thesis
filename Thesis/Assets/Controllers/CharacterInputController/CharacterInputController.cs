@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Controllers
 {
-    public class CharacterInputController : UnityController<Character, Character.Order>
+    public class CharacterInputController : GameEntityController<Character, Character.Order>
     {
         private class InputActionWithOrder
         {
@@ -62,9 +62,11 @@ namespace SJ.GameEntities.Controllers
 
         protected override void SJAwake()
         {
-            Management.Application.EventBus.Subscribe(ApplicationEvents.GameInputSettingsChanged, LoadInputActions);
+            Management.Application.Instance.EventBus().Subscribe(ApplicationEvents.GameInputSettingsChanged, LoadInputActions);
             GroupInputActions();
             LoadInputActions();
+
+            base.SJAwake();
         }
 
         private void GroupInputActions()

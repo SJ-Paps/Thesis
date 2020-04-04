@@ -14,7 +14,7 @@ namespace SJ.Menu
         {
             controller = new SoundSettingsScreenViewController(
                 GetComponent<ISoundSettingsScreenView>(), Repositories.GetGameSettingsRepository(),
-                Management.Application.SoundService, optionsScreenView);
+                Management.Application.Instance.SoundService(), optionsScreenView);
         }
     }
 

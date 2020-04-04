@@ -12,5 +12,7 @@ namespace SJ.GameEntities.Characters.Tribals
         PercentageReversibleNumber MovementAcceleration { get; }
         PercentageReversibleNumber JumpMaxTime { get; }
         PercentageReversibleNumber JumpAcceleration { get; }
+
+        void EnqueueTrigger(Tribal.Trigger trigger);
     }
 }

@@ -3,6 +3,7 @@ using Paps.StateMachines;
 using SJ.GameEntities.Characters.Tribals.States;
 using SJ.Tools;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals
@@ -126,6 +127,9 @@ namespace SJ.GameEntities.Characters.Tribals
         private Blackboard blackboard = new Blackboard();
         private TribalStateEvent stateEvent = new TribalStateEvent();
 
+        private Queue<Trigger> pendingTriggerQueue = new Queue<Trigger>();
+        private Queue<Trigger> frameTriggerQueue = new Queue<Trigger>();
+
         protected override void SJAwake()
         {
             CacheComponents();
@@ -204,6 +208,28 @@ namespace SJ.GameEntities.Characters.Tribals
         protected override void SJLateUpdate()
         {
             hsm.Update();
+            ProcessTriggerQueue();
+        }
+
+        public void EnqueueTrigger(Trigger trigger)
+        {
+            pendingTriggerQueue.Enqueue(trigger);
+        }
+
+        private void ProcessTriggerQueue()
+        {
+            if(pendingTriggerQueue.Count > 0)
+            {
+                foreach (var trigger in pendingTriggerQueue)
+                    frameTriggerQueue.Enqueue(trigger);
+
+                pendingTriggerQueue.Clear();
+
+                foreach (var trigger in frameTriggerQueue)
+                    hsm.Trigger(trigger);
+
+                frameTriggerQueue.Clear();
+            }
         }
 
         protected override void OnSendOrder(Order orderEvent)

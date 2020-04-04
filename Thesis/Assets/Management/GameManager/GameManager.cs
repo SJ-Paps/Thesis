@@ -19,11 +19,7 @@ namespace SJ.Management
             public GameplayObjectSave[] gameplaySaves;
         }
 
-        private string ignoreScenesOnSavingSubfix = "_igld";
-        private string baseSceneName = "Base";
-
-        private string[] beginScenes;
-        private string returnSceneOnEndSession;
+        private ApplicationSettings applicationSettings;
 
         public event Action OnSaving;
         public event Action OnSaveFailed;
@@ -44,9 +40,7 @@ namespace SJ.Management
         public GameManager(IProfileRepository profileRepository, ApplicationSettings applicationSettings)
         {
             this.profileRepository = profileRepository;
-
-            beginScenes = applicationSettings.BeginningScenes;
-            returnSceneOnEndSession = applicationSettings.ReturnSceneOnEndSession;
+            this.applicationSettings = applicationSettings;
 
             saveables = new HashSet<ISaveableGameEntity>();
         }
@@ -88,7 +82,7 @@ namespace SJ.Management
             {
                 gameplaySaves = null,
                 isBeginning = true,
-                loadedScenes = beginScenes
+                loadedScenes = applicationSettings.BeginningScenes
             });
         }
 
@@ -99,7 +93,7 @@ namespace SJ.Management
 
             OnSessionFinished?.Invoke();
 
-            SceneManager.LoadScene(returnSceneOnEndSession);
+            SceneManager.LoadScene(applicationSettings.ReturnSceneOnEndSession);
         }
 
         public void Save()
@@ -185,7 +179,7 @@ namespace SJ.Management
         {
             OnLoading?.Invoke();
 
-            LoadGameplayScenes(beginScenes)
+            LoadGameplayScenes(applicationSettings.BeginningScenes)
                 .Do(_ => OnLoadingSucceeded?.Invoke())
                 .Do(_ => OnSessionBegan?.Invoke())
                 .Subscribe();
@@ -206,9 +200,9 @@ namespace SJ.Management
 
         private IEnumerator LoadBaseScene()
         {
-            SceneManager.LoadScene(baseSceneName, LoadSceneMode.Single);
+            SceneManager.LoadScene(applicationSettings.BaseScene, LoadSceneMode.Single);
             yield return null;
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName(baseSceneName));
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(applicationSettings.BaseScene));
             yield return null;
         }
 
@@ -220,7 +214,7 @@ namespace SJ.Management
             {
                 Scene current = SceneManager.GetSceneAt(i);
 
-                if (current.name.HasSubfix(ignoreScenesOnSavingSubfix) == false && current.name != baseSceneName)
+                if (IsValidSaveableScene(current.name))
                     saveableScenes.Add(current.name);
             }
 
@@ -245,6 +239,11 @@ namespace SJ.Management
         public void UnsubscribeSaveable(ISaveableGameEntity saveable)
         {
             saveables.Remove(saveable);
+        }
+
+        private bool IsValidSaveableScene(string sceneName)
+        {
+            return applicationSettings.IgnoreScenesOnSave.Contains(sceneName) == false && sceneName != applicationSettings.BaseScene;
         }
     }
 }

@@ -1,58 +1,33 @@
-﻿using Paps.EventBus;
-using SJ.Management.Audio;
-using SJ.Management.Localization;
-using System;
-using UniRx;
+﻿using UniRx;
 
 namespace SJ.Management
 {
-    public static class Application
+    public class Application
     {
-        public static IUpdater Updater { get; private set; }
-        public static ITranslatorService TranslatorService { get; private set; }
-        public static ISoundService SoundService { get; private set; }
-        public static IGameManager GameManager { get; private set; }
-        public static IEventBus EventBus { get; private set; }
-        public static ApplicationSettings ApplicationSettings { get; private set; }
+        private static Application instance;
 
-        public static bool IsInitialized { get; private set; }
-
-        public static void Initialize(LoadAction[] loadActions)
+        public static Application Instance
         {
-            LoadApplicationSettings()
-                .Do(applicationsSettings => ApplicationSettings = applicationsSettings)
-                .Do(_ =>
-                {
-                    InitializeMandatoryObjects();
-                    ExecuteLoadActions(loadActions);
-                })
-                .Subscribe();
+            get
+            {
+                if (instance == null)
+                    instance = new Application();
+
+                return instance;
+            }
         }
 
-        private static void ExecuteLoadActions(LoadAction[] loadActions)
+        private Application() { }
+
+        public bool IsInitialized { get; private set; }
+
+        public void Initialize(LoadAction[] loadActions) => ExecuteLoadActions(loadActions);
+
+        private void ExecuteLoadActions(LoadAction[] loadActions)
         {
             Observable.Zip(loadActions)
                 .ObserveOnMainThread()
                 .Subscribe();
         }
-
-        private static void InitializeMandatoryObjects()
-        {
-            Updater = UpdaterFactory.Create();
-            TranslatorService = TranslatorServiceFactory.Create();
-            SoundService = SoundServiceFactory.Create();
-            GameManager = new GameManager(Repositories.GetProfileRepository(), ApplicationSettings);
-            EventBus = new EventBus();
-
-            IsInitialized = true;
-        }
-
-        private static IObservable<ApplicationSettings> LoadApplicationSettings()
-        {
-            return SJResources.LoadAssetAsync<ApplicationSettings>(Reg.ApplicationSettingsAssetName);
-        }
-
     }
 }
-
-

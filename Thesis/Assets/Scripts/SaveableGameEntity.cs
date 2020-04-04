@@ -17,7 +17,9 @@ namespace SJ.GameEntities
 
         protected override void SJAwake()
         {
-            Application.GameManager.SubscribeSaveable(this);
+            base.SJAwake();
+
+            Application.Instance.GameManager().SubscribeSaveable(this);
         }
 
         public GameplayObjectSave Save()
@@ -64,7 +66,7 @@ namespace SJ.GameEntities
         {
             if (UnityEngine.Application.isEditor == false)
             {
-                Application.GameManager.UnsubscribeSaveable(this);
+                Application.Instance.GameManager().UnsubscribeSaveable(this);
             }
         }
 

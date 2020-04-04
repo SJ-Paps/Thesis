@@ -14,7 +14,7 @@ namespace SJ.Menu
         {
             controller = new GameInputSettingsScreenViewController(
                 GetComponent<IGameInputSettingsScreenView>(), Repositories.GetGameInputSettingsRepository(),
-                Management.Application.TranslatorService, optionsScreenView, Management.Application.EventBus);
+                Management.Application.Instance.TranslatorService(), optionsScreenView, Management.Application.Instance.EventBus());
         }
     }
 }

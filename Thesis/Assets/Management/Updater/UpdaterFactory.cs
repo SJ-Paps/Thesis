@@ -4,7 +4,7 @@
     {
         public static IUpdater Create()
         {
-            return new UpdateManager();
+            return new Updater();
         }
     }
 }

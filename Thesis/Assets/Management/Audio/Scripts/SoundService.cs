@@ -207,7 +207,7 @@ namespace SJ.Management.Audio
         private void InstantiatePlayOneShotAudioSource()
         {
             playOneShotSource = GameObject.Instantiate(audioSourcePrefab);
-            UnityUtil.DontDestroyOnLoad(playOneShotSource);
+            playOneShotSource.gameObject.DontDestroyOnLoad();
         }
     }
 }

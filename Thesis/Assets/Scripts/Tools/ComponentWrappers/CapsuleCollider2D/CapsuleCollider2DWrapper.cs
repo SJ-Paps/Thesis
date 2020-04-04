@@ -7,11 +7,17 @@ namespace SJ.Tools
     {
         private new CapsuleCollider2D collider;
 
-        public Bounds bounds { get => collider.bounds; }
-
-        protected override void SJAwake()
+        private CapsuleCollider2D Collider
         {
-            collider = GetComponent<CapsuleCollider2D>();
+            get
+            {
+                if(collider == null)
+                    collider = GetComponent<CapsuleCollider2D>();
+
+                return collider;
+            }
         }
+
+        public Bounds bounds { get => Collider.bounds; }
     }
 }

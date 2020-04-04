@@ -13,7 +13,7 @@ namespace SJ.Menu
         protected override void SJAwake()
         {
             controller = new NewGameScreenViewController(GetComponent<INewGameScreenView>(), Repositories.GetProfileRepository(),
-                Repositories.GetGameSettingsRepository(), Management.Application.TranslatorService, Management.Application.GameManager, mainMenu);
+                Repositories.GetGameSettingsRepository(), Management.Application.Instance.TranslatorService(), Management.Application.Instance.GameManager(), mainMenu);
         }
     }
 }

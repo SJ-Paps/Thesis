@@ -97,19 +97,19 @@ namespace SJ
         private void UpdateUpdaterSubscriptions()
         {
             if (EnableUpdate && gameObject.activeSelf && enabled)
-                Application.Updater.SubscribeToUpdate(this);
+                Application.Instance.Updater().SubscribeToUpdate(this);
             else
-                Application.Updater.UnsubscribeFromUpdate(this);
+                Application.Instance.Updater().UnsubscribeFromUpdate(this);
 
             if (EnableLateUpdate && gameObject.activeSelf && enabled)
-                Application.Updater.SubscribeToLateUpdate(this);
+                Application.Instance.Updater().SubscribeToLateUpdate(this);
             else
-                Application.Updater.UnsubscribeFromLateUpdate(this);
+                Application.Instance.Updater().UnsubscribeFromLateUpdate(this);
 
             if (EnableFixedUpdate && gameObject.activeSelf && enabled)
-                Application.Updater.SubscribeToFixedUpdate(this);
+                Application.Instance.Updater().SubscribeToFixedUpdate(this);
             else
-                Application.Updater.UnsubscribeFromFixedUpdate(this);
+                Application.Instance.Updater().UnsubscribeFromFixedUpdate(this);
         }
 
         private void OnEnable()
@@ -140,9 +140,9 @@ namespace SJ
         {
             OnDestruction?.Invoke(this);
 
-            Application.Updater.UnsubscribeFromUpdate(this);
-            Application.Updater.UnsubscribeFromLateUpdate(this);
-            Application.Updater.UnsubscribeFromFixedUpdate(this);
+            Application.Instance.Updater().UnsubscribeFromUpdate(this);
+            Application.Instance.Updater().UnsubscribeFromLateUpdate(this);
+            Application.Instance.Updater().UnsubscribeFromFixedUpdate(this);
 
             SJOnDestroy();
         }

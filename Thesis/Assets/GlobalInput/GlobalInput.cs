@@ -1,5 +1,4 @@
-﻿using SJ.Tools;
-using SJ.Menu;
+﻿using SJ.Menu;
 using UnityEngine;
 using Application = SJ.Management.Application;
 
@@ -14,14 +13,14 @@ namespace SJ
 
         protected override void SJAwake()
         {
-            UnityUtil.DontDestroyOnLoad(gameObject);
+            gameObject.DontDestroyOnLoad();
 
-            Application.GameManager.OnSessionFinished += () => { Destroy(mainMenuInstance); mainMenuInstance = null; };
+            Application.Instance.GameManager().OnSessionFinished += () => { Destroy(mainMenuInstance); mainMenuInstance = null; };
         }
 
         protected override void SJUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && Application.GameManager.IsInGame())
+            if (Input.GetKeyDown(KeyCode.Escape) && Application.Instance.GameManager().IsInGame())
             {
                 if (mainMenuInstance == null)
                     InstantiateMenu();
@@ -33,9 +32,9 @@ namespace SJ
             }
 #if UNITY_EDITOR
             else if (Input.GetKeyDown(KeyCode.F5))
-                Application.GameManager.Save();
+                Application.Instance.GameManager().Save();
             else if (Input.GetKeyDown(KeyCode.F6))
-                Application.GameManager.Reload();
+                Application.Instance.GameManager().Reload();
 #endif
         }
 

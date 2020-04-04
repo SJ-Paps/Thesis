@@ -10,8 +10,11 @@ namespace SJ.Tools
 
         public static void DontDestroyOnLoad(Object obj)
         {
-            dontDestroyOnLoadObjects.Add(obj);
-            Object.DontDestroyOnLoad(obj);
+            if(dontDestroyOnLoadObjects.Contains(obj) == false)
+            {
+                dontDestroyOnLoadObjects.Add(obj);
+                Object.DontDestroyOnLoad(obj);
+            }
         }
 
         public static T FindDontDestroyOnLoadObjectOfType<T>() where T : class

@@ -15,8 +15,8 @@ namespace SJ.Menu
         {
             base.SJAwake();
 
-            mainScreenController = new MainScreenViewController(GetComponent<IMainScreenView>(), Application.GameManager, 
-                Repositories.GetGameSettingsRepository(), mainMenu, Application.TranslatorService);
+            mainScreenController = new MainScreenViewController(GetComponent<IMainScreenView>(), Application.Instance.GameManager(), 
+                Repositories.GetGameSettingsRepository(), mainMenu, Application.Instance.TranslatorService());
         }
     }
 }

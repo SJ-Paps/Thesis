@@ -30,7 +30,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected void Trigger(Tribal.Trigger trigger)
         {
-            StateMachine.Trigger(trigger);
+            Owner.EnqueueTrigger(trigger);
         }
 
         public override sealed bool HandleEvent(IEvent ev)

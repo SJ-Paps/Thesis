@@ -1,7 +1,7 @@
 ﻿using SJ.GameEntities;
 using UnityEngine;
 
-public abstract class UnityController<TControllable, TOrder> : SaveableGameEntity, IController<TControllable, TOrder> where TControllable : IControllable<TOrder>
+public abstract class GameEntityController<TControllable, TOrder> : SaveableGameEntity, IController<TControllable, TOrder> where TControllable : IControllable<TOrder>
 {
     public event ChangeControlDelegate<TControllable, TOrder> OnControllableChanged;
 

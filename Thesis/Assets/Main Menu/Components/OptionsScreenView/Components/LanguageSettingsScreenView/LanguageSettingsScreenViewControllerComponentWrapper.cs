@@ -13,7 +13,7 @@ namespace SJ.Menu
         protected override void SJAwake()
         {
             controller = new LanguageSettingsScreenViewController(
-                GetComponent<ILanguageSettingsScreenView>(), Management.Application.TranslatorService, 
+                GetComponent<ILanguageSettingsScreenView>(), Management.Application.Instance.TranslatorService(), 
                 Repositories.GetGameSettingsRepository(), optionsScreenView);
         }
     }

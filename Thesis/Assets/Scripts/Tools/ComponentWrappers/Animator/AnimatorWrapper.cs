@@ -7,29 +7,35 @@ namespace SJ.Tools
     {
         private Animator animator;
 
-        protected override void SJAwake()
+        private Animator Animator
         {
-            animator = GetComponent<Animator>();
+            get
+            {
+                if (animator == null)
+                    animator = GetComponent<Animator>();
+
+                return animator;
+            }
         }
 
         public void ResetTrigger(int id)
         {
-            animator.ResetTrigger(id);
+            Animator.ResetTrigger(id);
         }
 
         public void ResetTrigger(string trigger)
         {
-            animator.ResetTrigger(trigger);
+            Animator.ResetTrigger(trigger);
         }
 
         public void SetTrigger(int id)
         {
-            animator.SetTrigger(id);
+            Animator.SetTrigger(id);
         }
 
         public void SetTrigger(string trigger)
         {
-            animator.SetTrigger(trigger);
+            Animator.SetTrigger(trigger);
         }
     }
 }

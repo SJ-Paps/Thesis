@@ -1,5 +1,4 @@
-﻿using SJ.Tools;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FPSDisplay : MonoBehaviour
 {
@@ -7,7 +6,9 @@ public class FPSDisplay : MonoBehaviour
     [RuntimeInitializeOnLoadMethod]
     private static void InstantiateOnLoad()
     {
-        UnityUtil.DontDestroyOnLoad(new GameObject("FSPDisplay").AddComponent<FPSDisplay>().gameObject);
+        new GameObject("FSPDisplay")
+            .AddComponent<FPSDisplay>()
+            .gameObject.DontDestroyOnLoad();
     }
 
     float deltaTime = 0.0f;

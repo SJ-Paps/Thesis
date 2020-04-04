@@ -7,27 +7,22 @@ namespace SJ.Tools
     {
         private new Rigidbody2D rigidbody2D;
 
-        public Vector2 velocity
+        private Rigidbody2D Rigidbody2D
         {
             get
             {
-                return rigidbody2D.velocity;
-            }
+                if(rigidbody2D == null)
+                    rigidbody2D = GetComponent<Rigidbody2D>();
 
-            set
-            {
-                rigidbody2D.velocity = value;
+                return rigidbody2D;
             }
         }
 
-        protected override void SJAwake()
-        {
-            rigidbody2D = GetComponent<Rigidbody2D>();
-        }
+        public Vector2 velocity { get => Rigidbody2D.velocity; set => Rigidbody2D.velocity = value; }
 
         public void AddForce(Vector2 force, ForceMode2D mode = ForceMode2D.Force)
         {
-            rigidbody2D.AddForce(force, mode);
+            Rigidbody2D.AddForce(force, mode);
         }
     }
 }

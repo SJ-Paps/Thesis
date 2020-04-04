@@ -12,13 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad11553160fd7864cb23285587b6fddf, type: 3}
   m_Name: ApplicationSettings
   m_EditorClassIdentifier: 
+  returnSceneOnEndSession: Menu
+  baseScene: Base
   beginningScenes:
   - MasterSceneLevel1
-  - Entities_FirstGame_igld
-  returnSceneOnEndSession: Menu
-  defaultGameSettings:
-    musicVolume: 1
-    soundsVolume: 1
-    generalVolume: 1
-    userLanguage: english
-    lastProfile: 
+  - Entities_FirstGame
+  ignoreScenesOnSave:
+  - Entities_FirstGame

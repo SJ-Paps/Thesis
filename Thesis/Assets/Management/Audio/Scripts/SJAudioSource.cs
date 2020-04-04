@@ -52,7 +52,7 @@ namespace SJ.Management.Audio
 
         public bool IsPlaying => InnerSource.isPlaying;
 
-        protected ISoundService SoundService => Application.SoundService;
+        protected ISoundService SoundService => Application.Instance.SoundService();
 
         [SerializeField]
         protected SoundChannels channel;

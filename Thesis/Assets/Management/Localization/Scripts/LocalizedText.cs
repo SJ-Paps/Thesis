@@ -34,7 +34,7 @@ namespace SJ.Management.Localization
             this.tag = tag;
             this.option = option;
 
-            translatorService = Application.TranslatorService;
+            translatorService = Application.Instance.TranslatorService();
 
             translatorService.onLanguageChanged += OnLanguageChanged;
         }
