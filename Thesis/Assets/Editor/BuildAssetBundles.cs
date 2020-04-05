@@ -30,7 +30,7 @@ namespace SJ.Editor
                     ForMacOS();
                     break;
                 default:
-                    Debug.LogWarning("NO SUITABLE ASSET BUNDLE BUILD TARGET FOUND");
+                    Logger.LogWarning("NO SUITABLE ASSET BUNDLE BUILD TARGET FOUND");
                     break;
             }
         }

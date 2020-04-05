@@ -26,8 +26,13 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             groundingTimer.Update(Time.deltaTime);
 
-            if (IsBelowVelocityDeadZone() && Owner.IsTouchingFloorWalkable() == false)
+            if (IsFalling())
                 Trigger(Tribal.Trigger.Fall);
+        }
+
+        private bool IsFalling()
+        {
+            return IsBelowVelocityDeadZone() && Owner.IsTouchingFloorWalkable() == false;
         }
 
         private bool IsBelowVelocityDeadZone()
@@ -48,7 +53,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
                 groundingTimer.Active == false && 
                 Owner.IsTouchingCeilingWalkable() == false)
             {
-                  Trigger(Tribal.Trigger.Jump);
+                Trigger(Tribal.Trigger.Jump);
                 return true;
             }
 

@@ -8,8 +8,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnEnter()
         {
-            Debug.Log("ENTER PULLING STATE");
-            
             movableObject = Blackboard.GetItem<IMovableObject>(Tribal.BlackboardKeys.MovableObject);
 
             movableObject.Connect(Owner.RigidBody2D);
@@ -18,7 +16,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnExit()
         {
-            Debug.Log("EXIT PULLING STATE");
             movableObject.Disconnect();
             movableObject.OnLinkBreak -= Release;
         }
@@ -35,7 +32,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private void Release()
         {
-            Debug.Log("LINK BREAK");
+            Logger.LogConsole("LINK BREAK");
             Trigger(Tribal.Trigger.Release);
         }
     }

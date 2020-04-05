@@ -58,8 +58,8 @@ namespace SJ.GameEntities.Characters.Tribals
 
             var bounds = tribal.Collider.bounds;
 
-            var center = new Vector2(bounds.center.x + (bounds.extents.x * facingDirection), bounds.center.y - bounds.extents.y / 3);
-            var size = new Vector2(checkMovableObjectDistanceX, bounds.extents.y);
+            var center = new Vector2(bounds.center.x + (bounds.extents.x * facingDirection), bounds.center.y);
+            var size = new Vector2(checkMovableObjectDistanceX, bounds.extents.y / 2);
 
             return SJUtil.FindMovableObject(center, size, tribal.transform.eulerAngles.z);
         }

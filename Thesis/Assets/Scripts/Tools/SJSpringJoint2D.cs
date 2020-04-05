@@ -58,9 +58,11 @@ namespace SJ.Tools
 
         protected override void SJFixedUpdate()
         {
-            if(InnerJoint.reactionForce.magnitude > breakForce)
+            var reactionForce = InnerJoint.reactionForce.magnitude;
+
+            if (reactionForce > breakForce)
             {
-                Debug.Log(InnerJoint.reactionForce.magnitude);
+                Logger.LogConsole("BREAK SPRING JOINT FORCE: " + reactionForce);
                 Disconnect();
                 OnJointBreak?.Invoke();
             }

@@ -47,7 +47,7 @@ namespace SJ.Management
 
         public void BeginSessionFor(string profile)
         {
-            Debug.Log("Wants to begin session with profile " + profile);
+            Logger.LogConsole("Wants to begin session with profile " + profile);
 
             profileRepository.GetProfileDataFrom(profile)
                 .ObserveOnMainThread()
@@ -63,8 +63,7 @@ namespace SJ.Management
                         currentProfileData = maybeProfile.Value;
                         LoadGame();
                     }
-                },
-                error => Debug.LogError(error.Message));
+                });
         }
 
         private IObservable<ProfileData> CreateDefaultProfile(string profile)
@@ -116,7 +115,7 @@ namespace SJ.Management
             profileRepository.UpdateProfileData(CurrentProfile, currentProfileData)
                 .ContinueWith(profileRepository.SaveOnProfile(CurrentProfile, new SaveData(CurrentProfile, sessionData)))
                 .ObserveOnMainThread()
-                .Subscribe(_ => OnSaveSucceeded?.Invoke(), error => { OnSaveFailed?.Invoke(); Debug.LogError(error.Message); });
+                .Subscribe(_ => OnSaveSucceeded?.Invoke(), error => { OnSaveFailed?.Invoke(); });
         }
 
         private void LoadGame()

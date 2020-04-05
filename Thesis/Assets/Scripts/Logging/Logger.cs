@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public static partial class Logger
+public static class Logger
 {
     public static void LogConsole(object obj)
     {
@@ -20,13 +20,6 @@ public static partial class Logger
     {
 #if (UNITY_EDITOR || DEVELOPMENT_BUILD)
         Debug.LogError(obj);
-#endif
-    }
-
-    public static void DrawLine(Vector3 origin, Vector3 end, Color color)
-    {
-#if UNITY_EDITOR && LOG
-        Debug.DrawLine(origin, end, color);
 #endif
     }
 }
