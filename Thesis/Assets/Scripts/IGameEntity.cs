@@ -1,6 +1,6 @@
 ﻿namespace SJ.Management
 {
-    public interface IGameEntity : ICompositeUpdatable
+    public interface IGameEntity : ICompositeUpdateable
     {
         string EntityGUID { get; }
     }

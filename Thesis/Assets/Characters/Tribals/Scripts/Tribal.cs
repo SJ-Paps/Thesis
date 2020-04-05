@@ -112,7 +112,7 @@ namespace SJ.GameEntities.Characters.Tribals
         public PercentageReversibleNumber MaxMovementVelocity { get; protected set; }
         public PercentageReversibleNumber MovementAcceleration { get; protected set; }
         public PercentageReversibleNumber JumpAcceleration { get; protected set; }
-        public PercentageReversibleNumber JumpMaxTime { get; protected set; }
+        public PercentageReversibleNumber JumpMaxForce { get; protected set; }
 
         public event Action OnDead;
 
@@ -126,7 +126,7 @@ namespace SJ.GameEntities.Characters.Tribals
         [SerializeField]
         private float jumpAcceleration;
         [SerializeField]
-        private float jumpMaxTime;
+        private float jumpMaxForce;
 
         [SerializeField]
         private HierarchicalStateMachineBuilder hsmBuilder;
@@ -163,7 +163,7 @@ namespace SJ.GameEntities.Characters.Tribals
             MaxMovementVelocity = new PercentageReversibleNumber(maxMovementVelocity);
             MovementAcceleration = new PercentageReversibleNumber(movementAcceleration);
             JumpAcceleration = new PercentageReversibleNumber(jumpAcceleration);
-            JumpMaxTime = new PercentageReversibleNumber(jumpMaxTime);
+            JumpMaxForce = new PercentageReversibleNumber(jumpMaxForce);
         }
 
         private void CacheComponents()

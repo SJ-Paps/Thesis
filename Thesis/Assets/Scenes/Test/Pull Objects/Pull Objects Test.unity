@@ -680,11 +680,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4974510637164506, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.56
+      value: 1.43
       objectReference: {fileID: 0}
     - target: {fileID: 4974510637164506, guid: 3c94efd32389ad348a2cfa7765206ca8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.62
+      value: -0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 3510456569548738507, guid: 3c94efd32389ad348a2cfa7765206ca8,
+        type: 3}
+      propertyPath: jumpMaxForce
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5250698291130173462, guid: 3c94efd32389ad348a2cfa7765206ca8,
         type: 3}

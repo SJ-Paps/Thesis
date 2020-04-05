@@ -31,7 +31,7 @@ namespace SJ.GameEntities.Characters.Tribals
 
         public static bool IsTouchingFloorWalkable(this ITribal tribal)
         {
-            return IsTouchingCeilingOrFloorLayer(tribal, VerticalDirection.Down, Layers.Walkable);
+            return IsTouchingCeilingOrFloorLayer(tribal, VerticalDirection.Down, Layers.Walkable, heightExtents: 0.02f, widthNegativeOffset: 0.3f);
         }
 
         public static bool IsTouchingCeilingWalkable(this ITribal tribal)
@@ -39,11 +39,10 @@ namespace SJ.GameEntities.Characters.Tribals
             return IsTouchingCeilingOrFloorLayer(tribal, VerticalDirection.Up, Layers.Walkable);
         }
 
-        private static bool IsTouchingCeilingOrFloorLayer(ITribal tribal, VerticalDirection direction, int layerMask)
+        private static bool IsTouchingCeilingOrFloorLayer(ITribal tribal, VerticalDirection direction,
+            int layerMask, float heightExtents = 0.05f, float widthNegativeOffset = 0.1f)
         {
             Bounds bounds = tribal.Collider.bounds;
-            float heightExtents = 0.05f;
-            float widthNegativeOffset = 0.1f;
 
             var upperOrLowerPoint = new Vector2(bounds.center.x, bounds.center.y + (bounds.extents.y + heightExtents) * (int)direction);
             var size = new Vector2(bounds.size.x - widthNegativeOffset, heightExtents * 2);

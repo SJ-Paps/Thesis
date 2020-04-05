@@ -48,7 +48,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
                 groundingTimer.Active == false && 
                 Owner.IsTouchingCeilingWalkable() == false)
             {
-                Trigger(Tribal.Trigger.Jump);
+                  Trigger(Tribal.Trigger.Jump);
                 return true;
             }
 

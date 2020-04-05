@@ -6,7 +6,7 @@ using Application = SJ.Management.Application;
 
 namespace SJ
 {
-    public abstract class SJMonoBehaviour : MonoBehaviour, ICompositeUpdatable
+    public abstract class SJMonoBehaviour : MonoBehaviour, ICompositeUpdateable
     {
         public static event Action<SJMonoBehaviour> OnInstantiation;
         public static event Action<SJMonoBehaviour> OnDestruction;
@@ -202,44 +202,50 @@ namespace SJ
 
         }
 
-        public void SubscribeToUpdate(IUpdateListener updatable)
+        public void SubscribeToUpdate(IUpdateListener listener)
         {
-            updateListeners.Add(updatable);
+            updateListeners.Add(listener);
         }
 
-        public void SubscribeToLateUpdate(ILateUpdateListener updatable)
+        public void SubscribeToLateUpdate(ILateUpdateListener listener)
         {
-            lateUpdateListeners.Add(updatable);
+            lateUpdateListeners.Add(listener);
         }
 
-        public void SubscribeToFixedUpdate(IFixedUpdateListener updatable)
+        public void SubscribeToFixedUpdate(IFixedUpdateListener listener)
         {
-            fixedUpdateListeners.Add(updatable);
+            fixedUpdateListeners.Add(listener);
         }
 
-        public void UnsubscribeFromUpdate(IUpdateListener updatable)
+        public void UnsubscribeFromUpdate(IUpdateListener listener)
         {
-            if (updateListeners.Remove(updatable))
+            var indexOfListener = updateListeners.IndexOf(listener);
+
+            if (updateListeners.Remove(listener))
             {
-                if(updateListenersCurrentIndex > 0)
+                if(indexOfListener <= updateListenersCurrentIndex && updateListenersCurrentIndex > 0)
                     updateListenersCurrentIndex--;
             }
         }
 
-        public void UnsubscribeFromLateUpdate(ILateUpdateListener updatable)
+        public void UnsubscribeFromLateUpdate(ILateUpdateListener listener)
         {
-            if (lateUpdateListeners.Remove(updatable))
+            var indexOfListener = lateUpdateListeners.IndexOf(listener);
+
+            if (lateUpdateListeners.Remove(listener))
             {
-                if(lateUpdateListenersCurrentIndex > 0)
+                if(indexOfListener <= lateUpdateListenersCurrentIndex && lateUpdateListenersCurrentIndex > 0)
                     lateUpdateListenersCurrentIndex--;
             }
         }
 
-        public void UnsubscribeFromFixedUpdate(IFixedUpdateListener updatable)
+        public void UnsubscribeFromFixedUpdate(IFixedUpdateListener listener)
         {
-            if (fixedUpdateListeners.Remove(updatable))
+            var indexOfListener = fixedUpdateListeners.IndexOf(listener);
+
+            if (fixedUpdateListeners.Remove(listener))
             {
-                if(fixedUpdateListenersCurrentIndex > 0)
+                if(indexOfListener <= fixedUpdateListenersCurrentIndex && fixedUpdateListenersCurrentIndex > 0)
                     fixedUpdateListenersCurrentIndex--;
             } 
         }

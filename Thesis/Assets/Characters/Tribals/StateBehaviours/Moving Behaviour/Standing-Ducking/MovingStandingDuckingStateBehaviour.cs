@@ -9,7 +9,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
         [SerializeField]
         private float velocityDeadZone;
 
-        private bool shouldMove;
         private HorizontalDirection moveDirection;
         private float moveForce;
         private bool isMovingByWill;
@@ -38,7 +37,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public override void OnExit()
         {
-            shouldMove = false;
             isMovingByWill = false;
 
             Owner.UnsubscribeFromFixedUpdate(this);
@@ -53,7 +51,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
                     moveDirection = ev.weight >= 0 ? HorizontalDirection.Right : HorizontalDirection.Left;
                     moveForce = Math.Abs(ev.weight);
 
-                    shouldMove = true;
                     isMovingByWill = true;
                     return true;
 
@@ -68,13 +65,8 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void DoFixedUpdate()
         {
-            if (shouldMove)
-            {
-                Owner.Face(moveDirection);
-                Move();
-            }
-
-            shouldMove = false;
+            Owner.Face(moveDirection);
+            Move();
         }
 
         private void Move()

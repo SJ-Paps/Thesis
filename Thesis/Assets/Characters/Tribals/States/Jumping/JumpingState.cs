@@ -10,14 +10,8 @@ namespace SJ.GameEntities.Characters.Tribals.States
         private float jumpForce, velocityDeadZone;
 
         private bool keepsReceivingJumpOrders;
-        private bool jumpOnce;
 
-        private SyncTimer jumpTimer = new SyncTimer();
-
-        protected override void Initialize()
-        {
-            jumpTimer.OnTick += _ => FinishJump();
-        }
+        private float accumulatedForce;
 
         protected override void OnEnter()
         {
@@ -27,18 +21,25 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
             Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.Jump);
 
-            jumpTimer.Start();
+            accumulatedForce = 0;
         }
 
         protected override void OnUpdate()
         {
-            jumpTimer.Interval = Owner.JumpMaxTime;
-            jumpTimer.Update(Time.deltaTime);
-
-            if (keepsReceivingJumpOrders == false || (IsBelowVelocityDeadZone() && Owner.IsTouchingCeilingWalkable()))
+            if (ShouldStop())
                 FinishJump();
 
             keepsReceivingJumpOrders = false;
+        }
+
+        private bool ShouldStop()
+        {
+            return keepsReceivingJumpOrders == false || IsOverMaxForce() || (IsBelowVelocityDeadZone() && Owner.IsTouchingCeilingWalkable());
+        }
+
+        private bool IsOverMaxForce()
+        {
+            return accumulatedForce >= Owner.JumpMaxForce;
         }
 
         private void FinishJump()
@@ -49,7 +50,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
         protected override void OnExit()
         {
             keepsReceivingJumpOrders = false;
-            jumpOnce = false;
 
             Owner.UnsubscribeFromFixedUpdate(this);
         }
@@ -58,7 +58,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             if(ev.type == Character.OrderType.Jump)
             {
-                jumpOnce = true;
                 keepsReceivingJumpOrders = true;
 
                 return true;
@@ -69,17 +68,16 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void DoFixedUpdate()
         {
-            if (jumpOnce)
-            {
-                Jump();
-            }
-
-            jumpOnce = false;
+            Jump();
         }
 
         private void Jump()
         {
-            Owner.RigidBody2D.AddForce(Owner.JumpAcceleration * jumpForce * Vector2.up, ForceMode2D.Impulse);
+            var force = Owner.JumpAcceleration * jumpForce;
+
+            accumulatedForce += force;
+
+            Owner.RigidBody2D.AddForce(force * Vector2.up, ForceMode2D.Impulse);
         }
 
         private bool IsBelowVelocityDeadZone()

@@ -9,7 +9,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
         [SerializeField]
         private float velocityDeadZone, maxMovementVelocityPercentageModifier;
 
-        private bool shouldMove;
         private HorizontalDirection moveDirection;
         private float moveForce;
         private bool isMovingByWill;
@@ -42,7 +41,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public override void OnExit()
         {
-            shouldMove = false;
             isMovingByWill = false;
 
             Owner.MaxMovementVelocity.RemovePercentageConstraint(constraintId);
@@ -67,7 +65,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
                         moveDirection = nextDirection;
                         moveForce = Math.Abs(ev.weight);
 
-                        shouldMove = true;
                         isMovingByWill = true;
                     }
                     return true;
@@ -78,10 +75,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void DoFixedUpdate()
         {
-            if (shouldMove)
-                Move();
-
-            shouldMove = false;
+            Move();
         }
 
         private void Move()

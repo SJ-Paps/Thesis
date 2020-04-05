@@ -10,7 +10,7 @@ namespace SJ.GameEntities.Characters.Tribals
         ICapsuleCollider2D Collider { get; }
         PercentageReversibleNumber MaxMovementVelocity { get; }
         PercentageReversibleNumber MovementAcceleration { get; }
-        PercentageReversibleNumber JumpMaxTime { get; }
+        PercentageReversibleNumber JumpMaxForce { get; }
         PercentageReversibleNumber JumpAcceleration { get; }
 
         void EnqueueTrigger(Tribal.Trigger trigger);
