@@ -38,13 +38,6 @@ namespace SJ.GameEntities
         {
             if(string.IsNullOrEmpty(EntityGUID))
                 EntityGUID = Guid.NewGuid().ToString();
-
-            SJValidate();
-        }
-
-        protected virtual void SJValidate()
-        {
-
         }
 
 #endif

@@ -88,13 +88,13 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private void ClampVelocityIfIsOverLimit()
         {
-            var velocity = Owner.RigidBody2D.velocity;
+            var velocity = Owner.RigidBody2D.Velocity;
             float maxMovementVelocity = Owner.MaxMovementVelocity;
 
             if (velocity.x > maxMovementVelocity)
-                Owner.RigidBody2D.velocity = new Vector2(maxMovementVelocity, velocity.y);
+                Owner.RigidBody2D.Velocity = new Vector2(maxMovementVelocity, velocity.y);
             else if (velocity.x < maxMovementVelocity * -1)
-                Owner.RigidBody2D.velocity = new Vector2(maxMovementVelocity * -1, velocity.y);
+                Owner.RigidBody2D.Velocity = new Vector2(maxMovementVelocity * -1, velocity.y);
         }
     }
 }

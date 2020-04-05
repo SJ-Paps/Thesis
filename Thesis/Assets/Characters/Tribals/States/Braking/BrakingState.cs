@@ -15,7 +15,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnUpdate()
         {
-            if (Owner.RigidBody2D.velocity.x > velocityDeadZone * 1 || Owner.RigidBody2D.velocity.x < velocityDeadZone)
+            if (Owner.RigidBody2D.Velocity.x > velocityDeadZone * 1 || Owner.RigidBody2D.Velocity.x < velocityDeadZone)
             {
                 StopCompletely();
                 Trigger(Tribal.Trigger.Stop);
@@ -46,18 +46,18 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void Brake(float force)
         {
-            if (Owner.RigidBody2D.velocity.x > 0)
+            if (Owner.RigidBody2D.Velocity.x > 0)
             {
                 ApplyForceOnDirection(HorizontalDirection.Left, force);
 
-                if (Owner.RigidBody2D.velocity.x < 0)
+                if (Owner.RigidBody2D.Velocity.x < 0)
                     StopCompletely();
             }
-            else if (Owner.RigidBody2D.velocity.x < 0)
+            else if (Owner.RigidBody2D.Velocity.x < 0)
             {
                 ApplyForceOnDirection(HorizontalDirection.Right, force);
 
-                if (Owner.RigidBody2D.velocity.x < 0)
+                if (Owner.RigidBody2D.Velocity.x < 0)
                     StopCompletely();
             }
         }
@@ -69,7 +69,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void StopCompletely()
         {
-            Owner.RigidBody2D.velocity = Vector2.zero;
+            Owner.RigidBody2D.Velocity = Vector2.zero;
         }
     }
 }

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugName: Idle Standing Ducking
   _instantiateThis: 1
+  drag: 200

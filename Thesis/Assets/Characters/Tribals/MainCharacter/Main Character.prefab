@@ -929,7 +929,7 @@ MonoBehaviour:
   maxMovementVelocity: 3
   movementAcceleration: 1
   jumpAcceleration: 0.4
-  jumpMaxForce: 10
+  jumpMaxForce: 8
   hsmBuilder: {fileID: 11400000, guid: d17cde24881972249bc5d0ed44976893, type: 2}
 --- !u!114 &-3087027967331757174
 MonoBehaviour:

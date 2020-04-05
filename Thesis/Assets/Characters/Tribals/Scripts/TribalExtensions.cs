@@ -20,13 +20,14 @@ namespace SJ.GameEntities.Characters.Tribals
             int direction = (int)faceDirection;
 
             Bounds bounds = tribal.Collider.bounds;
-            float widthExtents = 0.02f;
-            float heightNegativeOffset = 0.1f;
+            float lineSeparation = 0.2f;
 
-            var frontPoint = new Vector2(bounds.center.x + ((bounds.extents.x + widthExtents) * direction), bounds.center.y);
-            var size = new Vector2(widthExtents * 2, bounds.size.y - heightNegativeOffset);
+            var upperBeginPoint = new Vector2(bounds.center.x + (lineSeparation + bounds.extents.x) * direction, bounds.center.y + bounds.extents.y);
+            var lowerEndPoint = new Vector2(upperBeginPoint.x, bounds.center.y);
 
-            return Physics2D.OverlapBox(frontPoint, size, tribal.transform.eulerAngles.z, layerMask) != null;
+            Debug.DrawLine(upperBeginPoint, lowerEndPoint);
+
+            return Physics2D.Linecast(upperBeginPoint, lowerEndPoint, layerMask);
         }
 
         public static bool IsTouchingFloorWalkable(this ITribal tribal)
@@ -66,14 +67,14 @@ namespace SJ.GameEntities.Characters.Tribals
 
         public static bool IsInsideVelocityDeadZoneOnHorizontalAxis(this ITribal tribal, float velocityDeadZone)
         {
-            var velocity = tribal.RigidBody2D.velocity.x;
+            var velocity = tribal.RigidBody2D.Velocity.x;
 
             return velocity > velocityDeadZone * -1 && velocity < velocityDeadZone;
         }
 
         public static bool IsInsideVelocityDeadZoneOnVerticalAxis(this ITribal tribal, float velocityDeadZone)
         {
-            var velocity = tribal.RigidBody2D.velocity.y;
+            var velocity = tribal.RigidBody2D.Velocity.y;
 
             return velocity > velocityDeadZone * -1 && velocity < velocityDeadZone;
         }

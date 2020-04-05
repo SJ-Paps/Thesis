@@ -5,13 +5,18 @@ namespace SJ.GameEntities.Characters.Tribals.States
 {
     public class IdleStandingDuckingState : TribalSimpleState
     {
+        private RigidbodyConstraints2D previousConstraints;
+
         protected override void OnEnter()
         {
+            previousConstraints = Owner.RigidBody2D.Constraints;
+            Owner.RigidBody2D.Constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
             Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.Idle);
         }
 
         protected override void OnExit()
         {
+            Owner.RigidBody2D.Constraints = previousConstraints;
             Owner.Animator.ResetTrigger(Tribal.AnimatorTriggers.Idle);
         }
 
@@ -28,7 +33,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
                 Owner.Face(desiredDirection);
 
-                if (HasWallTooClose(desiredDirection) == false)
+                if (Owner.IsTouchingWall(desiredDirection) == false)
                 {
                     Trigger(Tribal.Trigger.Move);
                     return true;
@@ -36,22 +41,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
             }
 
             return false;
-        }
-
-        private bool HasWallTooClose(HorizontalDirection faceDirection)
-        {
-            int layerMask = Layers.Floor;
-
-            int direction = (int)faceDirection;
-
-            Bounds bounds = Owner.Collider.bounds;
-            float widthExtents = 0.02f;
-            float heightNegativeOffset = 0.1f;
-
-            var frontPoint = new Vector2(bounds.center.x + ((bounds.extents.x + widthExtents) * direction), bounds.center.y);
-            var size = new Vector2(widthExtents * 2, bounds.size.y - heightNegativeOffset);
-
-            return Physics2D.OverlapBox(frontPoint, size, Owner.transform.eulerAngles.z, layerMask) != null;
         }
     }
 }

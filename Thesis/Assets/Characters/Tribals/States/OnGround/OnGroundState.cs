@@ -37,7 +37,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private bool IsBelowVelocityDeadZone()
         {
-            return Owner.RigidBody2D.velocity.y < velocityDeadZone;
+            return Owner.RigidBody2D.Velocity.y < velocityDeadZone;
         }
 
         protected override void OnExit()
