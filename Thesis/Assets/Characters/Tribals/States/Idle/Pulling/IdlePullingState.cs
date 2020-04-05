@@ -3,14 +3,21 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class IdleState : TribalSimpleState
+    public class IdlePullingState : TribalSimpleState
     {
-        [SerializeField]
-        private bool applyFacing;
+        private bool isAboutToMove;
 
         protected override void OnEnter()
         {
             Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.Idle);
+        }
+
+        protected override void OnUpdate()
+        {
+            if (isAboutToMove == false && IsInPullMode() == false)
+                Trigger(Tribal.Trigger.Release);
+
+            isAboutToMove = false;
         }
 
         protected override void OnExit()
@@ -20,7 +27,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override bool OnHandleEvent(Character.Order ev)
         {
-            if(ev.type == Character.OrderType.Move)
+            if (ev.type == Character.OrderType.Move)
             {
                 FaceDirection desiredDirection = default;
 
@@ -29,12 +36,12 @@ namespace SJ.GameEntities.Characters.Tribals.States
                 else
                     desiredDirection = FaceDirection.Left;
 
-                if(applyFacing)
-                    Owner.Face(desiredDirection);
-
                 if (HasWallTooClose(desiredDirection) == false)
                 {
-                    Blackboard.SetItem(Tribal.BlackboardKeys.MovingInitialDirectionAndForce, ev.weight);
+                    isAboutToMove = true;
+
+                    Blackboard.SetItem(Tribal.BlackboardKeys.PullMoveDirection, ev.weight > 0 ? FaceDirection.Right : FaceDirection.Left);
+
                     Trigger(Tribal.Trigger.Move);
                     return true;
                 }
@@ -57,6 +64,11 @@ namespace SJ.GameEntities.Characters.Tribals.States
             var size = new Vector2(widthExtents * 2, bounds.size.y - heightNegativeOffset);
 
             return Physics2D.OverlapBox(frontPoint, size, Owner.transform.eulerAngles.z, layerMask) != null;
+        }
+
+        private bool IsInPullMode()
+        {
+            return Blackboard.GetItem<bool>(Tribal.BlackboardKeys.PullMode);
         }
     }
 }

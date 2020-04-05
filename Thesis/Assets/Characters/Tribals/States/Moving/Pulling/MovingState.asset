@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce6a3a792f7c374daca7a133b10cfba, type: 3}
-  m_Name: IdleState
+  m_Script: {fileID: 11500000, guid: f5b27e9e0c33a0e4a85b552f253a439d, type: 3}
+  m_Name: MovingState
   m_EditorClassIdentifier: 
-  _debugName: IdlePulling
+  _debugName: MovingPulling
   _instantiateThis: 1
-  applyFacing: 0
+  behaviours:
+  - {fileID: 11400000, guid: 158e0ab2483c5784a9fbfe5448b6333f, type: 2}

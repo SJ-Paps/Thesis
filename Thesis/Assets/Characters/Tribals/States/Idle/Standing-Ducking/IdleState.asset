@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f03e342fe9d85d40958b11154a4d650, type: 3}
-  m_Name: MovingPullingBehaviour
+  m_Script: {fileID: 11500000, guid: dce6a3a792f7c374daca7a133b10cfba, type: 3}
+  m_Name: IdleState
   m_EditorClassIdentifier: 
-  _debugName: Moving Pulling Behaviour
+  _debugName: Idle Standing Ducking
   _instantiateThis: 1
-  velocityDeadZone: 0.2
-  applyFacing: 0

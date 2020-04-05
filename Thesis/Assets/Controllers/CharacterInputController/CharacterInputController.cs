@@ -39,6 +39,11 @@ namespace SJ.GameEntities.Controllers
         private const string WalkKeyGroupName = "Walk";
         private const string RunKeyGroupName = "Run";
         private const string JumpKeyGroupName = "Jump";
+        private const string ActivateOrPullKeyGroupName = "Activate";
+
+        [Header("Character Input Controller Configuration")]
+        [SerializeField]
+        private bool loadGameInputSettings = true;
 
         [Header("Input Actions")]
         [Space]
@@ -57,14 +62,22 @@ namespace SJ.GameEntities.Controllers
         [SerializeField]
         private SimpleKeyAction jumpAction;
 
+        [Space]
+        [SerializeField]
+        private SimpleKeyAction pullAction;
+
         private List<AxisActionWithOrder> axisActions = new List<AxisActionWithOrder>();
         private List<InputActionWithOrder> nonAxisActions = new List<InputActionWithOrder>();
 
         protected override void SJAwake()
         {
-            Management.Application.Instance.EventBus().Subscribe(ApplicationEvents.GameInputSettingsChanged, LoadInputActions);
             GroupInputActions();
-            LoadInputActions();
+
+            if(loadGameInputSettings)
+            {
+                Management.Application.Instance.EventBus().Subscribe(ApplicationEvents.GameInputSettingsChanged, LoadInputActions);
+                LoadInputActions();
+            }
 
             base.SJAwake();
         }
@@ -78,6 +91,7 @@ namespace SJ.GameEntities.Controllers
             nonAxisActions.Add(new InputActionWithOrder(walkAction, Character.OrderType.Walk));
             nonAxisActions.Add(new InputActionWithOrder(runAction, Character.OrderType.Run));
             nonAxisActions.Add(new InputActionWithOrder(jumpAction, Character.OrderType.Jump));
+            nonAxisActions.Add(new InputActionWithOrder(pullAction, Character.OrderType.Pull));
         }
 
         private void LoadInputActions()
@@ -117,6 +131,11 @@ namespace SJ.GameEntities.Controllers
             jumpAction.SetKeys(
                 keyGroups[JumpKeyGroupName].main,
                 keyGroups[JumpKeyGroupName].alternative
+                );
+
+            pullAction.SetKeys(
+                keyGroups[ActivateOrPullKeyGroupName].main,
+                keyGroups[ActivateOrPullKeyGroupName].alternative
                 );
         }
 

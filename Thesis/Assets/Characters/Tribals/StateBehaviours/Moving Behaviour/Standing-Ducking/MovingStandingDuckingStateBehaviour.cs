@@ -5,13 +5,10 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class MovingStateBehaviour : TribalStateBehaviour, IFixedUpdateListener
+    public class MovingStandingDuckingStateBehaviour : TribalStateBehaviour, IFixedUpdateListener
     {
         [SerializeField]
         private float velocityDeadZone;
-
-        [SerializeField]
-        private bool applyFacing;
 
         private bool shouldMove;
         private FaceDirection moveDirection;
@@ -74,9 +71,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             if (shouldMove)
             {
-                if(applyFacing)
-                    Owner.Face(moveDirection);
-
+                Owner.Face(moveDirection);
                 Move();
             }
 

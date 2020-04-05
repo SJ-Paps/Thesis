@@ -27,6 +27,7 @@ namespace SJ.GameEntities.Characters
             Walk,
             Run,
             Activate,
+            Pull,
         }
 
         public event Action<Order> OnOrderReceived;

@@ -85,9 +85,10 @@ namespace SJ.GameEntities.Characters.Tribals
         public static class BlackboardKeys
         {
             public const string LastTrigger = "LastTrigger";
-            public const string MovingInitialDirectionAndForce = "MovingInitialDirectionAndForce";
             public const string WalkMode = "WalkMode";
             public const string MovableObject = "MovableObject";
+            public const string PullMoveDirection = "PullMoveDirection";
+            public const string PullMode = "PullMode";
         }
 
         public static class AnimatorTriggers

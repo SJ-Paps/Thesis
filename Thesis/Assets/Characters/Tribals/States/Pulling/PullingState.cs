@@ -1,4 +1,6 @@
-﻿namespace SJ.GameEntities.Characters.Tribals.States
+﻿using UnityEngine;
+
+namespace SJ.GameEntities.Characters.Tribals.States
 {
     public class PullingState : TribalSimpleState
     {
@@ -6,6 +8,8 @@
 
         protected override void OnEnter()
         {
+            Debug.Log("ENTER PULLING STATE");
+            
             movableObject = Blackboard.GetItem<IMovableObject>(Tribal.BlackboardKeys.MovableObject);
 
             movableObject.Connect(Owner.RigidBody2D);
@@ -14,6 +18,8 @@
 
         protected override void OnExit()
         {
+            Debug.Log("EXIT PULLING STATE");
+            movableObject.Disconnect();
             movableObject.OnLinkBreak -= Release;
         }
 
@@ -29,6 +35,7 @@
 
         private void Release()
         {
+            Debug.Log("LINK BREAK");
             Trigger(Tribal.Trigger.Release);
         }
     }

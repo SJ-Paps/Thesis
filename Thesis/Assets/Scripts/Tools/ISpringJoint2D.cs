@@ -10,6 +10,7 @@ namespace SJ.Tools
 
         IRigidbody2D ConnectedBody { get; }
         bool Enabled { get; set; }
+        float BreakForce { get; set; }
 
         void Connect(IRigidbody2D rigidbody2D);
         void Disconnect();

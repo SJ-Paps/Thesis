@@ -33,6 +33,8 @@ namespace SJ.Tools
             }
         }
 
+        public float BreakForce { get => breakForce; set => breakForce = value; }
+
         public void Connect(IRigidbody2D rigidbody2D)
         {
             if (rigidbody2D == null)

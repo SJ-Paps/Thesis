@@ -37,7 +37,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
             switch(ev.type)
             {
                 case Character.OrderType.Move:
-                    Blackboard.SetItem(Tribal.BlackboardKeys.MovingInitialDirectionAndForce, ev.weight);
                     Trigger(Tribal.Trigger.Trot);
                     return true;
             }
