@@ -48,21 +48,21 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             if (Owner.RigidBody2D.velocity.x > 0)
             {
-                ApplyForceOnDirection(FaceDirection.Left, force);
+                ApplyForceOnDirection(HorizontalDirection.Left, force);
 
                 if (Owner.RigidBody2D.velocity.x < 0)
                     StopCompletely();
             }
             else if (Owner.RigidBody2D.velocity.x < 0)
             {
-                ApplyForceOnDirection(FaceDirection.Right, force);
+                ApplyForceOnDirection(HorizontalDirection.Right, force);
 
                 if (Owner.RigidBody2D.velocity.x < 0)
                     StopCompletely();
             }
         }
 
-        private void ApplyForceOnDirection(FaceDirection direction, float force)
+        private void ApplyForceOnDirection(HorizontalDirection direction, float force)
         {
             Owner.RigidBody2D.AddForce(new Vector2((int)direction * force, 0), ForceMode2D.Impulse);
         }

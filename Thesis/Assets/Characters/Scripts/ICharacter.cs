@@ -2,9 +2,9 @@
 {
     public interface ICharacter : ISaveableGameEntity, IControllable<Character.Order>
     {
-        FaceDirection FacingDirection { get; }
+        HorizontalDirection FacingDirection { get; }
         bool BlockFacing { get; set; }
 
-        void Face(FaceDirection direction);
+        void Face(HorizontalDirection direction);
     }
 }

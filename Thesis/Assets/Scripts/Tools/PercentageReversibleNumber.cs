@@ -6,16 +6,9 @@ public class PercentageReversibleNumber
     public float BaseValue { get; private set; }
     public float CurrentValue { get; private set; }
 
-    private List<float> constraints;
+    private Dictionary<int, float> constraints = new Dictionary<int, float>();
 
-    public PercentageReversibleNumber()
-    {
-        constraints = new List<float>();
-
-        AddDefaultConstraint();
-    }
-
-    public PercentageReversibleNumber(float baseValue) : this()
+    public PercentageReversibleNumber(float baseValue)
     {
         BaseValue = baseValue;
 
@@ -31,30 +24,24 @@ public class PercentageReversibleNumber
 
     public int AddPercentageConstraint(float percentage)
     {
-        constraints.Add(percentage);
+        var id = Guid.NewGuid().GetHashCode();
+
+        constraints.Add(id, percentage);
 
         Recalculate();
 
-        return constraints.Count - 1;
+        return id;
     }
 
     public void RemovePercentageConstraint(int id)
     {
-        if(id < 1 || id > constraints.Count - 1)
-        {
-            return;
-        }
-
-        constraints.RemoveAt(id);
-
-        Recalculate();
+        if(constraints.Remove(id))
+            Recalculate();
     }
 
     public void RemoveAll()
     {
         constraints.Clear();
-
-        AddDefaultConstraint();
 
         Recalculate();
     }
@@ -63,15 +50,8 @@ public class PercentageReversibleNumber
     {
         CurrentValue = BaseValue;
 
-        for(int i = 0; i < constraints.Count; i++)
-        {
-            CurrentValue = (constraints[i] * CurrentValue) / 100;
-        }
-    }
-
-    private void AddDefaultConstraint()
-    {
-        constraints.Add(100);
+        foreach (var constraint in constraints)
+            CurrentValue = (constraint.Value * CurrentValue) / 100;
     }
 
     public static implicit operator float(PercentageReversibleNumber number)

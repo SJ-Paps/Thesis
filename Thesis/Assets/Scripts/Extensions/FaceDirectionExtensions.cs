@@ -2,11 +2,11 @@
 
 public static class FaceDirectionExtensions
 {
-    public static FaceDirection Inverse(this FaceDirection direction)
+    public static HorizontalDirection Inverse(this HorizontalDirection direction)
     {
-        if (direction == FaceDirection.Left)
-            return FaceDirection.Right;
+        if (direction == HorizontalDirection.Left)
+            return HorizontalDirection.Right;
         else
-            return FaceDirection.Left;
+            return HorizontalDirection.Left;
     }
 }

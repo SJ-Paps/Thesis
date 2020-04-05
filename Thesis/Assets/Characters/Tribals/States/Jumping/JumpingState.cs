@@ -35,7 +35,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
             jumpTimer.Interval = Owner.JumpMaxTime;
             jumpTimer.Update(Time.deltaTime);
 
-            if (keepsReceivingJumpOrders == false || (IsBelowVelocityDeadZone() && IsTouchingCeiling()))
+            if (keepsReceivingJumpOrders == false || (IsBelowVelocityDeadZone() && Owner.IsTouchingCeilingWalkable()))
                 FinishJump();
 
             keepsReceivingJumpOrders = false;
@@ -85,20 +85,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
         private bool IsBelowVelocityDeadZone()
         {
             return Owner.RigidBody2D.velocity.y < velocityDeadZone;
-        }
-
-        private bool IsTouchingCeiling()
-        {
-            int layerMask = Layers.Walkable;
-
-            Bounds bounds = Owner.Collider.bounds;
-            float heightExtents = 0.05f;
-            float widthNegativeOffset = 0.1f;
-
-            var upperPoint = new Vector2(bounds.center.x, bounds.center.y + bounds.extents.y + heightExtents);
-            var size = new Vector2(bounds.size.x - widthNegativeOffset, heightExtents * 2);
-
-            return Physics2D.OverlapBox(upperPoint, size, Owner.transform.eulerAngles.z, layerMask) != null;
         }
     }
 }

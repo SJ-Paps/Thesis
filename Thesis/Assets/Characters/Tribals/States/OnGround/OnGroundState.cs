@@ -26,7 +26,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             groundingTimer.Update(Time.deltaTime);
 
-            if (IsBelowVelocityDeadZone() && IsTouchingFloor() == false)
+            if (IsBelowVelocityDeadZone() && Owner.IsTouchingFloorWalkable() == false)
                 Trigger(Tribal.Trigger.Fall);
         }
 
@@ -44,41 +44,15 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override bool OnHandleEvent(Character.Order order)
         {
-            if (order.type == Character.OrderType.Jump && groundingTimer.Active == false && HasCeilingTooClose() == false)
+            if (order.type == Character.OrderType.Jump && 
+                groundingTimer.Active == false && 
+                Owner.IsTouchingCeilingWalkable() == false)
             {
                 Trigger(Tribal.Trigger.Jump);
                 return true;
             }
 
             return false;
-        }
-
-        private bool IsTouchingFloor()
-        {
-            int layerMask = Layers.Walkable;
-
-            Bounds bounds = Owner.Collider.bounds;
-            float heightExtents = 0.05f;
-            float widthNegativeOffset = 0.2f;
-
-            var lowerPoint = new Vector2(bounds.center.x, bounds.center.y - bounds.extents.y - heightExtents);
-            var size = new Vector2(bounds.size.x - widthNegativeOffset, heightExtents * 2);
-
-            return Physics2D.OverlapBox(lowerPoint, size, Owner.transform.eulerAngles.z, layerMask) != null;
-        }
-
-        private bool HasCeilingTooClose()
-        {
-            int layerMask = Layers.Walkable;
-
-            Bounds bounds = Owner.Collider.bounds;
-            float heightExtents = 0.05f;
-            float widthNegativeOffset = 0.1f;
-
-            var upperPoint = new Vector2(bounds.center.x, bounds.center.y + bounds.extents.y + heightExtents);
-            var size = new Vector2(bounds.size.x - widthNegativeOffset, heightExtents * 2);
-
-            return Physics2D.OverlapBox(upperPoint, size, Owner.transform.eulerAngles.z, layerMask) != null;
         }
     }
 }

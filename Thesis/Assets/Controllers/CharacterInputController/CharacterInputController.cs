@@ -22,15 +22,13 @@ namespace SJ.GameEntities.Controllers
             }
         }
 
-        private class AxisActionWithOrder
+        private class AxisActionWithOrder : InputActionWithOrder
         {
-            public AxisAction action;
-            public Character.OrderType orderType;
+            public new AxisAction action;
 
-            public AxisActionWithOrder(AxisAction action, Character.OrderType orderType)
+            public AxisActionWithOrder(AxisAction action, Character.OrderType orderType) : base(action, orderType)
             {
                 this.action = action;
-                this.orderType = orderType;
             }
         }
 

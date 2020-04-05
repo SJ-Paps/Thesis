@@ -41,6 +41,8 @@
     <line tag="input_action_moveright">right</line>
     <line tag="input_action_walk">walk</line>
     <line tag="input_action_run">run</line>
+    <line tag="input_action_jump">jump</line>
+    <line tag="input_action_activate">interact</line>
 
     <line tag="soundchannel_general">general volume</line>
     <line tag="soundchannel_music">music volume</line>

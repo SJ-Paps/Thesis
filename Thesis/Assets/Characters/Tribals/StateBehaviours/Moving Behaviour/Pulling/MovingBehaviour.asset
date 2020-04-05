@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106b9f8cc2947ee459fe8c6df01e621b, type: 3}
   m_Name: MovingBehaviour
   m_EditorClassIdentifier: 
-  _debugName: 
+  _debugName: Moving Pulling Behaviour
   _instantiateThis: 1
-  velocityDeadZone: 0
+  velocityDeadZone: 0.2
+  maxMovementVelocityPercentageModifier: 60

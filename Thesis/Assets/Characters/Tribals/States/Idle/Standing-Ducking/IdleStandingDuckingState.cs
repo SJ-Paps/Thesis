@@ -19,12 +19,12 @@ namespace SJ.GameEntities.Characters.Tribals.States
         {
             if(ev.type == Character.OrderType.Move)
             {
-                FaceDirection desiredDirection = default;
+                HorizontalDirection desiredDirection = default;
 
                 if (ev.weight > 0)
-                    desiredDirection = FaceDirection.Right;
+                    desiredDirection = HorizontalDirection.Right;
                 else
-                    desiredDirection = FaceDirection.Left;
+                    desiredDirection = HorizontalDirection.Left;
 
                 Owner.Face(desiredDirection);
 
@@ -38,7 +38,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
             return false;
         }
 
-        private bool HasWallTooClose(FaceDirection faceDirection)
+        private bool HasWallTooClose(HorizontalDirection faceDirection)
         {
             int layerMask = Layers.Floor;
 

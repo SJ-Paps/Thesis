@@ -36,16 +36,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private void SearchMovableObjects()
         {
-            float checkMovableObjectDistanceX = 0.2f;
-
-            int facingDirection = (int)Owner.FacingDirection;
-
-            var bounds = Owner.Collider.bounds;
-
-            var center = new Vector2(bounds.center.x + (bounds.extents.x * facingDirection), bounds.center.y - bounds.extents.y / 3);
-            var size = new Vector2(checkMovableObjectDistanceX, bounds.extents.y);
-
-            var movableObject = SJUtil.FindMovableObject(center, size, Owner.transform.eulerAngles.z);
+            var movableObject = Owner.SearchMovableObjects();
 
             if (movableObject != null)
             {

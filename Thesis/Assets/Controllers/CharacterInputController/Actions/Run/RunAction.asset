@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: Run
   hold: 1
-  defaultKeys: 1a010000
+  defaultKeys: 30010000

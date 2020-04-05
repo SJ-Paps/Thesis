@@ -60,6 +60,7 @@ namespace SJ.Tools
         {
             if(InnerJoint.reactionForce.magnitude > breakForce)
             {
+                Debug.Log(InnerJoint.reactionForce.magnitude);
                 Disconnect();
                 OnJointBreak?.Invoke();
             }

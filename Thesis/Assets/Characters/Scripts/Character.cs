@@ -32,14 +32,14 @@ namespace SJ.GameEntities.Characters
 
         public event Action<Order> OnOrderReceived;
 
-        public FaceDirection FacingDirection
+        public HorizontalDirection FacingDirection
         {
             get
             {
                 if (transform.right.x > 0)
-                    return FaceDirection.Right;
+                    return HorizontalDirection.Right;
                 else
-                    return FaceDirection.Left;
+                    return HorizontalDirection.Left;
             }
         }
 
@@ -54,7 +54,7 @@ namespace SJ.GameEntities.Characters
 
         protected abstract void OnSendOrder(Order order);
 
-        public void Face(FaceDirection direction)
+        public void Face(HorizontalDirection direction)
         {
             if (BlockFacing || direction == FacingDirection)
                 return;

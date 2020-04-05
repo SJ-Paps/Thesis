@@ -30,3 +30,6 @@ MonoBehaviour:
   - name: Jump
     main: 32
     alternative: 0
+  - name: Activate
+    main: 101
+    alternative: 0

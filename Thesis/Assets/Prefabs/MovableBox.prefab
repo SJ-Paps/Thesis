@@ -147,10 +147,10 @@ SpringJoint2D:
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_AutoConfigureConnectedAnchor: 0
-  m_Anchor: {x: -0.33, y: 0}
+  m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 0
-  m_Distance: 0.1
+  m_Distance: 1
   m_DampingRatio: 1
   m_Frequency: 2
 --- !u!114 &1556778737519477568
@@ -169,7 +169,7 @@ MonoBehaviour:
   enableLateUpdate: 0
   enableFixedUpdate: 1
   disableAfterAwake: 0
-  breakForce: 28
+  breakForce: 20
 --- !u!114 &2160204799407946551
 MonoBehaviour:
   m_ObjectHideFlags: 0
