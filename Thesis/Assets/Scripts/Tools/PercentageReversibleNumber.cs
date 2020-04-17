@@ -22,7 +22,7 @@ public class PercentageReversibleNumber
         Recalculate();
     }
 
-    public int AddPercentageConstraint(float percentage)
+    public int AddConstraint(float percentage)
     {
         var id = Guid.NewGuid().GetHashCode();
 
@@ -33,7 +33,7 @@ public class PercentageReversibleNumber
         return id;
     }
 
-    public void RemovePercentageConstraint(int id)
+    public void RemoveConstraint(int id)
     {
         if(constraints.Remove(id))
             Recalculate();

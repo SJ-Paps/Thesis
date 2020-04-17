@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States
 {
-    public class MovingStandingDuckingStateBehaviour : TribalStateBehaviour, IFixedUpdateListener
+    public class MovingStateBehaviour : TribalStateBehaviour, IFixedUpdateListener
     {
         [SerializeField]
         private float velocityDeadZone;
@@ -16,7 +16,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public override void OnEnter()
         {
-            moveDirection = Owner.FacingDirection;
+            moveDirection = Blackboard.GetItem<HorizontalDirection>(Tribal.BlackboardKeys.MoveDirection);
 
             Owner.SubscribeToFixedUpdate(this);
 
@@ -49,15 +49,19 @@ namespace SJ.GameEntities.Characters.Tribals.States
             {
                 case Character.OrderType.Move:
 
-                    moveDirection = ev.weight >= 0 ? HorizontalDirection.Right : HorizontalDirection.Left;
-                    moveForce = Math.Abs(ev.weight);
+                    var desiredDirection = ev.weight >= 0 ? HorizontalDirection.Right : HorizontalDirection.Left;
+                    
+                    if (desiredDirection != moveDirection)
+                    {
+                        Trigger(Tribal.Trigger.Stop);
+                    }
+                    else
+                    {
+                        moveForce = Math.Abs(ev.weight);
 
-                    isMovingByWill = true;
-                    return true;
-
-                case Character.OrderType.Run:
-
-                    Trigger(Tribal.Trigger.Run);
+                        isMovingByWill = true;
+                    }
+                    
                     return true;
             }
 
@@ -66,7 +70,6 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         public void DoFixedUpdate()
         {
-            Owner.Face(moveDirection);
             Move();
         }
 

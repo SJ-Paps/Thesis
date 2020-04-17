@@ -9,6 +9,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnEnter()
         {
+            Debug.Log("ENTER IDLE PULLING");
             Owner.Animator.SetTrigger(Tribal.AnimatorTriggers.Idle);
         }
 
@@ -40,7 +41,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
                 {
                     isAboutToMove = true;
 
-                    Blackboard.SetItem(Tribal.BlackboardKeys.PullMoveDirection, ev.weight > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+                    Blackboard.SetItem(Tribal.BlackboardKeys.MoveDirection, ev.weight > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
 
                     Trigger(Tribal.Trigger.Move);
                     return true;

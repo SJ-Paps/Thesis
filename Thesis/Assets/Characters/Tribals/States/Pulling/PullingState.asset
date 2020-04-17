@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugName: Pulling
   _instantiateThis: 1
+  maxMovementVelocityPercentageModifier: 60

@@ -35,6 +35,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
                 if (Owner.IsTouchingWall(desiredDirection) == false)
                 {
+                    Blackboard.SetItem(Tribal.BlackboardKeys.MoveDirection, ev.weight > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
                     Trigger(Tribal.Trigger.Move);
                     return true;
                 }

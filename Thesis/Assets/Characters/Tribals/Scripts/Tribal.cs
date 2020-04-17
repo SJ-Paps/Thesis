@@ -87,7 +87,7 @@ namespace SJ.GameEntities.Characters.Tribals
             public const string LastTrigger = "LastTrigger";
             public const string WalkMode = "WalkMode";
             public const string MovableObject = "MovableObject";
-            public const string PullMoveDirection = "PullMoveDirection";
+            public const string MoveDirection = "PullMoveDirection";
             public const string PullMode = "PullMode";
         }
 

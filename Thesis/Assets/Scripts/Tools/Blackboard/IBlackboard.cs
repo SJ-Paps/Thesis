@@ -1,4 +1,6 @@
-﻿namespace SJ.Tools
+﻿using System;
+
+namespace SJ.Tools
 {
     public interface IBlackboard
     {
@@ -7,5 +9,7 @@
         bool TryGetItem<T>(string identifier, out T value);
         bool RemoveItem(string identifier);
         bool ContainsItem(string identifier);
+        void AddOnValueChangedListener(string identifier, Action callback);
+        void RemoveOnValueChangedListener(string identifier, Action callback);
     }
 }
