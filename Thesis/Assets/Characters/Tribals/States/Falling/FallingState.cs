@@ -14,7 +14,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         protected override void OnUpdate()
         {
-            if (IsOverVelocityDeadZone() && Owner.IsTouchingFloorWalkable())
+            if (IsOverVelocityDeadZone() && Owner.IsTouchingWalkableFloor())
                 Trigger(Tribal.Trigger.Ground);
         }
 

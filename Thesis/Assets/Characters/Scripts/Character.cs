@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using SJ.Tools;
 
 namespace SJ.GameEntities.Characters
 {

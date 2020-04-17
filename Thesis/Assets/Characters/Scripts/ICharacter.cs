@@ -1,4 +1,6 @@
-﻿namespace SJ.GameEntities.Characters
+﻿using SJ.Tools;
+
+namespace SJ.GameEntities.Characters
 {
     public interface ICharacter : ISaveableGameEntity, IControllable<Character.Order>
     {

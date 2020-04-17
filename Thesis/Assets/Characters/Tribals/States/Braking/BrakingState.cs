@@ -1,4 +1,5 @@
 ﻿using SJ.Management;
+using SJ.Tools;
 using UnityEngine;
 
 namespace SJ.GameEntities.Characters.Tribals.States

@@ -10,7 +10,7 @@ namespace SJ.GameEntities.Characters.Tribals
             return IsTouchingWallLayer(tribal, faceDirection, Layers.Floor);
         }
 
-        public static bool IsTouchingWallWalkable(this ITribal tribal, HorizontalDirection faceDirection)
+        public static bool IsTouchingWalkableWall(this ITribal tribal, HorizontalDirection faceDirection)
         {
             return IsTouchingWallLayer(tribal, faceDirection, Layers.Walkable);
         }
@@ -30,12 +30,12 @@ namespace SJ.GameEntities.Characters.Tribals
             return Physics2D.Linecast(upperBeginPoint, lowerEndPoint, layerMask);
         }
 
-        public static bool IsTouchingFloorWalkable(this ITribal tribal)
+        public static bool IsTouchingWalkableFloor(this ITribal tribal)
         {
             return IsTouchingCeilingOrFloorLayer(tribal, VerticalDirection.Down, Layers.Walkable, heightExtents: 0.02f, widthNegativeOffset: 0.3f);
         }
 
-        public static bool IsTouchingCeilingWalkable(this ITribal tribal)
+        public static bool IsTouchingWalkableCeiling(this ITribal tribal)
         {
             return IsTouchingCeilingOrFloorLayer(tribal, VerticalDirection.Up, Layers.Walkable);
         }

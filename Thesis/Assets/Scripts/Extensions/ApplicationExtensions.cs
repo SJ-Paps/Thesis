@@ -29,7 +29,7 @@ public static class ApplicationExtensions
 
     public static IGameManager GameManager(this Application application)
     {
-        return gameManager ?? (gameManager = new GameManager(Repositories.GetProfileRepository(), ApplicationSettings(application)));
+        return gameManager ?? (gameManager = GameManagerFactory.Create());
     }
 
     public static IEventBus EventBus(this Application application)

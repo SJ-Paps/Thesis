@@ -34,7 +34,7 @@ namespace SJ.GameEntities.Characters.Tribals.States
 
         private bool ShouldStop()
         {
-            return keepsReceivingJumpOrders == false || IsOverMaxForce() || (IsBelowVelocityDeadZone() && Owner.IsTouchingCeilingWalkable());
+            return keepsReceivingJumpOrders == false || IsOverMaxForce() || (IsBelowVelocityDeadZone() && Owner.IsTouchingWalkableCeiling());
         }
 
         private bool IsOverMaxForce()

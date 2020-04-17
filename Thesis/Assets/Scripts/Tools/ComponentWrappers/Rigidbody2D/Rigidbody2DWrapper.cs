@@ -5,7 +5,7 @@ namespace SJ.Tools
     [RequireComponent(typeof(Rigidbody2D))]
     public class Rigidbody2DWrapper : SJMonoBehaviour, IRigidbody2D
     {
-        private new Rigidbody2D internalRigidBody2D;
+        private Rigidbody2D internalRigidBody2D;
 
         private Rigidbody2D Rigidbody2D
         {
